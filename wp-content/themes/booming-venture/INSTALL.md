@@ -125,6 +125,12 @@ Inside `Fluent Forms`:
    | `head-of-growth`     | Head of Growth landing page          | 4 + tag    |
 
 2. **Integrations → Brevo →** paste your API key. Map each form to its list.
+3. **Settings → Booming Venture → Fluent Forms.** Map each slug
+   (`contact`, `newsletter`, `newsletter-inline`, `growth-guide`,
+   `quickscan`, `head-of-growth`) to the numeric Fluent Forms ID. The
+   patterns ship with semantic slugs and the theme rewrites them at
+   render time. Until you map them, logged-in editors see a red warning
+   block; logged-out visitors see nothing.
 3. (Optional) **Spam:** enable Akismet + Cloudflare Turnstile in Fluent Forms
    → settings, the patterns already include `[fluentform]` shortcodes.
 

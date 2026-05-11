@@ -6,8 +6,8 @@
  * Viewport Width: 1400
  */
 ?>
-<!-- wp:group {"tagName":"section","align":"full","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"background":{"backgroundGradient":"var:preset|gradient|brand-dark"}},"textColor":"base","layout":{"type":"constrained"}} -->
-<section class="wp-block-group alignfull has-base-color has-text-color" style="background:var(--wp--preset--gradient--brand-dark);padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:group {"tagName":"section","align":"full","gradient":"brand-dark","textColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
+<section class="wp-block-group alignfull has-base-color has-brand-dark-gradient-background has-text-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
 	<!-- wp:heading {"textAlign":"center","level":2,"fontSize":"5xl"} --><h2 class="wp-block-heading has-text-align-center has-5-xl-font-size">Ready to accelerate your growth?</h2><!-- /wp:heading -->
 	<!-- wp:paragraph {"align":"center","fontSize":"xl"} -->
 	<p class="has-text-align-center has-xl-font-size">Book a free 30-minute strategy session — no pitch, just clarity on your biggest growth lever.</p>

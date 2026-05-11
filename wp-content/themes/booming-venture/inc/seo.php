@@ -12,9 +12,13 @@ function bv_seo_active_plugin_handles_meta(): bool {
 	return defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' );
 }
 
-/* JSON-LD: Organization + WebSite + per-page graph. */
+/* JSON-LD: Organization + WebSite + per-page graph.
+ * Yoast and Rank Math both emit their own Organization/WebSite/Article graphs,
+ * so when either is active we step back to avoid duplicate-schema warnings in
+ * Google Search Console. Override with `add_filter( 'bv_emit_jsonld', '__return_true' )`. */
 add_action( 'wp_head', function () {
 	if ( is_admin() ) return;
+	if ( apply_filters( 'bv_emit_jsonld', ! bv_seo_active_plugin_handles_meta() ) === false ) return;
 
 	$site_url = home_url( '/' );
 	$logo_id  = (int) get_theme_mod( 'custom_logo' );

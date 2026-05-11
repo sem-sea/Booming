@@ -7,8 +7,8 @@
  * Viewport Width: 1400
  */
 ?>
-<!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}},"background":{"backgroundGradient":"var:preset|gradient|brand"}},"textColor":"base","layout":{"type":"constrained"}} -->
-<section class="wp-block-group has-base-color has-text-color" style="background:var(--wp--preset--gradient--brand);padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+<!-- wp:group {"tagName":"section","gradient":"brand","textColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
+<section class="wp-block-group has-base-color has-brand-gradient-background has-text-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
 
 	<!-- wp:columns {"align":"wide","verticalAlignment":"center"} -->
 	<div class="wp-block-columns alignwide are-vertically-aligned-center">
