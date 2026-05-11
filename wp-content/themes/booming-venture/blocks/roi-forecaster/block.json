@@ -6,7 +6,7 @@
   "title": "ROI Forecaster",
   "category": "booming-venture",
   "icon": "chart-line",
-  "description": "Interactive 12-month ROI forecaster with funnel chart, metrics panel, and PDF export.",
+  "description": "Interactive ROI forecaster with cumulative revenue chart, table view, and PDF export. Self-contained — no external dependencies.",
   "keywords": ["roi", "forecast", "growth", "calculator"],
   "supports": {
     "html": false,
@@ -19,8 +19,8 @@
     "showPdfExport": { "type": "boolean", "default": true }
   },
   "textdomain": "booming-venture",
-  "editorScript": "file:./build/editor.js",
-  "viewScript": "file:./build/view.js",
-  "style":  "file:./build/style.css",
+  "editorScript": "file:./editor.js",
+  "viewScript": "file:./view.js",
+  "style":  "file:./view.css",
   "render": "file:./render.php"
 }

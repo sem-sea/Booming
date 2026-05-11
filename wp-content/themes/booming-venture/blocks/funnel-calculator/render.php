@@ -1,7 +1,7 @@
 <?php
 /**
  * Server render for the Funnel Leak Calculator block.
- * Outputs a mount point; the React bundle in build/view.js hydrates it.
+ * The vanilla-JS app in view.js hydrates the mount point on the client.
  *
  * @var array  $attributes
  * @var string $content
@@ -22,6 +22,6 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-block-funnel-calculato
 	data-default-stage="<?php echo esc_attr( $stage ); ?>"
 	data-pdf-export="<?php echo esc_attr( $pdf ); ?>">
 	<noscript>
-		<p>The Funnel Leak Calculator needs JavaScript. Please enable it, or <a href="mailto:info@boomingventure.com">email us</a> for a manual analysis.</p>
+		<p>The Funnel Leak Calculator is interactive and needs JavaScript. Please enable it, or <a href="mailto:info@boomingventure.com">email us</a> for a manual analysis.</p>
 	</noscript>
 </div>

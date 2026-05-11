@@ -28,29 +28,24 @@ Activate it:
 
 ---
 
-## 2. Build the custom Gutenberg blocks
+## 2. The custom Gutenberg blocks
 
-The Funnel Calculator and ROI Forecaster are React widgets compiled
-through `@wordpress/scripts`. Run the build once and they appear in the
-inserter under **Booming Venture**.
+The **Funnel Leak Calculator** and **ROI Forecaster** ship as working
+vanilla-JS apps inside the theme — no `npm install`, no build step.
+They appear in the editor inserter under **Booming Venture** as soon as
+the theme is activated.
 
-```bash
-cd wp-content/themes/booming-venture/blocks
-npm install
-npm run build
-```
+Each block is fully interactive on the front end:
 
-This produces:
+- Funnel Calculator: 6 input fields, live recalculation, SVG benchmark
+  chart, biggest-leak recommendation, "save as PDF" via `window.print()`.
+- ROI Forecaster: 7 inputs, 3-month linear ramp model, cumulative
+  revenue SVG chart, month-by-month table, break-even highlight, PDF
+  export.
 
-- `blocks/funnel-calculator/build/` → `view.js`, `editor.js`, `style.css`
-- `blocks/roi-forecaster/build/`    → same
-
-`functions.php` auto-detects them and registers each block.
-
-> **Tip:** Before the first build, see `blocks/README.md` — the original
-> Lovable components were copied in but reference `@/components/ui/*`
-> (shadcn) and `react-router-dom`. Swap those imports for plain
-> HTML/CSS equivalents or vendor a minimal shadcn subset.
+To customise the math or visuals, edit:
+- `blocks/funnel-calculator/view.js` + `view.css`
+- `blocks/roi-forecaster/view.js` + `view.css`
 
 ---
 
@@ -212,7 +207,7 @@ add it to a redirects file (Rank Math has a Redirections module).
 
 | Symptom | Fix |
 | ------- | ----|
-| Custom blocks missing from inserter | Did you run `npm run build` in `blocks/`? Check that `block.json` + `build/` exist. |
+| Custom blocks missing from inserter | Bump theme version in `style.css` and visit `Appearance → Editor` once. Check that `blocks/*/block.json` exist. |
 | `[fluentform id="contact"]` shows literal text | Install + activate Fluent Forms. |
 | DataSpeak chat doesn't appear | Check `bv_dataspeak_id` option and that the page isn't blocked by an ad-blocker. |
 | Patterns not appearing | Bump theme version in `style.css` and visit `Appearance → Editor` once. |

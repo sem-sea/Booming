@@ -6,7 +6,7 @@
   "title": "Funnel Leak Calculator",
   "category": "booming-venture",
   "icon": "filter",
-  "description": "Interactive funnel calculator that pinpoints where revenue is leaking and recommends fixes. Self-contained React app — fits any page.",
+  "description": "Interactive funnel calculator that pinpoints where revenue is leaking and recommends fixes. Self-contained — no external dependencies.",
   "keywords": ["funnel", "calculator", "growth", "cro"],
   "supports": {
     "html": false,
@@ -19,8 +19,8 @@
     "showPdfExport": { "type": "boolean", "default": true }
   },
   "textdomain": "booming-venture",
-  "editorScript": "file:./build/editor.js",
-  "viewScript": "file:./build/view.js",
-  "style":  "file:./build/style.css",
+  "editorScript": "file:./editor.js",
+  "viewScript": "file:./view.js",
+  "style":  "file:./view.css",
   "render": "file:./render.php"
 }

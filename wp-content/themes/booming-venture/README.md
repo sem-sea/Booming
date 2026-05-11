@@ -28,8 +28,8 @@ touching code.
 | `templates/`              | Block templates: `index`, `front-page`, `page`, `single`, `archive`, `search`, `404`, + custom templates for the tool/landing pages. |
 | `parts/`                  | `header.html`, `footer.html`. |
 | `patterns/`               | Sectioned block patterns (hero, services-grid, about, testimonials, contact, growth-guide-cta, cta-band, newsletter-cta, awards-banner, blog-grid, UNIFY framework). |
-| `blocks/funnel-calculator`| Custom block — Funnel Leak Calculator (React, server-rendered shell). |
-| `blocks/roi-forecaster`   | Custom block — ROI Forecaster (React, server-rendered shell). |
+| `blocks/funnel-calculator`| Custom block — Funnel Leak Calculator (vanilla JS, **ships working** — no build). |
+| `blocks/roi-forecaster`   | Custom block — ROI Forecaster with SVG chart + table + PDF export (vanilla JS, **ships working**). |
 | `assets/css/theme.css`    | Animations, glassmorphism, check-list pseudo-element, FABs, scroll-progress. |
 | `assets/css/editor.css`   | Editor preview tweaks. |
 | `assets/js/theme.js`      | Scroll progress, smooth scroll, FABs, external-link safety. |
@@ -85,15 +85,11 @@ See **INSTALL.md** for the full walk-through. TL;DR:
 # 2. Activate
 wp theme activate booming-venture
 
-# 3. Build the custom blocks (one-time)
-cd wp-content/themes/booming-venture/blocks
-npm install && npm run build
-
-# 4. Install Fluent Forms + the Brevo connector
+# 3. Install Fluent Forms + the Brevo connector
 wp plugin install fluentform brevo-fluentform-integration --activate
 # (or use the admin notice link)
 
-# 5. Import content
+# 4. Import content
 wp import wp-content/themes/booming-venture/import/booming-venture-content.xml --authors=create
 ```
 
