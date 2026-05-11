@@ -1,0 +1,5 @@
+blocks/node_modules/
+blocks/**/build/
+blocks/**/*.tsbuildinfo
+.DS_Store
+*.log

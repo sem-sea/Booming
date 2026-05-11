@@ -1,0 +1,12 @@
+# The original Lovable zip is committed; the extracted folder is reference-only
+lovable-source/
+
+# OS / editor
+.DS_Store
+*.log
+.idea/
+.vscode/
+
+# Node build artifacts inside the theme
+wp-content/themes/*/blocks/node_modules/
+wp-content/themes/*/blocks/**/build/

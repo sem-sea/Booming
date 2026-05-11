@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  Booming Venture — WordPress eXtended RSS (WXR) import file.
+  Import in WordPress: Tools → Import → WordPress → Run Importer.
+
+  Contains:
+    - 12 core pages (Home, About, Services, Blog, UNIFY, Privacy, Terms,
+      Disclaimer, 404, Funnel Calc, ROI Forecaster, Free Growth Guide,
+      Boardroom Quickscan, Head of Growth)
+    - 4 services (CPT: service)
+    - 40 blog posts with categories
+    - 5 landing pages (CPT: landing_page) — placeholders
+-->
+<rss version="2.0"
+	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:wp="http://wordpress.org/export/1.2/">
+
+<channel>
+	<title>Booming Venture</title>
+	<link>https://boomingventure.com</link>
+	<description>Performance. Personality. Powered by AI.</description>
+	<pubDate>Mon, 11 May 2026 00:00:00 +0000</pubDate>
+	<language>en-US</language>
+	<wp:wxr_version>1.2</wp:wxr_version>
+	<wp:base_site_url>https://boomingventure.com</wp:base_site_url>
+	<wp:base_blog_url>https://boomingventure.com</wp:base_blog_url>
+
+	<wp:author>
+		<wp:author_id>1</wp:author_id>
+		<wp:author_login><![CDATA[boomingventure]]></wp:author_login>
+		<wp:author_email><![CDATA[info@boomingventure.com]]></wp:author_email>
+		<wp:author_display_name><![CDATA[Booming Venture]]></wp:author_display_name>
+	</wp:author>
+
+	<!-- Blog categories -->
+	<wp:category><wp:term_id>10</wp:term_id><wp:category_nicename><![CDATA[ai-marketing]]></wp:category_nicename><wp:cat_name><![CDATA[AI Marketing]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>11</wp:term_id><wp:category_nicename><![CDATA[brand-strategy]]></wp:category_nicename><wp:cat_name><![CDATA[Brand Strategy]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>12</wp:term_id><wp:category_nicename><![CDATA[marketing-strategy]]></wp:category_nicename><wp:cat_name><![CDATA[Marketing Strategy]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>13</wp:term_id><wp:category_nicename><![CDATA[content-strategy]]></wp:category_nicename><wp:cat_name><![CDATA[Content Strategy]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>14</wp:term_id><wp:category_nicename><![CDATA[b2b-marketing]]></wp:category_nicename><wp:cat_name><![CDATA[B2B Marketing]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>15</wp:term_id><wp:category_nicename><![CDATA[growth-hacking]]></wp:category_nicename><wp:cat_name><![CDATA[Growth Hacking]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>16</wp:term_id><wp:category_nicename><![CDATA[roi-optimization]]></wp:category_nicename><wp:cat_name><![CDATA[ROI Optimization]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>17</wp:term_id><wp:category_nicename><![CDATA[funnel-strategy]]></wp:category_nicename><wp:cat_name><![CDATA[Funnel Strategy]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>18</wp:term_id><wp:category_nicename><![CDATA[customer-retention]]></wp:category_nicename><wp:cat_name><![CDATA[Customer Retention]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>19</wp:term_id><wp:category_nicename><![CDATA[marketing-automation]]></wp:category_nicename><wp:cat_name><![CDATA[Marketing Automation]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>20</wp:term_id><wp:category_nicename><![CDATA[social-media]]></wp:category_nicename><wp:cat_name><![CDATA[Social Media]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>21</wp:term_id><wp:category_nicename><![CDATA[email-marketing]]></wp:category_nicename><wp:cat_name><![CDATA[Email Marketing]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>22</wp:term_id><wp:category_nicename><![CDATA[content-marketing]]></wp:category_nicename><wp:cat_name><![CDATA[Content Marketing]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>23</wp:term_id><wp:category_nicename><![CDATA[creative-strategy]]></wp:category_nicename><wp:cat_name><![CDATA[Creative Strategy]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>24</wp:term_id><wp:category_nicename><![CDATA[mobile-marketing]]></wp:category_nicename><wp:cat_name><![CDATA[Mobile Marketing]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>25</wp:term_id><wp:category_nicename><![CDATA[conversion-optimization]]></wp:category_nicename><wp:cat_name><![CDATA[Conversion Optimization]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>26</wp:term_id><wp:category_nicename><![CDATA[lead-generation]]></wp:category_nicename><wp:cat_name><![CDATA[Lead Generation]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>27</wp:term_id><wp:category_nicename><![CDATA[paid-advertising]]></wp:category_nicename><wp:cat_name><![CDATA[Paid Advertising]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>28</wp:term_id><wp:category_nicename><![CDATA[pricing-strategy]]></wp:category_nicename><wp:cat_name><![CDATA[Pricing Strategy]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>29</wp:term_id><wp:category_nicename><![CDATA[local-seo]]></wp:category_nicename><wp:cat_name><![CDATA[Local SEO]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>30</wp:term_id><wp:category_nicename><![CDATA[marketing-analytics]]></wp:category_nicename><wp:cat_name><![CDATA[Marketing Analytics]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>31</wp:term_id><wp:category_nicename><![CDATA[influencer-marketing]]></wp:category_nicename><wp:cat_name><![CDATA[Influencer Marketing]]></wp:cat_name></wp:category>
+	<wp:category><wp:term_id>32</wp:term_id><wp:category_nicename><![CDATA[video-marketing]]></wp:category_nicename><wp:cat_name><![CDATA[Video Marketing]]></wp:cat_name></wp:category>
+
+	<!-- ===================== CORE PAGES ===================== -->
+
+	<item>
+		<title>Home</title>
+		<link>https://boomingventure.com/</link>
+		<dc:creator><![CDATA[boomingventure]]></dc:creator>
+		<wp:post_id>100</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[home]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/hero"} /-->
+<!-- wp:pattern {"slug":"booming-venture/services-grid"} /-->
+<!-- wp:pattern {"slug":"booming-venture/growth-guide-cta"} /-->
+<!-- wp:pattern {"slug":"booming-venture/about"} /-->
+<!-- wp:pattern {"slug":"booming-venture/testimonials"} /-->
+<!-- wp:pattern {"slug":"booming-venture/contact"} /-->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>About Us</title>
+		<link>https://boomingventure.com/about/</link>
+		<wp:post_id>101</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[about]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/about"} /-->
+<!-- wp:pattern {"slug":"booming-venture/unify-framework"} /-->
+<!-- wp:pattern {"slug":"booming-venture/testimonials"} /-->
+<!-- wp:pattern {"slug":"booming-venture/cta-band"} /-->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Services</title>
+		<link>https://boomingventure.com/services/</link>
+		<wp:post_id>102</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[services]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/services-grid"} /-->
+<!-- wp:pattern {"slug":"booming-venture/unify-framework"} /-->
+<!-- wp:pattern {"slug":"booming-venture/testimonials"} /-->
+<!-- wp:pattern {"slug":"booming-venture/cta-band"} /-->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Blog</title>
+		<link>https://boomingventure.com/blog/</link>
+		<wp:post_id>103</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[blog]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/blog-grid"} /-->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>UNIFY Framework</title>
+		<link>https://boomingventure.com/unify-framework/</link>
+		<wp:post_id>104</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[unify-framework]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/unify-framework"} /-->
+<!-- wp:pattern {"slug":"booming-venture/testimonials"} /-->
+<!-- wp:pattern {"slug":"booming-venture/cta-band"} /-->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Funnel Leak Calculator</title>
+		<link>https://boomingventure.com/funnel-calculator/</link>
+		<wp:post_id>105</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[funnel-calculator]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value><![CDATA[page-funnel-calculator]]></wp:meta_value></wp:postmeta>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Wondering where your funnel is leaking? Plug your numbers in above — it takes 90 seconds and surfaces the exact stage costing you the most.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>ROI Forecaster</title>
+		<link>https://boomingventure.com/roi-forecaster/</link>
+		<wp:post_id>106</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[roi-forecaster]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value><![CDATA[page-roi-forecaster]]></wp:meta_value></wp:postmeta>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Model the next 12 months of ROI based on your real numbers. Export a clean PDF to share with the team — no email gate.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Free Growth Guide</title>
+		<link>https://boomingventure.com/free-growth-guide/</link>
+		<wp:post_id>107</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[free-growth-guide]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value><![CDATA[page-landing]]></wp:meta_value></wp:postmeta>
+		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/growth-guide-cta"} /-->
+<!-- wp:pattern {"slug":"booming-venture/testimonials"} /-->
+<!-- wp:pattern {"slug":"booming-venture/cta-band"} /-->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Boardroom Quickscan</title>
+		<link>https://boomingventure.com/boardroom-quickscan/</link>
+		<wp:post_id>108</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[boardroom-quickscan]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value><![CDATA[page-boardroom-quickscan]]></wp:meta_value></wp:postmeta>
+		<content:encoded><![CDATA[<!-- wp:heading {"level":2,"textAlign":"center","fontSize":"4xl"} --><h2 class="wp-block-heading has-text-align-center has-4-xl-font-size">A 15-minute boardroom-grade diagnostic</h2><!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","fontSize":"lg","textColor":"muted"} --><p class="has-text-align-center has-muted-color has-text-color has-lg-font-size">Built for execs who need clarity on where the next quarter of growth comes from — without sitting through a 60-page deck.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Head of Growth — Fractional Leadership</title>
+		<link>https://boomingventure.com/head-of-growth/</link>
+		<wp:post_id>109</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[head-of-growth]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value><![CDATA[page-head-of-growth]]></wp:meta_value></wp:postmeta>
+		<content:encoded><![CDATA[<!-- wp:heading {"level":2,"textAlign":"center","fontSize":"4xl"} --><h2 class="wp-block-heading has-text-align-center has-4-xl-font-size">Senior growth leadership — on demand</h2><!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","fontSize":"lg","textColor":"muted"} --><p class="has-text-align-center has-muted-color has-text-color has-lg-font-size">Two days a week. Quarterly outcomes. Knowledge transfer to your team baked in.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Privacy Policy</title>
+		<link>https://boomingventure.com/privacy-policy/</link>
+		<wp:post_id>110</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[privacy-policy]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>This Privacy Policy explains how Booming Venture (Breedveldsingel 1, 3055 PG Rotterdam, The Netherlands) collects, uses, and protects your personal data. Update this content with your finalised legal copy.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Terms of Service</title>
+		<link>https://boomingventure.com/terms-of-service/</link>
+		<wp:post_id>111</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[terms-of-service]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace this with your final Terms of Service.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Disclaimer</title>
+		<link>https://boomingventure.com/disclaimer/</link>
+		<wp:post_id>112</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[disclaimer]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[page]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace this with your final disclaimer copy.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<!-- ===================== SERVICES (CPT) ===================== -->
+
+	<item>
+		<title>Strategic Consulting</title>
+		<link>https://boomingventure.com/services/strategic-consulting/</link>
+		<wp:post_id>200</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[strategic-consulting]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[service]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Tailored growth strategies built around your customers, your market, and your real numbers. Customised business growth plans · Market analysis and competitor research · Revenue optimization strategies · Business model innovation.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Performance Marketing</title>
+		<link>https://boomingventure.com/services/performance-marketing/</link>
+		<wp:post_id>201</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[performance-marketing]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[service]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Data-driven, multi-channel campaigns engineered for measurable ROI. Conversion rate optimization · Customer acquisition · ROI-focused advertising.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>AI-Powered Solutions</title>
+		<link>https://boomingventure.com/services/ai-powered-solutions/</link>
+		<wp:post_id>202</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[ai-powered-solutions]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[service]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Predictive analytics, automated workflows, customer-behaviour analysis, and AI-driven decision support — implemented end-to-end.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Growth Optimization</title>
+		<link>https://boomingventure.com/services/growth-optimization/</link>
+		<wp:post_id>203</wp:post_id>
+		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[growth-optimization]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[service]]></wp:post_type>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Comprehensive programs to scale efficiently: scalable growth frameworks · process optimization · cross-functional alignment · long-term planning.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<!-- ===================== BLOG POSTS (40) =====================
+	     Each post is a stub: title, slug, category, excerpt.
+	     Replace `content:encoded` with the long-form drafts you have. -->
+
+	<item>
+		<title>What is AI marketing? (And why it&#8217;s not just hype)</title>
+		<link>https://boomingventure.com/blog/what-is-ai-marketing/</link>
+		<wp:post_id>300</wp:post_id>
+		<wp:post_date><![CDATA[2025-01-15 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[what-is-ai-marketing]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="ai-marketing"><![CDATA[AI Marketing]]></category>
+		<excerpt:encoded><![CDATA[AI marketing isn&#8217;t just a buzzword — it&#8217;s a fundamental shift in how we understand and engage customers. Discover the data-driven strategies that are transforming business growth.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph {"className":"bv-drop-cap"} --><p class="bv-drop-cap">AI marketing is the systematic use of machine learning, large language models, and predictive analytics to make every step of the customer journey faster, sharper, and more personal. It is not a swap-in tool — it is an operating model.</p><!-- /wp:paragraph -->
+<!-- wp:heading --><h2 class="wp-block-heading">Why now</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Three forces converged in 2025: cheap inference, first-party data maturity, and the death of last-click attribution. Replace this paragraph with your full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+		<wp:postmeta><wp:meta_key>_bv_read_time</wp:meta_key><wp:meta_value><![CDATA[8 min]]></wp:meta_value></wp:postmeta>
+	</item>
+
+	<item>
+		<title>7 biggest growth mistakes premium brands make</title>
+		<link>https://boomingventure.com/blog/7-biggest-growth-mistakes-premium-brands/</link>
+		<wp:post_id>301</wp:post_id>
+		<wp:post_date><![CDATA[2025-01-20 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[7-biggest-growth-mistakes-premium-brands]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="brand-strategy"><![CDATA[Brand Strategy]]></category>
+		<excerpt:encoded><![CDATA[Premium brands often fall into growth traps that commoditize their positioning. Learn the 7 critical mistakes and how to avoid them while scaling sustainably.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Premium brands chase volume, then wonder why their margins collapse. Replace this with the full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+		<wp:postmeta><wp:meta_key>_bv_read_time</wp:meta_key><wp:meta_value><![CDATA[10 min]]></wp:meta_value></wp:postmeta>
+	</item>
+
+	<item>
+		<title>Why traditional marketing strategies fail in 2025</title>
+		<link>https://boomingventure.com/blog/traditional-marketing-strategies-fail-2025/</link>
+		<wp:post_id>302</wp:post_id>
+		<wp:post_date><![CDATA[2025-01-25 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[traditional-marketing-strategies-fail-2025]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="marketing-strategy"><![CDATA[Marketing Strategy]]></category>
+		<excerpt:encoded><![CDATA[The marketing playbook from 2020 is obsolete. Consumer behavior, technology, and market dynamics have fundamentally shifted. Here&#8217;s what works now.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>How AI automation strengthens (not replaces) your marketing team</title>
+		<link>https://boomingventure.com/blog/ai-automation-strengthen-marketing-team/</link>
+		<wp:post_id>303</wp:post_id>
+		<wp:post_date><![CDATA[2025-01-28 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[ai-automation-strengthen-marketing-team]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="ai-marketing"><![CDATA[AI Marketing]]></category>
+		<excerpt:encoded><![CDATA[AI isn&#8217;t here to replace marketers — it&#8217;s here to amplify their capabilities. Discover how smart automation can free your team to focus on strategy and creativity.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>The future of content: AI as your creative assistant</title>
+		<link>https://boomingventure.com/blog/future-content-ai-creative-assistant/</link>
+		<wp:post_id>304</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-01 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[future-content-ai-creative-assistant]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="content-strategy"><![CDATA[Content Strategy]]></category>
+		<excerpt:encoded><![CDATA[Content creation is evolving beyond human vs. AI to human + AI collaboration.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Integrating branding with performance marketing for sustainable growth</title>
+		<link>https://boomingventure.com/blog/branding-performance-marketing-integration/</link>
+		<wp:post_id>305</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-05 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[branding-performance-marketing-integration]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="brand-strategy"><![CDATA[Brand Strategy]]></category>
+		<excerpt:encoded><![CDATA[The false choice between brand building and performance marketing is killing long-term growth.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>AI marketing for B2B: opportunities, risks, and real results</title>
+		<link>https://boomingventure.com/blog/ai-marketing-b2b-opportunities-risks-results/</link>
+		<wp:post_id>306</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-08 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[ai-marketing-b2b-opportunities-risks-results]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="b2b-marketing"><![CDATA[B2B Marketing]]></category>
+		<excerpt:encoded><![CDATA[B2B marketing is ripe for AI transformation, but the stakes are higher.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Low-hanging growth: what you can improve tomorrow using AI</title>
+		<link>https://boomingventure.com/blog/low-hanging-growth-ai-improvements/</link>
+		<wp:post_id>307</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-10 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[low-hanging-growth-ai-improvements]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="growth-hacking"><![CDATA[Growth Hacking]]></category>
+		<excerpt:encoded><![CDATA[You don&#8217;t need a complete overhaul to see AI results.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>ROI optimization for Netherlands SME: a data-driven approach</title>
+		<link>https://boomingventure.com/blog/roi-optimization-netherlands-sme/</link>
+		<wp:post_id>308</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-12 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[roi-optimization-netherlands-sme]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="roi-optimization"><![CDATA[ROI Optimization]]></category>
+		<excerpt:encoded><![CDATA[Dutch SMEs face unique market challenges.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Marketing funnel: how it works in 2025</title>
+		<link>https://boomingventure.com/blog/marketing-funnel-how-it-works-2025/</link>
+		<wp:post_id>309</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-15 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[marketing-funnel-how-it-works-2025]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="funnel-strategy"><![CDATA[Funnel Strategy]]></category>
+		<excerpt:encoded><![CDATA[The traditional marketing funnel is dead.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>The hidden costs of inefficient marketing funnels</title>
+		<link>https://boomingventure.com/blog/hidden-costs-inefficient-marketing-funnels/</link>
+		<wp:post_id>310</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-18 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[hidden-costs-inefficient-marketing-funnels]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="funnel-strategy"><![CDATA[Funnel Strategy]]></category>
+		<excerpt:encoded><![CDATA[Funnel inefficiencies don&#8217;t just reduce conversions — they compound into massive hidden costs.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Customer retention AI strategies for 2025</title>
+		<link>https://boomingventure.com/blog/customer-retention-ai-strategies-2025/</link>
+		<wp:post_id>311</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-20 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[customer-retention-ai-strategies-2025]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="customer-retention"><![CDATA[Customer Retention]]></category>
+		<excerpt:encoded><![CDATA[Acquiring customers is expensive; retaining them is profitable.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>5 marketing automation mistakes that are losing you customers</title>
+		<link>https://boomingventure.com/blog/marketing-automation-mistakes-losing-customers/</link>
+		<wp:post_id>312</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-22 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[marketing-automation-mistakes-losing-customers]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="marketing-automation"><![CDATA[Marketing Automation]]></category>
+		<excerpt:encoded><![CDATA[Marketing automation should nurture relationships, not damage them.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Social media ROI measurement: beyond vanity metrics</title>
+		<link>https://boomingventure.com/blog/social-media-roi-measurement-guide/</link>
+		<wp:post_id>313</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-25 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[social-media-roi-measurement-guide]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="social-media"><![CDATA[Social Media]]></category>
+		<excerpt:encoded><![CDATA[Likes and follows don&#8217;t pay the bills.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Advanced email marketing personalization (beyond &#8216;Hi [Name]&#8217;)</title>
+		<link>https://boomingventure.com/blog/email-marketing-personalization-advanced/</link>
+		<wp:post_id>314</wp:post_id>
+		<wp:post_date><![CDATA[2025-02-28 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[email-marketing-personalization-advanced]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="email-marketing"><![CDATA[Email Marketing]]></category>
+		<excerpt:encoded><![CDATA[True email personalization goes far beyond first names.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Content marketing distribution strategies that actually work</title>
+		<link>https://boomingventure.com/blog/content-marketing-distribution-strategies/</link>
+		<wp:post_id>315</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-01 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[content-marketing-distribution-strategies]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="content-marketing"><![CDATA[Content Marketing]]></category>
+		<excerpt:encoded><![CDATA[Great content without distribution is invisible content.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Making data-driven creative decisions without killing creativity</title>
+		<link>https://boomingventure.com/blog/data-driven-creative-decisions-balance/</link>
+		<wp:post_id>316</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-03 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[data-driven-creative-decisions-balance]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="creative-strategy"><![CDATA[Creative Strategy]]></category>
+		<excerpt:encoded><![CDATA[Data should inform creativity, not constrain it.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Mobile-first marketing strategies for 2025</title>
+		<link>https://boomingventure.com/blog/mobile-first-marketing-strategies-2025/</link>
+		<wp:post_id>317</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-05 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[mobile-first-marketing-strategies-2025]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="mobile-marketing"><![CDATA[Mobile Marketing]]></category>
+		<excerpt:encoded><![CDATA[Mobile isn&#8217;t the future — it&#8217;s the present.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Why traditional funnels are dying</title>
+		<link>https://boomingventure.com/blog/why-traditional-funnels-dying/</link>
+		<wp:post_id>318</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-08 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[why-traditional-funnels-dying]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="funnel-strategy"><![CDATA[Funnel Strategy]]></category>
+		<excerpt:encoded><![CDATA[The linear funnel is a relic of simpler times.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>AI vs. human: who writes better landing pages?</title>
+		<link>https://boomingventure.com/blog/ai-vs-human-landing-pages/</link>
+		<wp:post_id>319</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-10 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[ai-vs-human-landing-pages]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="conversion-optimization"><![CDATA[Conversion Optimization]]></category>
+		<excerpt:encoded><![CDATA[A comprehensive analysis of AI-generated vs human-written landing pages.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>How AI content will outperform human creators by 2026</title>
+		<link>https://boomingventure.com/blog/how-ai-content-outperform-human-2026/</link>
+		<wp:post_id>320</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-12 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[how-ai-content-outperform-human-2026]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="ai-marketing"><![CDATA[AI Marketing]]></category>
+		<excerpt:encoded><![CDATA[Discover the data-driven reasons why AI content creation is set to surpass human creators.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>How to scale lead gen without scaling your team</title>
+		<link>https://boomingventure.com/blog/scale-lead-gen-without-scaling-team/</link>
+		<wp:post_id>321</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-15 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[scale-lead-gen-without-scaling-team]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="lead-generation"><![CDATA[Lead Generation]]></category>
+		<excerpt:encoded><![CDATA[Growth doesn&#8217;t have to mean hiring sprees.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>3 things your competitors already do with AI (and you don&#8217;t)</title>
+		<link>https://boomingventure.com/blog/3-things-competitors-already-do-ai/</link>
+		<wp:post_id>322</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-18 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[3-things-competitors-already-do-ai]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="ai-marketing"><![CDATA[AI Marketing]]></category>
+		<excerpt:encoded><![CDATA[While you&#8217;re debating AI adoption, your competitors are already winning with it.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>The future of marketing automation (with real use cases)</title>
+		<link>https://boomingventure.com/blog/future-marketing-automation-real-use-cases/</link>
+		<wp:post_id>323</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-20 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[future-marketing-automation-real-use-cases]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="marketing-automation"><![CDATA[Marketing Automation]]></category>
+		<excerpt:encoded><![CDATA[Discover the evolution of marketing automation with real-world use cases.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Building an omnichannel growth engine in 60 days</title>
+		<link>https://boomingventure.com/blog/omnichannel-growth-engine-60-days/</link>
+		<wp:post_id>324</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-22 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[omnichannel-growth-engine-60-days]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="growth-hacking"><![CDATA[Growth Hacking]]></category>
+		<excerpt:encoded><![CDATA[Stop playing channel whack-a-mole.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>B2B marketing UX makeover with AI</title>
+		<link>https://boomingventure.com/blog/b2b-marketing-ux-makeover-ai/</link>
+		<wp:post_id>325</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-25 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[b2b-marketing-ux-makeover-ai]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="b2b-marketing"><![CDATA[B2B Marketing]]></category>
+		<excerpt:encoded><![CDATA[B2B marketing experiences are notoriously poor.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Influencer marketing in 2025: authenticity over reach</title>
+		<link>https://boomingventure.com/blog/influencer-marketing-authenticity-2025/</link>
+		<wp:post_id>326</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-28 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[influencer-marketing-authenticity-2025]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="influencer-marketing"><![CDATA[Influencer Marketing]]></category>
+		<excerpt:encoded><![CDATA[The influencer marketing landscape has evolved.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>The psychology behind high-converting landing pages</title>
+		<link>https://boomingventure.com/blog/conversion-optimization-psychology-landing-pages/</link>
+		<wp:post_id>327</wp:post_id>
+		<wp:post_date><![CDATA[2025-03-30 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[conversion-optimization-psychology-landing-pages]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="conversion-optimization"><![CDATA[Conversion Optimization]]></category>
+		<excerpt:encoded><![CDATA[Great landing pages tap into psychological triggers that drive action.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Why video marketing will dominate 2025 (and how to get started)</title>
+		<link>https://boomingventure.com/blog/video-marketing-dominance-2025/</link>
+		<wp:post_id>328</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-01 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[video-marketing-dominance-2025]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="video-marketing"><![CDATA[Video Marketing]]></category>
+		<excerpt:encoded><![CDATA[Video content is taking over every platform.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Complete CRO audit checklist: find hidden conversion killers</title>
+		<link>https://boomingventure.com/blog/conversion-rate-optimization-audit-checklist/</link>
+		<wp:post_id>329</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-03 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[conversion-rate-optimization-audit-checklist]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="conversion-optimization"><![CDATA[Conversion Optimization]]></category>
+		<excerpt:encoded><![CDATA[Most websites have invisible conversion barriers.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Lead magnet strategies that convert 40%+ of visitors</title>
+		<link>https://boomingventure.com/blog/lead-magnet-strategies-high-conversion/</link>
+		<wp:post_id>330</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-05 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[lead-magnet-strategies-high-conversion]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="lead-generation"><![CDATA[Lead Generation]]></category>
+		<excerpt:encoded><![CDATA[Generic ebooks are dead.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Google Ads optimization: from wasteful spending to profitable ROI</title>
+		<link>https://boomingventure.com/blog/google-ads-optimization-profitable-roi/</link>
+		<wp:post_id>331</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-08 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[google-ads-optimization-profitable-roi]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="paid-advertising"><![CDATA[Paid Advertising]]></category>
+		<excerpt:encoded><![CDATA[Stop burning money on Google Ads.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Pricing psychology for premium brands: charge what you&#8217;re worth</title>
+		<link>https://boomingventure.com/blog/pricing-psychology-premium-brands/</link>
+		<wp:post_id>332</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-10 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[pricing-psychology-premium-brands]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="pricing-strategy"><![CDATA[Pricing Strategy]]></category>
+		<excerpt:encoded><![CDATA[Premium brands that compete on price lose their positioning.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>CLV optimization: turn one-time buyers into lifetime customers</title>
+		<link>https://boomingventure.com/blog/customer-lifetime-value-optimization/</link>
+		<wp:post_id>333</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-12 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[customer-lifetime-value-optimization]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="customer-retention"><![CDATA[Customer Retention]]></category>
+		<excerpt:encoded><![CDATA[Acquiring customers is expensive — maximizing their lifetime value is profitable.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Local SEO for Netherlands businesses: dominate your market</title>
+		<link>https://boomingventure.com/blog/local-seo-netherlands-businesses/</link>
+		<wp:post_id>334</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-15 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[local-seo-netherlands-businesses]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="local-seo"><![CDATA[Local SEO]]></category>
+		<excerpt:encoded><![CDATA[Dutch businesses need location-specific SEO strategies.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Sales funnel psychology: what makes people buy (and what doesn&#8217;t)</title>
+		<link>https://boomingventure.com/blog/sales-funnel-psychology-buying-decisions/</link>
+		<wp:post_id>335</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-18 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[sales-funnel-psychology-buying-decisions]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="funnel-strategy"><![CDATA[Funnel Strategy]]></category>
+		<excerpt:encoded><![CDATA[Understanding buyer psychology is the difference between funnels that convert and funnels that leak.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Brand positioning that creates unbeatable competitive advantage</title>
+		<link>https://boomingventure.com/blog/brand-positioning-competitive-advantage/</link>
+		<wp:post_id>336</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-20 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[brand-positioning-competitive-advantage]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="brand-strategy"><![CDATA[Brand Strategy]]></category>
+		<excerpt:encoded><![CDATA[In crowded markets, positioning determines profitability.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Growth hacking for B2B SaaS: from startup to scale-up</title>
+		<link>https://boomingventure.com/blog/growth-hacking-b2b-saas-strategies/</link>
+		<wp:post_id>337</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-22 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[growth-hacking-b2b-saas-strategies]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="growth-hacking"><![CDATA[Growth Hacking]]></category>
+		<excerpt:encoded><![CDATA[B2B SaaS growth requires different tactics than B2C.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Marketing attribution modeling: know what&#8217;s really driving sales</title>
+		<link>https://boomingventure.com/blog/marketing-attribution-modeling-guide/</link>
+		<wp:post_id>338</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-25 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[marketing-attribution-modeling-guide]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="marketing-analytics"><![CDATA[Marketing Analytics]]></category>
+		<excerpt:encoded><![CDATA[Last-click attribution is killing your marketing decisions.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>Facebook Ads &amp; iOS privacy: how to win in a post-IDFA world</title>
+		<link>https://boomingventure.com/blog/facebook-ads-ios-privacy/</link>
+		<wp:post_id>339</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-28 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[facebook-ads-ios-privacy]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="paid-advertising"><![CDATA[Paid Advertising]]></category>
+		<excerpt:encoded><![CDATA[The iOS privacy change broke last-click attribution on Meta. Here is the playbook that actually works now.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>LinkedIn Ads for B2B lead generation</title>
+		<link>https://boomingventure.com/blog/linkedin-ads-b2b-lead-generation/</link>
+		<wp:post_id>340</wp:post_id>
+		<wp:post_date><![CDATA[2025-04-30 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[linkedin-ads-b2b-lead-generation]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="b2b-marketing"><![CDATA[B2B Marketing]]></category>
+		<excerpt:encoded><![CDATA[LinkedIn is the most underused B2B channel. Here is how to make it pay back in 90 days.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>SEO + content marketing integration that compounds</title>
+		<link>https://boomingventure.com/blog/seo-content-marketing-integration/</link>
+		<wp:post_id>341</wp:post_id>
+		<wp:post_date><![CDATA[2025-05-02 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[seo-content-marketing-integration]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="content-marketing"><![CDATA[Content Marketing]]></category>
+		<excerpt:encoded><![CDATA[Treating SEO and content as separate disciplines is leaving compounding on the table.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+	<item>
+		<title>E-commerce CRO: rescue your abandoned carts</title>
+		<link>https://boomingventure.com/blog/ecommerce-cro-abandoned-cart/</link>
+		<wp:post_id>342</wp:post_id>
+		<wp:post_date><![CDATA[2025-05-05 09:00:00]]></wp:post_date>
+		<wp:post_name><![CDATA[ecommerce-cro-abandoned-cart]]></wp:post_name>
+		<wp:status><![CDATA[publish]]></wp:status>
+		<wp:post_type><![CDATA[post]]></wp:post_type>
+		<category domain="category" nicename="conversion-optimization"><![CDATA[Conversion Optimization]]></category>
+		<excerpt:encoded><![CDATA[Most stores leave 30–40% of revenue in abandoned carts. Here is how to recover it without spamming.]]></excerpt:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace with full draft.</p><!-- /wp:paragraph -->]]></content:encoded>
+	</item>
+
+</channel>
+</rss>

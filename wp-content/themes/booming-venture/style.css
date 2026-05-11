@@ -1,0 +1,17 @@
+/*
+Theme Name: Booming Venture
+Theme URI: https://boomingventure.com
+Author: Booming Venture
+Author URI: https://boomingventure.com
+Description: Modern block (FSE) theme for Booming Venture — AI-powered performance marketing from Rotterdam. Includes custom Gutenberg blocks for the Funnel Leak Calculator and ROI Forecaster, full block patterns library, brand-aligned design tokens, JSON-LD schema, and lead-magnet templates. Designed for accessibility (WCAG 2.2 AA), Core Web Vitals, and Brevo / Fluent Forms integration.
+Version: 1.0.0
+Tested up to: 6.7
+Requires at least: 6.5
+Requires PHP: 8.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: booming-venture
+Tags: full-site-editing, block-templates, block-patterns, custom-colors, custom-logo, editor-style, featured-images, rtl-language-support, threaded-comments, translation-ready, wide-blocks, blog, portfolio, business
+*/
+
+/* All visual styling lives in theme.json and assets/css/theme.css. This file is the WordPress theme header. */

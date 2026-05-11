@@ -1,0 +1,15 @@
+/**
+ * Editor preview — small QoL tweaks. theme.json drives the rest.
+ */
+.editor-styles-wrapper { font-family: var(--wp--preset--font-family--sans); }
+.editor-styles-wrapper .bv-block-editor-placeholder { padding: 2rem; border: 2px dashed var(--wp--preset--color--booming-300); border-radius: 1rem; background: var(--wp--preset--color--booming-50); text-align: center; }
+.editor-styles-wrapper .bv-check-list { list-style: none; padding-left: 0; }
+.editor-styles-wrapper .bv-check-list li { position: relative; padding-left: 1.75rem; }
+.editor-styles-wrapper .bv-check-list li::before {
+	content: '✓'; position: absolute; left: 0; top: 0;
+	color: var(--wp--preset--color--venture-600); font-weight: 700;
+}
+.editor-styles-wrapper .bv-gradient-text {
+	background: var(--wp--preset--gradient--brand);
+	-webkit-background-clip: text; background-clip: text; color: transparent;
+}

@@ -1,0 +1,156 @@
+/**
+ * Booming Venture — theme.css
+ * Visual layer on top of theme.json. Keep it lean.
+ */
+
+/* ---- Base ---------------------------------------------------------- */
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+	html { scroll-behavior: auto; }
+	*, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+body { overflow-x: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* Focus ring — WCAG AA contrast on all backgrounds. */
+:focus-visible {
+	outline: 2px solid var(--wp--preset--color--booming-600);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+
+/* ---- Header / Nav -------------------------------------------------- */
+.bv-header {
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	background: rgba(255, 255, 255, 0.85);
+	border-bottom: 1px solid var(--wp--preset--color--border);
+	z-index: 50;
+}
+.bv-header .wp-block-button.bv-cta .wp-block-button__link {
+	box-shadow: var(--wp--preset--shadow--brand);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.bv-header .wp-block-button.bv-cta .wp-block-button__link:hover {
+	transform: translateY(-1px);
+	box-shadow: var(--wp--preset--shadow--glow);
+}
+
+/* Logo lockup */
+.bv-brand { letter-spacing: -0.01em; }
+.bv-brand-accent { color: var(--wp--preset--color--venture-600); }
+
+/* ---- Brand utilities ----------------------------------------------- */
+.bv-gradient-text {
+	background: var(--wp--preset--gradient--brand);
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+/* ---- Hero ---------------------------------------------------------- */
+.bv-hero { position: relative; isolation: isolate; }
+.bv-hero::before,
+.bv-hero::after {
+	content: ''; position: absolute; pointer-events: none; z-index: -1;
+	width: 60vw; height: 60vw; max-width: 700px; max-height: 700px;
+	border-radius: 50%; filter: blur(80px); opacity: 0.45;
+}
+.bv-hero::before { top: -20%; right: -10%; background: radial-gradient(circle, var(--wp--preset--color--booming-200), transparent 70%); }
+.bv-hero::after  { bottom: -20%; left: -10%;  background: radial-gradient(circle, var(--wp--preset--color--venture-200), transparent 70%); }
+
+.bv-hero-card {
+	position: relative;
+	border-radius: 1rem;
+}
+.bv-hero-card::before {
+	content: ''; position: absolute; inset: -8px; z-index: -1;
+	border-radius: 1.25rem;
+	background: linear-gradient(135deg, rgba(186,230,253,0.7), rgba(153,246,228,0.7));
+	transform: rotate(3deg);
+	backdrop-filter: blur(8px);
+}
+
+/* ---- Check list (used in hero + services + about) ------------------ */
+.bv-check-list { list-style: none; padding-left: 0 !important; margin: 0; }
+.bv-check-list li {
+	position: relative;
+	padding-left: 1.75rem;
+	margin: 0.5rem 0;
+	color: var(--wp--preset--color--contrast-2);
+}
+.bv-check-list li::before {
+	content: ''; position: absolute; left: 0; top: 0.45em;
+	width: 1rem; height: 1rem; border-radius: 50%;
+	background: var(--wp--preset--gradient--brand);
+	mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 12l5 5L20 7' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+	-webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 12l5 5L20 7' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;
+}
+
+/* ---- Service cards ------------------------------------------------- */
+.bv-service-card { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; }
+.bv-service-card:hover { transform: translateY(-4px); box-shadow: var(--wp--preset--shadow--lg); border-color: var(--wp--preset--color--booming-200); }
+.bv-service-icon { width: 3rem; height: 3rem; display: inline-flex !important; align-items: center; justify-content: center; font-size: 1.25rem; }
+
+/* ---- Quote card ---------------------------------------------------- */
+.bv-quote-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.bv-quote-card:hover { transform: translateY(-3px); box-shadow: var(--wp--preset--shadow--lg); }
+
+/* ---- Post cards (archive / blog grid) ------------------------------ */
+.bv-post-card { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease; overflow: hidden; }
+.bv-post-card:hover { transform: translateY(-4px); box-shadow: var(--wp--preset--shadow--lg); border-color: var(--wp--preset--color--booming-200); }
+
+/* ---- Marquee (awards) --------------------------------------------- */
+.bv-marquee .wp-block-gallery {
+	mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+	-webkit-mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent);
+}
+
+/* ---- Footer -------------------------------------------------------- */
+.bv-footer-nav, .bv-footer-list { list-style: none; padding-left: 0; }
+.bv-footer-list li { margin: 0.5rem 0; }
+.bv-footer-list li a { color: var(--wp--preset--color--muted); text-decoration: none; transition: color 0.2s; }
+.bv-footer-list li a:hover { color: var(--wp--preset--color--booming-600); }
+.bv-legal-links { list-style: none; padding-left: 0; display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.bv-legal-links a { color: var(--wp--preset--color--muted); text-decoration: none; }
+.bv-legal-links a:hover { color: var(--wp--preset--color--booming-600); }
+
+/* ---- Floating action buttons (calculators + chat) ------------------ */
+.bv-fabs {
+	position: fixed; right: 1.5rem; bottom: 1.5rem; z-index: 40;
+	display: flex; flex-direction: column; gap: 0.75rem;
+}
+.bv-fab {
+	width: 3.25rem; height: 3.25rem; border-radius: 50%;
+	background: var(--wp--preset--gradient--brand);
+	display: inline-flex; align-items: center; justify-content: center;
+	color: #fff; text-decoration: none;
+	box-shadow: var(--wp--preset--shadow--brand);
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.bv-fab:hover { transform: scale(1.06); box-shadow: var(--wp--preset--shadow--glow); }
+
+/* ---- Scroll progress bar (theme.js) -------------------------------- */
+.bv-scroll-progress {
+	position: fixed; top: 0; left: 0; height: 3px; z-index: 60;
+	background: var(--wp--preset--gradient--brand);
+	width: var(--bv-scroll, 0%);
+	transition: width 0.05s linear;
+}
+
+/* ---- Blocks placeholder (editor) ---------------------------------- */
+.bv-block-editor-placeholder { padding: 2rem; border: 2px dashed var(--wp--preset--color--booming-300); border-radius: 1rem; background: var(--wp--preset--color--booming-50); text-align: center; }
+.bv-placeholder-card strong { display: block; font-size: 1.25rem; margin-bottom: 0.25rem; }
+
+/* ---- Drop-cap helper for long-form posts -------------------------- */
+.bv-drop-cap::first-letter {
+	float: left; font-size: 4.5rem; line-height: 0.9; margin: 0.25rem 0.5rem 0 0;
+	background: var(--wp--preset--gradient--brand);
+	-webkit-background-clip: text; background-clip: text; color: transparent;
+	font-weight: 700;
+}
+
+/* ---- Print --------------------------------------------------------- */
+@media print {
+	.bv-header, .bv-footer, .bv-fabs, .bv-scroll-progress { display: none !important; }
+	body { background: #fff !important; color: #000 !important; }
+}
