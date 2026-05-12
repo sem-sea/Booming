@@ -10,3 +10,4 @@ lovable-source/
 # Node build artifacts inside the theme
 wp-content/themes/*/blocks/node_modules/
 wp-content/themes/*/blocks/**/build/
+__pycache__/
