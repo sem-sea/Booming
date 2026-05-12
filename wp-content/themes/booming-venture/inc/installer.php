@@ -272,3 +272,83 @@ add_action( 'admin_notices', function () {
 		<?php
 	}
 } );
+
+
+/* ============================================================
+ * Manual re-import endpoint + diagnostics on the Settings page.
+ * Useful when the auto-importer ran but missed posts (Strato
+ * 30-second timeout) or when re-installing the theme over the top.
+ * ============================================================ */
+
+add_action( 'admin_post_bv_reimport', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( 'bv_reimport' );
+	delete_option( BV_INSTALL_FLAG );
+	bv_run_install();
+	wp_safe_redirect( admin_url( 'options-general.php?page=booming-venture&bv_reimported=1' ) );
+	exit;
+} );
+
+/* Inject the diagnostic card + button at the top of the BV settings
+ * page. Hooks in_admin_footer for the options-general page so it
+ * renders even if the rest of the settings page is loaded by the
+ * existing options framework. */
+add_action( 'admin_notices', function () {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen || 'settings_page_booming-venture' !== $screen->id ) return;
+	if ( isset( $_GET['bv_reimported'] ) ) {
+		?>
+		<div class="notice notice-success is-dismissible">
+			<p><strong>Re-import complete.</strong> Demo content has been re-applied. Visit the front-end to verify.</p>
+		</div>
+		<?php
+	}
+} );
+
+/* Render a "Booming Venture content" panel at the top of the
+ * settings page. Counts pages / posts / services and shows the
+ * Re-import button. */
+add_action( 'admin_init', function () {
+	add_filter( 'admin_footer_text', function ( $text ) {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || 'settings_page_booming-venture' !== $screen->id ) return $text;
+		return $text;
+	} );
+} );
+
+add_action( 'admin_print_footer_scripts-settings_page_booming-venture', function () {
+	$pages    = count( get_posts( [ 'post_type' => 'page',    'post_status' => 'publish', 'posts_per_page' => -1, 'fields' => 'ids' ] ) );
+	$posts    = count( get_posts( [ 'post_type' => 'post',    'post_status' => 'publish', 'posts_per_page' => -1, 'fields' => 'ids' ] ) );
+	$services = count( get_posts( [ 'post_type' => 'service', 'post_status' => 'publish', 'posts_per_page' => -1, 'fields' => 'ids' ] ) );
+	$home_set = (int) get_option( 'page_on_front' );
+	$blog_set = (int) get_option( 'page_for_posts' );
+	$front    = get_option( 'show_on_front' );
+	$installed = get_option( BV_INSTALL_FLAG );
+
+	$action = esc_url( admin_url( 'admin-post.php' ) );
+	$nonce  = wp_nonce_field( 'bv_reimport', '_wpnonce', true, false );
+
+	$html = '<div class="notice" style="margin:1rem 20px;border-left:4px solid #0284c7;padding:1rem 1.25rem;background:#f0f9ff;">'
+		. '<h3 style="margin:0 0 0.5rem;">Booming Venture content status</h3>'
+		. '<ul style="margin:0 0 1rem;font-size:13px;line-height:1.6;">'
+		. '<li>Pages published: <strong>' . $pages . '</strong> (expect ≥13)</li>'
+		. '<li>Blog posts published: <strong>' . $posts . '</strong> (expect 43)</li>'
+		. '<li>Services published: <strong>' . $services . '</strong> (expect 4)</li>'
+		. '<li>Front page set: <strong>' . ( $home_set ? esc_html( get_the_title( $home_set ) ) : 'NOT SET' ) . '</strong></li>'
+		. '<li>Posts page set: <strong>' . ( $blog_set ? esc_html( get_the_title( $blog_set ) ) : 'NOT SET — your blog will not show!' ) . '</strong></li>'
+		. '<li>Show on front: <strong>' . esc_html( $front ) . '</strong></li>'
+		. '<li>Install flag: <strong>' . ( $installed ? esc_html( $installed ) : 'not run' ) . '</strong></li>'
+		. '</ul>'
+		. '<form method="post" action="' . $action . '" style="display:inline;">'
+		. $nonce
+		. '<input type="hidden" name="action" value="bv_reimport">'
+		. '<button type="submit" class="button button-primary" onclick="return confirm(\'Re-run the import? Existing pages/posts/services with the same slug will be skipped (safe). Menus will be rebuilt from the theme defaults.\')">Re-import demo content</button>'
+		. '</form>'
+		. ' <a href="' . esc_url( admin_url( 'options-permalink.php' ) ) . '" class="button">Open Permalinks (Save once to flush rules)</a>'
+		. ' <a href="' . esc_url( admin_url( 'edit.php' ) ) . '" class="button">View all posts</a>'
+		. '</div>';
+
+	/* Inject after the <h1> on the settings page so it appears at
+	 * the top of the panel. */
+	echo "<script>(function(){var t=document.querySelector('.wrap h1');if(t)t.insertAdjacentHTML('afterend'," . wp_json_encode( $html ) . ");})();</script>";
+} );
