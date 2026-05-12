@@ -397,3 +397,197 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .bv-page-hero h1 { font-size: clamp(2rem, 1.4rem + 3vw, 3.75rem); line-height: 1.1; max-width: 18ch; margin: 0 auto 1rem; }
 .bv-page-hero p.lead { font-size: clamp(1rem, 0.95rem + 0.25vw, 1.25rem); color: var(--wp--preset--color--muted); max-width: 56ch; margin: 0 auto 1.5rem; }
 
+
+/* ============================================================
+ * Contact Form 7 — branded styling
+ * Overrides CF7's defaults (brown spinner, p-wrapping, red tooltip,
+ * inline border colours on response output) and aligns inputs with
+ * the theme's design tokens.
+ * Class reference: https://contactform7.com/2024/05/06/v6.0/
+ * ============================================================ */
+
+.wpcf7 { color: var(--wp--preset--color--contrast); }
+
+/* Form container becomes a grid so labels stack cleanly. */
+.wpcf7-form { display: grid; gap: 1rem; }
+
+/* Strip CF7's default p-tag spacing where wpautop wasn't disabled. */
+.wpcf7-form p { margin: 0; }
+
+/* Labels: stack above the field. */
+.wpcf7-form label {
+	display: grid;
+	gap: 0.375rem;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: var(--wp--preset--color--contrast);
+}
+
+/* The field wrap CF7 generates around each input. */
+.wpcf7-form-control-wrap { display: block; position: relative; }
+
+/* All form controls (text, email, tel, url, number, date, textarea, select). */
+.wpcf7-form-control:where(.wpcf7-text, .wpcf7-email, .wpcf7-tel, .wpcf7-url, .wpcf7-number, .wpcf7-date, .wpcf7-textarea, .wpcf7-select, .wpcf7-quiz, [type="text"], [type="email"], [type="tel"], [type="url"], [type="number"], [type="date"]) {
+	width: 100%;
+	min-height: 44px;
+	padding: 0.75rem 1rem;
+	font-size: max(1rem, 16px);
+	font-family: inherit;
+	line-height: 1.5;
+	color: var(--wp--preset--color--contrast);
+	background: #fff;
+	border: 1px solid var(--wp--preset--color--border);
+	border-radius: 0.625rem;
+	box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
+	transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+	appearance: none;
+	-webkit-appearance: none;
+}
+.wpcf7-form-control.wpcf7-textarea { min-height: 140px; resize: vertical; }
+.wpcf7-form-control.wpcf7-select   { padding-right: 2.5rem; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2364748b'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.084l3.71-3.853a.75.75 0 111.08 1.04l-4.25 4.41a.75.75 0 01-1.08 0l-4.25-4.41a.75.75 0 01.02-1.06z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; background-size: 1rem; }
+
+/* Focus state: brand ring, accessible contrast. */
+.wpcf7-form-control:focus,
+.wpcf7-form-control:focus-visible {
+	outline: none;
+	border-color: var(--wp--preset--color--booming-500);
+	box-shadow: 0 0 0 3px rgba(14,165,233,0.18);
+	background: #fff;
+}
+
+/* Placeholder styling for legibility. */
+.wpcf7-form-control::placeholder { color: var(--wp--preset--color--muted); opacity: 1; }
+
+/* Required-asterisk visual cue. CF7 emits a span with .wpcf7-validates-as-required on the input only,
+   so we add a tiny dot to the label of any wrap holding a required field. */
+.wpcf7-form-control-wrap:has(.wpcf7-validates-as-required)::before {
+	content: '*';
+	position: absolute;
+	top: -1.35rem;
+	right: 0;
+	font-size: 0.75rem;
+	color: var(--wp--preset--color--venture-700);
+	font-weight: 700;
+}
+
+/* Submit button: matches theme buttons. */
+.wpcf7-form-control.wpcf7-submit {
+	min-height: 48px;
+	padding: 0.875rem 1.75rem;
+	font-size: 1rem;
+	font-weight: 600;
+	color: #fff;
+	background: var(--wp--preset--gradient--brand);
+	border: none;
+	border-radius: 0.625rem;
+	cursor: pointer;
+	transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+	touch-action: manipulation;
+	width: 100%;
+}
+@media (min-width: 640px) { .wpcf7-form-control.wpcf7-submit { width: auto; } }
+.wpcf7-form-control.wpcf7-submit:hover { transform: translateY(-1px); box-shadow: var(--wp--preset--shadow--brand); }
+.wpcf7-form-control.wpcf7-submit:focus-visible { outline: 2px solid var(--wp--preset--color--booming-700); outline-offset: 2px; }
+.wpcf7-form-control.wpcf7-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* Acceptance / GDPR checkbox row. */
+.wpcf7-acceptance, .wpcf7-checkbox, .wpcf7-radio { display: block; }
+.wpcf7-list-item { display: inline-flex; align-items: flex-start; gap: 0.5rem; margin: 0; padding: 0; }
+.wpcf7-list-item input[type="checkbox"],
+.wpcf7-list-item input[type="radio"] {
+	width: 18px; height: 18px;
+	margin-top: 2px;
+	accent-color: var(--wp--preset--color--booming-600);
+	flex-shrink: 0;
+}
+.wpcf7-list-item-label { font-size: 0.875rem; color: var(--wp--preset--color--muted); line-height: 1.5; }
+
+/* Validation tip: replace CF7's positioned red bubble with inline copy. */
+.wpcf7-not-valid-tip {
+	position: static !important;
+	display: block;
+	background: transparent !important;
+	border: none !important;
+	margin-top: 0.375rem;
+	padding: 0;
+	color: #b91c1c;
+	font-size: 0.8125rem;
+	font-weight: 500;
+}
+
+/* Invalid input borders. */
+.wpcf7-form-control.wpcf7-not-valid {
+	border-color: #ef4444;
+	box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
+}
+
+/* The big response message at the bottom of the form (success / failure / spam). */
+.wpcf7-response-output {
+	margin: 0.5rem 0 0;
+	padding: 0.875rem 1rem;
+	border-radius: 0.5rem;
+	font-size: 0.9375rem;
+	border-width: 0 !important;
+	border-left: 4px solid var(--wp--preset--color--muted) !important;
+	background: var(--wp--preset--color--base-50);
+}
+.wpcf7-form.invalid  .wpcf7-response-output { border-left-color: #ef4444 !important; background: #fef2f2; color: #7f1d1d; }
+.wpcf7-form.unaccepted .wpcf7-response-output,
+.wpcf7-form.spam     .wpcf7-response-output,
+.wpcf7-form.failed   .wpcf7-response-output { border-left-color: #f97316 !important; background: #fff7ed; color: #7c2d12; }
+.wpcf7-form.sent     .wpcf7-response-output { border-left-color: var(--wp--preset--color--venture-600) !important; background: #ecfdf5; color: #065f46; }
+
+/* Branded spinner replaces the default brown gif. */
+.wpcf7-spinner {
+	display: none;
+	background: none !important;
+	width: 20px; height: 20px;
+	border-radius: 50%;
+	border: 2px solid rgba(14,165,233,0.25);
+	border-top-color: var(--wp--preset--color--booming-600);
+	animation: bv-spin 0.7s linear infinite;
+	margin-left: 0.625rem;
+	vertical-align: middle;
+}
+.wpcf7-form.submitting .wpcf7-spinner { display: inline-block; }
+@keyframes bv-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .wpcf7-spinner { animation: none; border-top-color: transparent; } }
+
+/* Submitting state on the form: dim controls, prevent double-clicks. */
+.wpcf7-form.submitting .wpcf7-form-control { opacity: 0.7; pointer-events: none; }
+
+/* Newsletter-inline form variant — used in the footer. Stacks tighter. */
+.bv-footer .wpcf7-form,
+.bv-footer-newsletter .wpcf7-form { gap: 0.625rem; }
+.bv-footer .wpcf7-form-control,
+.bv-footer-newsletter .wpcf7-form-control { font-size: 0.9375rem; }
+
+/* Horizontal inline form (email + button on one row) — applied via the
+   .bv-form-inline wrapper class in the newsletter-inline pattern. */
+.bv-form-inline .wpcf7-form {
+	grid-template-columns: 1fr;
+	gap: 0.5rem;
+}
+@media (min-width: 480px) {
+	.bv-form-inline .wpcf7-form { grid-template-columns: 1fr auto; align-items: end; }
+	.bv-form-inline .wpcf7-form > :last-child { grid-column: 2; }
+}
+
+/* Form on dark / gradient backgrounds (newsletter-cta, growth-guide). */
+.has-brand-gradient-background .wpcf7-form-control,
+.has-brand-dark-gradient-background .wpcf7-form-control {
+	background: rgba(255,255,255,0.95);
+	border-color: transparent;
+}
+.has-brand-gradient-background .wpcf7-form-control.wpcf7-submit,
+.has-brand-dark-gradient-background .wpcf7-form-control.wpcf7-submit {
+	background: #fff;
+	color: var(--wp--preset--color--booming-700);
+}
+.has-brand-gradient-background .wpcf7-form-control.wpcf7-submit:hover,
+.has-brand-dark-gradient-background .wpcf7-form-control.wpcf7-submit:hover {
+	box-shadow: 0 12px 30px -8px rgba(0,0,0,0.2);
+}
+
+/* Print: hide forms when printing pages (Funnel Calc / ROI PDF export). */
+@media print { .wpcf7 { display: none; } }

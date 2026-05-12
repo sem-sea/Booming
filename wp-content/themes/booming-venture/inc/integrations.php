@@ -1,16 +1,19 @@
 <?php
 /**
- * Third-party integrations — Brevo, Fluent Forms hand-off.
+ * Third-party integrations — Brevo, Contact Form 7 hand-off.
  *
  * The recommended flow:
- *   - Install Fluent Forms (free) + Fluent Forms Brevo connector.
- *   - Configure each form (contact, newsletter, growth-guide, newsletter-inline, quickscan, head-of-growth)
- *     to push to the matching Brevo list.
+ *   - Install Contact Form 7 + Honeypot for CF7 + Flamingo + a Brevo
+ *     bridge (CF7 to Brevo / official Brevo plugin / CF7 to Any API).
+ *   - Create six forms (contact, newsletter, newsletter-inline,
+ *     growth-guide, quickscan, head-of-growth). CF7 will assign each a
+ *     hash ID like "a1b2c3d4".
+ *   - Map each semantic slug to the CF7 hash ID under
+ *     Settings → Booming Venture.
  *
- * As a fallback for sites NOT running Fluent Forms, this file exposes a
- * tiny REST endpoint that the theme can post to from a custom form. It
- * is feature-gated behind the `bv_brevo_api_key` option / constant so
- * nothing fires unless the user opts in.
+ * The patterns ship with `[contact-form-7 id="contact"]` etc. so the
+ * markup stays human-readable; this file rewrites the slug to the real
+ * CF7 ID at render time.
  *
  * @package BoomingVenture
  */
@@ -18,50 +21,73 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Map semantic Fluent Forms slugs to real numeric form IDs.
- *
- * The patterns ship with [fluentform id="contact"] etc. so the markup stays
- * human-readable. Once the user creates each form they store the ID/slug
- * mapping in the `bv_fluentform_map` option (or via the constant). This
- * filter rewrites the shortcode at render time so the numeric Fluent Forms
- * ID flows through correctly.
+ * Map semantic Contact Form 7 slugs to real CF7 form IDs (hash strings
+ * since CF7 5.7, numeric post IDs still accepted).
  */
-function bv_fluentform_slug_map(): array {
+function bv_cf7_slug_map(): array {
 	$default = [
-		'contact'           => 0,
-		'newsletter'        => 0,
-		'newsletter-inline' => 0,
-		'growth-guide'      => 0,
-		'quickscan'         => 0,
-		'head-of-growth'    => 0,
+		'contact'           => '',
+		'newsletter'        => '',
+		'newsletter-inline' => '',
+		'growth-guide'      => '',
+		'quickscan'         => '',
+		'head-of-growth'    => '',
 	];
-	$map = (array) get_option( 'bv_fluentform_map', [] );
-	if ( defined( 'BV_FLUENTFORM_MAP' ) && is_array( BV_FLUENTFORM_MAP ) ) {
-		$map = BV_FLUENTFORM_MAP;
+	$map = (array) get_option( 'bv_cf7_map', [] );
+	if ( defined( 'BV_CF7_MAP' ) && is_array( BV_CF7_MAP ) ) {
+		$map = BV_CF7_MAP;
 	}
 	return array_merge( $default, $map );
 }
 
+/* Rewrite `[contact-form-7 id="contact"]` → `[contact-form-7 id="<hash>"]`. */
 add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
-	if ( 'fluentform' !== $tag ) return $output;
-	if ( ! isset( $attr['id'] ) || is_numeric( $attr['id'] ) ) return $output;
-	$map = bv_fluentform_slug_map();
-	$slug = sanitize_key( $attr['id'] );
+	if ( 'contact-form-7' !== $tag ) return $output;
+	if ( ! isset( $attr['id'] ) ) return $output;
+
+	$id_raw = (string) $attr['id'];
+
+	/* If it's already numeric or a CF7 hash (lowercase alnum 6+ chars), pass through. */
+	if ( is_numeric( $id_raw ) || preg_match( '/^[a-z0-9]{6,}$/i', $id_raw ) ) {
+		return $output;
+	}
+
+	$map  = bv_cf7_slug_map();
+	$slug = sanitize_key( $id_raw );
+
 	if ( ! empty( $map[ $slug ] ) ) {
-		$attr['id'] = (int) $map[ $slug ];
+		$attr['id'] = sanitize_text_field( $map[ $slug ] );
 		$attr_str = '';
 		foreach ( $attr as $k => $v ) {
 			$attr_str .= ' ' . $k . '="' . esc_attr( $v ) . '"';
 		}
 		return do_shortcode( '[' . $tag . $attr_str . ']' );
 	}
+
 	if ( current_user_can( 'edit_posts' ) ) {
-		return '<div class="bv-form-missing" style="padding:1rem;border:2px dashed #fca5a5;border-radius:0.5rem;background:#fef2f2;color:#7f1d1d;">Form <code>' . esc_html( $slug ) . '</code> is not mapped. Set it in <strong>Settings → Booming Venture → Forms</strong> or via <code>BV_FLUENTFORM_MAP</code>.</div>';
+		return '<div class="bv-form-missing" style="padding:1rem;border:2px dashed #fca5a5;border-radius:0.5rem;background:#fef2f2;color:#7f1d1d;">Form <code>' . esc_html( $slug ) . '</code> is not mapped to a Contact Form 7 ID. Set it in <strong>Settings → Booming Venture → Forms</strong> or via <code>BV_CF7_MAP</code>.</div>';
 	}
 	return '';
 }, 10, 3 );
 
-/* Settings page: map Fluent Forms slugs → IDs. */
+/* CF7 setup: disable autop (gives us CSS Grid control), keep its JS/CSS
+ * only on pages with a CF7 shortcode (perf win). */
+add_filter( 'wpcf7_autop_or_not', '__return_false' );
+
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! function_exists( 'wpcf7_enqueue_scripts' ) ) return;
+	global $post;
+	$has_cf7 = is_a( $post, 'WP_Post' ) && (
+		has_shortcode( $post->post_content, 'contact-form-7' ) ||
+		false !== stripos( get_the_content(), 'contact-form-7' )
+	);
+	if ( ! $has_cf7 && ! is_front_page() ) {
+		add_filter( 'wpcf7_load_js',  '__return_false' );
+		add_filter( 'wpcf7_load_css', '__return_false' );
+	}
+}, 5 );
+
+/* Settings page: map CF7 slugs → IDs. */
 add_action( 'admin_menu', function () {
 	add_options_page(
 		__( 'Booming Venture', 'booming-venture' ),
@@ -73,12 +99,12 @@ add_action( 'admin_menu', function () {
 } );
 
 add_action( 'admin_init', function () {
-	register_setting( 'bv_settings', 'bv_fluentform_map', [
+	register_setting( 'bv_settings', 'bv_cf7_map', [
 		'type'              => 'array',
 		'sanitize_callback' => function ( $value ) {
 			$out = [];
 			foreach ( (array) $value as $k => $v ) {
-				$out[ sanitize_key( $k ) ] = absint( $v );
+				$out[ sanitize_key( $k ) ] = sanitize_text_field( $v );
 			}
 			return $out;
 		},
@@ -101,18 +127,19 @@ add_action( 'admin_init', function () {
 
 function bv_settings_page(): void {
 	if ( ! current_user_can( 'manage_options' ) ) return;
-	$map = bv_fluentform_slug_map();
+	$map = bv_cf7_slug_map();
 	?>
 	<div class="wrap">
 		<h1>Booming Venture</h1>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'bv_settings' ); ?>
-			<h2>Fluent Forms — slug → ID</h2>
+			<h2>Contact Form 7 — slug → CF7 form ID</h2>
+			<p class="description">After creating each form in <strong>Contact → Contact Forms</strong>, paste the CF7 hash ID (e.g. <code>a1b2c3d4</code>) or numeric form ID into the matching slug below.</p>
 			<table class="form-table">
 			<?php foreach ( $map as $slug => $id ) : ?>
 				<tr>
-					<th><label for="bv-ff-<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $slug ); ?></label></th>
-					<td><input type="number" min="0" id="bv-ff-<?php echo esc_attr( $slug ); ?>" name="bv_fluentform_map[<?php echo esc_attr( $slug ); ?>]" value="<?php echo esc_attr( (string) $id ); ?>" class="small-text"></td>
+					<th><label for="bv-cf7-<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $slug ); ?></label></th>
+					<td><input type="text" id="bv-cf7-<?php echo esc_attr( $slug ); ?>" name="bv_cf7_map[<?php echo esc_attr( $slug ); ?>]" value="<?php echo esc_attr( (string) $id ); ?>" class="regular-text" placeholder="e.g. a1b2c3d4"></td>
 				</tr>
 			<?php endforeach; ?>
 			</table>
@@ -139,11 +166,10 @@ function bv_settings_page(): void {
 /* Admin notice nudging the install. */
 add_action( 'admin_notices', function () {
 	if ( ! current_user_can( 'install_plugins' ) ) return;
-	if ( defined( 'FLUENTFORM' ) ) return;
-	if ( get_option( 'bv_dismissed_fluentform_notice' ) ) return;
+	if ( defined( 'WPCF7_VERSION' ) ) return;
 	?>
 	<div class="notice notice-info is-dismissible">
-		<p><strong>Booming Venture theme:</strong> install <a href="<?php echo esc_url( admin_url( 'plugin-install.php?s=fluent+forms&tab=search&type=term' ) ); ?>">Fluent Forms</a> + its Brevo connector to wire up the contact, newsletter, and growth-guide forms baked into the patterns.</p>
+		<p><strong>Booming Venture theme:</strong> install <a href="<?php echo esc_url( admin_url( 'plugin-install.php?s=contact+form+7&tab=search&type=term' ) ); ?>">Contact Form 7</a>, <a href="<?php echo esc_url( admin_url( 'plugin-install.php?s=honeypot+for+contact+form+7&tab=search&type=term' ) ); ?>">Honeypot for CF7</a>, and <a href="<?php echo esc_url( admin_url( 'plugin-install.php?s=flamingo&tab=search&type=term' ) ); ?>">Flamingo</a> to wire up the forms baked into the patterns.</p>
 	</div>
 	<?php
 } );

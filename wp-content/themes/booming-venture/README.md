@@ -24,7 +24,7 @@ touching code.
 | `inc/patterns.php`        | Pattern categories. |
 | `inc/seo.php`             | JSON-LD (Organization, WebSite, BlogPosting, Service, BreadcrumbList), OG/Twitter fallback. |
 | `inc/security.php`        | Hardening: hides REST users, blocks author enum, security headers. |
-| `inc/integrations.php`    | Brevo REST proxy + Fluent Forms install nudge. |
+| `inc/integrations.php`    | Brevo REST proxy + Contact Form 7 slug→ID mapper + admin settings page. |
 | `templates/`              | Block templates: `index`, `front-page`, `page`, `single`, `archive`, `search`, `404`, + custom templates for the tool/landing pages. |
 | `parts/`                  | `header.html`, `footer.html`. |
 | `patterns/`               | Sectioned block patterns (hero, services-grid, about, testimonials, contact, growth-guide-cta, cta-band, newsletter-cta, awards-banner, blog-grid, UNIFY framework). |
@@ -85,8 +85,8 @@ See **INSTALL.md** for the full walk-through. TL;DR:
 # 2. Activate
 wp theme activate booming-venture
 
-# 3. Install Fluent Forms + the Brevo connector
-wp plugin install fluentform brevo-fluentform-integration --activate
+# 3. Install Contact Form 7 + anti-spam + storage + Brevo bridge
+wp plugin install contact-form-7 contact-form-7-honeypot flamingo mailin --activate
 # (or use the admin notice link)
 
 # 4. Import content
@@ -118,7 +118,7 @@ Then set **Settings → Reading → Front page** to the imported `Home` page.
 | ---------------------------- | ---------------------------------------------------------- |
 | Funnel Calculator (jsPDF)    | Custom block `booming-venture/funnel-calculator`           |
 | ROI Forecaster (recharts)    | Custom block `booming-venture/roi-forecaster`              |
-| Brevo `addContactToBrevo`    | Fluent Forms → Brevo connector (recommended) or `wp-json/bv/v1/brevo` |
+| Brevo `addContactToBrevo`    | Contact Form 7 + Brevo plugin (or CF7 to Any API) |
 | DataSpeak chat               | Idle-loaded in `inc/enqueue.php`, interface ID `6863892dbcf4fea86a49e9f8` |
 | Google Tag Manager           | Auto-injected in `inc/enqueue.php`, ID `GTM-K9532WK5`      |
 | react-router-dom             | Native WordPress routing                                   |
@@ -147,9 +147,11 @@ Then set **Settings → Reading → Front page** to the imported `Home` page.
 - [ ] Add real client/award logos to `pattern/awards-banner.php`
 - [ ] Replace placeholder hero / about / service imagery in `assets/images/`
 - [ ] Drop Inter + Space Grotesk woff2 files into `assets/fonts/`
-- [ ] Publish each Fluent Form (contact, newsletter, growth-guide,
-      newsletter-inline, quickscan, head-of-growth) and connect to Brevo
-      lists (Newsletter=3, Growth Guide=2, Contact=4)
+- [ ] Create the six Contact Form 7 forms following the recipes in
+      `INSTALL.md §5a` (contact, newsletter, newsletter-inline,
+      growth-guide, quickscan, head-of-growth), wire each to its Brevo
+      list (Newsletter=3, Growth Guide=2, Contact=4), and paste each
+      form's CF7 hash ID into *Settings → Booming Venture*
 - [ ] Install Rank Math (or Yoast) and import the JSON-LD already on-page
 - [ ] Install a cookie-consent plugin (Complianz / CookieYes) — required EU
 - [ ] Run Lighthouse → target ≥95 across the board

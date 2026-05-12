@@ -52,16 +52,22 @@ To customise the math or visuals, edit:
 ## 3. Install required plugins
 
 ```bash
-# Free, official
-wp plugin install fluentform --activate
-# Brevo connector for Fluent Forms (search "Brevo" inside Fluent Forms → Integrations)
+# Required for the forms shipped in the patterns
+wp plugin install contact-form-7 --activate
+wp plugin install contact-form-7-honeypot --activate   # anti-spam, mandatory
+wp plugin install flamingo --activate                  # stores submissions (CF7 stores nothing by default)
 
 # Optional but recommended for a "10/10" site
 wp plugin install seo-by-rank-math --activate   # SEO meta + sitemap merge
 wp plugin install complianz-gdpr --activate     # EU cookie consent
 wp plugin install wp-super-cache --activate     # page caching
-wp plugin install enable-media-replace --activate
-wp plugin install wp-rocket-lazyload --activate # lazy-load <iframe>/video
+wp plugin install simple-cloudflare-turnstile --activate  # better than reCAPTCHA for privacy
+
+# Brevo: install one of these to push CF7 submissions to Brevo lists
+# Option A: official Brevo plugin (has CF7 mapping in its settings)
+wp plugin install mailin --activate
+# Option B: lightweight webhook-style
+# wp plugin install cf7-to-any-api --activate
 ```
 
 ---
@@ -103,34 +109,163 @@ wp rewrite structure '/%postname%/' --hard
 
 ---
 
-## 5. Configure Fluent Forms → Brevo
+## 5. Create the six Contact Form 7 forms
 
-Inside `Fluent Forms`:
+The theme's patterns reference forms by semantic slug
+(`[contact-form-7 id="contact"]` etc.). The integrations layer rewrites
+each slug to the matching CF7 hash ID at render time. Six forms to
+create, one per slug:
 
-1. **Create six forms** (or duplicate one and rename). Use these IDs in the
-   patterns — they're referenced as `[fluentform id="..."]`:
+| Slug                 | Purpose                              | Brevo list |
+| -------------------- | ------------------------------------ | ---------- |
+| `contact`            | Main contact form (Contact section)  | 4          |
+| `newsletter`         | Big newsletter CTA on /blog          | 3          |
+| `newsletter-inline`  | Footer mini newsletter               | 3          |
+| `growth-guide`       | Hero + dedicated lead-magnet page    | 2          |
+| `quickscan`          | Boardroom Quickscan landing page     | 4 + tag    |
+| `head-of-growth`     | Head of Growth landing page          | 4 + tag    |
 
-   | Slug                 | Purpose                              | Brevo list |
-   | -------------------- | ------------------------------------ | ---------- |
-   | `contact`            | Main contact form (Contact section)  | 4          |
-   | `newsletter`         | Big newsletter CTA on /blog          | 3          |
-   | `newsletter-inline`  | Footer mini newsletter               | 3          |
-   | `growth-guide`       | Hero + dedicated lead-magnet page    | 2          |
-   | `quickscan`          | Boardroom Quickscan landing page     | 4 + tag    |
-   | `head-of-growth`     | Head of Growth landing page          | 4 + tag    |
+### 5a. Recipes for each form
 
-2. **Integrations → Brevo →** paste your API key. Map each form to its list.
-3. **Settings → Booming Venture → Fluent Forms.** Map each slug
-   (`contact`, `newsletter`, `newsletter-inline`, `growth-guide`,
-   `quickscan`, `head-of-growth`) to the numeric Fluent Forms ID. The
-   patterns ship with semantic slugs and the theme rewrites them at
-   render time. Until you map them, logged-in editors see a red warning
-   block; logged-out visitors see nothing.
-3. (Optional) **Spam:** enable Akismet + Cloudflare Turnstile in Fluent Forms
-   → settings, the patterns already include `[fluentform]` shortcodes.
+In **Contact → Contact Forms → Add New**, paste the form-tags below into
+the **Form** tab. Each form already gets the brand styling via
+`theme.css` because the CF7 default class hooks are styled.
 
-> If you'd rather not use Fluent Forms, the theme also exposes a tiny
-> proxy at `POST /wp-json/bv/v1/brevo` (see `inc/integrations.php`) — set
+**`contact`** — full contact form:
+
+```
+<label>Your name *
+  [text* your-name placeholder "Jane Doe" autocomplete:name]</label>
+<label>Email *
+  [email* your-email placeholder "jane@company.com" autocomplete:email]</label>
+<label>Company
+  [text your-company autocomplete:organization]</label>
+<label>How can we help? *
+  [textarea* your-message]</label>
+[honeypot website-2]
+[acceptance gdpr optional]I agree to the [link url="/privacy-policy/"]Privacy Policy[/link].[/acceptance]
+[submit "Send message"]
+```
+
+**`newsletter`** — big newsletter CTA:
+
+```
+<label>Email *
+  [email* your-email placeholder "you@work.com" autocomplete:email]</label>
+[honeypot website-2]
+[submit "Join 700+ growth pros"]
+```
+
+**`newsletter-inline`** — footer mini newsletter (wrap in `.bv-form-inline`):
+
+```
+[email* your-email placeholder "Enter email" autocomplete:email]
+[honeypot website-2]
+[submit "Join"]
+```
+
+**`growth-guide`** — lead magnet:
+
+```
+<label>Business email *
+  [email* your-email placeholder "you@company.com" autocomplete:email]</label>
+[honeypot website-2]
+[submit "Download the guide"]
+```
+
+**`quickscan`** — Boardroom Quickscan landing form:
+
+```
+<label>Your name *
+  [text* your-name autocomplete:name]</label>
+<label>Email *
+  [email* your-email autocomplete:email]</label>
+<label>Company *
+  [text* your-company autocomplete:organization]</label>
+<label>Annual revenue
+  [select revenue "< €1M" "€1M – €5M" "€5M – €25M" "> €25M"]</label>
+<label>What's the single biggest growth question on your desk? *
+  [textarea* your-message]</label>
+[honeypot website-2]
+[acceptance gdpr optional]I agree to the [link url="/privacy-policy/"]Privacy Policy[/link].[/acceptance]
+[submit "Request my Quickscan"]
+```
+
+**`head-of-growth`** — fractional service intake:
+
+```
+<label>Your name *
+  [text* your-name autocomplete:name]</label>
+<label>Work email *
+  [email* your-email autocomplete:email]</label>
+<label>Company *
+  [text* your-company autocomplete:organization]</label>
+<label>Stage
+  [select stage "Pre-seed" "Seed" "Series A" "Series B+" "Bootstrapped"]</label>
+<label>What you'd want a fractional Head of Growth to fix first *
+  [textarea* your-message]</label>
+[honeypot website-2]
+[acceptance gdpr optional]I agree to the [link url="/privacy-policy/"]Privacy Policy[/link].[/acceptance]
+[submit "Apply for an intro call"]
+```
+
+### 5b. Configure the Mail tab per form
+
+CF7 sends one email per submission. In each form's **Mail** tab, set:
+
+- **To:** `info@boomingventure.com`
+- **From:** `[your-name] <wordpress@boomingventure.com>`
+- **Subject:** `[BV] {slug} — [your-email]` (replace `{slug}` with the form name)
+- **Body:** include every field token: `Name: [your-name]`, `Email: [your-email]`, `Company: [your-company]`, `Message: [your-message]`. Plus a footer line: `Submitted via {page-url}`.
+
+### 5c. Push to Brevo
+
+Pick one of the two routes:
+
+- **Brevo plugin** (`mailin`): in *Brevo → Settings → Contact Form 7*,
+  map each form to its target list using the same field names as above.
+- **CF7 to Any API**: in each form's **CF7 to API** tab, point at
+  `https://api.brevo.com/v3/contacts` with the right JSON body and your
+  Brevo API key header.
+
+### 5d. Wire the slugs into the theme
+
+Open **Settings → Booming Venture** in WP admin. For each slug paste
+the CF7 hash ID from the form's edit screen (e.g. `a1b2c3d4`). Until
+you do this, the front-end shows a red warning to logged-in editors and
+nothing to visitors.
+
+For production, set the map in `wp-config.php` instead:
+
+```php
+define( 'BV_CF7_MAP', [
+    'contact'           => 'a1b2c3d4',
+    'newsletter'        => 'b2c3d4e5',
+    'newsletter-inline' => 'c3d4e5f6',
+    'growth-guide'      => 'd4e5f6a7',
+    'quickscan'         => 'e5f6a7b8',
+    'head-of-growth'    => 'f6a7b8c9',
+] );
+```
+
+### 5e. Anti-spam stack
+
+- **Honeypot for CF7**: already in your form-tags as `[honeypot website-2]`.
+- **Turnstile**: install *Simple Cloudflare Turnstile*, get a site key
+  + secret from Cloudflare, paste into the plugin settings. It auto-
+  attaches to every CF7 form.
+- **Akismet**: if you already pay for it, CF7 detects it automatically.
+
+### 5f. Submission storage
+
+CF7 stores nothing by default. **Flamingo** (free, by the CF7 author)
+captures every submission. Set a retention window in your
+calendar / use a plugin like WP-Optimize to purge older entries to keep
+GDPR retention obligations clean (24 months for prospect data per the
+shipped Privacy Policy).
+
+> Want a no-plugin alternative? The theme also exposes a tiny proxy at
+> `POST /wp-json/bv/v1/brevo` (see `inc/integrations.php`). Set
 > `BV_BREVO_API_KEY` in `wp-config.php`.
 
 ---
@@ -208,7 +343,9 @@ add it to a redirects file (Rank Math has a Redirections module).
 | Symptom | Fix |
 | ------- | ----|
 | Custom blocks missing from inserter | Bump theme version in `style.css` and visit `Appearance → Editor` once. Check that `blocks/*/block.json` exist. |
-| `[fluentform id="contact"]` shows literal text | Install + activate Fluent Forms. |
+| `[contact-form-7 id="contact"]` shows literal text | Install + activate Contact Form 7. |
+| Form shows the red "not mapped" warning | Go to *Settings → Booming Venture* and paste the CF7 hash ID for each slug. |
+| Form spinner shows the default brown gif | Hard refresh; the theme replaces it with a brand spinner via CSS. |
 | DataSpeak chat doesn't appear | Check `bv_dataspeak_id` option and that the page isn't blocked by an ad-blocker. |
 | Patterns not appearing | Bump theme version in `style.css` and visit `Appearance → Editor` once. |
 | Front page shows blog instead of Home | `Settings → Reading → Front page displays → A static page → Home`. |

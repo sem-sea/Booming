@@ -62,7 +62,7 @@
 			<!-- wp:group {"style":{"border":{"radius":"1rem"},"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}},"shadow":"var:preset|shadow|sm"},"backgroundColor":"base"} -->
 			<div class="wp-block-group has-base-background-color has-background" style="border-radius:1rem;padding:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--sm)">
 				<!-- wp:heading {"level":3,"fontSize":"2xl"} --><h3 class="wp-block-heading has-2-xl-font-size">Send Us a Message</h3><!-- /wp:heading -->
-				<!-- wp:shortcode -->[fluentform id="contact"]<!-- /wp:shortcode -->
+				<!-- wp:shortcode -->[contact-form-7 id="contact"]<!-- /wp:shortcode -->
 			</div>
 			<!-- /wp:group -->
 		</div>

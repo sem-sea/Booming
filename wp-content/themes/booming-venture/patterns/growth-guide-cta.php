@@ -27,7 +27,7 @@
 		<div class="wp-block-column is-vertically-aligned-center">
 			<!-- wp:group {"style":{"border":{"radius":"1rem"},"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"backgroundColor":"base"} -->
 			<div class="wp-block-group has-base-background-color has-background" style="border-radius:1rem;padding:var(--wp--preset--spacing--40)">
-				<!-- wp:shortcode -->[fluentform id="growth-guide"]<!-- /wp:shortcode -->
+				<!-- wp:shortcode -->[contact-form-7 id="growth-guide"]<!-- /wp:shortcode -->
 			</div>
 			<!-- /wp:group -->
 		</div>

@@ -30,7 +30,7 @@
 			<div class="wp-block-group has-base-background-color has-background" style="border-color:var(--wp--preset--color--booming-100);border-width:1px;border-radius:1rem;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--lg)">
 				<!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Get the free UNIFY Framework™ Guide</h3><!-- /wp:heading -->
 				<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Complete framework with implementation templates.</p><!-- /wp:paragraph -->
-				<!-- wp:shortcode -->[fluentform id="growth-guide"]<!-- /wp:shortcode -->
+				<!-- wp:shortcode -->[contact-form-7 id="growth-guide"]<!-- /wp:shortcode -->
 				<!-- wp:paragraph {"fontSize":"xs","textColor":"muted"} --><p class="has-muted-color has-text-color has-xs-font-size">✓ No spam, unsubscribe anytime</p><!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:group -->
