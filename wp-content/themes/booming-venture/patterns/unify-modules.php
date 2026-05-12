@@ -9,7 +9,7 @@
 <!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}},"backgroundColor":"base-50","layout":{"type":"constrained"}} -->
 <section class="wp-block-group has-base-50-background-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
 	<!-- wp:heading {"textAlign":"center","level":2,"fontSize":"5xl"} -->
-	<h2 class="wp-block-heading has-text-align-center has-5-xl-font-size">📘 What&#8217;s Inside the UNIFY Guide</h2>
+	<h2 class="wp-block-heading has-text-align-center has-5-xl-font-size"><?php echo bv_icon( "book-open", 28, "bv-section-icon" ); ?> What&#8217;s Inside the UNIFY Guide</h2>
 	<!-- /wp:heading -->
 	<!-- wp:paragraph {"align":"center","fontSize":"lg","textColor":"muted"} -->
 	<p class="has-text-align-center has-muted-color has-text-color has-lg-font-size">Four comprehensive modules that take you from strategy to execution in 30 days.</p>

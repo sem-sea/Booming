@@ -31,7 +31,7 @@
 			<!-- wp:group {"className":"bv-service-card","style":{"border":{"radius":"1rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}},"shadow":"var:preset|shadow|sm"},"backgroundColor":"base","layout":{"type":"constrained"}} -->
 			<div class="wp-block-group bv-service-card has-base-background-color has-background" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:1rem;padding:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--sm)">
 				<!-- wp:group {"className":"bv-service-icon","gradient":"brand-soft","style":{"border":{"radius":"0.625rem"},"spacing":{"padding":{"top":"0.625rem","right":"0.625rem","bottom":"0.625rem","left":"0.625rem"}},"dimensions":{"minHeight":"3rem"}},"layout":{"type":"flex","justifyContent":"center"}} -->
-				<div class="wp-block-group bv-service-icon has-brand-soft-gradient-background has-background" style="border-radius:0.625rem;min-height:3rem;padding:0.625rem">📊</div>
+				<div class="wp-block-group bv-service-icon has-brand-soft-gradient-background has-background" style="border-radius:0.625rem;min-height:3rem;padding:0.625rem;color:var(--wp--preset--color--booming-700)"><?php echo bv_icon( "bar-chart-3", 28 ); ?></div>
 				<!-- /wp:group -->
 				<!-- wp:heading {"level":3,"fontSize":"xl"} --><h3 class="wp-block-heading has-xl-font-size">Strategic Consulting</h3><!-- /wp:heading -->
 				<!-- wp:paragraph {"textColor":"muted"} --><p class="has-muted-color has-text-color">Tailored growth strategies to help your business reach its full potential.</p><!-- /wp:paragraph -->
@@ -53,7 +53,7 @@
 			<!-- wp:group {"className":"bv-service-card","style":{"border":{"radius":"1rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}},"shadow":"var:preset|shadow|sm"},"backgroundColor":"base","layout":{"type":"constrained"}} -->
 			<div class="wp-block-group bv-service-card has-base-background-color has-background" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:1rem;padding:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--sm)">
 				<!-- wp:group {"className":"bv-service-icon","gradient":"brand-soft","style":{"border":{"radius":"0.625rem"},"spacing":{"padding":{"top":"0.625rem","right":"0.625rem","bottom":"0.625rem","left":"0.625rem"}}},"layout":{"type":"flex","justifyContent":"center"}} -->
-				<div class="wp-block-group bv-service-icon has-brand-soft-gradient-background has-background" style="border-radius:0.625rem;padding:0.625rem">🚀</div>
+				<div class="wp-block-group bv-service-icon has-brand-soft-gradient-background has-background" style="border-radius:0.625rem;padding:0.625rem;color:var(--wp--preset--color--booming-700)"><?php echo bv_icon( "rocket", 28 ); ?></div>
 				<!-- /wp:group -->
 				<!-- wp:heading {"level":3,"fontSize":"xl"} --><h3 class="wp-block-heading has-xl-font-size">Performance Marketing</h3><!-- /wp:heading -->
 				<!-- wp:paragraph {"textColor":"muted"} --><p class="has-muted-color has-text-color">Data-driven marketing campaigns that deliver measurable results.</p><!-- /wp:paragraph -->
@@ -75,7 +75,7 @@
 			<!-- wp:group {"className":"bv-service-card","style":{"border":{"radius":"1rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}},"shadow":"var:preset|shadow|sm"},"backgroundColor":"base","layout":{"type":"constrained"}} -->
 			<div class="wp-block-group bv-service-card has-base-background-color has-background" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:1rem;padding:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--sm)">
 				<!-- wp:group {"className":"bv-service-icon","gradient":"brand-soft","style":{"border":{"radius":"0.625rem"},"spacing":{"padding":{"top":"0.625rem","right":"0.625rem","bottom":"0.625rem","left":"0.625rem"}}},"layout":{"type":"flex","justifyContent":"center"}} -->
-				<div class="wp-block-group bv-service-icon has-brand-soft-gradient-background has-background" style="border-radius:0.625rem;padding:0.625rem">🧠</div>
+				<div class="wp-block-group bv-service-icon has-brand-soft-gradient-background has-background" style="border-radius:0.625rem;padding:0.625rem;color:var(--wp--preset--color--booming-700)"><?php echo bv_icon( "brain", 28 ); ?></div>
 				<!-- /wp:group -->
 				<!-- wp:heading {"level":3,"fontSize":"xl"} --><h3 class="wp-block-heading has-xl-font-size">AI-Powered Solutions</h3><!-- /wp:heading -->
 				<!-- wp:paragraph {"textColor":"muted"} --><p class="has-muted-color has-text-color">Leverage cutting-edge AI technology to optimize your business operations.</p><!-- /wp:paragraph -->
@@ -97,7 +97,7 @@
 			<!-- wp:group {"className":"bv-service-card","style":{"border":{"radius":"1rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}},"shadow":"var:preset|shadow|sm"},"backgroundColor":"base","layout":{"type":"constrained"}} -->
 			<div class="wp-block-group bv-service-card has-base-background-color has-background" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:1rem;padding:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--sm)">
 				<!-- wp:group {"className":"bv-service-icon","gradient":"brand-soft","style":{"border":{"radius":"0.625rem"},"spacing":{"padding":{"top":"0.625rem","right":"0.625rem","bottom":"0.625rem","left":"0.625rem"}}},"layout":{"type":"flex","justifyContent":"center"}} -->
-				<div class="wp-block-group bv-service-icon has-brand-soft-gradient-background has-background" style="border-radius:0.625rem;padding:0.625rem">📈</div>
+				<div class="wp-block-group bv-service-icon has-brand-soft-gradient-background has-background" style="border-radius:0.625rem;padding:0.625rem;color:var(--wp--preset--color--booming-700)"><?php echo bv_icon( "trending-up", 28 ); ?></div>
 				<!-- /wp:group -->
 				<!-- wp:heading {"level":3,"fontSize":"xl"} --><h3 class="wp-block-heading has-xl-font-size">Growth Optimization</h3><!-- /wp:heading -->
 				<!-- wp:paragraph {"textColor":"muted"} --><p class="has-muted-color has-text-color">Comprehensive programs to scale your business efficiently and sustainably.</p><!-- /wp:paragraph -->

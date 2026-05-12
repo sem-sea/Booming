@@ -20,25 +20,25 @@
 	<!-- wp:html -->
 	<div class="bv-add-services alignwide">
 		<article class="bv-add-card">
-			<div aria-hidden="true" style="font-size:1.5rem;">⚡</div>
+			<div aria-hidden="true" class="bv-add-icon"><?php echo bv_icon( "zap", 28 ); ?></div>
 			<p class="bv-price">€1,500 one-time</p>
 			<h4>Quick Wins Audit</h4>
 			<p>2-week intensive audit to identify immediate optimization opportunities.</p>
 		</article>
 		<article class="bv-add-card">
-			<div aria-hidden="true" style="font-size:1.5rem;">🎯</div>
+			<div aria-hidden="true" class="bv-add-icon"><?php echo bv_icon( "target", 28 ); ?></div>
 			<p class="bv-price">€2,000/month</p>
 			<h4>Conversion Optimization</h4>
 			<p>Dedicated focus on improving your website and funnel conversion rates.</p>
 		</article>
 		<article class="bv-add-card">
-			<div aria-hidden="true" style="font-size:1.5rem;">👥</div>
+			<div aria-hidden="true" class="bv-add-icon"><?php echo bv_icon( "users", 28 ); ?></div>
 			<p class="bv-price">€800/session</p>
 			<h4>Team Training</h4>
 			<p>Upskill your team with modern marketing and AI implementation workshops.</p>
 		</article>
 		<article class="bv-add-card">
-			<div aria-hidden="true" style="font-size:1.5rem;">💬</div>
+			<div aria-hidden="true" class="bv-add-icon"><?php echo bv_icon( "message-circle", 28 ); ?></div>
 			<p class="bv-price">€500/call</p>
 			<h4>Monthly Strategy Calls</h4>
 			<p>Regular strategic guidance and performance review sessions.</p>

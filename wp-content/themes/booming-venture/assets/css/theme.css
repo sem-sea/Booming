@@ -650,3 +650,39 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 
 /* "Last updated" banner injected above the_content on single posts. */
 .bv-post-meta-line { font-size: 0.875rem; }
+
+/* ---- Lucide icon helpers (bv_icon) -------------------------------- */
+.bv-icon { display: inline-block; vertical-align: -0.15em; flex-shrink: 0; }
+
+/* Service-card icon: brand-coloured, centred in the rounded square. */
+.bv-service-icon .bv-icon { color: var(--wp--preset--color--booming-700); }
+
+/* UNIFY 5-node diagram icons (small, above the label text). */
+.bv-unify-node-icon { display: block; margin-bottom: 0.2rem; color: var(--wp--preset--color--booming-700); }
+.bv-unify-node--center .bv-unify-node-icon,
+.bv-unify-node--center { color: #fff; }
+
+/* Phase-card and section-header inline icons. */
+.bv-phase-icon, .bv-section-icon {
+	color: var(--wp--preset--color--booming-600);
+	vertical-align: -0.2em;
+	margin-right: 0.35rem;
+}
+.bv-section-icon { color: var(--wp--preset--color--venture-700); }
+
+/* Additional-services / tools-cards top-of-card icons. */
+.bv-add-icon, .bv-tool-card .bv-icon {
+	display: inline-flex; align-items: center; justify-content: center;
+	width: 44px; height: 44px;
+	border-radius: 0.5rem;
+	background: linear-gradient(135deg, var(--wp--preset--color--booming-100), var(--wp--preset--color--venture-100));
+	color: var(--wp--preset--color--booming-700);
+}
+.bv-add-icon .bv-icon { color: var(--wp--preset--color--booming-700); }
+
+/* Persona-accordion summary icons. */
+.bv-persona > summary .bv-icon {
+	color: var(--wp--preset--color--booming-600);
+	margin-right: 0.25rem;
+	vertical-align: -0.2em;
+}

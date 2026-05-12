@@ -15,7 +15,7 @@ $theme = esc_url( BV_THEME_URI );
 
 		<article class="bv-service-row">
 			<div>
-				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;">📊 Strategic Consulting</div>
+				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;"><?php echo bv_icon( "bar-chart-3", 18 ); ?>&nbsp;&nbsp;Strategic Consulting</div>
 				<h3>Strategic Consulting</h3>
 				<p class="bv-price">From €2,500/month</p>
 				<p style="color:var(--wp--preset--color--muted);margin:0 0 1rem;">Comprehensive business growth strategies tailored to your unique market position and goals.</p>
@@ -36,7 +36,7 @@ $theme = esc_url( BV_THEME_URI );
 
 		<article class="bv-service-row bv-service-row--flip">
 			<div>
-				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;">🚀 Performance Marketing</div>
+				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;"><?php echo bv_icon( "rocket", 18 ); ?>&nbsp;&nbsp;Performance Marketing</div>
 				<h3>Performance Marketing</h3>
 				<p class="bv-price">From €3,000/month</p>
 				<p style="color:var(--wp--preset--color--muted);margin:0 0 1rem;">Data-driven marketing campaigns that deliver measurable results and maximize your ROI.</p>
@@ -57,7 +57,7 @@ $theme = esc_url( BV_THEME_URI );
 
 		<article class="bv-service-row">
 			<div>
-				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;">🧠 AI-Powered Solutions</div>
+				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;"><?php echo bv_icon( "brain", 18 ); ?>&nbsp;&nbsp;AI-Powered Solutions</div>
 				<h3>AI-Powered Solutions</h3>
 				<p class="bv-price">From €4,000/month</p>
 				<p style="color:var(--wp--preset--color--muted);margin:0 0 1rem;">Leverage cutting-edge artificial intelligence to optimize your business operations and decision-making.</p>
@@ -78,7 +78,7 @@ $theme = esc_url( BV_THEME_URI );
 
 		<article class="bv-service-row bv-service-row--flip">
 			<div>
-				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;">📈 Growth Optimization</div>
+				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;"><?php echo bv_icon( "trending-up", 18 ); ?>&nbsp;&nbsp;Growth Optimization</div>
 				<h3>Growth Optimization</h3>
 				<p class="bv-price">From €3,500/month</p>
 				<p style="color:var(--wp--preset--color--muted);margin:0 0 1rem;">Comprehensive programs to scale your business efficiently and sustainably across all channels.</p>

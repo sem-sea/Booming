@@ -56,11 +56,11 @@
 						<line x1="200" y1="200" x2="60"  y2="140"/>
 					</g>
 				</svg>
-				<div class="bv-unify-node" style="top:15%;left:50%;"><span class="bv-unify-node-icon" aria-hidden="true">🔍</span>Understand</div>
-				<div class="bv-unify-node" style="top:35%;left:85%;"><span class="bv-unify-node-icon" aria-hidden="true">💬</span>Nurture</div>
-				<div class="bv-unify-node" style="top:70%;left:85%;"><span class="bv-unify-node-icon" aria-hidden="true">⚙️</span>Integrate</div>
-				<div class="bv-unify-node" style="top:70%;left:15%;"><span class="bv-unify-node-icon" aria-hidden="true">📊</span>Forecast</div>
-				<div class="bv-unify-node" style="top:35%;left:15%;"><span class="bv-unify-node-icon" aria-hidden="true">🔁</span>Yield</div>
+				<div class="bv-unify-node" style="top:15%;left:50%;"><span class="bv-unify-node-icon" aria-hidden="true"><?php echo bv_icon( "search", 18 ); ?></span>Understand</div>
+				<div class="bv-unify-node" style="top:35%;left:85%;"><span class="bv-unify-node-icon" aria-hidden="true"><?php echo bv_icon( "message-circle", 18 ); ?></span>Nurture</div>
+				<div class="bv-unify-node" style="top:70%;left:85%;"><span class="bv-unify-node-icon" aria-hidden="true"><?php echo bv_icon( "settings-2", 18 ); ?></span>Integrate</div>
+				<div class="bv-unify-node" style="top:70%;left:15%;"><span class="bv-unify-node-icon" aria-hidden="true"><?php echo bv_icon( "bar-chart-3", 18 ); ?></span>Forecast</div>
+				<div class="bv-unify-node" style="top:35%;left:15%;"><span class="bv-unify-node-icon" aria-hidden="true"><?php echo bv_icon( "rotate-cw", 18 ); ?></span>Yield</div>
 				<div class="bv-unify-node bv-unify-node--center" style="top:50%;left:50%;">UNIFY</div>
 			</div>
 			<!-- /wp:html -->

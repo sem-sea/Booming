@@ -20,12 +20,12 @@
 	<!-- wp:html -->
 	<div class="bv-tools-cards" style="max-width:880px;margin:0 auto;">
 		<article class="bv-tool-card">
-			<h4>🧮 Funnel Leak Calculator</h4>
+			<h4><?php echo bv_icon( "calculator", 22 ); ?>&nbsp;&nbsp;Funnel Leak Calculator</h4>
 			<p>Discover funnel leak sources causing leaks for funnel inefficiencies.</p>
 			<a href="/funnel-calculator/" class="bv-tool-cta">Try Now — Free →</a>
 		</article>
 		<article class="bv-tool-card">
-			<h4>📈 ROI Forecaster</h4>
+			<h4><?php echo bv_icon( "trending-up", 22 ); ?>&nbsp;&nbsp;ROI Forecaster</h4>
 			<p>Predict your marketing ROI and optimize your budget allocation.</p>
 			<a href="/roi-forecaster/" class="bv-tool-cta">Try Now — Free →</a>
 		</article>
