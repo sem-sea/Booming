@@ -3,27 +3,26 @@
 <!-- wp:group {"tagName":"main","layout":{"type":"constrained"}} -->
 <main class="wp-block-group">
 
-	<!-- Blog hero: gradient backdrop + headline + newsletter -->
+	<!-- ============= Hero ============= -->
 	<!-- wp:group {"tagName":"section","className":"bv-blog-hero","gradient":"hero-backdrop","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
 	<section class="wp-block-group bv-blog-hero has-hero-backdrop-gradient-background has-background" style="padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--60)">
 
-		<!-- wp:paragraph {"align":"center","style":{"typography":{"textTransform":"uppercase","letterSpacing":"0.12em","fontWeight":"600"}},"fontSize":"sm","textColor":"venture-700"} -->
-		<p class="has-text-align-center has-venture-700-color has-text-color has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.12em">The Booming Venture Blog</p>
-		<!-- /wp:paragraph -->
-
-		<!-- wp:heading {"textAlign":"center","level":1,"fontSize":"7xl"} -->
-		<h1 class="wp-block-heading has-text-align-center has-7-xl-font-size">Growth Marketing <span class="bv-gradient-text">Insights</span></h1>
+		<!-- wp:heading {"textAlign":"center","level":1,"className":"bv-blog-hero__title","fontSize":"7xl","style":{"typography":{"lineHeight":"1.1","letterSpacing":"-0.02em"}}} -->
+		<h1 class="wp-block-heading has-text-align-center bv-blog-hero__title has-7-xl-font-size" style="line-height:1.1;letter-spacing:-0.02em"><span class="bv-gradient-text">Growth Marketing Insights</span></h1>
 		<!-- /wp:heading -->
 
 		<!-- wp:paragraph {"align":"center","fontSize":"xl","textColor":"contrast-2"} -->
-		<p class="has-text-align-center has-contrast-2-color has-text-color has-xl-font-size">Data-driven strategies and AI-powered insights to help businesses scale smarter, faster, and more profitably.</p>
+		<p class="has-text-align-center has-contrast-2-color has-text-color has-xl-font-size">Data-driven strategies and AI-powered insights to help Dutch businesses scale smarter, faster, and more profitably.</p>
 		<!-- /wp:paragraph -->
 
-		<!-- wp:group {"className":"bv-blog-hero__form","style":{"border":{"radius":"1rem"},"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|40","bottom":"var:preset|spacing|30","left":"var:preset|spacing|40"}},"shadow":"var:preset|shadow|lg"},"backgroundColor":"base","layout":{"type":"constrained","contentSize":"560px"}} -->
-		<div class="wp-block-group bv-blog-hero__form has-base-background-color has-background" style="border-radius:1rem;padding:var(--wp--preset--spacing--30) var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--lg)">
-			<!-- wp:paragraph {"align":"center","fontSize":"sm","style":{"typography":{"fontWeight":"600"}}} -->
-			<p class="has-text-align-center has-sm-font-size" style="font-weight:600">Join 700+ Members getting growth insights</p>
-			<!-- /wp:paragraph -->
+		<!-- wp:spacer {"height":"32px"} --><div style="height:32px" aria-hidden="true" class="wp-block-spacer"></div><!-- /wp:spacer -->
+
+		<!-- wp:paragraph {"align":"center","fontSize":"lg","style":{"typography":{"fontWeight":"500"}}} -->
+		<p class="has-text-align-center has-lg-font-size" style="font-weight:500">Join 700+ Members getting growth insights</p>
+		<!-- /wp:paragraph -->
+
+		<!-- wp:group {"className":"bv-blog-hero__form","layout":{"type":"constrained","contentSize":"520px"}} -->
+		<div class="wp-block-group bv-blog-hero__form">
 			<!-- wp:shortcode -->[contact-form-7 id="newsletter"]<!-- /wp:shortcode -->
 		</div>
 		<!-- /wp:group -->
@@ -31,7 +30,7 @@
 	</section>
 	<!-- /wp:group -->
 
-	<!-- Post grid -->
+	<!-- ============= Post grid ============= -->
 	<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
 	<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
 
@@ -40,31 +39,34 @@
 
 			<!-- wp:post-template {"className":"bv-blog-grid","layout":{"type":"grid","columnCount":3}} -->
 
-				<!-- wp:group {"className":"bv-post-card","style":{"border":{"radius":"1rem","width":"1px","color":"var:preset|color|border"}},"backgroundColor":"base","layout":{"type":"constrained"}} -->
-				<div class="wp-block-group bv-post-card has-base-background-color has-background" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:1rem;overflow:hidden">
+				<!-- wp:group {"className":"bv-post-card","backgroundColor":"base","layout":{"type":"constrained"}} -->
+				<div class="wp-block-group bv-post-card has-base-background-color has-background">
 
-					<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"16/9"} /-->
+					<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"16/9","className":"bv-post-card__image"} /-->
 
-					<!-- wp:group {"className":"bv-post-card__body","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} -->
-					<div class="wp-block-group bv-post-card__body" style="padding:var(--wp--preset--spacing--30) var(--wp--preset--spacing--40) var(--wp--preset--spacing--40)">
+					<!-- wp:group {"className":"bv-post-card__body","style":{"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} -->
+					<div class="wp-block-group bv-post-card__body" style="padding:var(--wp--preset--spacing--40)">
 
 						<!-- wp:group {"className":"bv-post-card__meta","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"left"}} -->
 						<div class="wp-block-group bv-post-card__meta">
-							<!-- wp:post-terms {"term":"category","className":"bv-badge"} /-->
-							<!-- wp:post-date {"fontSize":"sm","textColor":"muted"} /-->
+							<!-- wp:post-terms {"term":"category","className":"bv-post-card__badge"} /-->
+							<!-- wp:html -->
+							<span class="bv-post-card__date-wrap"><svg class="bv-icon bv-icon-calendar" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg></span>
+							<!-- /wp:html -->
+							<!-- wp:post-date {"fontSize":"sm","textColor":"muted","format":"F j, Y"} /-->
 						</div>
 						<!-- /wp:group -->
 
-						<!-- wp:post-title {"isLink":true,"level":3,"fontSize":"xl","style":{"typography":{"lineHeight":"1.25"}}} /-->
+						<!-- wp:post-title {"isLink":true,"level":3,"fontSize":"xl","className":"bv-post-card__title"} /-->
 
-						<!-- wp:post-excerpt {"moreOnNewLine":false,"excerptLength":24,"textColor":"muted","fontSize":"sm"} /-->
+						<!-- wp:post-excerpt {"moreOnNewLine":false,"excerptLength":24,"textColor":"muted","fontSize":"sm","className":"bv-post-card__excerpt"} /-->
 
-						<!-- wp:group {"className":"bv-post-card__footer","layout":{"type":"flex","justifyContent":"space-between"}} -->
+						<!-- wp:group {"className":"bv-post-card__footer","layout":{"type":"flex","justifyContent":"space-between","verticalAlignment":"center"}} -->
 						<div class="wp-block-group bv-post-card__footer">
-							<!-- wp:paragraph {"fontSize":"sm","textColor":"muted","style":{"typography":{"fontWeight":"500"}}} -->
-							<p class="has-muted-color has-text-color has-sm-font-size" style="font-weight:500">Read more</p>
-							<!-- /wp:paragraph -->
-							<!-- wp:read-more {"content":"→","fontSize":"sm"} /-->
+							<!-- wp:html -->
+							<span class="bv-post-card__readtime"><svg class="bv-icon bv-icon-clock" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>[bv_read_time]</span>
+							<span class="bv-post-card__arrow" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+							<!-- /wp:html -->
 						</div>
 						<!-- /wp:group -->
 
@@ -94,8 +96,22 @@
 	</div>
 	<!-- /wp:group -->
 
-	<!-- Newsletter CTA band -->
-	<!-- wp:pattern {"slug":"booming-venture/newsletter-cta"} /-->
+	<!-- ============= Newsletter CTA ============= -->
+	<!-- wp:group {"tagName":"section","align":"full","gradient":"brand","textColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
+	<section class="wp-block-group alignfull has-base-color has-brand-gradient-background has-text-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
+		<!-- wp:heading {"textAlign":"center","level":2,"fontSize":"4xl","textColor":"base"} -->
+		<h2 class="wp-block-heading has-text-align-center has-base-color has-text-color has-4-xl-font-size">Stay Ahead of the Growth Curve</h2>
+		<!-- /wp:heading -->
+		<!-- wp:paragraph {"align":"center","fontSize":"lg"} -->
+		<p class="has-text-align-center has-lg-font-size">Join 700+ Dutch business leaders getting weekly insights on AI marketing, growth strategies, and conversion optimization.</p>
+		<!-- /wp:paragraph -->
+		<!-- wp:group {"layout":{"type":"constrained","contentSize":"480px"}} -->
+		<div class="wp-block-group">
+			<!-- wp:shortcode -->[contact-form-7 id="newsletter"]<!-- /wp:shortcode -->
+		</div>
+		<!-- /wp:group -->
+	</section>
+	<!-- /wp:group -->
 
 </main>
 <!-- /wp:group -->

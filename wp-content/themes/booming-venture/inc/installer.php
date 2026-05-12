@@ -352,3 +352,23 @@ add_action( 'admin_print_footer_scripts-settings_page_booming-venture', function
 	 * the top of the panel. */
 	echo "<script>(function(){var t=document.querySelector('.wrap h1');if(t)t.insertAdjacentHTML('afterend'," . wp_json_encode( $html ) . ");})();</script>";
 } );
+
+
+/* ============================================================
+ * [bv_read_time] shortcode — outputs the per-post _bv_read_time
+ * meta value. Used inside wp:post-template loops on the blog
+ * index so each card can show "8 min read" / "12 min read" etc.
+ * Falls back to a calculated estimate from word count if the
+ * meta is empty.
+ * ============================================================ */
+add_shortcode( 'bv_read_time', function () {
+	$id = get_the_ID();
+	if ( ! $id ) return '';
+	$rt = get_post_meta( $id, '_bv_read_time', true );
+	if ( ! $rt ) {
+		$words = str_word_count( wp_strip_all_tags( get_post_field( 'post_content', $id ) ) );
+		$min   = max( 1, (int) round( $words / 220 ) );
+		$rt    = $min . ' min read';
+	}
+	return esc_html( $rt );
+} );
