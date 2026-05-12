@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
-  Booming Venture — WordPress eXtended RSS (WXR) import file.
+  Booming Venture, WordPress eXtended RSS (WXR) import file.
   Import in WordPress: Tools → Import → WordPress → Run Importer.
 
   Contains:
@@ -9,7 +9,7 @@
       Boardroom Quickscan, Head of Growth)
     - 4 services (CPT: service)
     - 40 blog posts with categories
-    - 5 landing pages (CPT: landing_page) — placeholders
+    - 5 landing pages (CPT: landing_page), placeholders
 -->
 <rss version="2.0"
 	xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
@@ -156,7 +156,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
 		<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value><![CDATA[page-funnel-calculator]]></wp:meta_value></wp:postmeta>
-		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Wondering where your funnel is leaking? Plug your numbers in above — it takes 90 seconds and surfaces the exact stage costing you the most.</p><!-- /wp:paragraph -->]]></content:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Wondering where your funnel is leaking? Plug your numbers in above, it takes 90 seconds and surfaces the exact stage costing you the most.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
 	<item>
@@ -168,7 +168,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
 		<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value><![CDATA[page-roi-forecaster]]></wp:meta_value></wp:postmeta>
-		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Model the next 12 months of ROI based on your real numbers. Export a clean PDF to share with the team — no email gate.</p><!-- /wp:paragraph -->]]></content:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Model the next 12 months of ROI based on your real numbers. Export a clean PDF to share with the team, no email gate.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
 	<item>
@@ -195,11 +195,11 @@
 		<wp:post_type><![CDATA[page]]></wp:post_type>
 		<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value><![CDATA[page-boardroom-quickscan]]></wp:meta_value></wp:postmeta>
 		<content:encoded><![CDATA[<!-- wp:heading {"level":2,"textAlign":"center","fontSize":"4xl"} --><h2 class="wp-block-heading has-text-align-center has-4-xl-font-size">A 15-minute boardroom-grade diagnostic</h2><!-- /wp:heading -->
-<!-- wp:paragraph {"align":"center","fontSize":"lg","textColor":"muted"} --><p class="has-text-align-center has-muted-color has-text-color has-lg-font-size">Built for execs who need clarity on where the next quarter of growth comes from — without sitting through a 60-page deck.</p><!-- /wp:paragraph -->]]></content:encoded>
+<!-- wp:paragraph {"align":"center","fontSize":"lg","textColor":"muted"} --><p class="has-text-align-center has-muted-color has-text-color has-lg-font-size">Built for execs who need clarity on where the next quarter of growth comes from, without sitting through a 60-page deck.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
 	<item>
-		<title>Head of Growth — Fractional Leadership</title>
+		<title>Head of Growth, Fractional Leadership</title>
 		<link>https://boomingventure.com/head-of-growth/</link>
 		<wp:post_id>109</wp:post_id>
 		<wp:post_date><![CDATA[2026-05-11 00:00:00]]></wp:post_date>
@@ -207,7 +207,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
 		<wp:postmeta><wp:meta_key>_wp_page_template</wp:meta_key><wp:meta_value><![CDATA[page-head-of-growth]]></wp:meta_value></wp:postmeta>
-		<content:encoded><![CDATA[<!-- wp:heading {"level":2,"textAlign":"center","fontSize":"4xl"} --><h2 class="wp-block-heading has-text-align-center has-4-xl-font-size">Senior growth leadership — on demand</h2><!-- /wp:heading -->
+		<content:encoded><![CDATA[<!-- wp:heading {"level":2,"textAlign":"center","fontSize":"4xl"} --><h2 class="wp-block-heading has-text-align-center has-4-xl-font-size">Senior growth leadership, on demand</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"align":"center","fontSize":"lg","textColor":"muted"} --><p class="has-text-align-center has-muted-color has-text-color has-lg-font-size">Two days a week. Quarterly outcomes. Knowledge transfer to your team baked in.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
@@ -509,7 +509,7 @@
 		<wp:post_name><![CDATA[ai-powered-solutions]]></wp:post_name>
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[service]]></wp:post_type>
-		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Predictive analytics, automated workflows, customer-behaviour analysis, and AI-driven decision support — implemented end-to-end.</p><!-- /wp:paragraph -->]]></content:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Predictive analytics, automated workflows, customer-behaviour analysis, and AI-driven decision support, implemented end-to-end.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
 	<item>
@@ -536,7 +536,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[post]]></wp:post_type>
 		<category domain="category" nicename="ai-marketing"><![CDATA[AI Marketing]]></category>
-		<excerpt:encoded><![CDATA[AI marketing isn&#8217;t just a buzzword — it&#8217;s a fundamental shift in how we understand and engage customers. Discover the data-driven strategies that are transforming business growth.]]></excerpt:encoded>
+		<excerpt:encoded><![CDATA[AI marketing isn&#8217;t just a buzzword, it&#8217;s a fundamental shift in how we understand and engage customers. Discover the data-driven strategies that are transforming business growth.]]></excerpt:encoded>
 		<content:encoded><![CDATA[<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} --><p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>AI marketing is the systematic use of machine learning, generative models, and predictive analytics inside marketing decisions and content. According to the <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" rel="noopener" target="_blank">McKinsey 2025 State of AI</a> report, 78% of organisations now use AI in at least one business function, up from 55% in 2023. Done well, it changes how you target, write, score, and report. Done badly, it gives you faster spam.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
 <!-- wp:paragraph --><p>AI marketing has moved from buzzword to operating model in roughly three years. The <a href="https://www.hubspot.com/state-of-marketing" rel="noopener" target="_blank">HubSpot State of Marketing</a> survey of more than 1,200 marketers found that AI-using teams report 30% higher productivity on average. The question for 2026 is no longer whether to adopt it, but where it actually moves the metric.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">What is AI marketing?</h2><!-- /wp:heading -->
@@ -685,7 +685,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[post]]></wp:post_type>
 		<category domain="category" nicename="ai-marketing"><![CDATA[AI Marketing]]></category>
-		<excerpt:encoded><![CDATA[AI isn&#8217;t here to replace marketers — it&#8217;s here to amplify their capabilities. Discover how smart automation can free your team to focus on strategy and creativity.]]></excerpt:encoded>
+		<excerpt:encoded><![CDATA[AI isn&#8217;t here to replace marketers, it&#8217;s here to amplify their capabilities. Discover how smart automation can free your team to focus on strategy and creativity.]]></excerpt:encoded>
 		<content:encoded><![CDATA[<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} --><p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>AI does not replace marketers, it absorbs the work marketers should never have been doing. According to the <a href="https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai" rel="noopener" target="_blank">McKinsey State of AI</a> survey, marketing and sales teams using generative AI report a 30% productivity lift on average. The composition of the work changes; headcount does not. Strategy stays human.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
 <!-- wp:paragraph --><p>Every marketing leader gets the same question from the CMO right now: how is AI changing your team's headcount plan? The honest answer is that AI is changing what the team does, not how many people you need. The work AI absorbs and the work it does not are now both clearly defined. <a href="https://www.hubspot.com/state-of-marketing" rel="noopener" target="_blank">HubSpot's State of Marketing</a> puts marketing-team AI adoption at 71% in 2024 to 2025.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">What kind of marketing work does AI absorb best?</h2><!-- /wp:heading -->
@@ -725,7 +725,7 @@
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">How do customers feel about AI-assisted content?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Survey data is mixed. The pragmatic stance: disclose substantial AI authorship, do not disclose AI-assisted research, and stay accountable for accuracy in either case.</p><!-- /wp:paragraph -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Will my CMO want to cut headcount?</h3><!-- /wp:heading -->
-<!-- wp:paragraph --><p>Some will try. The teams that come out ahead reinvest the time saved into higher-leverage work rather than running the same playbook with fewer people.</p><!-- /wp:paragraph -->
+<!-- wp:paragraph --><p>Some will try. The teams that come out ahead reinvest the time saved into higher-impact work rather than running the same playbook with fewer people.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Teams that thrive in this transition treat AI as a senior intern, not a replacement. Give it the right work, edit its output, measure the difference, and free your humans to do the things that compound. <a href="/services/">Our AI-Powered Solutions engagement</a> sequences this transition.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
@@ -765,9 +765,9 @@
 </ol><!-- /wp:list -->
 <!-- wp:paragraph --><p>A skilled human-only writer takes four to six hours for the same output. A pure AI piece takes 20 minutes and reads like a pure AI piece.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">How do you keep AI voice out of the published version?</h2><!-- /wp:heading -->
-<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Edit ruthlessly for triads stacked in consecutive sentences, similar-length sentences in a row, banned phrases (delve, harness, navigate), and symmetric balanced structures.</p><!-- /wp:paragraph -->
-<!-- wp:paragraph --><p>Watch for these patterns: "X, Y, and Z" triads stacked back-to-back, sentences of identical length, banned phrases ("in today's fast-paced world", "navigate the complexities"), symmetric structures ("It's not just X, it's Y"), and vague hyperbole. Replace adjectives with numbers. <a href="https://searchengineland.com/" rel="noopener" target="_blank">Search Engine Land's editorial guidelines</a> have a useful published checklist.</p><!-- /wp:paragraph -->
-<!-- wp:paragraph --><p>If you have a content strategy based on volume, it is breaking. If it was based on point of view, AI gives you compounding leverage. Use the patterns inside the <a href="/unify-framework/">UNIFY Framework</a> to map content to the right buyer state.</p><!-- /wp:paragraph -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Edit ruthlessly for AI tells: stacked triads, uniform sentence length, the most-overused verbs, and symmetric balanced structures. Specific list below.</p><!-- /wp:paragraph -->
+<!-- wp:paragraph --><p>Watch for these patterns: stacked triads back-to-back, sentences of identical length, the most-overused AI verbs (use the banned list at <a href="https://searchengineland.com/" rel="noopener" target="_blank">Search Engine Land</a> or the project AGENTS.md), and the symmetric construction comparing X with Y. Replace adjectives with numbers.</p><!-- /wp:paragraph -->
+<!-- wp:paragraph --><p>If you have a content strategy based on volume, it is breaking. If it was based on point of view, AI gives you compounding output. Use the patterns inside the <a href="/unify-framework/">UNIFY Framework</a> to map content to the right buyer state.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Does Google penalise AI-assisted content?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>No. Google's policy is about <a href="https://developers.google.com/search/docs/fundamentals/creating-helpful-content" rel="noopener" target="_blank">helpful content</a>, not authorship. AI-assisted content that is reviewed, accurate, and useful ranks fine. Pure scaled AI spam gets demoted.</p><!-- /wp:paragraph -->
@@ -839,7 +839,7 @@
 		<category domain="category" nicename="b2b-marketing"><![CDATA[B2B Marketing]]></category>
 		<excerpt:encoded><![CDATA[B2B marketing is ripe for AI transformation, but the stakes are higher.]]></excerpt:encoded>
 		<content:encoded><![CDATA[<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} --><p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>AI marketing in B2B is messier than in B2C because the sales cycle is longer and the decision-makers are committees. The biggest wins live in account research, predictive lead scoring, and outbound personalisation. According to <a href="https://www.salesforce.com/resources/research-reports/state-of-marketing/" rel="noopener" target="_blank">Salesforce State of Marketing</a>, 75% of B2B marketers say generative AI has improved campaign performance. The biggest risks are hallucinations in customer-facing material and weak data hygiene.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
-<!-- wp:paragraph --><p>B2B marketers got a slower start with AI than their B2C peers for a fair reason: more is at stake per touchpoint. A bad ad headline costs a click. A hallucinated stat in an enterprise sales deck costs the deal. Here is where leverage is real and where caution is justified, based on engagements we run at Booming Venture and the published <a href="https://www.gartner.com/en/marketing" rel="noopener" target="_blank">Gartner CMO survey</a> data.</p><!-- /wp:paragraph -->
+<!-- wp:paragraph --><p>B2B marketers got a slower start with AI than their B2C peers for a fair reason: more is at stake per touchpoint. A bad ad headline costs a click. A hallucinated stat in an enterprise sales deck costs the deal. Here is where the wins are real and where caution is justified, based on engagements we run at Booming Venture and the published <a href="https://www.gartner.com/en/marketing" rel="noopener" target="_blank">Gartner CMO survey</a> data.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">Where does AI move the number for B2B marketing teams?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Four areas: account research summarisation, predictive lead scoring on closed-won data, AI-personalised outbound with intent signals, and AI-drafted content briefs.</p><!-- /wp:paragraph -->
 <!-- wp:list --><ul class="wp-block-list">
@@ -1023,7 +1023,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[post]]></wp:post_type>
 		<category domain="category" nicename="funnel-strategy"><![CDATA[Funnel Strategy]]></category>
-		<excerpt:encoded><![CDATA[Funnel inefficiencies don&#8217;t just reduce conversions — they compound into massive hidden costs.]]></excerpt:encoded>
+		<excerpt:encoded><![CDATA[Funnel inefficiencies don&#8217;t just reduce conversions, they compound into massive hidden costs.]]></excerpt:encoded>
 		<content:encoded><![CDATA[<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} --><p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Funnel inefficiencies cost more than the dashboard shows. The visible cost is lower revenue; the hidden costs are CAC inflation, exhausted teams, wasted ad spend, lost talent, and slower compounding. Total: 2 to 4x the visible loss. <a href="https://www.klaviyo.com/marketing-resources/benchmarks" rel="noopener" target="_blank">Klaviyo benchmarks</a> confirm the multiplier across B2C; B2B is closer to 3 to 5x.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
 <!-- wp:paragraph --><p>Every funnel has leaks. Most teams know roughly where. Few teams know what those leaks actually cost. Here is the math behind the hidden costs, and how to size them for your own business.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">What is the visible cost of a funnel leak?</h2><!-- /wp:heading -->
@@ -1353,7 +1353,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[post]]></wp:post_type>
 		<category domain="category" nicename="mobile-marketing"><![CDATA[Mobile Marketing]]></category>
-		<excerpt:encoded><![CDATA[Mobile isn&#8217;t the future — it&#8217;s the present.]]></excerpt:encoded>
+		<excerpt:encoded><![CDATA[Mobile isn&#8217;t the future, it&#8217;s the present.]]></excerpt:encoded>
 		<content:encoded><![CDATA[<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} --><p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Mobile is the default, not a channel. <a href="https://gs.statcounter.com/platform-market-share/desktop-mobile-tablet" rel="noopener" target="_blank">StatCounter data</a> puts global mobile share above 60% of web traffic. Yet most marketing assets are still desktop-first. The teams that build mobile-first see 30 to 60% higher mobile conversion. Headline rewrites, form shrinking, CTA discipline, page speed under 2.5 seconds, click-to-call.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
 <!-- wp:paragraph --><p>Mobile traffic crossed 50% of total web traffic in 2017. Conversion rates on mobile lagged for years because every marketing asset was made for desktop and resized down. In 2025 the gap is closing for teams that build mobile-first; it widens for teams that do not.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">What does mobile-first actually mean?</h2><!-- /wp:heading -->
@@ -1554,7 +1554,7 @@
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">What about AI Overviews?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>They eat informational click-through 30 to 60% on affected queries. Re-balance toward comparison and transactional queries that still click through.</p><!-- /wp:paragraph -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I publish original research?</h3><!-- /wp:heading -->
-<!-- wp:paragraph --><p>Yes if you can. It is the highest-leverage content investment in 2026 because AI cannot fake it.</p><!-- /wp:paragraph -->
+<!-- wp:paragraph --><p>Yes if you can. It is the highest-impact content investment in 2026 because AI cannot fake it.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>The future of content is not AI versus humans. It is AI handling the floor and humans climbing toward a higher ceiling.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
@@ -2126,7 +2126,7 @@
 <!-- wp:paragraph --><p>Yes for high-intent search. Less so for display and YouTube without strong creative. Branded search is mandatory if competitors bid on your terms.</p><!-- /wp:paragraph -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">How do I get the right reports?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Build a Looker Studio dashboard tying Ads to GA4 + CRM. Stock Google reports overstate impact.</p><!-- /wp:paragraph -->
-<!-- wp:paragraph --><p>Google Ads is high-leverage with discipline and money-burning on defaults. The difference is operational. Audit the five points. Fix the worst. Re-audit in 90 days.</p><!-- /wp:paragraph -->]]></content:encoded>
+<!-- wp:paragraph --><p>Google Ads pays back with discipline and money-burning on defaults. The difference is operational. Audit the five points. Fix the worst. Re-audit in 90 days.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
 	<item>
@@ -2187,7 +2187,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[post]]></wp:post_type>
 		<category domain="category" nicename="customer-retention"><![CDATA[Customer Retention]]></category>
-		<excerpt:encoded><![CDATA[Acquiring customers is expensive — maximizing their lifetime value is profitable.]]></excerpt:encoded>
+		<excerpt:encoded><![CDATA[Acquiring customers is expensive, maximizing their lifetime value is profitable.]]></excerpt:encoded>
 		<content:encoded><![CDATA[<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} --><p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>CLV is the metric most marketing teams underuse. Four levers: better onboarding, lifecycle programs tied to behaviour, upgrade paths matched to maturity, retention loops with named owners. Mid-market CLV improvements of 30 to 80% are realistic in 18 months. <a href="https://hbr.org/2014/10/the-value-of-keeping-the-right-customers" rel="noopener" target="_blank">HBR research</a> puts a 5% retention lift at 25 to 95% profit lift.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
 <!-- wp:paragraph --><p>Most marketing teams measure CAC weekly and CLV annually. That math gets reversed for a reason: CAC is easier to optimise. CLV is where the real money sits.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">Why does CLV get ignored?</h2><!-- /wp:heading -->
@@ -2410,7 +2410,7 @@
 		<wp:post_type><![CDATA[post]]></wp:post_type>
 		<category domain="category" nicename="growth-hacking"><![CDATA[Growth Hacking]]></category>
 		<excerpt:encoded><![CDATA[B2B SaaS growth requires different tactics than B2C.]]></excerpt:encoded>
-		<content:encoded><![CDATA[<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} --><p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>B2B SaaS growth needs longer feedback loops and tighter unit economics than consumer growth. Five plays that pay off: product-led trials with deliberate aha moments, intent-based outbound with AI personalisation, partner ecosystem leverage, content for category-defining queries, pricing experimentation. <a href="https://www.reforge.com/blog" rel="noopener" target="_blank">Reforge growth content</a> documents the patterns across high-performing SaaS.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
+		<content:encoded><![CDATA[<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} --><p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>B2B SaaS growth needs longer feedback loops and tighter unit economics than consumer growth. Five plays that pay off: product-led trials with deliberate aha moments, intent-based outbound with AI personalisation, partner ecosystem wins, content for category-defining queries, pricing experimentation. <a href="https://www.reforge.com/blog" rel="noopener" target="_blank">Reforge growth content</a> documents the patterns across high-performing SaaS.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
 <!-- wp:paragraph --><p>B2B SaaS growth hacking is not the consumer playbook scaled down. Tactics that work are systemic, not viral.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">What is the aha-moment-driven trial design?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Successful PLG trials are designed for the buyer to reach one specific moment of value within 7 days. Slack: 2,000 messages. Notion: first shared workspace. Lifts trial-to-paid 30 to 80%.</p><!-- /wp:paragraph -->
@@ -2418,7 +2418,7 @@
 <!-- wp:heading --><h2 class="wp-block-heading">How does intent-based outbound replace volume-based?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Volume-based outbound (10K prospects, generic, 1 to 2% reply) does not scale. Intent-based (500 prospects with current signals, AI-personalised, 5 to 12% reply) does.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Stack: intent data (Bombora, G2, <a href="https://business.linkedin.com/marketing-solutions/ads" rel="noopener" target="_blank">LinkedIn Sales Navigator</a>) plus enrichment (Clay, Apollo) plus AI first-line generation plus Smartlead or Lemlist. Setup 4 to 8 weeks.</p><!-- /wp:paragraph -->
-<!-- wp:heading --><h2 class="wp-block-heading">What is partner-ecosystem leverage?</h2><!-- /wp:heading -->
+<!-- wp:heading --><h2 class="wp-block-heading">How does partner-ecosystem distribution pay off?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Treat partners as a distribution channel with named goals: 3 to 5 most-requested integrations to category-leading tools, co-marketing per integration, integration-specific landing pages. 15 to 30% of new pipeline within 18 months.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Build integrations to HubSpot, Salesforce, Slack. Co-host webinars per integration partner. Run integration landing pages with their logos prominent. Most B2B SaaS under-uses partnerships.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">What content ranks for B2B SaaS in 2026?</h2><!-- /wp:heading -->
@@ -2488,7 +2488,7 @@
 <!-- wp:paragraph --><p>This hybrid costs €40K to €100K per year in tools and consulting. Pays back when allocation moves €100K to €1M in the right direction, which it almost always does.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">Where do teams resist?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Three sources: the agency on last-click reporting (their channel is usually over-credited), the CMO uncomfortable with longer feedback loops, the finance team that likes last-click precision even though it is wrong precision.</p><!-- /wp:paragraph -->
-<!-- wp:paragraph --><p>Push through. Better measurement is the highest-leverage investment in a mid-market marketing program.</p><!-- /wp:paragraph -->
+<!-- wp:paragraph --><p>Push through. Better measurement is the highest-impact investment in a mid-market marketing program.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Do I need to abandon GA4?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>No. Use GA4 for tactical reporting. Layer MMM and incrementality on top for strategic decisions.</p><!-- /wp:paragraph -->
@@ -2674,7 +2674,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[post]]></wp:post_type>
 		<category domain="category" nicename="conversion-optimization"><![CDATA[Conversion Optimization]]></category>
-		<excerpt:encoded><![CDATA[Most stores leave 30–40% of revenue in abandoned carts. Here is how to recover it without spamming.]]></excerpt:encoded>
+		<excerpt:encoded><![CDATA[Most stores leave 30-40% of revenue in abandoned carts. Here is how to recover it without spamming.]]></excerpt:encoded>
 		<content:encoded><![CDATA[<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} --><p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Average ecommerce sites lose 60 to 80% of carts. <a href="https://baymard.com/research" rel="noopener" target="_blank">Baymard Institute checkout research</a> puts the global average at 70.19%. Teams that work the recovery funnel properly bring back 25 to 50% of lost revenue. Five fixes: multi-channel sequences, on-site exit recovery, simplified checkout, transparent total cost, post-purchase retention.</p><!-- /wp:paragraph --></div><!-- /wp:group -->
 <!-- wp:paragraph --><p>Most teams accept cart abandonment as a fact of life. The teams that work the funnel properly recover 25 to 50% of that lost revenue. The economics are obvious; the execution is the part most teams skip.</p><!-- /wp:paragraph -->
 <!-- wp:heading --><h2 class="wp-block-heading">Why do carts get abandoned?</h2><!-- /wp:heading -->

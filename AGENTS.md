@@ -68,3 +68,13 @@ rm -f wp-content/themes/booming-venture.zip
 ## Branch
 
 All work happens on `claude/lovable-to-wordpress-theme-lnXza` per the upstream instructions.
+
+## Self-checking infrastructure
+
+This repo ships its own `.claude/` configuration so Claude Code (and any AGENTS.md-aware agent) enforces these rules automatically:
+
+- **Slash commands**: `/geo-audit`, `/optimize-passage`, `/generate-faq`, `/add-schema`, `/llms-txt`
+- **Skills**: `geo-writer`, `schema-builder`, `citation-finder` (auto-invoked when matching work begins)
+- **PostToolUse hook**: `.claude/hooks/post-edit-geo-check.sh` runs after every Edit / Write / MultiEdit on content files; flags banned phrases, em-dashes, and missing structural elements.
+
+See `.claude/README.md` for the full layout. Do not delete or disable any of this without leaving the GEO/AEO compliance unprotected.

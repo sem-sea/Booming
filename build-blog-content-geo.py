@@ -234,7 +234,7 @@ POSTS["ai-automation-strengthen-marketing-team"] = "\n".join([
         ("How do I know if my AI use is degrading content quality?", "Measure engagement at the cohort level. If AI-assisted content has lower scroll depth and reply rate than the human-only baseline, the editing is too thin."),
         ("What is the right budget split for AI tools?", "Mid-market 2025 to 2026: 8 to 15% of marketing tools budget. Skewed toward Copilot or Gemini for the team plus one or two specialised tools for content or analysis."),
         ("How do customers feel about AI-assisted content?", "Survey data is mixed. The pragmatic stance: disclose substantial AI authorship, do not disclose AI-assisted research, and stay accountable for accuracy in either case."),
-        ("Will my CMO want to cut headcount?", "Some will try. The teams that come out ahead reinvest the time saved into higher-leverage work rather than running the same playbook with fewer people."),
+        ("Will my CMO want to cut headcount?", "Some will try. The teams that come out ahead reinvest the time saved into higher-impact work rather than running the same playbook with fewer people."),
     ]),
     p("Teams that thrive in this transition treat AI as a senior intern, not a replacement. Give it the right work, edit its output, measure the difference, and free your humans to do the things that compound. <a href=\"/services/\">Our AI-Powered Solutions engagement</a> sequences this transition."),
 ])
@@ -269,7 +269,7 @@ POSTS["future-content-ai-creative-assistant"] = "\n".join([
     h2("How do you keep AI voice out of the published version?"),
     cap("Edit ruthlessly for triads stacked in consecutive sentences, similar-length sentences in a row, banned phrases (delve, harness, navigate), and symmetric balanced structures."),
     p("Watch for these patterns: \"X, Y, and Z\" triads stacked back-to-back, sentences of identical length, banned phrases (\"in today's fast-paced world\", \"navigate the complexities\"), symmetric structures (\"It's not just X, it's Y\"), and vague hyperbole. Replace adjectives with numbers. " + link("Search Engine Land's editorial guidelines", SRC["search_engine_land"]) + " have a useful published checklist."),
-    p("If you have a content strategy based on volume, it is breaking. If it was based on point of view, AI gives you compounding leverage. Use the patterns inside the <a href=\"/unify-framework/\">UNIFY Framework</a> to map content to the right buyer state."),
+    p("If you have a content strategy based on volume, it is breaking. If it was based on point of view, AI gives you compounding output. Use the patterns inside the <a href=\"/unify-framework/\">UNIFY Framework</a> to map content to the right buyer state."),
     faq([
         ("Does Google penalise AI-assisted content?", "No. Google's policy is about " + link("helpful content", SRC["google_quality"]) + ", not authorship. AI-assisted content that is reviewed, accurate, and useful ranks fine. Pure scaled AI spam gets demoted."),
         ("Should I disclose AI assistance?", "Disclose when AI did substantial drafting. Skip disclosure when it only assists with research or metadata. Industry practice has settled here."),
@@ -317,7 +317,7 @@ POSTS["branding-performance-marketing-integration"] = "\n".join([
 # ============================================================ POST 7
 POSTS["ai-marketing-b2b-opportunities-risks-results"] = "\n".join([
     tldr("AI marketing in B2B is messier than in B2C because the sales cycle is longer and the decision-makers are committees. The biggest wins live in account research, predictive lead scoring, and outbound personalisation. According to " + link("Salesforce State of Marketing", SRC["salesforce_som"]) + ", 75% of B2B marketers say generative AI has improved campaign performance. The biggest risks are hallucinations in customer-facing material and weak data hygiene."),
-    p("B2B marketers got a slower start with AI than their B2C peers for a fair reason: more is at stake per touchpoint. A bad ad headline costs a click. A hallucinated stat in an enterprise sales deck costs the deal. Here is where leverage is real and where caution is justified, based on engagements we run at Booming Venture and the published " + link("Gartner CMO survey", SRC["gartner_cmo"]) + " data."),
+    p("B2B marketers got a slower start with AI than their B2C peers for a fair reason: more is at stake per touchpoint. A bad ad headline costs a click. A hallucinated stat in an enterprise sales deck costs the deal. Here is where the wins are real and where caution is justified, based on engagements we run at Booming Venture and the published " + link("Gartner CMO survey", SRC["gartner_cmo"]) + " data."),
     h2("Where does AI move the number for B2B marketing teams?"),
     cap("Four areas: account research summarisation, predictive lead scoring on closed-won data, AI-personalised outbound with intent signals, and AI-drafted content briefs."),
     ul([
@@ -859,7 +859,7 @@ POSTS["how-ai-content-outperform-human-2026"] = "\n".join([
         ("Should I disclose AI use?", "Yes for substantial AI authorship; no for AI-assisted research. Industry practice has converged here."),
         ("Will writers lose jobs?", "Some, yes. Junior production roles shift to AI. Senior editorial roles become more valuable. Mid-tier writers face squeeze unless they specialise."),
         ("What about AI Overviews?", "They eat informational click-through 30 to 60% on affected queries. Re-balance toward comparison and transactional queries that still click through."),
-        ("Should I publish original research?", "Yes if you can. It is the highest-leverage content investment in 2026 because AI cannot fake it."),
+        ("Should I publish original research?", "Yes if you can. It is the highest-impact content investment in 2026 because AI cannot fake it."),
     ]),
     p("The future of content is not AI versus humans. It is AI handling the floor and humans climbing toward a higher ceiling."),
 ])
@@ -1300,7 +1300,7 @@ POSTS["google-ads-optimization-profitable-roi"] = "\n".join([
         ("Is Google Ads still worth it in 2026?", "Yes for high-intent search. Less so for display and YouTube without strong creative. Branded search is mandatory if competitors bid on your terms."),
         ("How do I get the right reports?", "Build a Looker Studio dashboard tying Ads to GA4 + CRM. Stock Google reports overstate impact."),
     ]),
-    p("Google Ads is high-leverage with discipline and money-burning on defaults. The difference is operational. Audit the five points. Fix the worst. Re-audit in 90 days."),
+    p("Google Ads pays back with discipline and money-burning on defaults. The difference is operational. Audit the five points. Fix the worst. Re-audit in 90 days."),
 ])
 
 # ============================================================ POST 33
@@ -1516,7 +1516,7 @@ POSTS["brand-positioning-competitive-advantage"] = "\n".join([
 
 # ============================================================ POST 38
 POSTS["growth-hacking-b2b-saas-strategies"] = "\n".join([
-    tldr("B2B SaaS growth needs longer feedback loops and tighter unit economics than consumer growth. Five plays that pay off: product-led trials with deliberate aha moments, intent-based outbound with AI personalisation, partner ecosystem leverage, content for category-defining queries, pricing experimentation. " + link("Reforge growth content", SRC["reforge"]) + " documents the patterns across high-performing SaaS."),
+    tldr("B2B SaaS growth needs longer feedback loops and tighter unit economics than consumer growth. Five plays that pay off: product-led trials with deliberate aha moments, intent-based outbound with AI personalisation, partner ecosystem wins, content for category-defining queries, pricing experimentation. " + link("Reforge growth content", SRC["reforge"]) + " documents the patterns across high-performing SaaS."),
     p("B2B SaaS growth hacking is not the consumer playbook scaled down. Tactics that work are systemic, not viral."),
     h2("What is the aha-moment-driven trial design?"),
     cap("Successful PLG trials are designed for the buyer to reach one specific moment of value within 7 days. Slack: 2,000 messages. Notion: first shared workspace. Lifts trial-to-paid 30 to 80%."),
@@ -1524,7 +1524,7 @@ POSTS["growth-hacking-b2b-saas-strategies"] = "\n".join([
     h2("How does intent-based outbound replace volume-based?"),
     cap("Volume-based outbound (10K prospects, generic, 1 to 2% reply) does not scale. Intent-based (500 prospects with current signals, AI-personalised, 5 to 12% reply) does."),
     p("Stack: intent data (Bombora, G2, " + link("LinkedIn Sales Navigator", SRC["linkedin_ads"]) + ") plus enrichment (Clay, Apollo) plus AI first-line generation plus Smartlead or Lemlist. Setup 4 to 8 weeks."),
-    h2("What is partner-ecosystem leverage?"),
+    h2("How does partner-ecosystem distribution pay off?"),
     cap("Treat partners as a distribution channel with named goals: 3 to 5 most-requested integrations to category-leading tools, co-marketing per integration, integration-specific landing pages. 15 to 30% of new pipeline within 18 months."),
     p("Build integrations to HubSpot, Salesforce, Slack. Co-host webinars per integration partner. Run integration landing pages with their logos prominent. Most B2B SaaS under-uses partnerships."),
     h2("What content ranks for B2B SaaS in 2026?"),
@@ -1582,7 +1582,7 @@ POSTS["marketing-attribution-modeling-guide"] = "\n".join([
     p("This hybrid costs €40K to €100K per year in tools and consulting. Pays back when allocation moves €100K to €1M in the right direction, which it almost always does."),
     h2("Where do teams resist?"),
     cap("Three sources: the agency on last-click reporting (their channel is usually over-credited), the CMO uncomfortable with longer feedback loops, the finance team that likes last-click precision even though it is wrong precision."),
-    p("Push through. Better measurement is the highest-leverage investment in a mid-market marketing program."),
+    p("Push through. Better measurement is the highest-impact investment in a mid-market marketing program."),
     faq([
         ("Do I need to abandon GA4?", "No. Use GA4 for tactical reporting. Layer MMM and incrementality on top for strategic decisions."),
         ("How long until MMM is useful?", "First model 8 to 16 weeks. Real value after 6 to 12 months of comparing predictions to outcomes."),
