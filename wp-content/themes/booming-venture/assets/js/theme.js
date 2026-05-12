@@ -41,17 +41,39 @@
 		target.focus({ preventScroll: true });
 	});
 
-	/* Inject floating action buttons (Calculator / ROI / Contact) on home. */
+	/* Inject floating action buttons (ROI / Calculator / Contact)
+	 * Site-wide. Uses Lucide-style inline SVG icons matching the rest
+	 * of the theme. Hover reveals a label pill on the left.
+	 * Skip on legal / single-post pages to keep them less distracting. */
 	(function fabs() {
-		if (!document.body.classList.contains('home') && !document.body.classList.contains('page-template-front-page')) return;
-		const wrap = document.createElement('div');
+		var body = document.body;
+		var skip = body.classList.contains('page-template-page-funnel-calculator')
+			|| body.classList.contains('page-template-page-roi-forecaster')
+			|| body.classList.contains('single-post')
+			|| body.classList.contains('page-id-110') // privacy
+			|| body.classList.contains('page-id-111') // terms
+			|| body.classList.contains('page-id-112');// disclaimer
+		if (skip) return;
+
+		var ICON = {
+			'trending-up':    '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
+			'calculator':     '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/></svg>',
+			'message-circle': '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>'
+		};
+
+		var items = [
+			{ href: '/roi-forecaster/',    icon: 'trending-up',    label: 'ROI Forecaster',   cls: 'bv-fab--accent'  },
+			{ href: '/funnel-calculator/', icon: 'calculator',     label: 'Funnel Calculator', cls: ''               },
+			{ href: '/#contact',           icon: 'message-circle', label: 'Talk to us',       cls: 'bv-fab--pulse'   }
+		];
+
+		var wrap = document.createElement('div');
 		wrap.className = 'bv-fabs';
-		wrap.innerHTML = [
-			'<a class="bv-fab" href="/roi-forecaster/" aria-label="ROI Forecaster">📈</a>',
-			'<a class="bv-fab" href="/funnel-calculator/" aria-label="Funnel Leak Calculator">🧮</a>',
-			'<a class="bv-fab" href="#contact" aria-label="Contact">💬</a>'
-		].join('');
-		document.body.appendChild(wrap);
+		wrap.setAttribute('aria-label', 'Quick actions');
+		wrap.innerHTML = items.map(function (it) {
+			return '<a class="bv-fab ' + it.cls + '" href="' + it.href + '" aria-label="' + it.label + '" data-label="' + it.label + '">' + ICON[it.icon] + '</a>';
+		}).join('');
+		body.appendChild(wrap);
 	})();
 
 	/* Hero animated backdrop: third orb + canvas particle layer.
