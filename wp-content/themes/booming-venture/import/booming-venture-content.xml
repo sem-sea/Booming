@@ -219,7 +219,115 @@
 		<wp:post_name><![CDATA[privacy-policy]]></wp:post_name>
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
-		<content:encoded><![CDATA[<!-- wp:paragraph --><p>This Privacy Policy explains how Booming Venture (Breedveldsingel 1, 3055 PG Rotterdam, The Netherlands) collects, uses, and protects your personal data. Update this content with your finalised legal copy.</p><!-- /wp:paragraph -->]]></content:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Last updated: 12 May 2026. Version 1.0.</p><!-- /wp:paragraph -->
+
+<!-- wp:paragraph --><p>This Privacy Policy explains how Booming Venture handles personal data. We follow the EU General Data Protection Regulation (GDPR), the Dutch implementation (Uitvoeringswet AVG), and the ePrivacy obligations in the Dutch Telecommunicatiewet. If anything below is unclear, email <a href="mailto:info@boomingventure.com">info@boomingventure.com</a> and we will rewrite it.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">1. Who we are</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p><strong>Booming Venture</strong> is the data controller for personal data collected through this website.</p><!-- /wp:paragraph -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>Address: Breedveldsingel 1, 3055 PG Rotterdam, The Netherlands</li>
+<li>Email: <a href="mailto:info@boomingventure.com">info@boomingventure.com</a></li>
+<li>KvK (Chamber of Commerce): [to be added]</li>
+<li>VAT (BTW): [to be added]</li>
+</ul>
+<!-- /wp:list -->
+<!-- wp:paragraph --><p>We have not appointed a Data Protection Officer. Our processing does not meet the thresholds in GDPR Article 37(1), but you can reach our privacy contact at the email above.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">2. What personal data we collect</h2><!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li><strong>Identification and contact data</strong> you give us: name, work email, company, role, phone (optional).</li>
+<li><strong>Communication content</strong>: the message you send via the contact form, support emails, chatbot transcripts.</li>
+<li><strong>Billing data</strong> for clients: invoicing details and VAT identifiers.</li>
+<li><strong>Website usage data</strong>: IP address, browser, device, pages viewed, referrer, time on page. Most of this is collected by Google Analytics in pseudonymous form.</li>
+<li><strong>Marketing data</strong> for clients: campaign performance numbers on platforms we manage for you. This is processed under a separate Data Processing Agreement.</li>
+<li><strong>Lead-magnet data</strong>: the email you enter to download the Growth Guide or UNIFY Framework guide, plus the source field.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">3. Why we process it and the legal basis</h2><!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li><strong>To deliver the services you hire us for.</strong> Legal basis: performance of a contract (Art. 6(1)(b) GDPR).</li>
+<li><strong>To respond to your enquiry</strong> and follow up. Legal basis: legitimate interest in answering people who contact us (Art. 6(1)(f)). You can object at any time.</li>
+<li><strong>To send marketing emails</strong> to subscribers and existing clients. Legal basis: consent for new subscribers (Art. 6(1)(a) plus Telecommunicatiewet art. 11.7), or the soft opt-in for existing clients who can unsubscribe from every email.</li>
+<li><strong>To improve the website and security</strong>. Legal basis: legitimate interest (Art. 6(1)(f)), with a balancing test on record.</li>
+<li><strong>To comply with tax law.</strong> Legal basis: legal obligation, seven-year retention under Algemene wet inzake rijksbelastingen art. 52.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">4. Cookies and similar trackers</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Cookies that are strictly necessary for the site to work (session, security, load balancing) run by default. Every other cookie, including analytics, marketing pixels, and the DataSpeak chat, only loads after you accept it through the consent banner. You can change or withdraw consent any time via the cookie button in the footer.</p><!-- /wp:paragraph -->
+<!-- wp:paragraph --><p>The categories we use:</p><!-- /wp:paragraph -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li><strong>Strictly necessary</strong>: WordPress session, cookie-consent record, Cloudflare bot mitigation.</li>
+<li><strong>Analytics</strong>: Google Analytics 4 via Google Tag Manager. Pseudonymous user ID, page views, events. 14-month retention.</li>
+<li><strong>Marketing</strong>: Brevo tracking pixel for email engagement on opt-in lists.</li>
+<li><strong>Functional</strong>: DataSpeak conversational AI cookies when the chatbot is opened.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">5. Who we share data with</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>We use the following processors. Each has a Data Processing Agreement with us under GDPR Article 28.</p><!-- /wp:paragraph -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li><strong>Brevo</strong> (Sendinblue SAS, France) for transactional and marketing email.</li>
+<li><strong>DataSpeak B.V.</strong> (Netherlands) for the website chatbot.</li>
+<li><strong>Google Ireland Ltd</strong> for Google Analytics and Google Tag Manager. Data flows to Google LLC in the United States.</li>
+<li><strong>Cloudflare Inc.</strong> for content delivery and security.</li>
+<li><strong>Our WordPress hosting provider</strong>.</li>
+</ul>
+<!-- /wp:list -->
+<!-- wp:paragraph --><p>We do not sell personal data and we do not share it for cross-context behavioural advertising.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">6. Transfers outside the EU/EEA</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Google and Cloudflare process data in the United States. Both companies are certified under the EU-US Data Privacy Framework (Commission adequacy decision of 10 July 2023). As a fallback we rely on Standard Contractual Clauses (Commission Decision 2021/914) and we have transfer impact assessments on file. You can request a copy by emailing us.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">7. How long we keep data</h2><!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>Client engagement records and invoicing: 7 years after the contract ends (tax obligation).</li>
+<li>Prospect and lead data: 24 months from the last interaction.</li>
+<li>Newsletter subscribers: until unsubscribe plus 30 days of suppression-list retention.</li>
+<li>Chatbot transcripts: 12 months.</li>
+<li>Google Analytics: 14 months (default).</li>
+<li>Server logs: 14 days for security forensics.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">8. Your rights</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Under GDPR you can:</p><!-- /wp:paragraph -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>Request a copy of the personal data we hold (right of access, Art. 15).</li>
+<li>Correct inaccurate data (Art. 16).</li>
+<li>Ask us to delete data when there is no longer a legal reason to keep it (Art. 17).</li>
+<li>Ask us to restrict processing while a dispute is resolved (Art. 18).</li>
+<li>Receive your data in a portable format (Art. 20).</li>
+<li>Object to processing based on legitimate interest (Art. 21).</li>
+<li>Withdraw consent at any time without losing the lawfulness of past processing (Art. 7(3)).</li>
+</ul>
+<!-- /wp:list -->
+<!-- wp:paragraph --><p>Email <a href="mailto:info@boomingventure.com">info@boomingventure.com</a> to use any of these rights. We respond within one month (Art. 12(3)). You also have the right to file a complaint with the Dutch supervisory authority, <a href="https://autoriteitpersoonsgegevens.nl" rel="noopener">Autoriteit Persoonsgegevens</a>.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">9. Automated decisions and AI tools</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>The Funnel Leak Calculator and ROI Forecaster on this site produce estimates based on the numbers you type in. They do not store your inputs, do not profile you, and do not make any decision that has a legal or similarly significant effect on you. The DataSpeak chatbot is an AI system, and you will see a disclosure that you are chatting with one before the conversation starts.</p><!-- /wp:paragraph -->
+<!-- wp:paragraph --><p>For client work, any automated profiling we run on a campaign is governed by the Data Processing Agreement with that client.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">10. Security</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>The site uses TLS in transit. Access to admin systems is restricted and logged. Passwords are hashed. Backups are encrypted. We test our defences regularly.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">11. Data breaches</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>If a breach poses a risk to your rights, we notify the Autoriteit Persoonsgegevens within 72 hours under Art. 33 GDPR. If the risk is high, we notify you directly under Art. 34.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">12. Children</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Our services are aimed at businesses. We do not knowingly collect data from anyone under 16.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">13. Changes to this policy</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>We update this page when our processing changes or when the law does. The version date at the top tells you when. For material changes that affect existing subscribers, we send an email.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
 	<item>
@@ -230,7 +338,98 @@
 		<wp:post_name><![CDATA[terms-of-service]]></wp:post_name>
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
-		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace this with your final Terms of Service.</p><!-- /wp:paragraph -->]]></content:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Last updated: 12 May 2026. Version 1.0. Governed by Dutch law.</p><!-- /wp:paragraph -->
+
+<!-- wp:paragraph --><p>These Terms apply to every quote, agreement, and engagement between Booming Venture and a client. By signing a Statement of Work or paying an invoice, the client accepts these Terms. The Dutch version controls in case of translation conflict.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">1. Parties and contact</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>"<strong>We</strong>", "<strong>us</strong>", or "<strong>Booming Venture</strong>" means Booming Venture, registered at Breedveldsingel 1, 3055 PG Rotterdam, the Netherlands, KvK [number], VAT [BTW number]. "<strong>Client</strong>" means the natural or legal person who engages us. "<strong>Services</strong>" means the work described in the Statement of Work (SOW) or proposal we agree on.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">2. Scope of services</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>We deliver what the SOW says we deliver, on the timeline it sets. Anything outside that scope is a change request. Change requests need written approval (email counts) and adjust fees and timing.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">3. Best-efforts obligation, not result</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>This is an <em>overeenkomst van opdracht</em> under Article 7:400 of the Dutch Civil Code: a best-efforts obligation, not a result-based one. We commit to using our skill and experience, applying current best practice, and acting in the client's interest. We do not, and cannot, guarantee specific outcomes such as search rankings, leads generated, conversion rates, return on ad spend, or revenue. Marketing and AI performance depend on platforms, market conditions, the client's product, brand, pricing, sales follow-up, and many factors outside our control.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">4. Fees, invoicing, and late payment</h2><!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>Retainers are invoiced monthly in advance. Project fees follow the schedule in the SOW.</li>
+<li>Payment is due within 14 days of the invoice date unless agreed otherwise.</li>
+<li>For overdue B2B invoices we charge the statutory commercial interest rate (<em>wettelijke handelsrente</em>, Art. 6:119a Dutch Civil Code) plus extrajudicial collection costs (<em>Besluit vergoeding voor buitengerechtelijke incassokosten</em>).</li>
+<li>We may suspend services on non-payment (Art. 6:262 Dutch Civil Code) after one written reminder.</li>
+<li>All fees exclude VAT. VAT is added at the applicable rate.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">5. Term and termination</h2><!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>The initial term is set in the SOW. After it, the agreement continues month to month unless terminated.</li>
+<li>Either party can end the agreement with one full calendar month notice in writing.</li>
+<li>If the client terminates an active engagement early, a kill-fee equal to the remaining retainer in the current term, or 50% thereof if the SOW says so, becomes due.</li>
+<li>Either party can terminate immediately if the other commits a material breach that is not cured within 14 days of written notice, or in case of bankruptcy or insolvency proceedings.</li>
+<li>On termination, the client pays for work delivered up to the effective date. Sections that by nature should survive (IP, confidentiality, liability, governing law) do.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">6. Intellectual property</h2><!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>On full payment, the client owns the final deliverables created for the client and may use them without restriction.</li>
+<li>Our pre-existing frameworks, methodologies, templates, prompt libraries, internal tools, and the UNIFY Framework™ remain our property. The client gets a perpetual, non-exclusive licence to use them as part of the delivered work.</li>
+<li>The client grants us a non-exclusive, royalty-free licence to use deliverables and the client's name and logo in our portfolio, case studies, and marketing, unless the client opts out in writing.</li>
+<li>Third-party assets (stock images, licensed fonts, paid plugins) follow their own licence terms, passed through to the client.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">7. Confidentiality</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Both parties keep confidential information confidential for three years after the engagement ends. Standard carve-outs apply: information that is public, already known to the receiving party, independently developed, or required to be disclosed by law or regulator.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">8. Data protection</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Where we process personal data on the client's behalf, the client is the controller and we are the processor under GDPR Article 28. A Data Processing Agreement is annexed to the SOW and prevails over these Terms for data-protection matters. The client warrants that it has a valid legal basis for any personal data it provides to us, including customer lists and CRM exports, and indemnifies us against any third-party claim that arises from a failure to do so.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">9. Liability</h2><!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>Our total liability under or in connection with the agreement, in any 12-month period, is capped at the fees the client paid us in that period.</li>
+<li>If a claim arises in the first three months of the engagement, the cap is one month of retainer.</li>
+<li>We are not liable for indirect or consequential damages, lost profits, lost revenue, loss of data, loss of goodwill, or reputational harm.</li>
+<li>The cap and exclusions do not apply to liability that cannot be limited under Dutch law, such as intent or gross negligence (per Art. 6:248 Dutch Civil Code).</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">10. Platform and third-party dependencies</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Our work depends on third-party platforms (Google, Meta, LinkedIn, TikTok, HubSpot, Brevo, OpenAI, Anthropic, and others). We are not responsible for changes in their algorithms, pricing, policies, API behaviour, account suspensions, or service availability. If a platform change degrades or breaks part of the work, we will redesign in good faith within the existing scope where possible.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">11. Force majeure</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Neither party is liable for failure to perform due to events beyond reasonable control (Art. 6:75 Dutch Civil Code), including but not limited to natural disaster, war, terrorism, civil unrest, strike, public health emergency, regulator action, internet outages affecting the country, and major outages of third-party platforms we depend on. If the event lasts more than 60 days, either party can terminate without penalty for work not yet delivered.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">12. Client obligations and deemed approval</h2><!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>The client provides accurate, complete, and timely information, access, and approvals needed for us to deliver.</li>
+<li>The client names a single decision-maker for the engagement.</li>
+<li>Any deliverable shared with the client is considered approved if the client does not raise specific written objections within five working days. Approved deliverables can still be revised under change control.</li>
+<li>The client warrants that any content, brand asset, product claim, or audience list it provides does not infringe third-party rights and complies with applicable advertising rules. The client indemnifies us against claims that arise from it.</li>
+</ul>
+<!-- /wp:list -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">13. Subcontracting and assignment</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>We may engage subcontractors. We remain responsible for their work. The client cannot assign the agreement to a third party without our written consent, which we will not unreasonably withhold.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">14. Governing law and dispute resolution</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Dutch law governs the agreement, with the UN Convention on Contracts for the International Sale of Goods excluded. Before starting litigation, parties try to resolve disputes in good faith and, if helpful, through a mediator. Otherwise the Rechtbank Rotterdam has exclusive jurisdiction.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">15. Miscellaneous</h2><!-- /wp:heading -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>If any provision is unenforceable, the rest stays in force and parties replace it with one that comes closest to its commercial intent.</li>
+<li>Amendments need to be in writing and signed by both parties.</li>
+<li>These Terms together with the SOW and any annexes are the entire agreement. They prevail over the client's purchase conditions (Art. 6:225(3) Dutch Civil Code battle-of-forms).</li>
+<li>No waiver of any breach counts as a waiver of any later breach.</li>
+</ul>
+<!-- /wp:list -->]]></content:encoded>
 	</item>
 
 	<item>
@@ -241,7 +440,41 @@
 		<wp:post_name><![CDATA[disclaimer]]></wp:post_name>
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
-		<content:encoded><![CDATA[<!-- wp:paragraph --><p>Replace this with your final disclaimer copy.</p><!-- /wp:paragraph -->]]></content:encoded>
+		<content:encoded><![CDATA[<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Last updated: 12 May 2026.</p><!-- /wp:paragraph -->
+
+<!-- wp:paragraph --><p>The information on this website, including all articles, calculators, chatbot responses, and guides, is provided for general information only. Read this page before relying on anything you find here.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">No professional advice</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Content on this site is not a substitute for professional advice. The Funnel Leak Calculator and ROI Forecaster produce illustrative estimates based on numbers you enter and standard assumptions. Their outputs are not financial advice, legal advice, tax advice, or accounting advice, and they are not promises about future business results. Make important decisions with a qualified adviser who knows your business.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">AI-generated content and EU AI Act transparency</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Some content and tools on this site involve artificial intelligence:</p><!-- /wp:paragraph -->
+<!-- wp:list -->
+<ul class="wp-block-list">
+<li>The chatbot in the bottom-right corner is an AI system. Replies are machine-generated. Verify anything important before acting on it.</li>
+<li>The Funnel Leak Calculator and ROI Forecaster produce automated estimates. They do not profile you, do not store inputs, and do not make any decision that has a legal or similarly significant effect on you.</li>
+<li>Articles on this blog are written and edited by humans. Where any AI assistance is used (for example research summarising), the published version is reviewed by a human author.</li>
+</ul>
+<!-- /wp:list -->
+<!-- wp:paragraph --><p>We disclose these under Article 50 of Regulation (EU) 2024/1689 (the EU AI Act). If you have questions about how an AI feature works, email <a href="mailto:info@boomingventure.com">info@boomingventure.com</a>.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">Accuracy of content</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>We try to keep articles current and accurate, but the world changes faster than our editorial calendar. Strategies, platform features, prices, and regulations cited in blog posts may be outdated by the time you read them. We do not warrant that the content is complete, accurate, or fit for any specific purpose.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">Third-party links and tools</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>This site links to third-party websites, products, and services. Including a link is not an endorsement. We are not responsible for the content, accuracy, privacy practices, or service availability of any third party.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">Results, case studies, and testimonials</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Numbers and quotes from clients are real, but they describe specific situations. Past results are not a guarantee of future performance. Your results depend on your product, market, team, and execution.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">Forward-looking statements</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>Forecasts, predictions, and projections published anywhere on this site, including in the ROI Forecaster, involve assumptions and uncertainty. Treat them as scenarios, not as facts.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">Trademarks</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>UNIFY Framework™ is a trademark of Booming Venture. Other product names, logos, and trademarks belong to their respective owners and are used for identification only.</p><!-- /wp:paragraph -->
+
+<!-- wp:heading --><h2 class="wp-block-heading">Contact</h2><!-- /wp:heading -->
+<!-- wp:paragraph --><p>For questions about this disclaimer, email <a href="mailto:info@boomingventure.com">info@boomingventure.com</a>.</p><!-- /wp:paragraph -->]]></content:encoded>
 	</item>
 
 	<!-- ===================== SERVICES (CPT) ===================== -->
