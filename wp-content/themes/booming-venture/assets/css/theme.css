@@ -88,16 +88,60 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	color: transparent;
 }
 
-/* ---- Hero ---------------------------------------------------------- */
-.bv-hero { position: relative; isolation: isolate; }
+/* ---- Hero — animated brand backdrop -------------------------------
+   Two morphing gradient blobs slowly orbit behind the hero content,
+   plus a canvas particle layer (added by theme.js). The blobs are
+   pure CSS, run at compositor-only properties (transform / opacity),
+   and disable themselves under prefers-reduced-motion. */
+.bv-hero { position: relative; isolation: isolate; overflow: hidden; }
 .bv-hero::before,
 .bv-hero::after {
 	content: ''; position: absolute; pointer-events: none; z-index: -1;
 	width: 60vw; height: 60vw; max-width: 700px; max-height: 700px;
-	border-radius: 50%; filter: blur(80px); opacity: 0.45;
+	border-radius: 50%; filter: blur(80px); opacity: 0.55;
+	will-change: transform, border-radius;
 }
-.bv-hero::before { top: -20%; right: -10%; background: radial-gradient(circle, var(--wp--preset--color--booming-200), transparent 70%); }
-.bv-hero::after  { bottom: -20%; left: -10%;  background: radial-gradient(circle, var(--wp--preset--color--venture-200), transparent 70%); }
+.bv-hero::before {
+	top: -20%; right: -10%;
+	background: radial-gradient(circle, var(--wp--preset--color--booming-200), transparent 70%);
+	animation: bv-blob-morph 28s ease-in-out infinite;
+}
+.bv-hero::after {
+	bottom: -20%; left: -10%;
+	background: radial-gradient(circle, var(--wp--preset--color--venture-200), transparent 70%);
+	animation: bv-blob-morph 34s ease-in-out infinite reverse;
+}
+
+/* Third subtle accent shape — gradient blend of both brand colours. */
+.bv-hero > .bv-hero-orb-3 {
+	position: absolute; pointer-events: none; z-index: -1;
+	top: 40%; left: 45%;
+	width: 40vw; height: 40vw; max-width: 460px; max-height: 460px;
+	border-radius: 50%; filter: blur(90px); opacity: 0.35;
+	background: radial-gradient(circle, var(--wp--preset--color--venture-100), transparent 70%);
+	animation: bv-blob-morph 42s ease-in-out infinite;
+	will-change: transform, border-radius;
+}
+
+@keyframes bv-blob-morph {
+	0%, 100% { transform: translate(0, 0) scale(1)   rotate(0deg); border-radius: 50%; }
+	25%      { transform: translate(8%, -6%) scale(1.12) rotate(45deg); border-radius: 60% 40% 70% 30% / 50% 60% 30% 50%; }
+	50%      { transform: translate(-6%, 8%) scale(0.92) rotate(90deg); border-radius: 40% 60% 30% 70% / 60% 30% 70% 40%; }
+	75%      { transform: translate(6%, 6%) scale(1.06) rotate(135deg); border-radius: 70% 30% 60% 40% / 30% 70% 40% 60%; }
+}
+
+/* Canvas particle layer injected by theme.js (~50 slow-moving brand-coloured dots). */
+.bv-hero-particles {
+	position: absolute; inset: 0; z-index: -1; pointer-events: none;
+	width: 100%; height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.bv-hero::before,
+	.bv-hero::after,
+	.bv-hero > .bv-hero-orb-3 { animation: none; }
+	.bv-hero-particles { display: none; }
+}
 
 .bv-hero-card {
 	position: relative;

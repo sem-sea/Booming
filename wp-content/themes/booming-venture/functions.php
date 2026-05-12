@@ -18,5 +18,6 @@ require_once BV_THEME_DIR . '/inc/blocks.php';
 require_once BV_THEME_DIR . '/inc/patterns.php';
 require_once BV_THEME_DIR . '/inc/seo.php';
 require_once BV_THEME_DIR . '/inc/geo.php';
+require_once BV_THEME_DIR . '/inc/installer.php';
 require_once BV_THEME_DIR . '/inc/security.php';
 require_once BV_THEME_DIR . '/inc/integrations.php';
