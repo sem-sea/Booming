@@ -87,9 +87,10 @@
 		<wp:post_name><![CDATA[about]]></wp:post_name>
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
-		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/about"} /-->
-<!-- wp:pattern {"slug":"booming-venture/unify-framework"} /-->
-<!-- wp:pattern {"slug":"booming-venture/testimonials"} /-->
+		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/about-story"} /-->
+<!-- wp:pattern {"slug":"booming-venture/core-values"} /-->
+<!-- wp:pattern {"slug":"booming-venture/approach-steps"} /-->
+<!-- wp:pattern {"slug":"booming-venture/why-choose-checklist"} /-->
 <!-- wp:pattern {"slug":"booming-venture/cta-band"} /-->]]></content:encoded>
 	</item>
 
@@ -101,9 +102,20 @@
 		<wp:post_name><![CDATA[services]]></wp:post_name>
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
-		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/services-grid"} /-->
-<!-- wp:pattern {"slug":"booming-venture/unify-framework"} /-->
-<!-- wp:pattern {"slug":"booming-venture/testimonials"} /-->
+		<content:encoded><![CDATA[<!-- wp:group {"tagName":"section","className":"bv-page-hero","gradient":"hero-backdrop","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} -->
+<section class="wp-block-group bv-page-hero has-hero-backdrop-gradient-background has-background" style="padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--40)">
+<!-- wp:heading {"textAlign":"center","level":1,"fontSize":"6xl"} -->
+<h1 class="wp-block-heading has-text-align-center has-6-xl-font-size">Our <span class="bv-gradient-text">Services</span></h1>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"align":"center","fontSize":"xl","textColor":"muted"} -->
+<p class="has-text-align-center has-muted-color has-text-color has-xl-font-size">Comprehensive solutions designed to accelerate your business growth through innovative marketing strategies, AI-powered optimization, and strategic consulting.</p>
+<!-- /wp:paragraph -->
+</section>
+<!-- /wp:group -->
+<!-- wp:pattern {"slug":"booming-venture/services-detail"} /-->
+<!-- wp:pattern {"slug":"booming-venture/additional-services"} /-->
+<!-- wp:pattern {"slug":"booming-venture/process-steps"} /-->
+<!-- wp:pattern {"slug":"booming-venture/tools-cards"} /-->
 <!-- wp:pattern {"slug":"booming-venture/cta-band"} /-->]]></content:encoded>
 	</item>
 
@@ -126,8 +138,12 @@
 		<wp:post_name><![CDATA[unify-framework]]></wp:post_name>
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
-		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/unify-framework"} /-->
-<!-- wp:pattern {"slug":"booming-venture/testimonials"} /-->
+		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/unify-hero"} /-->
+<!-- wp:pattern {"slug":"booming-venture/unify-friction-to-flow"} /-->
+<!-- wp:pattern {"slug":"booming-venture/unify-market-clarity"} /-->
+<!-- wp:pattern {"slug":"booming-venture/unify-phases"} /-->
+<!-- wp:pattern {"slug":"booming-venture/unify-modules"} /-->
+<!-- wp:pattern {"slug":"booming-venture/unify-stats"} /-->
 <!-- wp:pattern {"slug":"booming-venture/cta-band"} /-->]]></content:encoded>
 	</item>
 

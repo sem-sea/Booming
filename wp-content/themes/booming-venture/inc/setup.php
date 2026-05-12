@@ -55,6 +55,15 @@ add_action( 'init', function () {
 	remove_action( 'wp_print_styles', 'print_emoji_styles' );
 } );
 
+/* Viewport with viewport-fit=cover — needed for env(safe-area-inset-*) to fire
+ * on iPhone 14+ Dynamic Island / Android 15 edge-to-edge. Kept user-scalable
+ * (WCAG 1.4.4 — never set maximum-scale=1). */
+add_action( 'wp_head', function () {
+	echo '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">' . "\n";
+	echo '<meta name="theme-color" content="#0284c7">' . "\n";
+	echo '<meta name="color-scheme" content="light">' . "\n";
+}, 0 );
+
 /* Body class helpers. */
 add_filter( 'body_class', function ( $classes ) {
 	if ( is_singular( 'service' ) )      $classes[] = 'is-service';
