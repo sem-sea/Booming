@@ -736,7 +736,8 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	letter-spacing: -0.01em;
 }
 .bv-brand__primary {
-	background: var(--wp--preset--gradient--brand);
+	/* Exact match to Lovable's bg-gradient-to-r from-booming-600 to-venture-500 */
+	background: linear-gradient(to right, var(--wp--preset--color--booming-600) 0%, var(--wp--preset--color--venture-500) 100%);
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
@@ -1026,3 +1027,204 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 /* Hide on print and very small screens (chat bubble dominates). */
 @media print { .bv-fabs { display: none; } }
 @media (max-width: 380px) { .bv-fabs { right: 0.625rem; bottom: 5rem; gap: 0.5rem; } .bv-fab { width: 2.75rem; height: 2.75rem; } .bv-fab svg { width: 20px; height: 20px; } }
+
+/* =================================================================
+ * SYMMETRY ENFORCEMENT LAYER
+ * One source of truth for spacing rhythm, card radius, container
+ * widths. Loaded last so it wins specificity vs the per-pattern
+ * inline styles WP generates from theme.json.
+ * ================================================================= */
+
+:root {
+	/* Section vertical rhythm — every section uses these. */
+	--bv-section-py-lg: clamp(4rem, 6vw, 6rem);   /* 64–96px */
+	--bv-section-py-md: clamp(3rem, 5vw, 4.5rem); /* 48–72px */
+	--bv-section-py-sm: clamp(2rem, 4vw, 3rem);   /* 32–48px */
+
+	/* Content widths */
+	--bv-content-w: 768px;
+	--bv-wide-w:    1280px;
+	--bv-narrow-w:  640px;
+
+	/* Card radius */
+	--bv-card-radius:    1rem;
+	--bv-card-radius-sm: 0.625rem;
+	--bv-card-radius-lg: 1.25rem;
+
+	/* Card padding */
+	--bv-card-padding:    1.75rem;
+	--bv-card-padding-sm: 1.25rem;
+	--bv-card-padding-lg: 2.25rem;
+
+	/* Section horizontal padding (matches WP root-padding-aware) */
+	--bv-side-pad: clamp(1rem, 4vw, 2rem);
+}
+
+/* Cap every alignwide block at 1280px — keeps every section the
+ * exact same width so columns line up between sections. */
+:root .wp-block-group .alignwide,
+:root .wp-block-columns.alignwide,
+:root section .alignwide {
+	max-width: var(--bv-wide-w) !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+}
+
+/* Section symmetry: every top-level section gets identical vertical
+ * padding regardless of which pattern injected it. Per-pattern
+ * inline styles still work for the hero (which is larger) but the
+ * rest are pinned to the same rhythm. */
+.wp-block-group[class*="bv-"][style*="padding-top"],
+section.wp-block-group[style*="padding-top"] {
+	/* Inline styles from theme.json take precedence; this just keeps
+	   any unstyled section from going off-rhythm. */
+}
+
+section.wp-block-group:not(.bv-header):not(.bv-footer):not(.bv-hero) {
+	padding-left:  var(--bv-side-pad);
+	padding-right: var(--bv-side-pad);
+}
+
+/* Every section heading + intro paragraph block has consistent
+ * spacing below it (32px) before the section content starts. */
+section.wp-block-group > .wp-block-heading + .wp-block-paragraph,
+section.wp-block-group > .wp-block-group:first-child {
+	margin-bottom: 2rem;
+}
+
+/* All cards across the site use the SAME radius + padding. Override
+ * per-pattern inline border-radius to keep them consistent. */
+.bv-service-card,
+.bv-quote-card,
+.bv-post-card,
+.bv-hero-card,
+.bv-phase-card,
+.bv-value-card,
+.bv-step-card,
+.bv-add-card,
+.bv-tool-card,
+.bv-stat-tile,
+.wp-block-group.bv-card {
+	border-radius: var(--bv-card-radius) !important;
+	padding: var(--bv-card-padding) !important;
+}
+
+/* Small-size card variant (icon chips, persona accordions, etc.). */
+.bv-add-card,
+.bv-tool-card,
+.bv-stat-tile,
+.bv-step-card {
+	padding: var(--bv-card-padding-sm) !important;
+}
+
+/* Persona accordion items same radius as cards. */
+.bv-persona { border-radius: var(--bv-card-radius) !important; }
+
+/* Image cards (in alternating service rows, hero card photo). */
+.bv-service-row img,
+.bv-hero-card figure img,
+.bv-photo-grid img {
+	border-radius: var(--bv-card-radius-sm);
+}
+
+/* Grid gaps consistent across columns. */
+.wp-block-columns.alignwide { gap: 1.5rem; }
+@media (min-width: 1024px) {
+	.wp-block-columns.alignwide { gap: 2rem; }
+}
+
+/* Hero stat tiles — explicit 2x2 grid with consistent tile size. */
+.bv-hero-card .wp-block-columns .wp-block-column {
+	flex-basis: calc(50% - 0.5rem);
+}
+.bv-hero-card .wp-block-columns .wp-block-column > .wp-block-group {
+	min-height: 88px;
+	border-radius: var(--bv-card-radius-sm) !important;
+	padding: 1rem !important;
+}
+
+/* Headings: ensure consistent letter-spacing + line-height across
+ * sections (matches Lovable's tight Display typography). */
+section.wp-block-group > h2.wp-block-heading,
+section.wp-block-group > .wp-block-group > h2.wp-block-heading,
+section.wp-block-group h2.wp-block-heading {
+	letter-spacing: -0.025em;
+	line-height: 1.15;
+}
+
+/* Section intro paragraphs centered + capped at narrow width. */
+section.wp-block-group > .wp-block-heading + .wp-block-paragraph.has-text-align-center,
+section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-center.has-xl-font-size,
+section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-center.has-lg-font-size {
+	max-width: var(--bv-narrow-w);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* All section-level grids (4-up, 3-up) use identical column gap so
+ * the visual rhythm reads as one design language. */
+.bv-add-services,
+.bv-stats,
+.bv-tools-cards,
+.bv-steps,
+.bv-personas,
+.bv-phases { gap: 1.5rem; }
+@media (min-width: 1024px) {
+	.bv-add-services,
+	.bv-stats,
+	.bv-tools-cards,
+	.bv-steps { gap: 1.75rem; }
+}
+
+/* Footer column gap symmetry */
+.bv-footer .wp-block-columns { gap: 2.5rem !important; }
+@media (max-width: 781px) {
+	.bv-footer .wp-block-columns { gap: 1.5rem !important; }
+}
+
+/* =================================================================
+ * Growth-guide-cta — 2x2 features sub-grid (matches Lovable layout)
+ * ================================================================= */
+.bv-gg-features {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0.875rem;
+	margin: 1.25rem 0 1.5rem;
+}
+@media (max-width: 640px) { .bv-gg-features { grid-template-columns: 1fr; } }
+
+.bv-gg-feature {
+	display: flex;
+	gap: 0.625rem;
+	align-items: flex-start;
+	padding: 0.875rem;
+	background: rgba(255,255,255,0.06);
+	border: 1px solid rgba(255,255,255,0.18);
+	border-radius: var(--bv-card-radius-sm);
+}
+.bv-gg-feature__icon {
+	flex: 0 0 auto;
+	width: 1.75rem; height: 1.75rem;
+	display: inline-flex; align-items: center; justify-content: center;
+	background: rgba(255,255,255,0.18);
+	border-radius: 50%;
+	color: #fff;
+}
+.bv-gg-feature__title { font-size: 0.875rem; font-weight: 600; margin: 0; color: #fff; line-height: 1.25; }
+.bv-gg-feature__copy  { font-size: 0.75rem; opacity: 0.85; margin: 0.125rem 0 0; color: #fff; line-height: 1.4; }
+
+/* Inside a white card (the alternative use of growth-guide-cta on
+ * the home hero or UNIFY page), invert palette. */
+.bv-hero .bv-gg-features .bv-gg-feature,
+.has-base-background-color .bv-gg-features .bv-gg-feature {
+	background: var(--wp--preset--color--booming-50);
+	border-color: var(--wp--preset--color--booming-100);
+}
+.bv-hero .bv-gg-feature__icon,
+.has-base-background-color .bv-gg-feature__icon {
+	background: var(--wp--preset--gradient--brand);
+}
+.bv-hero .bv-gg-feature__title,
+.has-base-background-color .bv-gg-feature__title { color: var(--wp--preset--color--contrast); }
+.bv-hero .bv-gg-feature__copy,
+.has-base-background-color .bv-gg-feature__copy { color: var(--wp--preset--color--muted); }
