@@ -1,23 +1,34 @@
-<!-- wp:group {"tagName":"header","className":"bv-header","style":{"position":{"type":"sticky","top":"0px"},"spacing":{"padding":{"top":"var:preset|spacing|20","bottom":"var:preset|spacing|20"}}},"backgroundColor":"base","layout":{"type":"constrained"}} -->
-<header class="wp-block-group bv-header has-base-background-color has-background" style="position:sticky;top:0px;padding-top:var(--wp--preset--spacing--20);padding-bottom:var(--wp--preset--spacing--20)">
+<!-- wp:group {"tagName":"header","className":"bv-header","layout":{"type":"constrained"}} -->
+<header class="wp-block-group bv-header">
 
-	<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
-	<div class="wp-block-group">
+	<!-- wp:group {"className":"bv-header__inner","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+	<div class="wp-block-group bv-header__inner">
 
-		<!-- wp:site-logo {"width":180} /-->
-
-		<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap"}} -->
-		<div class="wp-block-group">
-			<!-- wp:navigation {"overlayMenu":"mobile","textColor":"contrast","style":{"typography":{"fontWeight":"500"}}} /-->
-			<!-- wp:buttons -->
-			<div class="wp-block-buttons">
-				<!-- wp:button {"backgroundColor":"booming-600","textColor":"base","className":"bv-cta"} -->
-				<div class="wp-block-button bv-cta"><a class="wp-block-button__link has-base-color has-booming-600-background-color has-text-color has-background wp-element-button" href="/#contact">Get Started</a></div>
-				<!-- /wp:button -->
-			</div>
-			<!-- /wp:buttons -->
+		<!-- wp:group {"className":"bv-brand-wrap","layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
+		<div class="wp-block-group bv-brand-wrap">
+			<!-- wp:site-logo {"width":48} /-->
+			<!-- wp:html -->
+			<a href="/" class="bv-brand" aria-label="Booming Venture — home"><span class="bv-brand__primary">Booming</span><span class="bv-brand__accent">Venture</span></a>
+			<!-- /wp:html -->
 		</div>
 		<!-- /wp:group -->
+
+		<!-- wp:navigation {"overlayMenu":"mobile","textColor":"contrast","className":"bv-nav","style":{"typography":{"fontWeight":"500"},"spacing":{"blockGap":"var:preset|spacing|30"}}} -->
+			<!-- wp:navigation-link {"label":"About","url":"/about/","kind":"custom","isTopLevelLink":true} /-->
+			<!-- wp:navigation-link {"label":"UNIFY Framework","url":"/unify-framework/","kind":"custom","isTopLevelLink":true} /-->
+			<!-- wp:navigation-link {"label":"Services","url":"/services/","kind":"custom","isTopLevelLink":true} /-->
+			<!-- wp:navigation-link {"label":"Funnel Calculator","url":"/funnel-calculator/","kind":"custom","isTopLevelLink":true} /-->
+			<!-- wp:navigation-link {"label":"ROI Forecaster","url":"/roi-forecaster/","kind":"custom","isTopLevelLink":true} /-->
+			<!-- wp:navigation-link {"label":"Blog","url":"/blog/","kind":"custom","isTopLevelLink":true} /-->
+		<!-- /wp:navigation -->
+
+		<!-- wp:buttons {"className":"bv-header__cta"} -->
+		<div class="wp-block-buttons bv-header__cta">
+			<!-- wp:button {"className":"bv-btn bv-btn--primary"} -->
+			<div class="wp-block-button bv-btn bv-btn--primary"><a class="wp-block-button__link wp-element-button" href="/#contact">Get Started</a></div>
+			<!-- /wp:button -->
+		</div>
+		<!-- /wp:buttons -->
 
 	</div>
 	<!-- /wp:group -->

@@ -6,9 +6,9 @@
 
 		<!-- wp:column {"width":"40%"} -->
 		<div class="wp-block-column" style="flex-basis:40%">
-			<!-- wp:heading {"level":3,"fontSize":"2xl","className":"bv-brand"} -->
-			<h3 class="wp-block-heading bv-brand has-2-xl-font-size">Booming<span class="bv-brand-accent">Venture</span></h3>
-			<!-- /wp:heading -->
+			<!-- wp:html -->
+			<a href="/" class="bv-brand" aria-label="Booming Venture — home"><span class="bv-brand__primary">Booming</span><span class="bv-brand__accent">Venture</span></a>
+			<!-- /wp:html -->
 			<!-- wp:paragraph {"textColor":"muted"} -->
 			<p class="has-muted-color has-text-color">Based from Rotterdam, The Netherlands, we help businesses grow through innovative marketing strategies and AI-driven solutions.</p>
 			<!-- /wp:paragraph -->
@@ -27,7 +27,15 @@
 		<!-- wp:column -->
 		<div class="wp-block-column">
 			<!-- wp:heading {"level":4,"fontSize":"lg"} --><h4 class="wp-block-heading has-lg-font-size">Company</h4><!-- /wp:heading -->
-			<!-- wp:navigation {"className":"bv-footer-nav","overlayMenu":"never","style":{"typography":{"fontSize":"0.95rem"}}} /-->
+			<!-- wp:list {"className":"bv-footer-list"} -->
+			<ul class="wp-block-list bv-footer-list">
+				<!-- wp:list-item --><li><a href="/about/">About Us</a></li><!-- /wp:list-item -->
+				<!-- wp:list-item --><li><a href="/unify-framework/">UNIFY Framework</a></li><!-- /wp:list-item -->
+				<!-- wp:list-item --><li><a href="/services/">Services</a></li><!-- /wp:list-item -->
+				<!-- wp:list-item --><li><a href="/blog/">Blog</a></li><!-- /wp:list-item -->
+				<!-- wp:list-item --><li><a href="/#contact">Contact</a></li><!-- /wp:list-item -->
+			</ul>
+			<!-- /wp:list -->
 		</div>
 		<!-- /wp:column -->
 
@@ -66,8 +74,8 @@
 	<hr class="wp-block-separator has-alpha-channel-opacity is-style-wide"/>
 	<!-- /wp:separator -->
 
-	<!-- wp:group {"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
-	<div class="wp-block-group">
+	<!-- wp:group {"className":"bv-footer__bottom","layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between"}} -->
+	<div class="wp-block-group bv-footer__bottom">
 		<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} -->
 		<p class="has-muted-color has-text-color has-sm-font-size">© 2026 Booming Venture. All rights reserved.</p>
 		<!-- /wp:paragraph -->
