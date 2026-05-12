@@ -48,6 +48,16 @@ def faq(items):
         out.append(p(a))
     return "\n".join(out)
 
+def capsule(t):
+    """20-25 word answer capsule shown immediately after a question-shaped H2.
+    Wrap in a styled paragraph so it's visually distinct (and Indig's
+    'definitive language' is reinforced)."""
+    return f'<!-- wp:paragraph {{"className":"bv-capsule","style":{{"typography":{{"fontWeight":"500"}}}},"fontSize":"lg"}} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">{t}</p><!-- /wp:paragraph -->'
+
+def link(text, url):
+    """External authoritative link with rel attrs for AI crawlers + SEO."""
+    return f'<a href="{url}" rel="noopener" target="_blank">{text}</a>'
+
 POSTS = {}
 
 # ============================================================ POST 2

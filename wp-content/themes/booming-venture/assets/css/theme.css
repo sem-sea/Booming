@@ -591,3 +591,18 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 
 /* Print: hide forms when printing pages (Funnel Calc / ROI PDF export). */
 @media print { .wpcf7 { display: none; } }
+
+/* GEO answer capsule (Bible §5) — visually distinct paragraph that lives
+   immediately after each question-shaped H2. The visual cue also signals
+   "definitive language" passages to the eye, matching the AI-cited
+   linguistic patterns (Indig Feb 2026). */
+.bv-capsule {
+	border-left: 3px solid var(--wp--preset--color--booming-500);
+	padding: 0.75rem 0 0.75rem 1rem;
+	margin: 0.5rem 0 1.25rem;
+	color: var(--wp--preset--color--contrast);
+	line-height: 1.55;
+}
+
+/* "Last updated" banner injected above the_content on single posts. */
+.bv-post-meta-line { font-size: 0.875rem; }
