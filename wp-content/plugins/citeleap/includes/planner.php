@@ -17,16 +17,29 @@ class CiteLeap_Planner {
 		<div class="citeleap-planner">
 			<div class="notice" style="border-left:4px solid #0284c7;padding:0.75rem 1rem;background:#f0f9ff;margin:0 0 1rem;">
 				<p style="margin:0;">
-					<strong><?php echo esc_html__( 'Auto-publish:', 'citeleap' ); ?></strong>
-					<?php echo empty( $schedule['auto'] ) ? '<span style="color:#b45309">OFF</span>' : '<span style="color:#16a34a">ON</span>'; ?>
+					<strong><?php echo esc_html__( 'Auto mode:', 'citeleap' ); ?></strong>
+					<?php $mode_label = CiteLeap_Scheduler::auto_mode( $schedule ); ?>
+					<span style="color:<?php echo 'off' === $mode_label ? '#b45309' : '#16a34a'; ?>;font-weight:600;text-transform:uppercase;"><?php echo esc_html( $mode_label ); ?></span>
 					|
 					<strong><?php echo esc_html__( 'Cadence:', 'citeleap' ); ?></strong>
 					<?php echo (int) ( $schedule['posts_per_week'] ?? 3 ); ?> / <?php echo esc_html__( 'week', 'citeleap' ); ?>
 					|
 					<strong><?php echo esc_html__( 'Next publish slot:', 'citeleap' ); ?></strong>
-					<?php echo esc_html( get_date_from_gmt( gmdate( 'Y-m-d H:i:s', $next ) ) ); ?>
+					<?php echo esc_html( citeleap_format( $next ) ); ?>
 				</p>
 			</div>
+
+			<details style="background:#fffbeb;border:1px solid #fde68a;border-radius:6px;padding:0.5rem 0.875rem;margin:0 0 1rem;">
+				<summary style="cursor:pointer;font-weight:600;color:#92400e;"><?php echo esc_html__( 'How CiteLeap works (click to expand)', 'citeleap' ); ?></summary>
+				<div class="citeleap-flow" style="margin-top:0.75rem;">
+					<div class="citeleap-flow-step"><strong><span class="citeleap-flow-num">1</span> Generate or paste topics</strong>Click "Generate ideas" to have the reasoning model brainstorm, OR paste your own topics one per line. Both land in the queue with status=queued.</div>
+					<div class="citeleap-flow-step"><strong><span class="citeleap-flow-num">2</span> Plan or pin</strong>Optionally pin a specific publish datetime per row. Pinned rows fire ahead of the auto cadence at exactly that time.</div>
+					<div class="citeleap-flow-step"><strong><span class="citeleap-flow-num">3</span> Write draft</strong>Click "Write draft" to draft manually, OR enable Auto mode = Draft / Publish to let the hourly cron tick do it. The writing model produces a 1,200 to 1,600 word GEO-compliant post.</div>
+					<div class="citeleap-flow-step"><strong><span class="citeleap-flow-num">4</span> Schedule or publish</strong>Drafted rows can be scheduled to a specific datetime, published immediately, paused, or removed. Scheduled rows can be rescheduled or unscheduled.</div>
+					<div class="citeleap-flow-step"><strong><span class="citeleap-flow-num">5</span> Refresh anytime</strong>Pick existing posts to refresh (checkbox list, paste-list, or auto-pick). Refresh mode = Draft parks the rewrite as pending review; Live overwrites the post.</div>
+				</div>
+				<p class="citeleap-help" style="margin:0.5rem 0 0;"><strong><?php echo esc_html__( 'Per-row coherence:', 'citeleap' ); ?></strong> <?php echo esc_html__( 'every queue row supports Pause / Resume / Remove. Queued rows add Write draft + Pin. Drafted rows add Schedule + Publish now. Scheduled rows add Reschedule + Unschedule + Publish now. Failed rows add Retry. Pending-review rows add Approve + Reject. Refreshing rows add Reset stuck.', 'citeleap' ); ?></p>
+			</details>
 
 			<h2 style="margin:1rem 0 0.5rem;"><?php echo esc_html__( 'Manual actions', 'citeleap' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-block;margin-right:0.5rem;">
@@ -40,6 +53,8 @@ class CiteLeap_Planner {
 				<input type="hidden" name="action" value="citeleap_run_tick">
 				<button class="button"><?php echo esc_html__( 'Run scheduler tick now', 'citeleap' ); ?></button>
 			</form>
+			<p class="citeleap-help"><strong><?php echo esc_html__( 'Generate ideas now:', 'citeleap' ); ?></strong> <?php echo esc_html__( 'calls your reasoning model with the idea prompt, returns N unique titles, dedupes against existing slugs, persists to the queue. Takes 5 to 15 seconds. Cost: roughly $0.005 per idea on Claude.', 'citeleap' ); ?>
+			<br><strong><?php echo esc_html__( 'Run scheduler tick now:', 'citeleap' ); ?></strong> <?php echo esc_html__( 'manually fires the hourly cron. Useful if you do not want to wait. Runs refresh tick first, then content tick. Honors Auto mode (Off / Draft / Publish).', 'citeleap' ); ?></p>
 
 			<h2 style="margin:1.5rem 0 0.25rem;"><?php echo esc_html__( 'Add your own topics (no LLM call)', 'citeleap' ); ?></h2>
 			<p style="margin:0 0 0.5rem;color:#64748b;"><?php echo esc_html__( 'Paste one topic per line. Each becomes a queued post in order. Duplicates against existing slugs and the queue are skipped automatically. No tokens are spent until you draft the post.', 'citeleap' ); ?></p>
@@ -144,12 +159,16 @@ class CiteLeap_Planner {
 					foreach ( $queue as $row ) :
 						$status  = (string) ( $row['status'] ?? 'queued' );
 						$post_id = (int) ( $row['post_id'] ?? 0 );
-						$is_refresh = in_array( $status, [ 'queued_refresh', 'refreshing', 'refreshed' ], true );
+						$is_paused = ! empty( $row['paused'] );
+						$is_refresh = in_array( $status, [ 'queued_refresh', 'refreshing', 'refreshed', 'pending_review' ], true );
 				?>
 					<tr>
 						<td>
 							<?php if ( $is_refresh ) : ?>
 								<span style="background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;text-transform:uppercase;">REFRESH</span>
+							<?php endif; ?>
+							<?php if ( $is_paused ) : ?>
+								<span style="background:#e0e7ff;color:#3730a3;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;text-transform:uppercase;">PAUSED</span>
 							<?php endif; ?>
 							<strong><?php echo esc_html( (string) ( $row['title'] ?? '' ) ); ?></strong>
 							<?php if ( ! empty( $row['angle'] ) ) : ?>
@@ -260,9 +279,86 @@ class CiteLeap_Planner {
 									<input type="hidden" name="queue_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
 									<button class="button button-small" onclick="return confirm('<?php echo esc_js( __( 'Reset this stuck refresh? Use only if a previous tick crashed mid-flight.', 'citeleap' ) ); ?>');"><?php echo esc_html__( 'Reset stuck', 'citeleap' ); ?></button>
 								</form>
+							<?php elseif ( 'drafted' === $status && $post_id ) :
+								$pin_local = '';
+								if ( ! empty( $row['publish_at'] ) ) {
+									$pl = ( new DateTimeImmutable( (string) $row['publish_at'], new DateTimeZone( 'UTC' ) ) )->setTimezone( citeleap_tz() );
+									$pin_local = $pl->format( 'Y-m-d\TH:i' );
+								}
+							?>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-flex;align-items:center;gap:0.25rem;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_schedule_drafted">
+									<input type="hidden" name="id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<input type="datetime-local" name="when" value="<?php echo esc_attr( $pin_local ); ?>" required style="font-size:11px;padding:1px 2px;">
+									<button class="button button-small button-primary"><?php echo esc_html__( 'Schedule', 'citeleap' ); ?></button>
+								</form>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;" onsubmit="return confirm('<?php echo esc_js( __( 'Publish this draft immediately?', 'citeleap' ) ); ?>');">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_publish_now">
+									<input type="hidden" name="id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<button class="button button-small"><?php echo esc_html__( 'Publish now', 'citeleap' ); ?></button>
+								</form>
+								<a class="button button-small" href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>"><?php echo esc_html__( 'Edit', 'citeleap' ); ?></a>
+								<a class="button button-small" href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" target="_blank"><?php echo esc_html__( 'Preview', 'citeleap' ); ?></a>
+							<?php elseif ( 'scheduled' === $status && $post_id ) :
+								$pin_local = '';
+								if ( ! empty( $row['scheduled_for'] ) ) {
+									$pl = strtotime( (string) $row['scheduled_for'] );
+									if ( $pl ) {
+										$pi = ( new DateTimeImmutable( '@' . $pl ) )->setTimezone( citeleap_tz() );
+										$pin_local = $pi->format( 'Y-m-d\TH:i' );
+									}
+								}
+							?>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-flex;align-items:center;gap:0.25rem;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_reschedule">
+									<input type="hidden" name="id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<input type="datetime-local" name="when" value="<?php echo esc_attr( $pin_local ); ?>" required style="font-size:11px;padding:1px 2px;">
+									<button class="button button-small"><?php echo esc_html__( 'Reschedule', 'citeleap' ); ?></button>
+								</form>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_unschedule">
+									<input type="hidden" name="id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<button class="button button-small"><?php echo esc_html__( 'Unschedule', 'citeleap' ); ?></button>
+								</form>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;" onsubmit="return confirm('<?php echo esc_js( __( 'Publish now and ignore the scheduled time?', 'citeleap' ) ); ?>');">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_publish_now">
+									<input type="hidden" name="id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<button class="button button-small"><?php echo esc_html__( 'Publish now', 'citeleap' ); ?></button>
+								</form>
+								<a class="button button-small" href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>"><?php echo esc_html__( 'Edit', 'citeleap' ); ?></a>
+							<?php elseif ( 'failed' === $status ) : ?>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_retry">
+									<input type="hidden" name="id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<button class="button button-small button-primary"><?php echo esc_html__( 'Retry', 'citeleap' ); ?></button>
+								</form>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_remove_idea">
+									<input type="hidden" name="idea_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<button class="button button-small button-link-delete"><?php echo esc_html__( 'Remove', 'citeleap' ); ?></button>
+								</form>
 							<?php elseif ( $post_id ) : ?>
 								<a class="button button-small" href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>"><?php echo esc_html__( 'Edit', 'citeleap' ); ?></a>
 								<a class="button button-small" href="<?php echo esc_url( get_permalink( $post_id ) ); ?>" target="_blank"><?php echo esc_html__( 'Preview', 'citeleap' ); ?></a>
+							<?php endif; ?>
+							<?php /* Pause / Resume is universal for any non-terminal row. */
+							if ( ! in_array( $status, [ 'published', 'refreshed' ], true ) ) :
+								$paction = $is_paused ? 'citeleap_resume' : 'citeleap_pause';
+								$plabel  = $is_paused ? __( 'Resume', 'citeleap' ) : __( 'Pause', 'citeleap' );
+							?>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="<?php echo esc_attr( $paction ); ?>">
+									<input type="hidden" name="id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<button class="button button-small"><?php echo esc_html( $plabel ); ?></button>
+								</form>
 							<?php endif; ?>
 						</td>
 					</tr>

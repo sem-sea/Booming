@@ -82,6 +82,7 @@ class CiteLeap_Scheduler {
 		$pinned  = [];
 		foreach ( $queue as $row ) {
 			if ( ( $row['status'] ?? '' ) !== 'queued' ) continue;
+			if ( ! empty( $row['paused'] ) ) continue;
 			$pa = isset( $row['publish_at'] ) ? strtotime( (string) $row['publish_at'] ) : 0;
 			if ( $pa > 0 && $pa <= time() ) $pinned[] = $row + [ '_pa' => $pa ];
 		}
@@ -100,12 +101,12 @@ class CiteLeap_Scheduler {
 				$next_slot = time();
 			}
 			/* Make sure we have ideas. */
-			$queued = array_values( array_filter( $queue, fn( $r ) => ( $r['status'] ?? '' ) === 'queued' && empty( $r['publish_at'] ) ) );
+			$queued = array_values( array_filter( $queue, fn( $r ) => ( $r['status'] ?? '' ) === 'queued' && empty( $r['publish_at'] ) && empty( $r['paused'] ) ) );
 			if ( empty( $queued ) ) {
 				$gen = CiteLeap_Generator::generate_ideas( max( 5, (int) ( $schedule['posts_per_week'] ?? 3 ) ) );
 				if ( ! $gen['ok'] ) return;
 				$queue  = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
-				$queued = array_values( array_filter( $queue, fn( $r ) => ( $r['status'] ?? '' ) === 'queued' && empty( $r['publish_at'] ) ) );
+				$queued = array_values( array_filter( $queue, fn( $r ) => ( $r['status'] ?? '' ) === 'queued' && empty( $r['publish_at'] ) && empty( $r['paused'] ) ) );
 				if ( empty( $queued ) ) return;
 			}
 			/* Sort: priority desc, then created_at asc (FIFO within same priority). */
@@ -193,7 +194,7 @@ class CiteLeap_Scheduler {
 		/* Throttle: at most one refresh per hourly tick. */
 		$queue = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
 		foreach ( $queue as $row ) {
-			if ( ( $row['status'] ?? '' ) === 'queued_refresh' ) {
+			if ( ( $row['status'] ?? '' ) === 'queued_refresh' && empty( $row['paused'] ) ) {
 				CiteLeap_Refresh::refresh_from_queue( (string) $row['id'] );
 				return;
 			}

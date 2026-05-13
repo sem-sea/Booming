@@ -23,6 +23,10 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 	if ( strpos( (string) $hook, 'citeleap' ) === false ) return;
 	$css = CITELEAP_URL . 'assets/admin.css';
 	wp_enqueue_style( 'citeleap-admin', $css, [], (string) filemtime( CITELEAP_DIR . 'assets/admin.css' ) );
+	$js = CITELEAP_URL . 'assets/admin.js';
+	if ( file_exists( CITELEAP_DIR . 'assets/admin.js' ) ) {
+		wp_enqueue_script( 'citeleap-admin', $js, [], (string) filemtime( CITELEAP_DIR . 'assets/admin.js' ), true );
+	}
 } );
 
 function citeleap_render_admin(): void {
@@ -96,6 +100,18 @@ function citeleap_render_flash(): void {
 		$text = __( 'Stuck refresh reset to failed. You can retry it.', 'citeleap' );
 	} elseif ( 'pinned' === $msg ) {
 		$text = __( 'Publish datetime pinned. The auto-tick will pick this topic at exactly that time.', 'citeleap' );
+	} elseif ( 0 === strpos( $msg, 'action-' ) ) {
+		$labels = [
+			'action-pause'           => __( 'Paused. Cron tick will skip this row until you resume.', 'citeleap' ),
+			'action-resume'          => __( 'Resumed. Cron tick will pick this row up again on the next pass.', 'citeleap' ),
+			'action-publish_now'     => __( 'Published immediately.', 'citeleap' ),
+			'action-unschedule'      => __( 'Unscheduled. Post is back to draft state.', 'citeleap' ),
+			'action-retry'           => __( 'Retry queued.', 'citeleap' ),
+			'action-scheduled'       => __( 'Draft scheduled to publish at the picked datetime.', 'citeleap' ),
+			'action-rescheduled'     => __( 'Rescheduled to the new datetime.', 'citeleap' ),
+		];
+		$text = $labels[ $msg ] ?? __( 'Action completed.', 'citeleap' );
+		if ( 'action-err' === $msg ) { $kind = 'error'; $text = __( 'Action failed. Check the log.', 'citeleap' ); }
 	}
 	$class = ( 'error' === $kind ) ? 'notice-error' : 'notice-success';
 	echo '<div class="notice ' . esc_attr( $class ) . ' is-dismissible" style="margin-top:1rem;"><p>' . esc_html( $text ) . '</p></div>';

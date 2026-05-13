@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,18 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 1.6.0 =
+* NEW: progression overlay shown while long synchronous operations run. When you click any CiteLeap form button, a centered card appears with the action title, a 4 to 5 step narrative explaining what is happening behind the scenes, a spinner, and a hint that the page will reload when finished. Pure vanilla JS, no AJAX rewrite needed.
+* NEW: pause / resume on every non-terminal queue row. Paused rows are skipped by the scheduler tick. State is preserved (paused queued stays queued; paused drafted stays drafted; etc.) so resume returns the row to its prior pipeline position.
+* NEW: drafted rows can be manually scheduled to a specific datetime via inline datetime-local picker + Schedule button. Moves the WP post to status=future.
+* NEW: drafted and scheduled rows have a Publish now button that promotes the post to publish state immediately, ignoring any planned datetime.
+* NEW: scheduled rows can be Rescheduled to a different datetime or Unscheduled back to draft state.
+* NEW: failed rows have a Retry button that resets them to queued (or queued_refresh) without manual editing of the option.
+* NEW: workflow explanation panel at the top of the Planner tab, expandable, showing the five-step end-to-end flow and the per-row action map.
+* NEW: includes/actions.php , unified state-machine module with explicit allowed transitions documented inline.
+* CHANGE: every action button gets a one-paragraph help text underneath explaining what happens, cost estimate, and expected duration.
+* CHANGE: paused queue rows are excluded from the new-content auto-tick AND the refresh auto-tick so the operator can freeze any item without removing it.
 
 = 1.5.0 =
 * NEW: Per-row "Pin datetime" control on every queued topic. Set a specific publish date+time via a native datetime-local input. The auto-tick respects per-post pins ahead of the auto-computed slot, so you can schedule a specific topic for "next Tuesday 10:00 CET" without disturbing the rest of the cadence. Clear the field and save to release the pin.

@@ -3,7 +3,7 @@
  * Plugin Name:       CiteLeap
  * Plugin URI:        https://boomingventure.com/citeleap
  * Description:       AI-powered blog content engine. Uses a reasoning model to ideate, a writing model to draft, and WP-Cron to publish on schedule. Bring your own API keys for Anthropic Claude, OpenAI, or Google Gemini. Default output format is GEO/AEO compliant (May 2026 Bible). Designed for lead-generation sites.
- * Version:           1.5.0
+ * Version:           1.6.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            CiteLeap (by Booming Venture)
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const CITELEAP_VERSION         = '1.5.0';
+const CITELEAP_VERSION         = '1.6.0';
 const CITELEAP_DEFAULT_TZ      = 'Europe/Amsterdam'; // CET / CEST per DST
 const CITELEAP_META_PENDING    = '_citeleap_pending_refresh';
 const CITELEAP_OPTION_API_KEYS = 'citeleap_api_keys';
@@ -49,6 +49,7 @@ require_once CITELEAP_DIR . 'includes/usage.php';
 require_once CITELEAP_DIR . 'includes/llm.php';
 require_once CITELEAP_DIR . 'includes/generator.php';
 require_once CITELEAP_DIR . 'includes/refresh.php';
+require_once CITELEAP_DIR . 'includes/actions.php';
 require_once CITELEAP_DIR . 'includes/scheduler.php';
 require_once CITELEAP_DIR . 'includes/dashboard.php';
 require_once CITELEAP_DIR . 'includes/planner.php';
