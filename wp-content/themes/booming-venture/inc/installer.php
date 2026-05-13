@@ -32,7 +32,13 @@ function bv_run_install(): void {
 
 	@set_time_limit( 120 );
 
-	update_option( 'permalink_structure', '/%postname%/' );
+	/* Permalink structure: /blog/%postname%/ — gives clean
+	 * /blog/{slug}/ URLs for posts while leaving pages and CPTs
+	 * (services, landing pages, case studies) on their own slugs.
+	 * WordPress handles the conflict between the "blog" page slug
+	 * and the /blog/ prefix natively as long as page_for_posts is
+	 * set to that page (done below in bv_configure_homepage). */
+	update_option( 'permalink_structure', '/blog/%postname%/' );
 
 	$ok = bv_import_wxr();
 	if ( ! $ok ) {
