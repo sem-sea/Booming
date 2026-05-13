@@ -1371,6 +1371,69 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 .has-base-background-color .bv-gg-feature__copy { color: var(--wp--preset--color--muted); }
 
 /* =================================================================
+ * Visitor-facing fallback form, rendered when a CF7 form cannot be
+ * resolved. Looks intentional rather than broken. Uses mailto so it
+ * always works without JS or plugins.
+ * ================================================================= */
+.bv-form-fallback {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	width: 100%;
+}
+.bv-form-fallback__label {
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--wp--preset--color--contrast);
+}
+.bv-form-fallback__row {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+.bv-form-fallback input[type="email"] {
+	flex: 1 1 220px;
+	min-width: 0;
+	padding: 0.75rem 0.875rem;
+	font-size: 1rem;
+	border: 1px solid var(--wp--preset--color--border);
+	border-radius: 0.625rem;
+	background: #fff;
+	color: var(--wp--preset--color--contrast);
+}
+.bv-form-fallback input[type="email"]:focus {
+	outline: none;
+	border-color: var(--wp--preset--color--booming-500);
+	box-shadow: 0 0 0 3px rgba(14,165,233,0.15);
+}
+.bv-form-fallback__btn {
+	flex: 0 0 auto;
+	padding: 0.75rem 1.25rem;
+	font-size: 1rem;
+	font-weight: 600;
+	color: #fff;
+	background: var(--wp--preset--gradient--brand);
+	border: none;
+	border-radius: 0.625rem;
+	cursor: pointer;
+	transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.bv-form-fallback__btn:hover { transform: translateY(-1px); box-shadow: 0 8px 20px -6px rgba(14,165,233,0.4); }
+.bv-form-fallback__note {
+	font-size: 0.8125rem;
+	color: var(--wp--preset--color--muted);
+	margin: 0.25rem 0 0;
+	line-height: 1.5;
+}
+.bv-form-fallback__note a { color: var(--wp--preset--color--booming-700); text-decoration: underline; }
+
+/* Slightly darker border on real CF7 inputs so they stay readable
+ * when sitting inside a white card. */
+.wpcf7-form-control:where([type="text"], [type="email"], [type="tel"], [type="url"], [type="number"], textarea) {
+	border-color: #cbd5e1 !important;
+}
+
+/* =================================================================
  * Blog overview (templates/home.html + templates/archive.html)
  * ================================================================= */
 

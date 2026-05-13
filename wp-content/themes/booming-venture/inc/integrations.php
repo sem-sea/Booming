@@ -149,17 +149,42 @@ add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
 		return do_shortcode( '[' . $tag . $attr_str . ']' );
 	}
 
-	/* Numeric or hash-shape we could not find. Probably a stale hash. */
-	if ( current_user_can( 'edit_posts' ) ) {
-		$slug = sanitize_key( $id_raw );
-		return '<div class="bv-form-missing" style="padding:1rem;border:2px dashed #fca5a5;border-radius:0.5rem;background:#fef2f2;color:#7f1d1d;line-height:1.55">'
-			. '<strong>Contact Form 7 form not found.</strong><br>'
-			. 'Slug or id: <code>' . esc_html( $id_raw ) . '</code>. '
-			. 'Create a CF7 form (Contact &rarr; Contact Forms), then either name it <code>' . esc_html( ucwords( str_replace( '-', ' ', $slug ) ) ) . '</code> '
-			. 'or paste its hash id under <strong>Settings &rarr; Booming Venture &rarr; Forms</strong> next to <code>' . esc_html( $slug ) . '</code>.'
-			. '</div>';
-	}
-	return '';
+	/* Form could not be resolved. Render a graceful fallback so visitors
+	 * never see an empty white box. Admins also get a small inline hint
+	 * above the fallback so they know what to fix. */
+	$slug   = sanitize_key( $id_raw );
+	$pretty = ucwords( str_replace( '-', ' ', $slug ) );
+	$subject_map = [
+		'contact'           => 'Talk to Booming Venture',
+		'newsletter'        => 'Subscribe me to the Booming Venture newsletter',
+		'newsletter-inline' => 'Subscribe me to the Booming Venture newsletter',
+		'growth-guide'      => 'Send me the free Growth Strategy Guide',
+		'quickscan'         => 'Book me in for the Boardroom Quickscan',
+		'head-of-growth'    => 'Interested in the Head of Growth programme',
+	];
+	$mail_subject = $subject_map[ $slug ] ?? 'Booming Venture enquiry , ' . $pretty;
+	$mailto       = 'mailto:info@boomingventure.com?subject=' . rawurlencode( $mail_subject );
+	$action       = esc_url( $mailto );
+
+	ob_start();
+	if ( current_user_can( 'edit_posts' ) ) : ?>
+		<div class="bv-form-missing" style="padding:0.75rem 1rem;margin:0 0 0.75rem;border:2px dashed #fca5a5;border-radius:0.5rem;background:#fef2f2;color:#7f1d1d;font-size:0.875rem;line-height:1.5">
+			<strong>Admin-only notice:</strong> CF7 form <code><?php echo esc_html( $id_raw ); ?></code> not found.
+			Create it (Contact &rarr; Contact Forms) and name it <code><?php echo esc_html( $pretty ); ?></code>,
+			or paste its hash id under <strong>Settings &rarr; Booming Venture &rarr; Forms</strong>.
+			The visitor-facing fallback below is rendering in the meantime.
+		</div>
+	<?php endif; ?>
+	<form class="bv-form-fallback" method="get" action="<?php echo $action; ?>" novalidate>
+		<label class="bv-form-fallback__label" for="bv-ff-<?php echo esc_attr( $slug ); ?>">Your work email</label>
+		<div class="bv-form-fallback__row">
+			<input type="email" id="bv-ff-<?php echo esc_attr( $slug ); ?>" name="email" required placeholder="you@company.com" autocomplete="email" inputmode="email">
+			<button type="submit" class="bv-form-fallback__btn">Send</button>
+		</div>
+		<p class="bv-form-fallback__note">Opens your email app pre-filled. Or write to <a href="mailto:info@boomingventure.com">info@boomingventure.com</a> directly.</p>
+	</form>
+	<?php
+	return ob_get_clean();
 }, 10, 3 );
 
 /* CF7 setup: disable autop so we keep CSS Grid control over the form layout.
