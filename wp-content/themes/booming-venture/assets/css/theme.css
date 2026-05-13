@@ -320,31 +320,23 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 .bv-founder__cta .bv-btn { text-decoration: none; }
 
-/* ============ Symmetric grid for About-page card sections ============
- * Ensures core-values, approach-steps and why-choose grids match
- * heights and widths across the page. */
-.bv-founder + .wp-block-group .wp-block-columns,
-section + section .wp-block-columns.alignwide {
-	gap: 1.5rem !important;
-}
+/* ============ Symmetric About-page cards , scoped to card classes only ============
+ * Stretches the individual cards to fill their column without ever
+ * touching the column or container layout. */
 .bv-value-card,
 .bv-step-card,
 .bv-why-card {
 	height: 100%;
 	display: flex;
 	flex-direction: column;
+	box-sizing: border-box;
 }
 .bv-value-card h3,
 .bv-step-card h3,
-.bv-why-card h3 { min-height: 1.5em; }
-.bv-value-card p,
-.bv-step-card p,
-.bv-why-card p { margin-top: auto; }
-@media (min-width: 768px) {
-	.wp-block-columns.alignwide > .wp-block-column { display: flex; }
-	.wp-block-columns.alignwide > .wp-block-column > .wp-block-html,
-	.wp-block-columns.alignwide > .wp-block-column > .wp-block-html > * { width: 100%; }
-}
+.bv-why-card h3 { margin-bottom: 0.5rem; }
+.bv-value-card > p:last-child,
+.bv-step-card  > p:last-child,
+.bv-why-card   > p:last-child { margin-top: auto; }
 
 /* ============ Pattern: core-values / 4-card grid ============ */
 .bv-value-card {
