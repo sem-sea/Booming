@@ -83,6 +83,14 @@ Use semver: `feat:` commits bump minor (1.2.0 -> 1.3.0), `fix:` and `chore:` com
 
 The release reply to the user must include BOTH download links: the latest URL plus the versioned URL. The versioned filename is the one that proves which version the user is downloading and avoids the "same version" confusion in WP admin.
 
+### HARD RULES (never break these)
+
+1. **NEVER reuse a version number.** Each release gets a fresh, unused version. Even tiny fixes get a patch bump. If unsure whether the previous shipped value was bumped, check `git log --oneline` and pick the next semver.
+2. **NEVER reuse a versioned download link.** Each release must produce a brand new `wp-content/themes/booming-venture-<version>.zip` filename. The URL with that filename is the user's proof of which build they are downloading.
+3. **NEVER ship a release reply without the new versioned link.** The versioned link (with the version number in the filename) is the primary link in the reply. The rolling latest URL is secondary.
+4. **NEVER ship without verifying the version string is inside the zip.** Run the unzip check below before sharing any link.
+5. **DELETE the previous versioned zip after the new one is committed.** Keeps the repo small; git history preserves the prior versions for rollback by SHA.
+
 Verify the version string inside the zip before linking it:
 ```bash
 unzip -p wp-content/themes/booming-venture.zip booming-venture/style.css | head -8 | grep Version
