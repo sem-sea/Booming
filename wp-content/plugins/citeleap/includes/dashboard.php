@@ -25,7 +25,7 @@ class CiteLeap_Dashboard {
 		/* Status counts. */
 		$counts = [
 			'queued' => 0, 'drafted' => 0, 'scheduled' => 0,
-			'queued_refresh' => 0, 'refreshing' => 0, 'refreshed' => 0,
+			'queued_refresh' => 0, 'refreshing' => 0, 'pending_review' => 0, 'refreshed' => 0,
 			'failed' => 0,
 		];
 		foreach ( $queue as $row ) {

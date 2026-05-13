@@ -3,7 +3,7 @@
  * Plugin Name:       CiteLeap
  * Plugin URI:        https://boomingventure.com/citeleap
  * Description:       AI-powered blog content engine. Uses a reasoning model to ideate, a writing model to draft, and WP-Cron to publish on schedule. Bring your own API keys for Anthropic Claude, OpenAI, or Google Gemini. Default output format is GEO/AEO compliant (May 2026 Bible). Designed for lead-generation sites.
- * Version:           1.3.0
+ * Version:           1.4.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            CiteLeap (by Booming Venture)
@@ -18,7 +18,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const CITELEAP_VERSION         = '1.3.0';
+const CITELEAP_VERSION         = '1.4.0';
+const CITELEAP_DEFAULT_TZ      = 'Europe/Amsterdam'; // CET / CEST per DST
+const CITELEAP_META_PENDING    = '_citeleap_pending_refresh';
 const CITELEAP_OPTION_API_KEYS = 'citeleap_api_keys';
 const CITELEAP_OPTION_MODELS   = 'citeleap_models';
 const CITELEAP_OPTION_PROMPTS  = 'citeleap_prompts';
@@ -64,7 +66,38 @@ register_activation_hook( CITELEAP_FILE, function () {
 		wp_schedule_event( time() + 60, 'hourly', CITELEAP_CRON_HOURLY );
 	}
 	register_uninstall_hook( CITELEAP_FILE, 'citeleap_on_uninstall' );
+	/* CET default: if the site has no timezone_string AND gmt_offset
+	 * is 0 (vanilla WP install on a fresh DB), promote to CET so
+	 * scheduled posts publish at sensible wall-clock times. We only
+	 * touch the site option if the operator has not picked one. */
+	$site_tz   = (string) get_option( 'timezone_string', '' );
+	$gmt_off   = (string) get_option( 'gmt_offset', '0' );
+	if ( '' === $site_tz && in_array( $gmt_off, [ '0', '0.0', '0,0', '' ], true ) ) {
+		update_option( 'timezone_string', CITELEAP_DEFAULT_TZ );
+	}
 } );
+
+/**
+ * Plugin-local timezone helper. Returns the site timezone first; if
+ * the site is on UTC and the operator never picked, falls back to
+ * Europe/Amsterdam (CET / CEST per DST). Used for display + slot
+ * calculation everywhere in the plugin.
+ */
+function citeleap_tz(): DateTimeZone {
+	$tz = (string) get_option( 'timezone_string', '' );
+	if ( ! $tz ) $tz = CITELEAP_DEFAULT_TZ;
+	try {
+		return new DateTimeZone( $tz );
+	} catch ( \Throwable $e ) {
+		return new DateTimeZone( CITELEAP_DEFAULT_TZ );
+	}
+}
+
+function citeleap_format( int $ts, string $fmt = 'Y-m-d H:i' ): string {
+	if ( $ts <= 0 ) return '';
+	$d = ( new DateTimeImmutable( '@' . $ts ) )->setTimezone( citeleap_tz() );
+	return $d->format( $fmt ) . ' ' . $d->format( 'T' );
+}
 
 register_deactivation_hook( CITELEAP_FILE, function () {
 	$ts = wp_next_scheduled( CITELEAP_CRON_HOURLY );

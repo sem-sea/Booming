@@ -80,6 +80,20 @@ function citeleap_render_flash(): void {
 		$dupes = (int) ( $parts[2] ?? 0 );
 		$total = (int) ( $parts[3] ?? 0 );
 		$text  = sprintf( __( 'Queued %d topic(s) from %d submitted. Skipped %d duplicate(s).', 'citeleap' ), $added, $total, $dupes );
+	} elseif ( 0 === strpos( $msg, 'bulk-refresh:' ) ) {
+		$parts     = explode( ':', $msg );
+		$added     = (int) ( $parts[1] ?? 0 );
+		$dupes     = (int) ( $parts[2] ?? 0 );
+		$not_found = (int) ( $parts[3] ?? 0 );
+		$total     = (int) ( $parts[4] ?? 0 );
+		$text      = sprintf( __( 'Queued %d post(s) for refresh from %d submitted. Skipped %d duplicate(s), could not resolve %d line(s).', 'citeleap' ), $added, $total, $dupes, $not_found );
+	} elseif ( 0 === strpos( $msg, 'refresh-approved:' ) ) {
+		$parts = explode( ':', $msg );
+		$text  = sprintf( __( 'Refresh approved and applied to post #%d.', 'citeleap' ), (int) ( $parts[1] ?? 0 ) );
+	} elseif ( 'refresh-rejected' === $msg ) {
+		$text = __( 'Refresh rejected. Live post unchanged.', 'citeleap' );
+	} elseif ( 'reset' === $msg ) {
+		$text = __( 'Stuck refresh reset to failed. You can retry it.', 'citeleap' );
 	}
 	$class = ( 'error' === $kind ) ? 'notice-error' : 'notice-success';
 	echo '<div class="notice ' . esc_attr( $class ) . ' is-dismissible" style="margin-top:1rem;"><p>' . esc_html( $text ) . '</p></div>';
@@ -200,10 +214,14 @@ function citeleap_render_settings(): void {
 		<?php $r = CiteLeap_Refresh::settings(); ?>
 		<table class="form-table">
 			<tr>
-				<th><label for="refresh_auto"><?php echo esc_html__( 'Auto-refresh mode', 'citeleap' ); ?></label></th>
+				<th><label for="refresh_auto_mode"><?php echo esc_html__( 'Refresh mode', 'citeleap' ); ?></label></th>
 				<td>
-					<label><input type="checkbox" id="refresh_auto" name="refresh_auto" value="1" <?php checked( ! empty( $r['auto'] ) ); ?>>
-					<?php echo esc_html__( 'Automatically refresh due posts on the hourly cron tick.', 'citeleap' ); ?></label>
+					<select id="refresh_auto_mode" name="refresh_auto_mode">
+						<option value="off"   <?php selected( $r['auto_mode'], 'off' );   ?>><?php echo esc_html__( 'Off (manual only)', 'citeleap' ); ?></option>
+						<option value="draft" <?php selected( $r['auto_mode'], 'draft' ); ?>><?php echo esc_html__( 'Auto-research to PENDING REVIEW (you approve before live)', 'citeleap' ); ?></option>
+						<option value="live"  <?php selected( $r['auto_mode'], 'live' );  ?>><?php echo esc_html__( 'Auto-research and OVERWRITE the live post directly', 'citeleap' ); ?></option>
+					</select>
+					<p class="description"><?php echo esc_html__( 'Draft mode stores the refreshed content as a pending review on the post. The live post is untouched until you click Approve. Live mode overwrites immediately.', 'citeleap' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -331,7 +349,7 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 
 	/* Refresh module settings. */
 	CiteLeap_Refresh::save_settings( [
-		'auto'           => $_POST['refresh_auto']           ?? 0,
+		'auto_mode'      => $_POST['refresh_auto_mode']      ?? 'off',
 		'cadence_days'   => $_POST['refresh_cadence_days']   ?? 90,
 		'posts_per_week' => $_POST['refresh_posts_per_week'] ?? 2,
 	] );

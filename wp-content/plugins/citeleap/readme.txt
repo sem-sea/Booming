@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,14 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 1.4.0 =
+* NEW: three-state Refresh mode (Off / Draft to pending review / Live overwrite). Pending review parks the proposed update in post meta until you Approve or Reject from the Planner. Live keeps the v1.3 immediate-overwrite behaviour.
+* NEW: bulk-add refresh queue by paste-list. One line per item, each a numeric post ID, a slug, or a full permalink URL. Resolves, dedupes, queues.
+* NEW: "Reset stuck" button for any refreshing entry that crashed mid-flight (rare but unblockable before this).
+* NEW: CET (Europe/Amsterdam) is the default plugin timezone if the site has no timezone configured. WP-Cron slot calculations and Dashboard timestamps both use it.
+* NEW: citeleap_format() + citeleap_tz() helpers expose the plugin's timezone-aware datetime everywhere.
+* NEW: new statuses pending_review (purple badge) + Approve / Reject row actions, plus refresh_approved / refresh_rejected log events.
 
 = 1.3.0 =
 * NEW: three-state Auto mode (Off / Draft only / Publish). Draft mode auto-generates and refills the queue continuously, but every post is left as a WP draft for your manual review. Publish mode also schedules each draft at the next slot.

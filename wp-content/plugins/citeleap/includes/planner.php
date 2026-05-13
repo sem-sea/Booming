@@ -51,6 +51,18 @@ class CiteLeap_Planner {
 			</form>
 
 			<h2 style="margin:2rem 0 0.5rem;"><?php echo esc_html__( 'Refresh existing posts', 'citeleap' ); ?></h2>
+
+			<details style="margin:0 0 1rem;background:#f8fafc;border:1px solid #e2e8f0;border-radius:4px;padding:0.5rem 0.75rem;">
+				<summary style="cursor:pointer;font-weight:600;"><?php echo esc_html__( 'Bulk add by paste (post IDs, slugs, or URLs)', 'citeleap' ); ?></summary>
+				<p style="margin:0.5rem 0;color:#64748b;font-size:13px;"><?php echo esc_html__( 'One per line. Each line can be a numeric post ID, a slug (e.g. "my-post"), or a full permalink URL. Duplicates skipped automatically.', 'citeleap' ); ?></p>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+					<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+					<input type="hidden" name="action" value="citeleap_bulk_refresh">
+					<textarea name="paste" rows="5" class="large-text" style="font-family:ui-monospace,monospace;font-size:13px;" placeholder="123&#10;my-blog-post-slug&#10;https://example.com/blog/another-post/"></textarea>
+					<p style="margin-top:0.5rem;"><button class="button button-primary"><?php echo esc_html__( 'Queue these for refresh', 'citeleap' ); ?></button></p>
+				</form>
+			</details>
+
 			<?php $refresh_settings = CiteLeap_Refresh::settings(); ?>
 			<p style="margin:0 0 0.5rem;color:#64748b;">
 				<?php echo esc_html__( 'Pick published posts below to add to the same planner as refresh items. Auto-refresh mode:', 'citeleap' ); ?>
@@ -119,10 +131,10 @@ class CiteLeap_Planner {
 					/* Sort: refreshing/refreshed/scheduled at top, then drafted, then queued by priority desc */
 					usort( $queue, function ( $a, $b ) {
 						$order = [
-							'refreshing'     => 0, 'refreshed'  => 1,
-							'scheduled'      => 2, 'drafted'    => 3,
-							'queued_refresh' => 4, 'queued'     => 5,
-							'failed'         => 6,
+							'refreshing'     => 0, 'pending_review' => 1, 'refreshed' => 2,
+							'scheduled'      => 3, 'drafted'        => 4,
+							'queued_refresh' => 5, 'queued'         => 6,
+							'failed'         => 7,
 						];
 						$ao = $order[ $a['status'] ?? '' ] ?? 9;
 						$bo = $order[ $b['status'] ?? '' ] ?? 9;
@@ -158,6 +170,7 @@ class CiteLeap_Planner {
 								'published'      => '#15803d',
 								'queued_refresh' => '#b45309',
 								'refreshing'     => '#0369a1',
+								'pending_review' => '#9333ea',
 								'refreshed'      => '#15803d',
 								'failed'         => '#b91c1c',
 							];
@@ -192,6 +205,29 @@ class CiteLeap_Planner {
 									<input type="hidden" name="action" value="citeleap_remove_idea">
 									<input type="hidden" name="idea_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
 									<button class="button button-small button-link-delete"><?php echo esc_html__( 'Remove', 'citeleap' ); ?></button>
+								</form>
+							<?php elseif ( 'pending_review' === $status ) : ?>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_approve_refresh">
+									<input type="hidden" name="queue_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<input type="hidden" name="post_id"  value="<?php echo (int) $post_id; ?>">
+									<button class="button button-small button-primary"><?php echo esc_html__( 'Approve', 'citeleap' ); ?></button>
+								</form>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_reject_refresh">
+									<input type="hidden" name="queue_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<input type="hidden" name="post_id"  value="<?php echo (int) $post_id; ?>">
+									<button class="button button-small button-link-delete" onclick="return confirm('<?php echo esc_js( __( 'Reject the pending refresh? The live post is not touched and the proposed content will be deleted.', 'citeleap' ) ); ?>');"><?php echo esc_html__( 'Reject', 'citeleap' ); ?></button>
+								</form>
+								<a class="button button-small" href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>"><?php echo esc_html__( 'View live post', 'citeleap' ); ?></a>
+							<?php elseif ( 'refreshing' === $status ) : ?>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_reset_stuck">
+									<input type="hidden" name="queue_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<button class="button button-small" onclick="return confirm('<?php echo esc_js( __( 'Reset this stuck refresh? Use only if a previous tick crashed mid-flight.', 'citeleap' ) ); ?>');"><?php echo esc_html__( 'Reset stuck', 'citeleap' ); ?></button>
 								</form>
 							<?php elseif ( $post_id ) : ?>
 								<a class="button button-small" href="<?php echo esc_url( get_edit_post_link( $post_id ) ); ?>"><?php echo esc_html__( 'Edit', 'citeleap' ); ?></a>
