@@ -3,7 +3,7 @@
  * Plugin Name:       Booming Venture , Blog Images
  * Plugin URI:        https://boomingventure.com
  * Description:       Adds a "Featured image" picker to every blog post so you can manually choose an image from the Media Library. The image renders nicely as a hero on the single post and as a card thumbnail in the blog overview. Mobile-first. Works on any active theme.
- * Version:           1.2.0
+ * Version:           1.3.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            Booming Venture
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const BVIMG_VERSION    = '1.2.0';
+const BVIMG_VERSION    = '1.3.0';
 const BVIMG_POOL_OPT   = 'bvimg_pool_ids';        // array<int> attachment IDs
 const BVIMG_RANDOM_KEY = '_bvimg_random_assigned'; // post meta flag for random-assigned posts
 const BVIMG_NONCE      = 'bvimg_pool';
