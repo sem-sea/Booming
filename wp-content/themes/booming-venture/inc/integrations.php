@@ -75,22 +75,16 @@ add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
 	return '';
 }, 10, 3 );
 
-/* CF7 setup: disable autop (gives us CSS Grid control), keep its JS/CSS
- * only on pages with a CF7 shortcode (perf win). */
+/* CF7 setup: disable autop so we keep CSS Grid control over the form layout.
+ *
+ * Note: we intentionally do NOT gate CF7 JS/CSS by has_shortcode() on the
+ * post content. Our CF7 shortcodes live inside block patterns (PHP files
+ * referenced via <!-- wp:pattern -->), which has_shortcode() cannot see
+ * because it only scans the raw stored post_content. Gating on that check
+ * caused CF7 scripts and styles to be skipped on every page that used
+ * patterns for the form, leaving an unstyled form that did not submit.
+ * Letting CF7 load on every page is a small perf cost and reliably correct. */
 add_filter( 'wpcf7_autop_or_not', '__return_false' );
-
-add_action( 'wp_enqueue_scripts', function () {
-	if ( ! function_exists( 'wpcf7_enqueue_scripts' ) ) return;
-	global $post;
-	$has_cf7 = is_a( $post, 'WP_Post' ) && (
-		has_shortcode( $post->post_content, 'contact-form-7' ) ||
-		false !== stripos( get_the_content(), 'contact-form-7' )
-	);
-	if ( ! $has_cf7 && ! is_front_page() ) {
-		add_filter( 'wpcf7_load_js',  '__return_false' );
-		add_filter( 'wpcf7_load_css', '__return_false' );
-	}
-}, 5 );
 
 /* Settings page: map CF7 slugs → IDs. */
 add_action( 'admin_menu', function () {
