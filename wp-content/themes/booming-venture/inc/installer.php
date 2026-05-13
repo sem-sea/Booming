@@ -20,7 +20,11 @@
 defined( 'ABSPATH' ) || exit;
 
 const BV_INSTALL_FLAG    = 'bv_content_imported';
-const BV_INSTALL_VERSION = '1.0.0';
+/* IMPORTANT: bump this whenever the WXR gains new content (new pages,
+ * new posts, new patterns wired into existing pages). The install hook
+ * re-runs the WXR import on the next activation when the stored value
+ * does not match this constant. */
+const BV_INSTALL_VERSION = '1.4.0';
 
 /* Run after theme activation (priority 20 = after setup hooks). */
 add_action( 'after_switch_theme', 'bv_run_install', 20 );
@@ -159,9 +163,35 @@ function bv_import_wxr(): bool {
 		if ( ! $post_type || ! $slug || 'publish' !== $post_status ) continue;
 		if ( ! in_array( $post_type, [ 'page', 'post', 'service', 'landing_page', 'case_study' ], true ) ) continue;
 
-		/* Skip if it already exists (re-run safety). */
+		/* Structural pages whose content is owned by the theme and gets
+		 * refreshed on every install-version bump. User-edited content
+		 * (blog posts, CPT detail pages, legal pages) is preserved. */
+		$structural_slugs = [
+			'home', 'about', 'services', 'blog', 'unify-framework',
+			'funnel-calculator', 'roi-forecaster',
+			'free-growth-guide', 'boardroom-quickscan', 'head-of-growth',
+		];
+		$is_structural = ( 'page' === $post_type ) && in_array( $slug, $structural_slugs, true );
+
 		$existing = get_page_by_path( $slug, OBJECT, $post_type );
-		if ( $existing ) continue;
+		if ( $existing ) {
+			if ( $is_structural ) {
+				/* Refresh theme-owned structural page content so pattern
+				 * roster updates (e.g. new about-founder pattern) take
+				 * effect on every install-version bump. */
+				wp_update_post( [
+					'ID'           => $existing->ID,
+					'post_content' => $content,
+					'post_excerpt' => $excerpt,
+				] );
+				foreach ( $wp->postmeta as $meta ) {
+					if ( '_wp_page_template' === (string) $meta->meta_key ) {
+						update_post_meta( $existing->ID, '_wp_page_template', (string) $meta->meta_value );
+					}
+				}
+			}
+			continue;
+		}
 
 		/* Look for `_wp_page_template` postmeta. */
 		foreach ( $wp->postmeta as $meta ) {

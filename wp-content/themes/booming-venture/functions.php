@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BV_THEME_VERSION', '1.4.0' );
+define( 'BV_THEME_VERSION', '1.4.1' );
 define( 'BV_THEME_DIR', get_template_directory() );
 define( 'BV_THEME_URI', get_template_directory_uri() );
 
