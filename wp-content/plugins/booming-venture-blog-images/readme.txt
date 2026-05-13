@@ -4,7 +4,7 @@ Tags: featured image, media library, hero, blog overview, thumbnails
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,11 @@ It registers two image sizes but does not regenerate existing uploads. To resize
 No. The hero image uses `loading=eager fetchpriority=high` so it counts as the LCP candidate. The card thumbnails are `loading=lazy decoding=async`.
 
 == Changelog ==
+
+= 1.2.0 =
+* FIX: stop the image rendering twice on themes that already render the Featured image via a `core/post-featured-image` block in the post template (or via `the_post_thumbnail()` in a classic template).
+* Adds duplicate detection: tracks per-post whether the theme already rendered the Featured image (via the `render_block_core/post-featured-image` and `post_thumbnail_html` filters). If yes, the plugin's hero / card injection short-circuits. If no, the plugin renders normally.
+* No configuration. Works automatically on any active theme.
 
 = 1.1.0 =
 * NEW: Tools -> Blog Images Pool admin page.

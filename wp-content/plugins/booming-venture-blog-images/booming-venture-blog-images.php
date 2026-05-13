@@ -3,7 +3,7 @@
  * Plugin Name:       Booming Venture , Blog Images
  * Plugin URI:        https://boomingventure.com
  * Description:       Adds a "Featured image" picker to every blog post so you can manually choose an image from the Media Library. The image renders nicely as a hero on the single post and as a card thumbnail in the blog overview. Mobile-first. Works on any active theme.
- * Version:           1.1.0
+ * Version:           1.2.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            Booming Venture
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const BVIMG_VERSION    = '1.1.0';
+const BVIMG_VERSION    = '1.2.0';
 const BVIMG_POOL_OPT   = 'bvimg_pool_ids';        // array<int> attachment IDs
 const BVIMG_RANDOM_KEY = '_bvimg_random_assigned'; // post meta flag for random-assigned posts
 const BVIMG_NONCE      = 'bvimg_pool';
@@ -63,6 +63,49 @@ add_action( 'add_meta_boxes_post', function () {
 } );
 
 /* ---------------------------------------------------------------------
+ * Duplicate-detection
+ *
+ * The theme's post template usually already renders the Featured image
+ * via the core/post-featured-image block. If we ALSO inject our own
+ * hero figure via the_content, the user sees the image twice.
+ *
+ * We watch render_block for core/post-featured-image and remember,
+ * per post, whether the theme already rendered it. The hero / card
+ * filters short-circuit when the flag is set.
+ *
+ * The same flag also prevents the archive-card injection from running
+ * twice when a block template includes core/post-featured-image inside
+ * the post-template loop.
+ * --------------------------------------------------------------------- */
+function bvimg_mark_rendered( int $post_id = 0 ): void {
+	static $seen = [];
+	$post_id = $post_id ?: (int) get_the_ID();
+	if ( ! $post_id ) return;
+	$seen[ $post_id ] = true;
+	$GLOBALS['bvimg_rendered'] = $seen;
+}
+
+function bvimg_already_rendered( int $post_id = 0 ): bool {
+	$post_id = $post_id ?: (int) get_the_ID();
+	if ( ! $post_id ) return false;
+	$seen = isset( $GLOBALS['bvimg_rendered'] ) && is_array( $GLOBALS['bvimg_rendered'] ) ? $GLOBALS['bvimg_rendered'] : [];
+	return ! empty( $seen[ $post_id ] );
+}
+
+add_filter( 'render_block_core/post-featured-image', function ( $block_content, $block ) {
+	$post_id = isset( $block['context']['postId'] ) ? (int) $block['context']['postId'] : (int) get_the_ID();
+	if ( $post_id ) bvimg_mark_rendered( $post_id );
+	return $block_content;
+}, 10, 2 );
+
+/* Classic themes call the_post_thumbnail() directly. Hook into the
+ * standard post_thumbnail_html filter so we can detect that too. */
+add_filter( 'post_thumbnail_html', function ( $html, $post_id ) {
+	if ( $html && $post_id ) bvimg_mark_rendered( (int) $post_id );
+	return $html;
+}, 10, 2 );
+
+/* ---------------------------------------------------------------------
  * Front-end CSS , mobile-first, scoped to .bvimg-* wrappers.
  * --------------------------------------------------------------------- */
 add_action( 'wp_enqueue_scripts', function () {
@@ -83,8 +126,14 @@ add_filter( 'the_content', function ( $content ) {
 	if ( ! is_singular( 'post' ) || ! in_the_loop() || ! is_main_query() ) {
 		return $content;
 	}
-	$id = (int) get_post_thumbnail_id( get_the_ID() );
+	$post_id = (int) get_the_ID();
+	$id      = (int) get_post_thumbnail_id( $post_id );
 	if ( ! $id ) return $content;
+
+	/* Skip if the theme already rendered the Featured image (e.g. via
+	 * a core/post-featured-image block in the post template, or via
+	 * the_post_thumbnail() in a classic template). Avoids duplication. */
+	if ( bvimg_already_rendered( $post_id ) ) return $content;
 
 	$img = wp_get_attachment_image(
 		$id,
@@ -106,6 +155,7 @@ add_filter( 'the_content', function ( $content ) {
 		. $cap_html
 		. '</figure>';
 
+	bvimg_mark_rendered( $post_id );
 	return $figure . $content;
 }, 5 );
 
@@ -120,9 +170,11 @@ add_filter( 'get_the_excerpt', function ( $excerpt, $post = null ) {
 	if ( ! in_the_loop() || ! is_main_query() ) return $excerpt;
 	$post_id = $post ? (int) $post->ID : (int) get_the_ID();
 	if ( 'post' !== get_post_type( $post_id ) ) return $excerpt;
+	if ( bvimg_already_rendered( $post_id ) ) return $excerpt;
 
 	$id = (int) get_post_thumbnail_id( $post_id );
 	if ( ! $id ) return $excerpt;
+	bvimg_mark_rendered( $post_id );
 
 	$img = wp_get_attachment_image(
 		$id,
@@ -158,15 +210,11 @@ add_filter( 'render_block', function ( $block_content, $block ) {
 	global $post;
 	$post_id = $post ? (int) $post->ID : (int) get_the_ID();
 	if ( 'post' !== get_post_type( $post_id ) ) return $block_content;
+	if ( bvimg_already_rendered( $post_id ) ) return $block_content;
 
 	$id = (int) get_post_thumbnail_id( $post_id );
 	if ( ! $id ) return $block_content;
-
-	/* Only inject once per loop iteration: avoid double-render if the
-	 * theme already shows the featured image via a sibling block. */
-	static $seen = [];
-	if ( isset( $seen[ $post_id ] ) ) return $block_content;
-	$seen[ $post_id ] = true;
+	bvimg_mark_rendered( $post_id );
 
 	$img = wp_get_attachment_image(
 		$id,
