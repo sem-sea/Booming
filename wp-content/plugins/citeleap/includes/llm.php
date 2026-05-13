@@ -99,12 +99,40 @@ class CiteLeap_LLM {
 			];
 		}
 
-		return match ( $provider ) {
+		$cap = CiteLeap_Usage::can_spend( $provider );
+		if ( ! $cap['ok'] ) {
+			CiteLeap_Log::add( 'budget_cap_hit', $cap['reason'] );
+			return [ 'ok' => false, 'text' => '', 'raw' => [], 'provider' => $provider, 'model' => $model, 'error' => $cap['reason'] ];
+		}
+
+		$res = match ( $provider ) {
 			'claude' => self::call_claude( $key, $model, $system, $user, $max_tokens ),
 			'openai' => self::call_openai( $key, $model, $system, $user, $max_tokens ),
 			'gemini' => self::call_gemini( $key, $model, $system, $user, $max_tokens ),
 			default  => [ 'ok' => false, 'text' => '', 'raw' => [], 'provider' => $provider, 'model' => $model, 'error' => 'unknown provider' ],
 		};
+
+		/* Record usage on success. */
+		if ( $res['ok'] ) {
+			$tokens = self::extract_token_counts( $provider, $res['raw'] );
+			CiteLeap_Usage::record( $provider, $model, (int) $tokens['in'], (int) $tokens['out'] );
+		}
+		return $res;
+	}
+
+	private static function extract_token_counts( string $provider, array $raw ): array {
+		$in = 0; $out = 0;
+		if ( 'claude' === $provider ) {
+			$in  = (int) ( $raw['usage']['input_tokens']  ?? 0 );
+			$out = (int) ( $raw['usage']['output_tokens'] ?? 0 );
+		} elseif ( 'openai' === $provider ) {
+			$in  = (int) ( $raw['usage']['prompt_tokens']     ?? $raw['usage']['input_tokens']      ?? 0 );
+			$out = (int) ( $raw['usage']['completion_tokens'] ?? $raw['usage']['output_tokens']     ?? 0 );
+		} elseif ( 'gemini' === $provider ) {
+			$in  = (int) ( $raw['usageMetadata']['promptTokenCount']     ?? 0 );
+			$out = (int) ( $raw['usageMetadata']['candidatesTokenCount'] ?? 0 );
+		}
+		return [ 'in' => $in, 'out' => $out ];
 	}
 
 	private static function call_claude( string $key, string $model, string $system, string $user, int $max_tokens ): array {

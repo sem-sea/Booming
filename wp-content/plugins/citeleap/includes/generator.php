@@ -36,6 +36,13 @@ class CiteLeap_Generator {
 		return array_values( array_filter( $out ) );
 	}
 
+	public static function render_template_public( string $template, array $vars ): string {
+		return self::render_template( $template, $vars );
+	}
+	public static function parse_json_object_public( string $text ): array {
+		return self::parse_json_object( $text );
+	}
+
 	private static function render_template( string $template, array $vars ): string {
 		foreach ( $vars as $k => $v ) {
 			$template = str_replace( '{' . $k . '}', (string) $v, $template );

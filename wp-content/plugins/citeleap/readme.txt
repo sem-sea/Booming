@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,18 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 1.1.0 =
+* NEW: Dashboard tab with this-month token usage + cost per provider, cap progress bars, status counts, recent successes / errors split.
+* NEW: monthly budget caps per provider (Claude / OpenAI / Gemini) + an overall cap. 0 = unlimited. Generation refuses with a logged reason once a cap is reached. Resets on the 1st.
+* NEW: pricing table baked in (May 2026 published Claude rates; best-effort OpenAI + Gemini estimates) with `wp_options 'citeleap_pricing_overrides'` for in-place adjustment and a `citeleap_pricing` filter.
+* NEW: token + cost ledger in `wp_options 'citeleap_token_usage'`, keeps last 12 months.
+* NEW: Refresh module. Pick existing published posts from the Planner tab, queue them for refresh, work them off manually with "Refresh now" or auto-queue posts older than the cadence-days threshold. Refresh runs preserve the slug, post ID, date, comments, post meta, and categories. Each refreshed post gets _citeleap_refresh_count + _citeleap_last_refreshed meta.
+* NEW: auto-refresh mode with separate cadence (days since modified) and posts-per-week control. Independent of new-content auto-publish.
+* NEW: post statuses: queued, drafted, scheduled, published, queued_refresh, refreshing, refreshed, failed. Color-coded badges in the Planner queue.
+* NEW: "REFRESH" tag on refresh rows so they are distinguishable at a glance.
+* CHANGE: default landing tab is now Dashboard.
+* CHANGE: planner queue now sorts refresh items above new-content items so in-flight work is always visible at the top.
 
 = 1.0.0 =
 * Initial release.

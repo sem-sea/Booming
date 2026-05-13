@@ -41,6 +41,55 @@ class CiteLeap_Planner {
 				<button class="button"><?php echo esc_html__( 'Run scheduler tick now', 'citeleap' ); ?></button>
 			</form>
 
+			<h2 style="margin:2rem 0 0.5rem;"><?php echo esc_html__( 'Refresh existing posts', 'citeleap' ); ?></h2>
+			<?php $refresh_settings = CiteLeap_Refresh::settings(); ?>
+			<p style="margin:0 0 0.5rem;color:#64748b;">
+				<?php echo esc_html__( 'Pick published posts below to add to the same planner as refresh items. Auto-refresh mode:', 'citeleap' ); ?>
+				<strong><?php echo $refresh_settings['auto'] ? '<span style="color:#16a34a">ON</span>' : '<span style="color:#b45309">OFF</span>'; ?></strong>
+				(<a href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=settings' ) ); ?>"><?php echo esc_html__( 'change', 'citeleap' ); ?></a>)
+			</p>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-bottom:1rem;">
+				<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+				<input type="hidden" name="action" value="citeleap_enqueue_refresh">
+				<details>
+					<summary style="cursor:pointer;font-weight:600;padding:0.5rem 0;"><?php echo esc_html__( 'Select posts to refresh', 'citeleap' ); ?></summary>
+					<div style="max-height:280px;overflow:auto;border:1px solid #e2e8f0;padding:0.5rem;background:#f8fafc;border-radius:4px;">
+						<?php
+						$recent = get_posts( [
+							'post_type'      => 'post',
+							'post_status'    => 'publish',
+							'posts_per_page' => 100,
+							'orderby'        => 'modified',
+							'order'          => 'ASC',
+							'no_found_rows'  => true,
+						] );
+						if ( empty( $recent ) ) {
+							echo '<p>' . esc_html__( 'No published posts yet.', 'citeleap' ) . '</p>';
+						} else {
+							foreach ( $recent as $p ) :
+								$last_ref = get_post_meta( $p->ID, CITELEAP_META_REFRESH_AT, true );
+								$n_ref    = (int) get_post_meta( $p->ID, CITELEAP_META_REFRESH_N, true );
+						?>
+								<label style="display:flex;align-items:center;gap:0.5rem;padding:0.25rem 0;font-size:13px;border-bottom:1px solid #e2e8f0;">
+									<input type="checkbox" name="post_ids[]" value="<?php echo (int) $p->ID; ?>">
+									<span style="flex:1;"><?php echo esc_html( $p->post_title ); ?></span>
+									<span style="color:#64748b;font-size:12px;">
+										<?php
+										$mod = mysql2date( 'Y-m-d', $p->post_modified );
+										echo esc_html( $mod );
+										if ( $n_ref ) echo ' &middot; refreshed ' . (int) $n_ref . 'x';
+										?>
+									</span>
+								</label>
+						<?php
+							endforeach;
+						}
+						?>
+					</div>
+				</details>
+				<button class="button button-primary" style="margin-top:0.5rem;"><?php echo esc_html__( 'Queue selected for refresh', 'citeleap' ); ?></button>
+			</form>
+
 			<h2 style="margin:2rem 0 0.5rem;"><?php echo esc_html__( 'Queue', 'citeleap' ); ?> (<?php echo count( $queue ); ?>)</h2>
 
 			<table class="widefat striped">
@@ -58,34 +107,56 @@ class CiteLeap_Planner {
 				<?php if ( empty( $queue ) ) : ?>
 					<tr><td colspan="6"><?php echo esc_html__( 'No ideas yet. Click "Generate ideas now" above.', 'citeleap' ); ?></td></tr>
 				<?php else :
-					/* Sort: drafted/scheduled at top, then queued by priority desc */
+					/* Sort: refreshing/refreshed/scheduled at top, then drafted, then queued by priority desc */
 					usort( $queue, function ( $a, $b ) {
-						$order = [ 'scheduled' => 0, 'drafted' => 1, 'queued' => 2 ];
+						$order = [
+							'refreshing'     => 0, 'refreshed'  => 1,
+							'scheduled'      => 2, 'drafted'    => 3,
+							'queued_refresh' => 4, 'queued'     => 5,
+							'failed'         => 6,
+						];
 						$ao = $order[ $a['status'] ?? '' ] ?? 9;
 						$bo = $order[ $b['status'] ?? '' ] ?? 9;
 						if ( $ao !== $bo ) return $ao <=> $bo;
 						return ( (int) ( $b['priority'] ?? 5 ) ) <=> ( (int) ( $a['priority'] ?? 5 ) );
 					} );
 					foreach ( $queue as $row ) :
-						$status = (string) ( $row['status'] ?? 'queued' );
+						$status  = (string) ( $row['status'] ?? 'queued' );
 						$post_id = (int) ( $row['post_id'] ?? 0 );
+						$is_refresh = in_array( $status, [ 'queued_refresh', 'refreshing', 'refreshed' ], true );
 				?>
 					<tr>
 						<td>
+							<?php if ( $is_refresh ) : ?>
+								<span style="background:#fef3c7;color:#92400e;padding:1px 6px;border-radius:3px;font-size:11px;font-weight:600;text-transform:uppercase;">REFRESH</span>
+							<?php endif; ?>
 							<strong><?php echo esc_html( (string) ( $row['title'] ?? '' ) ); ?></strong>
 							<?php if ( ! empty( $row['angle'] ) ) : ?>
 								<div style="color:#64748b;font-size:12px;margin-top:2px;"><?php echo esc_html( (string) $row['angle'] ); ?></div>
+							<?php endif; ?>
+							<?php if ( ! empty( $row['error'] ) ) : ?>
+								<div style="color:#b91c1c;font-size:12px;margin-top:2px;">⚠ <?php echo esc_html( (string) $row['error'] ); ?></div>
 							<?php endif; ?>
 						</td>
 						<td><code><?php echo esc_html( (string) ( $row['slug'] ?? '' ) ); ?></code></td>
 						<td><?php echo (int) ( $row['priority'] ?? 5 ); ?></td>
 						<td>
 							<?php
-							$color = [ 'queued' => '#0369a1', 'drafted' => '#7c2d12', 'scheduled' => '#16a34a', 'published' => '#15803d' ][ $status ] ?? '#475569';
-							echo '<span style="color:' . esc_attr( $color ) . ';font-weight:600;">' . esc_html( $status ) . '</span>';
+							$color_map = [
+								'queued'         => '#0369a1',
+								'drafted'        => '#7c2d12',
+								'scheduled'      => '#16a34a',
+								'published'      => '#15803d',
+								'queued_refresh' => '#b45309',
+								'refreshing'     => '#0369a1',
+								'refreshed'      => '#15803d',
+								'failed'         => '#b91c1c',
+							];
+							$color = $color_map[ $status ] ?? '#475569';
+							echo '<span style="color:' . esc_attr( $color ) . ';font-weight:600;">' . esc_html( str_replace( '_', ' ', $status ) ) . '</span>';
 							?>
 						</td>
-						<td><?php echo esc_html( (string) ( $row['scheduled_for'] ?? '' ) ); ?></td>
+						<td><?php echo esc_html( (string) ( $row['scheduled_for'] ?? $row['finished_at'] ?? '' ) ); ?></td>
 						<td>
 							<?php if ( 'queued' === $status ) : ?>
 								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
@@ -93,6 +164,19 @@ class CiteLeap_Planner {
 									<input type="hidden" name="action" value="citeleap_write_idea">
 									<input type="hidden" name="idea_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
 									<button class="button button-small"><?php echo esc_html__( 'Write draft', 'citeleap' ); ?></button>
+								</form>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_remove_idea">
+									<input type="hidden" name="idea_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<button class="button button-small button-link-delete"><?php echo esc_html__( 'Remove', 'citeleap' ); ?></button>
+								</form>
+							<?php elseif ( 'queued_refresh' === $status ) : ?>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_run_refresh">
+									<input type="hidden" name="queue_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<button class="button button-small button-primary"><?php echo esc_html__( 'Refresh now', 'citeleap' ); ?></button>
 								</form>
 								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
 									<?php wp_nonce_field( CITELEAP_NONCE ); ?>

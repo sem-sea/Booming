@@ -27,8 +27,8 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 
 function citeleap_render_admin(): void {
 	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
-	$tab = isset( $_GET['tab'] ) ? sanitize_key( (string) $_GET['tab'] ) : 'settings';
-	$tab = in_array( $tab, [ 'settings', 'planner', 'prompts', 'log' ], true ) ? $tab : 'settings';
+	$tab = isset( $_GET['tab'] ) ? sanitize_key( (string) $_GET['tab'] ) : 'dashboard';
+	$tab = in_array( $tab, [ 'dashboard', 'settings', 'planner', 'prompts', 'log' ], true ) ? $tab : 'dashboard';
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html__( 'CiteLeap', 'citeleap' ); ?> <span style="font-size:0.6em;color:#64748b;font-weight:normal;">v<?php echo esc_html( CITELEAP_VERSION ); ?></span></h1>
@@ -36,19 +36,21 @@ function citeleap_render_admin(): void {
 		<?php citeleap_render_flash(); ?>
 
 		<nav class="nav-tab-wrapper" style="margin-top:1rem;">
-			<a class="nav-tab <?php echo 'settings' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=settings' ) ); ?>"><?php echo esc_html__( 'Settings', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'prompts' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=prompts' ) ); ?>"><?php echo esc_html__( 'Prompts', 'citeleap' ); ?></a>
+			<a class="nav-tab <?php echo 'dashboard' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=dashboard' ) ); ?>"><?php echo esc_html__( 'Dashboard', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'planner' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=planner' ) ); ?>"><?php echo esc_html__( 'Planner', 'citeleap' ); ?></a>
+			<a class="nav-tab <?php echo 'prompts' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=prompts' ) ); ?>"><?php echo esc_html__( 'Prompts', 'citeleap' ); ?></a>
+			<a class="nav-tab <?php echo 'settings' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=settings' ) ); ?>"><?php echo esc_html__( 'Settings', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'log' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=log' ) ); ?>"><?php echo esc_html__( 'Log', 'citeleap' ); ?></a>
 		</nav>
 
 		<div style="background:#fff;padding:1.25rem 1.5rem;border:1px solid #e2e8f0;border-top:0;">
 			<?php
 			switch ( $tab ) {
-				case 'planner': CiteLeap_Planner::render(); break;
-				case 'prompts': citeleap_render_prompts(); break;
-				case 'log':     citeleap_render_log(); break;
-				default:        citeleap_render_settings();
+				case 'dashboard': CiteLeap_Dashboard::render(); break;
+				case 'planner':   CiteLeap_Planner::render(); break;
+				case 'prompts':   citeleap_render_prompts(); break;
+				case 'log':       citeleap_render_log(); break;
+				default:          citeleap_render_settings();
 			}
 			?>
 		</div>
@@ -150,6 +152,39 @@ function citeleap_render_settings(): void {
 			</tr>
 		</table>
 
+		<h2 style="margin-top:1.5rem;"><?php echo esc_html__( 'Monthly budget caps (USD)', 'citeleap' ); ?></h2>
+		<p style="color:#64748b;"><?php echo esc_html__( 'Hard cap per provider for the current calendar month. 0 = unlimited. Generation requests are refused (and logged) once a cap is reached. Resets automatically on the 1st.', 'citeleap' ); ?></p>
+		<?php $caps = CiteLeap_Usage::caps(); ?>
+		<table class="form-table">
+			<?php foreach ( [ 'claude' => 'Anthropic Claude', 'openai' => 'OpenAI', 'gemini' => 'Google Gemini', 'overall' => __( 'Overall cap (all providers)', 'citeleap' ) ] as $k => $label ) : ?>
+				<tr>
+					<th><label for="cap_<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></label></th>
+					<td>$ <input type="number" min="0" step="0.01" id="cap_<?php echo esc_attr( $k ); ?>" name="cap_<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( (string) $caps[ $k ] ); ?>" style="width:9rem;"></td>
+				</tr>
+			<?php endforeach; ?>
+		</table>
+
+		<h2 style="margin-top:1.5rem;"><?php echo esc_html__( 'Refresh existing content', 'citeleap' ); ?></h2>
+		<p style="color:#64748b;"><?php echo esc_html__( 'Periodically refresh older posts. Posts queue from the Planner tab (or auto-pick the oldest-modified once cadence is met). Existing slug, ID, date, comments, and meta are preserved.', 'citeleap' ); ?></p>
+		<?php $r = CiteLeap_Refresh::settings(); ?>
+		<table class="form-table">
+			<tr>
+				<th><label for="refresh_auto"><?php echo esc_html__( 'Auto-refresh mode', 'citeleap' ); ?></label></th>
+				<td>
+					<label><input type="checkbox" id="refresh_auto" name="refresh_auto" value="1" <?php checked( ! empty( $r['auto'] ) ); ?>>
+					<?php echo esc_html__( 'Automatically refresh due posts on the hourly cron tick.', 'citeleap' ); ?></label>
+				</td>
+			</tr>
+			<tr>
+				<th><label for="refresh_cadence_days"><?php echo esc_html__( 'Refresh cadence (days)', 'citeleap' ); ?></label></th>
+				<td><input type="number" id="refresh_cadence_days" name="refresh_cadence_days" min="7" max="365" value="<?php echo (int) $r['cadence_days']; ?>"> <span class="description"><?php echo esc_html__( 'A post is "due" if its last-modified date is older than this.', 'citeleap' ); ?></span></td>
+			</tr>
+			<tr>
+				<th><label for="refresh_posts_per_week"><?php echo esc_html__( 'Refresh posts per week', 'citeleap' ); ?></label></th>
+				<td><input type="number" id="refresh_posts_per_week" name="refresh_posts_per_week" min="1" max="14" value="<?php echo (int) $r['posts_per_week']; ?>"></td>
+			</tr>
+		</table>
+
 		<p style="margin-top:1rem;"><button class="button button-primary"><?php echo esc_html__( 'Save settings', 'citeleap' ); ?></button></p>
 	</form>
 	<?php
@@ -238,6 +273,21 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 		'internal_links' => sanitize_text_field( wp_unslash( (string) ( $_POST['internal_links'] ?? '' ) ) ),
 	];
 	update_option( CITELEAP_OPTION_SCHEDULE, $schedule, false );
+
+	/* Budget caps. */
+	update_option( CITELEAP_OPTION_CAPS, [
+		'claude'  => max( 0, (float) ( $_POST['cap_claude']  ?? 0 ) ),
+		'openai'  => max( 0, (float) ( $_POST['cap_openai']  ?? 0 ) ),
+		'gemini'  => max( 0, (float) ( $_POST['cap_gemini']  ?? 0 ) ),
+		'overall' => max( 0, (float) ( $_POST['cap_overall'] ?? 0 ) ),
+	], false );
+
+	/* Refresh module settings. */
+	CiteLeap_Refresh::save_settings( [
+		'auto'           => $_POST['refresh_auto']           ?? 0,
+		'cadence_days'   => $_POST['refresh_cadence_days']   ?? 90,
+		'posts_per_week' => $_POST['refresh_posts_per_week'] ?? 2,
+	] );
 
 	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'settings', 'citeleap_msg' => 'saved' ], admin_url( 'admin.php' ) ) );
 	exit;

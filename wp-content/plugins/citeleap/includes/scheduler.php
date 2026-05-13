@@ -19,6 +19,9 @@ defined( 'ABSPATH' ) || exit;
 class CiteLeap_Scheduler {
 
 	public static function tick(): void {
+		/* Refresh tick runs independently of new-content auto-publish. */
+		self::tick_refresh();
+
 		$schedule = (array) get_option( CITELEAP_OPTION_SCHEDULE, [] );
 		if ( empty( $schedule['auto'] ) ) return;
 
@@ -89,6 +92,34 @@ class CiteLeap_Scheduler {
 			? (int) ceil( ( $last - $start ) / $interval ) + 1
 			: $slot_idx;
 		return $start + ( $candidate_idx * $interval );
+	}
+
+	/**
+	 * Refresh tick , independent of new-content schedule.
+	 * If auto-refresh is ON: enqueue due posts (capped at posts_per_week
+	 * for this tick) and process the first queued_refresh entry.
+	 */
+	public static function tick_refresh(): void {
+		$r = CiteLeap_Refresh::settings();
+		if ( empty( $r['auto'] ) ) return;
+
+		/* Top up the refresh queue with due posts if it is empty. */
+		$queue        = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
+		$queued_count = 0;
+		foreach ( $queue as $row ) if ( ( $row['status'] ?? '' ) === 'queued_refresh' ) $queued_count++;
+		if ( 0 === $queued_count ) {
+			$due = CiteLeap_Refresh::due_post_ids( max( 1, (int) $r['posts_per_week'] ) );
+			if ( ! empty( $due ) ) CiteLeap_Refresh::enqueue_posts( $due );
+		}
+
+		/* Throttle: at most one refresh per hourly tick. */
+		$queue = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
+		foreach ( $queue as $row ) {
+			if ( ( $row['status'] ?? '' ) === 'queued_refresh' ) {
+				CiteLeap_Refresh::refresh_from_queue( (string) $row['id'] );
+				return;
+			}
+		}
 	}
 
 	private static function last_scheduled_time(): int {
