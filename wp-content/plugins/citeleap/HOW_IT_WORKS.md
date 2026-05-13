@@ -25,7 +25,10 @@ The **only** planner. Lists every queue item (new ideas AND refresh items) in a 
 - **REFRESH** tagged rows are visually distinct (yellow tag).
 - Sort order puts in-flight items at the top so you always see what is actively being worked on.
 - Each row shows the status (color-coded), priority, slug, scheduled-for or finished-at date, and action buttons.
-- Top of tab: manual buttons (Generate ideas now, Run scheduler tick now) and a collapsible **Refresh existing posts** section with a 100-post checkbox list ordered by oldest-modified-first.
+- Top of tab: three action blocks:
+  1. **Manual actions** — Generate ideas now (LLM call) and Run scheduler tick now.
+  2. **Add your own topics** — paste one topic per line, each becomes a queued post in order. No LLM call until you draft. Duplicates against existing slugs and queue auto-skipped.
+  3. **Refresh existing posts** (collapsible) — 100-post checkbox list ordered by oldest-modified-first.
 
 ### 3. Prompts
 Three editable text areas:
@@ -66,19 +69,17 @@ Full activity log (max 200 entries) with severity column (info / warn / error / 
 6. The post gets meta `_citeleap_source=auto`, `_citeleap_provider=claude/sonnet-4-6`, `_citeleap_word_count=1342`, plus a link back to the queue idea ID.
 7. Queue entry status changes from `queued` to `drafted`. The draft is editable like any normal WP post.
 
-### Flow C — Auto-publish cron tick (hourly)
+### Flow C — Auto-mode cron tick (hourly)
 1. WP-Cron fires `citeleap_cron_hourly` every hour.
 2. **Transient lock check** — if a previous tick is still running, this one bails with a warning log. Prevents race conditions.
 3. **Refresh tick first** (always, independent of new-content auto-mode):
    - If auto-refresh is OFF, skip.
    - If queue has no `queued_refresh` items, top up from `due_post_ids` (oldest-modified posts past your cadence days).
    - Pick first `queued_refresh` item, run refresh, exit. **Throttled to one refresh per hourly tick** to keep budget predictable.
-4. **New-content tick second**:
-   - If auto-publish is OFF or start date is in the future, skip.
-   - Compute next slot time from start date + posts-per-week.
-   - If next slot is still in the future, skip.
-   - If queue has no `queued` items, call reasoning model to refill.
-   - Pick highest-priority queued item, draft it, schedule it at the slot time using `post_status='future'`. WordPress core publishes at the slot time, no further plugin action needed.
+4. **New-content tick second** — behaviour depends on Settings → Auto mode:
+   - **Off**: skip entirely.
+   - **Draft only**: every tick, if the queue has a `queued` item, draft one (no slot gate). Refills the queue with the reasoning model when empty. Drafts stay as WP draft for your manual review. Throttled to one draft per hourly tick to keep budget predictable.
+   - **Publish**: same as Draft, plus once the draft is created the post is moved to `post_status='future'` at the next slot time (start date + posts-per-week). WordPress core publishes at the slot time, no further plugin action needed.
 5. **Exceptions are caught**. Any throw inside the tick is logged as `critical` and the transient lock is always released.
 
 ### Flow D — Refresh

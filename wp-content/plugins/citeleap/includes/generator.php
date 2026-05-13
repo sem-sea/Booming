@@ -23,7 +23,7 @@ class CiteLeap_Generator {
 		];
 	}
 
-	private static function existing_slugs(): array {
+	public static function existing_slugs(): array {
 		$slugs = get_posts( [
 			'post_type'      => 'post',
 			'post_status'    => [ 'publish', 'future', 'draft', 'pending' ],
@@ -106,6 +106,55 @@ class CiteLeap_Generator {
 
 		CiteLeap_Log::add( 'ideas_generated', sprintf( '%d new ideas from %s/%s', count( $ideas ), $res['provider'], $res['model'] ) );
 		return [ 'ok' => true, 'ideas' => $ideas, 'error' => '' ];
+	}
+
+	/**
+	 * Add manually-typed topics to the queue. No LLM call. Each line
+	 * becomes one queued idea. Title is the line text, slug is
+	 * sanitized from it. Dedupes against existing slugs (any post
+	 * status) and against existing queue items.
+	 *
+	 * @param string[] $titles
+	 * @return array{added:int, skipped_dupes:int, total_in:int}
+	 */
+	public static function add_manual_topics( array $titles ): array {
+		$titles = array_values( array_filter( array_map( function ( $t ) {
+			$t = sanitize_text_field( (string) $t );
+			$t = trim( preg_replace( '/^\s*[\-\*\d\.\)]+\s*/', '', $t ) ); // strip bullet / number prefixes
+			return $t;
+		}, $titles ), fn( $t ) => '' !== $t && mb_strlen( $t ) >= 8 ) );
+
+		$existing_slugs = array_flip( self::existing_slugs() );
+		$queue          = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
+		$queue_slugs    = array_flip( array_column( $queue, 'slug' ) );
+
+		$added = 0;
+		$dupes = 0;
+		foreach ( $titles as $title ) {
+			$slug = sanitize_title( $title );
+			if ( ! $slug ) continue;
+			if ( isset( $existing_slugs[ $slug ] ) || isset( $queue_slugs[ $slug ] ) ) {
+				$dupes++;
+				continue;
+			}
+			$queue[] = [
+				'id'              => wp_generate_uuid4(),
+				'slug'            => $slug,
+				'title'           => $title,
+				'primary_keyword' => '',
+				'category_name'   => '',
+				'angle'           => __( 'Manually queued by operator.', 'citeleap' ),
+				'priority'        => 5,
+				'status'          => 'queued',
+				'source'          => 'manual',
+				'created_at'      => current_time( 'mysql' ),
+			];
+			$queue_slugs[ $slug ] = true;
+			$added++;
+		}
+		update_option( CITELEAP_OPTION_QUEUE, $queue, false );
+		if ( $added ) CiteLeap_Log::add( 'topics_added_manual', sprintf( '%d topic(s) queued manually (skipped %d duplicates)', $added, $dupes ) );
+		return [ 'added' => $added, 'skipped_dupes' => $dupes, 'total_in' => count( $titles ) ];
 	}
 
 	/**

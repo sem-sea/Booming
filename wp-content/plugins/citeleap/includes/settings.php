@@ -74,6 +74,12 @@ function citeleap_render_flash(): void {
 		$kind = 'error'; $text = __( 'Refresh failed , see the Log tab for details.', 'citeleap' );
 	} elseif ( 'saved' === $msg ) {
 		$text = __( 'Saved.', 'citeleap' );
+	} elseif ( 0 === strpos( $msg, 'topics:' ) ) {
+		$parts = explode( ':', $msg );
+		$added = (int) ( $parts[1] ?? 0 );
+		$dupes = (int) ( $parts[2] ?? 0 );
+		$total = (int) ( $parts[3] ?? 0 );
+		$text  = sprintf( __( 'Queued %d topic(s) from %d submitted. Skipped %d duplicate(s).', 'citeleap' ), $added, $total, $dupes );
 	}
 	$class = ( 'error' === $kind ) ? 'notice-error' : 'notice-success';
 	echo '<div class="notice ' . esc_attr( $class ) . ' is-dismissible" style="margin-top:1rem;"><p>' . esc_html( $text ) . '</p></div>';
@@ -141,10 +147,15 @@ function citeleap_render_settings(): void {
 		<h2 style="margin-top:1.5rem;"><?php echo esc_html__( 'Auto-publish schedule', 'citeleap' ); ?></h2>
 		<table class="form-table">
 			<tr>
-				<th><label for="auto"><?php echo esc_html__( 'Auto-publish', 'citeleap' ); ?></label></th>
+				<th><label for="auto_mode"><?php echo esc_html__( 'Auto mode', 'citeleap' ); ?></label></th>
 				<td>
-					<label><input type="checkbox" id="auto" name="auto" value="1" <?php checked( ! empty( $schedule['auto'] ) ); ?>>
-					<?php echo esc_html__( 'Enable scheduled idea generation + draft + future-publish via WP cron.', 'citeleap' ); ?></label>
+					<?php $auto_mode = (string) ( $schedule['auto_mode'] ?? ( ! empty( $schedule['auto'] ) ? 'publish' : 'off' ) ); ?>
+					<select id="auto_mode" name="auto_mode">
+						<option value="off"     <?php selected( $auto_mode, 'off' );     ?>><?php echo esc_html__( 'Off (manual only)', 'citeleap' ); ?></option>
+						<option value="draft"   <?php selected( $auto_mode, 'draft' );   ?>><?php echo esc_html__( 'Auto-generate to DRAFT only (you publish manually)', 'citeleap' ); ?></option>
+						<option value="publish" <?php selected( $auto_mode, 'publish' ); ?>><?php echo esc_html__( 'Auto-generate + auto-publish on schedule', 'citeleap' ); ?></option>
+					</select>
+					<p class="description"><?php echo esc_html__( 'Draft mode generates and refills the queue continuously but leaves every post as a draft for your review. Publish mode also schedules each draft to go live at the next slot.', 'citeleap' ); ?></p>
 				</td>
 			</tr>
 			<tr>
@@ -297,8 +308,11 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 	}
 	update_option( CITELEAP_OPTION_MODELS, $models, false );
 
+	$mode = sanitize_key( (string) ( $_POST['auto_mode'] ?? 'off' ) );
+	if ( ! in_array( $mode, [ 'off', 'draft', 'publish' ], true ) ) $mode = 'off';
 	$schedule = [
-		'auto'           => ! empty( $_POST['auto'] ) ? 1 : 0,
+		'auto'           => ( 'off' !== $mode ) ? 1 : 0,    // legacy boolean kept for back-compat
+		'auto_mode'      => $mode,
 		'start_date'     => sanitize_text_field( wp_unslash( (string) ( $_POST['start_date'] ?? '' ) ) ),
 		'posts_per_week' => max( 1, min( 14, (int) ( $_POST['posts_per_week'] ?? 3 ) ) ),
 		'audience'       => sanitize_text_field( wp_unslash( (string) ( $_POST['audience'] ?? '' ) ) ),

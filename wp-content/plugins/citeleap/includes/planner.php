@@ -33,12 +33,21 @@ class CiteLeap_Planner {
 				<?php wp_nonce_field( CITELEAP_NONCE ); ?>
 				<input type="hidden" name="action" value="citeleap_generate_ideas">
 				<input type="number" name="count" value="10" min="1" max="30" style="width:5rem;">
-				<button class="button button-primary"><?php echo esc_html__( 'Generate ideas now', 'citeleap' ); ?></button>
+				<button class="button button-primary"><?php echo esc_html__( 'Generate ideas now (LLM)', 'citeleap' ); ?></button>
 			</form>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-block;">
 				<?php wp_nonce_field( CITELEAP_NONCE ); ?>
 				<input type="hidden" name="action" value="citeleap_run_tick">
 				<button class="button"><?php echo esc_html__( 'Run scheduler tick now', 'citeleap' ); ?></button>
+			</form>
+
+			<h2 style="margin:1.5rem 0 0.25rem;"><?php echo esc_html__( 'Add your own topics (no LLM call)', 'citeleap' ); ?></h2>
+			<p style="margin:0 0 0.5rem;color:#64748b;"><?php echo esc_html__( 'Paste one topic per line. Each becomes a queued post in order. Duplicates against existing slugs and the queue are skipped automatically. No tokens are spent until you draft the post.', 'citeleap' ); ?></p>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+				<input type="hidden" name="action" value="citeleap_add_topics">
+				<textarea name="topics" rows="6" class="large-text" style="font-family:ui-monospace,monospace;font-size:13px;" placeholder="<?php echo esc_attr__( "How to scale paid social with Advantage+\nB2B SaaS pricing models 2026\nWhat is a marketing capability assessment", 'citeleap' ); ?>"></textarea>
+				<p style="margin-top:0.5rem;"><button class="button button-primary"><?php echo esc_html__( 'Queue these topics', 'citeleap' ); ?></button></p>
 			</form>
 
 			<h2 style="margin:2rem 0 0.5rem;"><?php echo esc_html__( 'Refresh existing posts', 'citeleap' ); ?></h2>
@@ -235,5 +244,16 @@ add_action( 'admin_post_citeleap_run_tick', function () {
 	check_admin_referer( CITELEAP_NONCE );
 	CiteLeap_Scheduler::tick();
 	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'planner', 'citeleap_msg' => 'tick' ], admin_url( 'admin.php' ) ) );
+	exit;
+} );
+
+add_action( 'admin_post_citeleap_add_topics', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( CITELEAP_NONCE );
+	$raw    = (string) wp_unslash( (string) ( $_POST['topics'] ?? '' ) );
+	$lines  = preg_split( '/\r?\n/', $raw ) ?: [];
+	$res    = CiteLeap_Generator::add_manual_topics( $lines );
+	$msg    = sprintf( 'topics:%d:%d:%d', $res['added'], $res['skipped_dupes'], $res['total_in'] );
+	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'planner', 'citeleap_msg' => $msg ], admin_url( 'admin.php' ) ) );
 	exit;
 } );

@@ -33,11 +33,12 @@ class CiteLeap_Scheduler {
 			self::tick_refresh();
 
 			$schedule = (array) get_option( CITELEAP_OPTION_SCHEDULE, [] );
-			if ( empty( $schedule['auto'] ) ) { delete_transient( 'citeleap_tick_lock' ); return; }
+			$mode     = self::auto_mode( $schedule );
+			if ( 'off' === $mode ) { delete_transient( 'citeleap_tick_lock' ); return; }
 			$start_ts = isset( $schedule['start_date'] ) ? strtotime( (string) $schedule['start_date'] ) : 0;
 			if ( $start_ts && $start_ts > time() ) { delete_transient( 'citeleap_tick_lock' ); return; }
 
-			self::tick_new_content( $schedule );
+			self::tick_new_content( $schedule, $mode );
 		} catch ( \Throwable $e ) {
 			CiteLeap_Log::add( 'tick_exception', $e->getMessage(), 'critical' );
 		} finally {
@@ -45,11 +46,26 @@ class CiteLeap_Scheduler {
 		}
 	}
 
-	private static function tick_new_content( array $schedule ): void {
+	public static function auto_mode( ?array $schedule = null ): string {
+		$schedule = $schedule ?? (array) get_option( CITELEAP_OPTION_SCHEDULE, [] );
+		$m = (string) ( $schedule['auto_mode'] ?? '' );
+		if ( in_array( $m, [ 'off', 'draft', 'publish' ], true ) ) return $m;
+		return ! empty( $schedule['auto'] ) ? 'publish' : 'off';   // legacy boolean fallback
+	}
 
-		/* Find the next slot we should publish on. */
-		$next_slot = self::next_slot( $schedule );
-		if ( $next_slot > time() ) return;
+	private static function tick_new_content( array $schedule, string $mode = 'publish' ): void {
+
+		/* In 'draft' mode we do not check the publish slot ,
+		 * we keep refilling the draft queue at the configured cadence
+		 * regardless of slot time. In 'publish' mode the next slot
+		 * gates how often we draft + schedule. */
+		if ( 'publish' === $mode ) {
+			$next_slot = self::next_slot( $schedule );
+			if ( $next_slot > time() ) return;
+		} else {
+			/* Throttle 'draft' mode to one draft per tick max. */
+			$next_slot = time();
+		}
 
 		/* Make sure we have ideas. */
 		$queue = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
@@ -69,7 +85,14 @@ class CiteLeap_Scheduler {
 		$res = CiteLeap_Generator::write_post_from_idea( (string) $idea['id'] );
 		if ( ! $res['ok'] || ! $res['post_id'] ) return;
 
-		/* Schedule the publish at the slot time. */
+		if ( 'draft' === $mode ) {
+			/* Draft-only mode: post is already a WP draft after
+			 * write_post_from_idea(). Nothing more to schedule. */
+			CiteLeap_Log::add( 'post_drafted_auto', sprintf( '#%d auto-drafted (mode=draft)', $res['post_id'] ) );
+			return;
+		}
+
+		/* publish mode: schedule the publish at the slot time. */
 		$publish_at_gmt = gmdate( 'Y-m-d H:i:s', $next_slot );
 		$publish_at     = get_date_from_gmt( $publish_at_gmt );
 		wp_update_post( [

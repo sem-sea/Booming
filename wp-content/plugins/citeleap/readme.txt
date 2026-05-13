@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,12 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 1.3.0 =
+* NEW: three-state Auto mode (Off / Draft only / Publish). Draft mode auto-generates and refills the queue continuously, but every post is left as a WP draft for your manual review. Publish mode also schedules each draft at the next slot.
+* NEW: bulk "Add your own topics" form on the Planner tab. Paste one topic per line; each becomes a queued post in submission order. No LLM call until you draft. Duplicate detection against existing slugs (any status) and the queue is automatic.
+* NEW: manually-queued topics carry source=manual in the queue entry for traceability.
+* Back-compat: legacy `auto=1` (v1.2.0 boolean) maps to `auto_mode=publish`. No re-save required.
 
 = 1.2.0 =
 * SECURITY: API keys encrypted at rest with AES-256-CBC, key derived from your AUTH_KEY salt. Decryption key lives in wp-config, not the database. Legacy plaintext keys auto-migrate on next save.
