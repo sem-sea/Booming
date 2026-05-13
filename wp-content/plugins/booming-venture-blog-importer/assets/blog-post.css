@@ -1,0 +1,254 @@
+/* ============================================================
+ * Booming Venture Blog Importer , blog-post styling
+ * Mobile-first. Loads only on single post views (is_singular('post')).
+ * Self-contained: works on any WP theme, falls back gracefully if
+ * the active theme already defines these classes.
+ * ============================================================ */
+
+/* ---- Scope every rule to the post content area for safety ---- */
+.bvbi-post {
+	font-size: 1rem;
+	line-height: 1.7;
+	color: #1f2937;
+	max-width: 100%;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	hyphens: auto;
+}
+
+/* Mobile padding so prose doesn't run edge to edge */
+.bvbi-post {
+	padding-inline: 1rem;
+}
+
+@media (min-width: 768px) {
+	.bvbi-post {
+		font-size: 1.0625rem;
+		line-height: 1.75;
+		padding-inline: 0;
+	}
+}
+
+/* ---- Headings ---- */
+.bvbi-post h1,
+.bvbi-post .entry-title {
+	font-size: 1.875rem;
+	line-height: 1.25;
+	font-weight: 700;
+	margin: 0 0 1rem;
+	letter-spacing: -0.01em;
+	color: #0f172a;
+}
+
+@media (min-width: 768px) {
+	.bvbi-post h1,
+	.bvbi-post .entry-title { font-size: 2.5rem; }
+}
+
+.bvbi-post h2,
+.bvbi-post .wp-block-heading[id],
+.bvbi-post h2.wp-block-heading {
+	font-size: 1.375rem;
+	line-height: 1.3;
+	font-weight: 700;
+	margin: 2rem 0 0.75rem;
+	color: #0f172a;
+	letter-spacing: -0.005em;
+}
+
+@media (min-width: 768px) {
+	.bvbi-post h2,
+	.bvbi-post h2.wp-block-heading { font-size: 1.625rem; margin-top: 2.5rem; }
+}
+
+.bvbi-post h3,
+.bvbi-post h3.wp-block-heading {
+	font-size: 1.125rem;
+	line-height: 1.35;
+	font-weight: 600;
+	margin: 1.5rem 0 0.5rem;
+	color: #0f172a;
+}
+
+@media (min-width: 768px) {
+	.bvbi-post h3,
+	.bvbi-post h3.wp-block-heading { font-size: 1.25rem; }
+}
+
+/* ---- Paragraphs ---- */
+.bvbi-post p {
+	margin: 0 0 1rem;
+}
+
+/* ---- TL;DR / Key takeaways box ---- */
+.bvbi-post .wp-block-group.has-booming-50-background-color,
+.bvbi-post .wp-block-group.has-background:first-of-type {
+	background-color: #eff6ff;
+	border-left: 4px solid #0284c7;
+	border-radius: 0.5rem;
+	padding: 1rem 1.125rem !important;
+	margin: 0 0 1.5rem;
+}
+
+@media (min-width: 768px) {
+	.bvbi-post .wp-block-group.has-booming-50-background-color,
+	.bvbi-post .wp-block-group.has-background:first-of-type {
+		padding: 1.25rem 1.5rem !important;
+		border-radius: 0.75rem;
+	}
+}
+
+.bvbi-post .wp-block-group.has-booming-50-background-color p:first-child,
+.bvbi-post .wp-block-group.has-background:first-of-type p:first-child {
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: #0369a1;
+	margin-bottom: 0.5rem;
+}
+
+.bvbi-post .wp-block-group.has-booming-50-background-color p:last-child,
+.bvbi-post .wp-block-group.has-background:first-of-type p:last-child {
+	margin-bottom: 0;
+	font-size: 0.9375rem;
+}
+
+@media (min-width: 768px) {
+	.bvbi-post .wp-block-group.has-booming-50-background-color p:last-child,
+	.bvbi-post .wp-block-group.has-background:first-of-type p:last-child {
+		font-size: 1rem;
+	}
+}
+
+/* ---- Answer capsule (the .bv-capsule paragraph that follows each question H2) ---- */
+.bvbi-post .bv-capsule {
+	background: #f8fafc;
+	border-left: 3px solid #0ea5e9;
+	padding: 0.875rem 1rem;
+	margin: 0.5rem 0 1.25rem;
+	font-size: 1rem;
+	font-weight: 500;
+	color: #0f172a;
+	border-radius: 0 0.375rem 0.375rem 0;
+}
+
+@media (min-width: 768px) {
+	.bvbi-post .bv-capsule {
+		padding: 1rem 1.25rem;
+		font-size: 1.0625rem;
+	}
+}
+
+/* ---- Lists ---- */
+.bvbi-post ul,
+.bvbi-post ol,
+.bvbi-post .wp-block-list {
+	margin: 0 0 1.25rem;
+	padding-left: 1.25rem;
+}
+
+.bvbi-post ul li,
+.bvbi-post ol li,
+.bvbi-post .wp-block-list li {
+	margin-bottom: 0.5rem;
+}
+
+.bvbi-post ul li::marker {
+	color: #0ea5e9;
+}
+.bvbi-post ol li::marker {
+	color: #0ea5e9;
+	font-weight: 600;
+}
+
+/* ---- Links ---- */
+.bvbi-post a {
+	color: #0369a1;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	text-decoration-thickness: 1px;
+}
+.bvbi-post a:hover,
+.bvbi-post a:focus {
+	color: #0c4a6e;
+	text-decoration-thickness: 2px;
+}
+
+/* ---- FAQ block (Frequently asked questions section) ---- */
+.bvbi-post h2.wp-block-heading + h3.wp-block-heading,
+.bvbi-post h3.wp-block-heading + p + h3.wp-block-heading {
+	margin-top: 1.25rem;
+}
+
+/* ---- Inline emphasis ---- */
+.bvbi-post strong,
+.bvbi-post b {
+	color: #0f172a;
+	font-weight: 600;
+}
+
+.bvbi-post em {
+	color: #1f2937;
+}
+
+.bvbi-post code {
+	font-size: 0.875em;
+	background: #f1f5f9;
+	padding: 0.125rem 0.375rem;
+	border-radius: 0.25rem;
+}
+
+/* ---- CTA closing paragraph (the cta() helper) ---- */
+.bvbi-post p:last-of-type a[href="/#contact"],
+.bvbi-post p a[href$="#contact"] {
+	font-weight: 600;
+}
+
+/* ---- Images and embeds (safety: keep responsive) ---- */
+.bvbi-post img,
+.bvbi-post iframe,
+.bvbi-post video,
+.bvbi-post .wp-block-image {
+	max-width: 100%;
+	height: auto;
+}
+
+/* ---- Tables (if any post adds a comparison table) ---- */
+.bvbi-post table,
+.bvbi-post .wp-block-table table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 0 0 1.5rem;
+	font-size: 0.9375rem;
+	display: block;
+	overflow-x: auto;
+}
+
+@media (min-width: 768px) {
+	.bvbi-post table,
+	.bvbi-post .wp-block-table table { display: table; font-size: 1rem; }
+}
+
+.bvbi-post th,
+.bvbi-post td {
+	padding: 0.625rem 0.75rem;
+	border-bottom: 1px solid #e2e8f0;
+	text-align: left;
+}
+
+.bvbi-post th {
+	background: #f8fafc;
+	font-weight: 600;
+	color: #0f172a;
+}
+
+/* ---- Blockquote ---- */
+.bvbi-post blockquote {
+	margin: 1.5rem 0;
+	padding: 0.75rem 1rem;
+	border-left: 4px solid #0284c7;
+	background: #f8fafc;
+	font-style: italic;
+	color: #334155;
+}
