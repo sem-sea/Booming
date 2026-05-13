@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,16 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 1.2.0 =
+* SECURITY: API keys encrypted at rest with AES-256-CBC, key derived from your AUTH_KEY salt. Decryption key lives in wp-config, not the database. Legacy plaintext keys auto-migrate on next save.
+* SECURITY: input fields no longer echo the key value into the page HTML. Placeholders show only last 4 chars of the existing key.
+* SECURITY: log entries auto-redact strings that look like sk-*, sk-ant-*, AIza* API keys.
+* RELIABILITY: scheduler tick now uses a transient lock (5-min expiry) so concurrent cron ticks cannot double-spend. Unhandled exceptions are caught, logged as critical, and the lock is always released.
+* OBSERVABILITY: log entries carry a severity field (info / warn / error / critical). Dashboard splits successes vs errors by severity rather than event-name allowlist.
+* OBSERVABILITY: pre-cap warning banners on Dashboard at 80% spend (amber) and 100% (red).
+* UX: per-provider "Test connection" button on Settings tab. One-shot tiny request that verifies key + quota + network.
+* DOCS: shipped HOW_IT_WORKS.md inside the plugin folder. Plain-language operator guide covering every flow, status, dependency, and gotcha.
 
 = 1.1.0 =
 * NEW: Dashboard tab with this-month token usage + cost per provider, cap progress bars, status counts, recent successes / errors split.

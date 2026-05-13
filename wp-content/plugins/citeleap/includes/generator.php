@@ -71,13 +71,13 @@ class CiteLeap_Generator {
 
 		$res = CiteLeap_LLM::chat( 'reasoning', $system, $user_prompt, 4000 );
 		if ( ! $res['ok'] ) {
-			CiteLeap_Log::add( 'idea_generation_failed', $res['error'] );
+			CiteLeap_Log::add( 'idea_generation_failed', $res['error'], 'error' );
 			return [ 'ok' => false, 'ideas' => [], 'error' => $res['error'] ];
 		}
 
 		$ideas = self::parse_json_array( $res['text'] );
 		if ( empty( $ideas ) ) {
-			CiteLeap_Log::add( 'idea_parse_failed', mb_substr( $res['text'], 0, 200 ) );
+			CiteLeap_Log::add( 'idea_parse_failed', mb_substr( $res['text'], 0, 200 ), 'error' );
 			return [ 'ok' => false, 'ideas' => [], 'error' => 'Model returned unparsable JSON.' ];
 		}
 
@@ -133,19 +133,19 @@ class CiteLeap_Generator {
 
 		$res = CiteLeap_LLM::chat( 'writing', $system, $user_prompt, 8000 );
 		if ( ! $res['ok'] ) {
-			CiteLeap_Log::add( 'write_failed', $res['error'] );
+			CiteLeap_Log::add( 'write_failed', $res['error'], 'error' );
 			return [ 'ok' => false, 'post_id' => 0, 'error' => $res['error'] ];
 		}
 
 		$post_data = self::parse_json_object( $res['text'] );
 		if ( empty( $post_data ) || empty( $post_data['title'] ) || empty( $post_data['body'] ) ) {
-			CiteLeap_Log::add( 'write_parse_failed', mb_substr( $res['text'], 0, 200 ) );
+			CiteLeap_Log::add( 'write_parse_failed', mb_substr( $res['text'], 0, 200 ), 'error' );
 			return [ 'ok' => false, 'post_id' => 0, 'error' => 'Model returned unparsable JSON.' ];
 		}
 
 		$word_count = str_word_count( wp_strip_all_tags( (string) $post_data['body'] ) );
 		if ( $word_count < 1000 ) {
-			CiteLeap_Log::add( 'write_too_short', sprintf( '%d words, below 1000 threshold', $word_count ) );
+			CiteLeap_Log::add( 'write_too_short', sprintf( '%d words, below 1000 threshold', $word_count ), 'warn' );
 		}
 
 		$post_id = wp_insert_post( [
@@ -240,14 +240,28 @@ class CiteLeap_Generator {
 }
 
 class CiteLeap_Log {
-	public static function add( string $event, string $detail = '' ): void {
-		$log   = (array) get_option( CITELEAP_OPTION_LOG, [] );
-		$log[] = [
-			'time'   => current_time( 'mysql' ),
-			'event'  => $event,
-			'detail' => $detail,
+	/* Severity classes: info | warn | error | critical.
+	 * The Dashboard tab splits success vs error views on this field
+	 * (instead of the prior event-name allowlist), so future event
+	 * names automatically classify correctly. */
+	public static function add( string $event, string $detail = '', string $severity = 'info' ): void {
+		$severity = in_array( $severity, [ 'info', 'warn', 'error', 'critical' ], true ) ? $severity : 'info';
+		/* Redact anything that looks like an API key from $detail. */
+		$detail = self::redact( $detail );
+		$log    = (array) get_option( CITELEAP_OPTION_LOG, [] );
+		$log[]  = [
+			'time'     => current_time( 'mysql' ),
+			'event'    => $event,
+			'detail'   => $detail,
+			'severity' => $severity,
 		];
 		if ( count( $log ) > 200 ) $log = array_slice( $log, -200 );
 		update_option( CITELEAP_OPTION_LOG, $log, false );
+	}
+	private static function redact( string $s ): string {
+		$s = preg_replace( '/sk-[A-Za-z0-9_\-]{20,}/', 'sk-***REDACTED***', $s );
+		$s = preg_replace( '/sk-ant-[A-Za-z0-9_\-]{20,}/', 'sk-ant-***REDACTED***', $s );
+		$s = preg_replace( '/AIza[0-9A-Za-z\-_]{30,}/',   'AIza***REDACTED***', $s );
+		return (string) $s;
 	}
 }

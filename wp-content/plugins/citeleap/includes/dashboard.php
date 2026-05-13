@@ -36,6 +36,19 @@ class CiteLeap_Dashboard {
 
 		?>
 		<div class="citeleap-dashboard">
+			<?php
+			/* Pre-cap alert: 80%+ on any provider or overall. */
+			foreach ( [ 'claude', 'openai', 'gemini' ] as $p ) {
+				$cap = (float) ( $caps[ $p ] ?? 0 );
+				if ( $cap <= 0 ) continue;
+				$cost = (float) ( $usage[ $p ]['cost_usd'] ?? 0 );
+				if ( $cost >= $cap ) {
+					echo '<div class="notice notice-error" style="margin:0 0 1rem;padding:0.75rem 1rem;"><p style="margin:0;"><strong>' . esc_html( ucfirst( $p ) ) . ':</strong> ' . esc_html__( 'monthly budget cap reached. All new generation refused until next calendar month or until you raise the cap.', 'citeleap' ) . '</p></div>';
+				} elseif ( $cost >= $cap * 0.8 ) {
+					echo '<div class="notice notice-warning" style="margin:0 0 1rem;padding:0.75rem 1rem;"><p style="margin:0;"><strong>' . esc_html( ucfirst( $p ) ) . ':</strong> ' . sprintf( esc_html__( '%1$s%% of monthly cap used ($%2$s of $%3$s). Plan accordingly.', 'citeleap' ), esc_html( (string) number_format( ( $cost / $cap ) * 100, 1 ) ), esc_html( number_format( $cost, 2 ) ), esc_html( number_format( $cap, 2 ) ) ) . '</p></div>';
+				}
+			}
+			?>
 			<h2 style="margin-top:0;"><?php echo esc_html__( 'This month', 'citeleap' ); ?> , <?php echo esc_html( $month ); ?></h2>
 
 			<div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:0.75rem;">
@@ -122,11 +135,19 @@ class CiteLeap_Dashboard {
 	}
 
 	private static function render_log_filtered( array $log, string $kind ): void {
-		$success = [ 'ideas_generated', 'post_drafted', 'post_scheduled', 'post_refreshed', 'refresh_queued' ];
+		/* Severity-driven split: any entry with severity info is a
+		 * success row; warn / error / critical are errors. Legacy
+		 * entries (no severity) fall back to event-name allowlist. */
+		$success_events = [ 'ideas_generated', 'post_drafted', 'post_scheduled', 'post_refreshed', 'refresh_queued', 'test_ok' ];
 		$rows = [];
 		foreach ( array_reverse( $log ) as $row ) {
-			$ev = (string) ( $row['event'] ?? '' );
-			$is_success = in_array( $ev, $success, true );
+			$sev = (string) ( $row['severity'] ?? '' );
+			$ev  = (string) ( $row['event'] ?? '' );
+			if ( $sev ) {
+				$is_success = ( 'info' === $sev );
+			} else {
+				$is_success = in_array( $ev, $success_events, true );
+			}
 			if ( 'success' === $kind && $is_success ) $rows[] = $row;
 			if ( 'error' === $kind && ! $is_success ) $rows[] = $row;
 			if ( count( $rows ) >= 10 ) break;

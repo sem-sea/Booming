@@ -62,7 +62,8 @@ class CiteLeap_LLM {
 
 	public static function get_api_key( string $provider ): string {
 		$keys = (array) get_option( CITELEAP_OPTION_API_KEYS, [] );
-		return (string) ( $keys[ $provider ] ?? '' );
+		$stored = (string) ( $keys[ $provider ] ?? '' );
+		return CiteLeap_Crypto::decrypt( $stored );
 	}
 
 	public static function get_model( string $provider, string $role ): string {
@@ -101,7 +102,7 @@ class CiteLeap_LLM {
 
 		$cap = CiteLeap_Usage::can_spend( $provider );
 		if ( ! $cap['ok'] ) {
-			CiteLeap_Log::add( 'budget_cap_hit', $cap['reason'] );
+			CiteLeap_Log::add( 'budget_cap_hit', $cap['reason'], 'error' );
 			return [ 'ok' => false, 'text' => '', 'raw' => [], 'provider' => $provider, 'model' => $model, 'error' => $cap['reason'] ];
 		}
 

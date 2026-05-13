@@ -19,14 +19,33 @@ defined( 'ABSPATH' ) || exit;
 class CiteLeap_Scheduler {
 
 	public static function tick(): void {
-		/* Refresh tick runs independently of new-content auto-publish. */
-		self::tick_refresh();
+		/* Transient lock: prevent concurrent ticks (manual "run tick
+		 * now" race with the hourly cron, or duplicate cron firings).
+		 * 5 minute expiry so a stuck tick eventually self-clears. */
+		if ( get_transient( 'citeleap_tick_lock' ) ) {
+			CiteLeap_Log::add( 'tick_locked', 'previous tick still in flight, skipping', 'warn' );
+			return;
+		}
+		set_transient( 'citeleap_tick_lock', 1, 5 * MINUTE_IN_SECONDS );
 
-		$schedule = (array) get_option( CITELEAP_OPTION_SCHEDULE, [] );
-		if ( empty( $schedule['auto'] ) ) return;
+		try {
+			/* Refresh tick runs independently of new-content auto-publish. */
+			self::tick_refresh();
 
-		$start_ts = isset( $schedule['start_date'] ) ? strtotime( (string) $schedule['start_date'] ) : 0;
-		if ( $start_ts && $start_ts > time() ) return;
+			$schedule = (array) get_option( CITELEAP_OPTION_SCHEDULE, [] );
+			if ( empty( $schedule['auto'] ) ) { delete_transient( 'citeleap_tick_lock' ); return; }
+			$start_ts = isset( $schedule['start_date'] ) ? strtotime( (string) $schedule['start_date'] ) : 0;
+			if ( $start_ts && $start_ts > time() ) { delete_transient( 'citeleap_tick_lock' ); return; }
+
+			self::tick_new_content( $schedule );
+		} catch ( \Throwable $e ) {
+			CiteLeap_Log::add( 'tick_exception', $e->getMessage(), 'critical' );
+		} finally {
+			delete_transient( 'citeleap_tick_lock' );
+		}
+	}
+
+	private static function tick_new_content( array $schedule ): void {
 
 		/* Find the next slot we should publish on. */
 		$next_slot = self::next_slot( $schedule );

@@ -61,7 +61,22 @@ function citeleap_render_admin(): void {
 function citeleap_render_flash(): void {
 	if ( empty( $_GET['citeleap_msg'] ) ) return;
 	$msg = sanitize_text_field( wp_unslash( (string) $_GET['citeleap_msg'] ) );
-	echo '<div class="notice notice-success is-dismissible" style="margin-top:1rem;"><p>' . esc_html( $msg ) . '</p></div>';
+	$kind = 'success';
+	$text = $msg;
+	if ( 0 === strpos( $msg, 'test-ok:' ) ) {
+		$parts = explode( ':', $msg, 3 );
+		$text = sprintf( __( '%s connection OK , model replied: %s', 'citeleap' ), ucfirst( (string) ( $parts[1] ?? '' ) ), rawurldecode( (string) ( $parts[2] ?? '' ) ) );
+	} elseif ( 0 === strpos( $msg, 'test-err:' ) ) {
+		$parts = explode( ':', $msg, 3 );
+		$kind  = 'error';
+		$text  = sprintf( __( '%s connection failed: %s', 'citeleap' ), ucfirst( (string) ( $parts[1] ?? '' ) ), rawurldecode( (string) ( $parts[2] ?? '' ) ) );
+	} elseif ( 0 === strpos( $msg, 'refresh-err' ) ) {
+		$kind = 'error'; $text = __( 'Refresh failed , see the Log tab for details.', 'citeleap' );
+	} elseif ( 'saved' === $msg ) {
+		$text = __( 'Saved.', 'citeleap' );
+	}
+	$class = ( 'error' === $kind ) ? 'notice-error' : 'notice-success';
+	echo '<div class="notice ' . esc_attr( $class ) . ' is-dismissible" style="margin-top:1rem;"><p>' . esc_html( $text ) . '</p></div>';
 }
 
 function citeleap_render_settings(): void {
@@ -75,20 +90,25 @@ function citeleap_render_settings(): void {
 		<input type="hidden" name="action" value="citeleap_save_settings">
 
 		<h2><?php echo esc_html__( 'API keys', 'citeleap' ); ?></h2>
-		<p style="color:#64748b;"><?php echo esc_html__( 'Bring your own keys. Stored locally; never sent to anyone other than the provider during generation.', 'citeleap' ); ?></p>
+		<p style="color:#64748b;"><?php echo esc_html__( 'Bring your own keys. Encrypted at rest with AES-256-CBC using your AUTH_KEY salt. Leave a field blank to keep the existing key.', 'citeleap' ); ?></p>
 		<table class="form-table">
-			<tr>
-				<th><label for="claude_key">Anthropic Claude</label></th>
-				<td><input type="password" id="claude_key" name="claude_key" value="<?php echo esc_attr( (string) ( $keys['claude'] ?? '' ) ); ?>" class="regular-text" autocomplete="off" placeholder="sk-ant-..."></td>
-			</tr>
-			<tr>
-				<th><label for="openai_key">OpenAI</label></th>
-				<td><input type="password" id="openai_key" name="openai_key" value="<?php echo esc_attr( (string) ( $keys['openai'] ?? '' ) ); ?>" class="regular-text" autocomplete="off" placeholder="sk-..."></td>
-			</tr>
-			<tr>
-				<th><label for="gemini_key">Google Gemini</label></th>
-				<td><input type="password" id="gemini_key" name="gemini_key" value="<?php echo esc_attr( (string) ( $keys['gemini'] ?? '' ) ); ?>" class="regular-text" autocomplete="off" placeholder="AIza..."></td>
-			</tr>
+			<?php foreach ( [ 'claude' => 'Anthropic Claude', 'openai' => 'OpenAI', 'gemini' => 'Google Gemini' ] as $p => $label ) :
+				$decrypted = CiteLeap_LLM::get_api_key( $p );
+				$mask      = CiteLeap_Crypto::mask( $decrypted );
+				$placeholder = $decrypted ? sprintf( __( 'Keep current key (%s)', 'citeleap' ), $mask ) : __( 'Paste your key', 'citeleap' );
+			?>
+				<tr>
+					<th><label for="<?php echo esc_attr( $p ); ?>_key"><?php echo esc_html( $label ); ?></label></th>
+					<td>
+						<input type="password" id="<?php echo esc_attr( $p ); ?>_key" name="<?php echo esc_attr( $p ); ?>_key" value="" class="regular-text" autocomplete="new-password" placeholder="<?php echo esc_attr( $placeholder ); ?>">
+						<?php if ( $decrypted ) : ?>
+							<button type="submit" name="action" value="citeleap_test_key_<?php echo esc_attr( $p ); ?>" formaction="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="button button-small" formnovalidate>
+								<?php echo esc_html__( 'Test connection', 'citeleap' ); ?>
+							</button>
+						<?php endif; ?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
 		</table>
 
 		<h2 style="margin-top:1.5rem;"><?php echo esc_html__( 'Model selection', 'citeleap' ); ?></h2>
@@ -225,11 +245,15 @@ function citeleap_render_log(): void {
 		<p><?php echo esc_html__( 'No activity yet.', 'citeleap' ); ?></p>
 	<?php else : ?>
 		<table class="widefat striped">
-			<thead><tr><th style="width:160px;"><?php echo esc_html__( 'Time', 'citeleap' ); ?></th><th style="width:200px;"><?php echo esc_html__( 'Event', 'citeleap' ); ?></th><th><?php echo esc_html__( 'Detail', 'citeleap' ); ?></th></tr></thead>
+			<thead><tr><th style="width:160px;"><?php echo esc_html__( 'Time', 'citeleap' ); ?></th><th style="width:80px;"><?php echo esc_html__( 'Level', 'citeleap' ); ?></th><th style="width:200px;"><?php echo esc_html__( 'Event', 'citeleap' ); ?></th><th><?php echo esc_html__( 'Detail', 'citeleap' ); ?></th></tr></thead>
 			<tbody>
-			<?php foreach ( $log as $row ) : ?>
+			<?php foreach ( $log as $row ) :
+				$sev = (string) ( $row['severity'] ?? 'info' );
+				$color = [ 'info' => '#0369a1', 'warn' => '#b45309', 'error' => '#b91c1c', 'critical' => '#7f1d1d' ][ $sev ] ?? '#475569';
+			?>
 				<tr>
 					<td><code><?php echo esc_html( (string) ( $row['time'] ?? '' ) ); ?></code></td>
+					<td><span style="color:<?php echo esc_attr( $color ); ?>;font-weight:600;text-transform:uppercase;font-size:11px;"><?php echo esc_html( $sev ); ?></span></td>
 					<td><?php echo esc_html( (string) ( $row['event'] ?? '' ) ); ?></td>
 					<td><?php echo esc_html( (string) ( $row['detail'] ?? '' ) ); ?></td>
 				</tr>
@@ -244,11 +268,20 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
 	check_admin_referer( CITELEAP_NONCE );
 
-	$keys = [
-		'claude' => sanitize_text_field( wp_unslash( (string) ( $_POST['claude_key'] ?? '' ) ) ),
-		'openai' => sanitize_text_field( wp_unslash( (string) ( $_POST['openai_key'] ?? '' ) ) ),
-		'gemini' => sanitize_text_field( wp_unslash( (string) ( $_POST['gemini_key'] ?? '' ) ) ),
-	];
+	/* Encrypt API keys at rest. An empty submitted value means "keep
+	 * the existing key" (because the form is masked, the operator
+	 * never sees the actual value and an unintentional blank should
+	 * NOT wipe a valid key). */
+	$existing = (array) get_option( CITELEAP_OPTION_API_KEYS, [] );
+	$keys     = [];
+	foreach ( [ 'claude', 'openai', 'gemini' ] as $p ) {
+		$submitted = sanitize_text_field( wp_unslash( (string) ( $_POST[ $p . '_key' ] ?? '' ) ) );
+		if ( '' === $submitted ) {
+			$keys[ $p ] = (string) ( $existing[ $p ] ?? '' );          // preserve
+		} else {
+			$keys[ $p ] = CiteLeap_Crypto::encrypt( $submitted );      // encrypt new value
+		}
+	}
 	update_option( CITELEAP_OPTION_API_KEYS, $keys, false );
 
 	$defaults = CiteLeap_LLM::defaults();
@@ -292,6 +325,27 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'settings', 'citeleap_msg' => 'saved' ], admin_url( 'admin.php' ) ) );
 	exit;
 } );
+
+/* Test-connection handlers , one per provider. Sends a minimal
+ * "say hello" request and reports the round-trip success or error
+ * back to the operator. Logs the result. */
+foreach ( [ 'claude', 'openai', 'gemini' ] as $__p ) {
+	add_action( 'admin_post_citeleap_test_key_' . $__p, function () use ( $__p ) {
+		if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+		check_admin_referer( CITELEAP_NONCE );
+		$res = CiteLeap_LLM::chat( 'writing', 'You are a test responder.', 'Reply with the single word OK.', 16 );
+		$msg = $res['ok']
+			? 'test-ok:' . $__p . ':' . rawurlencode( mb_substr( trim( $res['text'] ), 0, 60 ) )
+			: 'test-err:' . $__p . ':' . rawurlencode( mb_substr( $res['error'], 0, 200 ) );
+		CiteLeap_Log::add(
+			$res['ok'] ? 'test_ok' : 'test_failed',
+			$__p . ' / ' . ( $res['model'] ?? '' ) . ' / ' . ( $res['ok'] ? trim( $res['text'] ) : $res['error'] ),
+			$res['ok'] ? 'info' : 'error'
+		);
+		wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'settings', 'citeleap_msg' => $msg ], admin_url( 'admin.php' ) ) );
+		exit;
+	} );
+}
 
 add_action( 'admin_post_citeleap_save_prompts', function () {
 	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );

@@ -111,13 +111,13 @@ class CiteLeap_Refresh {
 			$queue = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
 			foreach ( $queue as $i => $row ) if ( ( $row['id'] ?? '' ) === $queue_id ) { $queue[ $i ]['status'] = 'failed'; $queue[ $i ]['error'] = $res['error']; }
 			update_option( CITELEAP_OPTION_QUEUE, $queue, false );
-			CiteLeap_Log::add( 'refresh_failed', '#' . $post_id . ' ' . $res['error'] );
+			CiteLeap_Log::add( 'refresh_failed', '#' . $post_id . ' ' . $res['error'], 'error' );
 			return [ 'ok' => false, 'post_id' => $post_id, 'error' => $res['error'] ];
 		}
 
 		$data = CiteLeap_Generator::parse_json_object_public( $res['text'] );
 		if ( empty( $data ) || empty( $data['body'] ) ) {
-			CiteLeap_Log::add( 'refresh_parse_failed', '#' . $post_id . ' ' . mb_substr( $res['text'], 0, 200 ) );
+			CiteLeap_Log::add( 'refresh_parse_failed', '#' . $post_id . ' ' . mb_substr( $res['text'], 0, 200 ), 'error' );
 			return [ 'ok' => false, 'post_id' => $post_id, 'error' => 'Unparsable model response.' ];
 		}
 
