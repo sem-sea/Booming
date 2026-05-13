@@ -24,7 +24,7 @@ const BV_INSTALL_FLAG    = 'bv_content_imported';
  * new posts, new patterns wired into existing pages). The install hook
  * re-runs the WXR import on the next activation when the stored value
  * does not match this constant. */
-const BV_INSTALL_VERSION = '1.6.0';
+const BV_INSTALL_VERSION = '1.7.0';
 
 /* Run after theme activation (priority 20 = after setup hooks). */
 add_action( 'after_switch_theme', 'bv_run_install', 20 );
@@ -111,6 +111,45 @@ function bv_flush_all_caches(): void {
 }
 
 /**
+ * Expand `<!-- wp:pattern {"slug":"booming-venture/X"} /-->` references into
+ * their actual block markup by rendering the matching `patterns/X.php` file.
+ *
+ * Why: WordPress editors show a pattern reference as a single non-editable
+ * "Pattern" placeholder block, which blocks the operator from editing the
+ * page content visually. WP best practice as of 6.6+: page post_content
+ * should contain real blocks, not server-side pattern references. Pattern
+ * references are appropriate inside `templates/*.html` and `parts/*.html`
+ * (Site Editor scope) but not inside page post_content.
+ *
+ * Expansion happens once at import time. The rendered block markup is
+ * substituted in place of the reference. Image URLs and other PHP-rendered
+ * values are baked in at that moment; running "Force re-import content" in
+ * Settings -> Booming Venture refreshes them.
+ */
+function bv_expand_pattern_refs( string $content ): string {
+	return preg_replace_callback(
+		'/<!--\s*wp:pattern\s+\{[^}]*"slug":"booming-venture\/([a-z0-9\-]+)"[^}]*\}\s*\/-->/i',
+		function ( $m ) {
+			$slug = $m[1];
+			$file = BV_THEME_DIR . '/patterns/' . $slug . '.php';
+			if ( ! file_exists( $file ) ) {
+				return $m[0]; // leave reference untouched if pattern file missing
+			}
+			ob_start();
+			try {
+				include $file;
+			} catch ( \Throwable $e ) {
+				ob_end_clean();
+				return $m[0];
+			}
+			$rendered = trim( (string) ob_get_clean() );
+			return '' !== $rendered ? $rendered : $m[0];
+		},
+		$content
+	);
+}
+
+/**
  * Parse the WXR and create all items.
  */
 function bv_import_wxr(): bool {
@@ -162,6 +201,17 @@ function bv_import_wxr(): bool {
 
 		if ( ! $post_type || ! $slug || 'publish' !== $post_status ) continue;
 		if ( ! in_array( $post_type, [ 'page', 'post', 'service', 'landing_page', 'case_study' ], true ) ) continue;
+
+		/* Expand `<!-- wp:pattern {"slug":"booming-venture/X"} /-->` references
+		 * into the actual block markup so page content stored in wp_posts is
+		 * fully editable in the block editor. WP renders pattern references
+		 * correctly on the front-end but the editor shows them as a single
+		 * non-editable Pattern placeholder, which prevents the operator from
+		 * editing the content visually. Expanding at import-time gives both:
+		 * front-end rendering still works AND the editor sees real blocks. */
+		if ( 'page' === $post_type ) {
+			$content = bv_expand_pattern_refs( $content );
+		}
 
 		/* Structural pages whose content is owned by the theme and gets
 		 * refreshed on every install-version bump. User-edited content
