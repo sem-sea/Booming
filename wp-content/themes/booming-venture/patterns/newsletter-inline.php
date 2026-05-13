@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Newsletter ,  Inline form (footer use)
+ * Title: Newsletter, Inline form (footer use)
  * Slug: booming-venture/newsletter-inline
  * Categories: booming-venture/cta
  * Inserter: no

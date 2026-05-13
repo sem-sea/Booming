@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Services ,  4-up grid
+ * Title: Services, 4-up grid
  * Slug: booming-venture/services-grid
  * Categories: booming-venture/home, booming-venture/sections
  * Keywords: services, features, grid

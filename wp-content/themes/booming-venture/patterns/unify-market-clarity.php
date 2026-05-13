@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: UNIFY ,  Market clarity map (3 personas)
+ * Title: UNIFY, Market clarity map (3 personas)
  * Slug: booming-venture/unify-market-clarity
  * Categories: booming-venture/landing, booming-venture/sections
  * Viewport Width: 1400

@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: About ,  Mission & values
+ * Title: About, Mission & values
  * Slug: booming-venture/about
  * Categories: booming-venture/home, booming-venture/sections
  * Keywords: about, mission, values

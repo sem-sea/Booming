@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: About ,  Why choose us (checklist + photo collage)
+ * Title: About, Why choose us (checklist + photo collage)
  * Slug: booming-venture/why-choose-checklist
  * Categories: booming-venture/sections, booming-venture/landing
  * Viewport Width: 1400

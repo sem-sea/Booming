@@ -1,6 +1,6 @@
 <?php
 /**
- * Custom block registration ,  Funnel Calculator and ROI Forecaster.
+ * Custom block registration, Funnel Calculator and ROI Forecaster.
  *
  * Each block has a block.json + a build/index.js produced by the Vite
  * pipeline in /blocks (run `npm install && npm run build` inside the

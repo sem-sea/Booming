@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: About ,  Our approach (3 steps)
+ * Title: About, Our approach (3 steps)
  * Slug: booming-venture/approach-steps
  * Categories: booming-venture/sections, booming-venture/landing
  * Viewport Width: 1400

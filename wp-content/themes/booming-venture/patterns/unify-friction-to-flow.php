@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: UNIFY ,  From friction to flow (before/after)
+ * Title: UNIFY, From friction to flow (before/after)
  * Slug: booming-venture/unify-friction-to-flow
  * Categories: booming-venture/landing, booming-venture/sections
  * Viewport Width: 1400

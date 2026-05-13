@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: UNIFY ,  Guide modules (4-up)
+ * Title: UNIFY, Guide modules (4-up)
  * Slug: booming-venture/unify-modules
  * Categories: booming-venture/landing, booming-venture/sections
  * Viewport Width: 1400

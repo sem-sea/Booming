@@ -1,6 +1,6 @@
 <?php
 /**
- * Third-party integrations ,  Brevo, Contact Form 7 hand-off.
+ * Third-party integrations, Brevo, Contact Form 7 hand-off.
  *
  * The recommended flow:
  *   - Install Contact Form 7 + Honeypot for CF7 + Flamingo + a Brevo
@@ -246,7 +246,7 @@ add_action( 'admin_init', function () {
 	] );
 } );
 
-/* Default brand image map ,  UUIDs / URLs the user uploaded to Strato.
+/* Default brand image map, UUIDs / URLs the user uploaded to Strato.
  * Override per-slug in Settings -> Booming Venture -> Brand images. */
 function bv_media_defaults(): array {
 	$base = 'https://boomingventure.com/wp-content/uploads/2026/05/';
@@ -296,7 +296,7 @@ function bv_settings_page(): void {
 		<h1>Booming Venture</h1>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'bv_settings' ); ?>
-			<h2>Contact Form 7 ,  slug → CF7 form</h2>
+			<h2>Contact Form 7, slug → CF7 form</h2>
 			<p class="description">After creating each form in <strong>Contact → Contact Forms</strong>, either name the form to match the slug (e.g. "Contact") OR paste its CF7 hash id (e.g. <code>a1b2c3d4</code>) or numeric id into the box. The status column shows whether the form was found.</p>
 			<table class="form-table">
 				<thead><tr><th>Slug</th><th>Configured id or hash</th><th>Status</th></tr></thead>
@@ -318,8 +318,8 @@ function bv_settings_page(): void {
 				</tbody>
 			</table>
 
-			<h2>Brand images ,  slug → upload UUID or URL</h2>
-			<p class="description">Paste either the bare UUID (e.g. <code>4e357139-5a7e-4336-8796-94013f33dc3d</code> ,  resolved against <code>/wp-content/uploads/2026/05/&lt;uuid&gt;.png</code>), a path starting with <code>/wp-content/</code>, or a full <code>https://</code> URL.</p>
+			<h2>Brand images, slug → upload UUID or URL</h2>
+			<p class="description">Paste either the bare UUID (e.g. <code>4e357139-5a7e-4336-8796-94013f33dc3d</code>, resolved against <code>/wp-content/uploads/2026/05/&lt;uuid&gt;.png</code>), a path starting with <code>/wp-content/</code>, or a full <code>https://</code> URL.</p>
 			<table class="form-table">
 			<?php $media = (array) get_option( 'bv_media_map', [] ); foreach ( bv_media_defaults() as $slug => $default ) : $val = $media[ $slug ] ?? $default; ?>
 				<tr>
@@ -375,17 +375,17 @@ add_action( 'rest_api_init', function () {
 } );
 
 function bv_brevo_proxy_handler( WP_REST_Request $req ) {
-	/* 1. CSRF ,  only meaningful for logged-in users, but doesn't hurt. */
+	/* 1. CSRF, only meaningful for logged-in users, but doesn't hurt. */
 	if ( ! wp_verify_nonce( $req->get_param( 'nonce' ), 'bv_brevo' ) ) {
 		return new WP_Error( 'bad_nonce', 'Invalid nonce', [ 'status' => 403 ] );
 	}
 
-	/* 2. Honeypot ,  JS strips this on submit; bots usually fill it. */
+	/* 2. Honeypot, JS strips this on submit; bots usually fill it. */
 	if ( ! empty( $req->get_param( 'website' ) ) ) {
 		return new WP_REST_Response( [ 'ok' => true ], 200 ); // pretend success
 	}
 
-	/* 3. Rate limit ,  keyed on IP + email, 5 attempts / 10 min. */
+	/* 3. Rate limit, keyed on IP + email, 5 attempts / 10 min. */
 	$ip   = isset( $_SERVER['REMOTE_ADDR'] ) ? preg_replace( '/[^0-9a-f:.]/i', '', $_SERVER['REMOTE_ADDR'] ) : '0.0.0.0';
 	$key  = 'bv_brevo_rl_' . md5( $ip . '|' . strtolower( (string) $req->get_param( 'email' ) ) );
 	$hits = (int) get_transient( $key );
@@ -394,7 +394,7 @@ function bv_brevo_proxy_handler( WP_REST_Request $req ) {
 	}
 	set_transient( $key, $hits + 1, 10 * MINUTE_IN_SECONDS );
 
-	/* 4. List ID allowlist ,  never let arbitrary list IDs through. */
+	/* 4. List ID allowlist, never let arbitrary list IDs through. */
 	$allowed = (array) get_option( 'bv_brevo_allowed_lists', [ 2, 3, 4 ] );
 	$list_id = (int) $req->get_param( 'list_id' );
 	if ( ! in_array( $list_id, array_map( 'intval', $allowed ), true ) ) {
@@ -407,7 +407,7 @@ function bv_brevo_proxy_handler( WP_REST_Request $req ) {
 		return new WP_Error( 'not_configured', 'Brevo API key is not configured', [ 'status' => 503 ] );
 	}
 
-	/* 6. Sanitize attributes ,  string-keyed scalars only. */
+	/* 6. Sanitize attributes, string-keyed scalars only. */
 	$attrs = [];
 	foreach ( (array) $req->get_param( 'attrs' ) as $k => $v ) {
 		if ( ! is_scalar( $v ) ) continue;

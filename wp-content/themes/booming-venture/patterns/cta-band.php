@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: CTA band ,  Book a call
+ * Title: CTA band, Book a call
  * Slug: booming-venture/cta-band
  * Categories: booming-venture/cta
  * Viewport Width: 1400
@@ -10,7 +10,7 @@
 <section class="wp-block-group alignfull has-base-color has-brand-dark-gradient-background has-text-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
 	<!-- wp:heading {"textAlign":"center","level":2,"fontSize":"5xl"} --><h2 class="wp-block-heading has-text-align-center has-5-xl-font-size">Ready to accelerate your growth?</h2><!-- /wp:heading -->
 	<!-- wp:paragraph {"align":"center","fontSize":"xl"} -->
-	<p class="has-text-align-center has-xl-font-size">Book a free 30-minute strategy session ,  no pitch, just clarity on your biggest growth lever.</p>
+	<p class="has-text-align-center has-xl-font-size">Book a free 30-minute strategy session. No pitch, just clarity on your biggest growth lever.</p>
 	<!-- /wp:paragraph -->
 	<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
 	<div class="wp-block-buttons">

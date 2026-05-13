@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: UNIFY ,  Result stats (3-up)
+ * Title: UNIFY, Result stats (3-up)
  * Slug: booming-venture/unify-stats
  * Categories: booming-venture/landing, booming-venture/sections
  * Viewport Width: 1400

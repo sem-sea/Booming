@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: About ,  Our Story narrative
+ * Title: About, Our Story narrative
  * Slug: booming-venture/about-story
  * Categories: booming-venture/sections, booming-venture/landing
  * Viewport Width: 1400
@@ -22,9 +22,9 @@
 		<!-- wp:heading {"level":3,"fontSize":"3xl"} -->
 		<h3 class="wp-block-heading has-3-xl-font-size">Our Story</h3>
 		<!-- /wp:heading -->
-		<!-- wp:paragraph --><p>Founded in Rotterdam, Booming Venture emerged from a simple belief: every business deserves access to world-class marketing strategies and AI-powered solutions ,  no matter their size or industry. They deserve bold, data-driven strategies that scale fast. At Booming Venture, we help brands do exactly that: boom.</p><!-- /wp:paragraph -->
+		<!-- wp:paragraph --><p>Founded in Rotterdam, Booming Venture emerged from a simple belief: every business deserves access to world-class marketing strategies and AI-powered solutions, no matter their size or industry. They deserve bold, data-driven strategies that scale fast. At Booming Venture, we help brands do exactly that: boom.</p><!-- /wp:paragraph -->
 		<!-- wp:paragraph --><p>Our team of experts combines decades of experience in business growth, marketing optimization, and AI implementation to deliver measurable results for our clients across the Netherlands and beyond.</p><!-- /wp:paragraph -->
-		<!-- wp:paragraph --><p>We don&#8217;t just provide AI services ,  we act as your strategic partner, working alongside your team to unlock the full growth potential of your business.</p><!-- /wp:paragraph -->
+		<!-- wp:paragraph --><p>We don&#8217;t just provide AI services, we act as your strategic partner, working alongside your team to unlock the full growth potential of your business.</p><!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
 </section>

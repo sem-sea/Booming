@@ -71,7 +71,7 @@ add_action( 'init', function () {
 	] );
 
 	/* Post meta exposed to the block editor (for binding to the new
-	 * core/post-meta source ,  works without ACF). */
+	 * core/post-meta source, works without ACF). */
 	$meta = [
 		'service'      => [ '_bv_icon', '_bv_subtitle', '_bv_benefits', '_bv_cta_url', '_bv_cta_label' ],
 		'landing_page' => [ '_bv_hero_eyebrow', '_bv_hero_subtitle', '_bv_cta_url', '_bv_cta_label' ],

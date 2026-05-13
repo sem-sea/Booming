@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Testimonials ,  3-up
+ * Title: Testimonials, 3-up
  * Slug: booming-venture/testimonials
  * Categories: booming-venture/home, booming-venture/sections
  * Keywords: testimonials, quotes, social proof

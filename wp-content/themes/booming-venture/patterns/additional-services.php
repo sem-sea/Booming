@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Services ,  Additional services (4-up with pricing)
+ * Title: Services, Additional services (4-up with pricing)
  * Slug: booming-venture/additional-services
  * Categories: booming-venture/landing, booming-venture/sections
  * Viewport Width: 1400

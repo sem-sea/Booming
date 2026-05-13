@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Growth Guide ,  lead magnet band (with 2x2 features grid)
+ * Title: Growth Guide, lead magnet band (with 2x2 features grid)
  * Slug: booming-venture/growth-guide-cta
  * Categories: booming-venture/home, booming-venture/cta
  * Keywords: lead magnet, ebook, download
@@ -66,11 +66,17 @@ $img   = bv_image( 'growth-guide' );
 			</div>
 			<!-- /wp:html -->
 
-			<!-- wp:group {"style":{"border":{"radius":"1rem"},"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|40","bottom":"var:preset|spacing|30","left":"var:preset|spacing|40"}}},"backgroundColor":"base"} -->
-			<div class="wp-block-group has-base-background-color has-background" style="border-radius:1rem;padding:var(--wp--preset--spacing--30) var(--wp--preset--spacing--40)">
+			<!-- wp:group {"className":"bv-leadmagnet-card","style":{"border":{"radius":"1rem"},"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"backgroundColor":"base"} -->
+			<div class="wp-block-group bv-leadmagnet-card has-base-background-color has-background" style="border-radius:1rem;padding:var(--wp--preset--spacing--40)">
+				<!-- wp:heading {"level":3,"fontSize":"xl","textColor":"contrast"} -->
+				<h3 class="wp-block-heading has-contrast-color has-text-color has-xl-font-size">Get the free Growth Strategy Guide</h3>
+				<!-- /wp:heading -->
+				<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} -->
+				<p class="has-muted-color has-text-color has-sm-font-size">Frameworks, templates and real case studies, delivered in one PDF.</p>
+				<!-- /wp:paragraph -->
 				<!-- wp:shortcode -->[contact-form-7 id="growth-guide"]<!-- /wp:shortcode -->
 				<!-- wp:paragraph {"fontSize":"xs","textColor":"muted"} -->
-				<p class="has-muted-color has-text-color has-xs-font-size">No spam, unsubscribe anytime.</p>
+				<p class="has-muted-color has-text-color has-xs-font-size">✓ No spam, unsubscribe anytime.</p>
 				<!-- /wp:paragraph -->
 			</div>
 			<!-- /wp:group -->

@@ -1,6 +1,6 @@
 <?php
 /**
- * Lucide icon library ,  inline SVG.
+ * Lucide icon library, inline SVG.
  *
  * Lucide (https://lucide.dev/) is ISC-licensed, the modern fork of
  * Feather Icons. We inline the SVG so no JS runtime is needed and

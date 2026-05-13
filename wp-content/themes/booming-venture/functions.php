@@ -1,18 +1,18 @@
 <?php
 /**
- * Booming Venture ,  theme bootstrap.
+ * Booming Venture, theme bootstrap.
  *
  * @package BoomingVenture
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BV_THEME_VERSION', '1.5.9' );
+define( 'BV_THEME_VERSION', '1.6.0' );
 define( 'BV_THEME_DIR', get_template_directory() );
 define( 'BV_THEME_URI', get_template_directory_uri() );
 
 /**
- * Per-asset version string ,  uses filemtime() in dev so any CSS / JS
+ * Per-asset version string, uses filemtime() in dev so any CSS / JS
  * edit auto-busts the browser and proxy cache. Falls back to the
  * BV_THEME_VERSION constant if the file is unreadable.
  */

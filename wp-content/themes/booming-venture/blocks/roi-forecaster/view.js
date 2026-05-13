@@ -1,5 +1,5 @@
 /**
- * Booming Venture ,  ROI Forecaster
+ * Booming Venture, ROI Forecaster
  * Vanilla JS, zero deps. Projects revenue + ROI over N months.
  */
 (function () {
@@ -125,7 +125,7 @@
 			<div class="bv-roi__grid">
 				<aside class="bv-roi__inputs">
 					<h3>Your business</h3>
-					<p class="bv-roi__hint">Conservative estimates only ,  we model a linear ramp.</p>
+					<p class="bv-roi__hint">Conservative estimates only. We model a linear ramp.</p>
 					<label>Monthly qualified traffic
 						<input type="number" min="0" step="100" name="traffic" value="8000" inputmode="numeric">
 					</label>
@@ -196,7 +196,7 @@
 			out('cumRevSub').textContent   = `Baseline if you do nothing: ${fmt(r.baselineTotal, ccy)}`;
 			out('incremental').textContent = fmt(r.incremental, ccy);
 			out('roi').textContent         = fmtX(r.roiMultiple);
-			out('breakeven').textContent   = r.breakevenMonth ? `Break-even at month ${r.breakevenMonth}` : 'No break-even inside this horizon ,  extend the budget or uplift assumption.';
+			out('breakeven').textContent   = r.breakevenMonth ? `Break-even at month ${r.breakevenMonth}` : 'No break-even inside this horizon, extend the budget or uplift assumption.';
 			out('chart').innerHTML         = svgChart(r.series, ccy);
 
 			const rowStep = Math.max(1, Math.floor(r.series.length / 8));

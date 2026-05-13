@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: About ,  Core values (4-up)
+ * Title: About, Core values (4-up)
  * Slug: booming-venture/core-values
  * Categories: booming-venture/sections, booming-venture/landing
  * Viewport Width: 1400

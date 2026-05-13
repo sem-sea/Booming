@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Services ,  Our process (4 steps)
+ * Title: Services, Our process (4 steps)
  * Slug: booming-venture/process-steps
  * Categories: booming-venture/landing, booming-venture/sections
  * Viewport Width: 1400

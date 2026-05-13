@@ -1,21 +1,21 @@
 /**
- * Booming Venture ,  theme.css
+ * Booming Venture, theme.css
  * Visual layer on top of theme.json. Mobile-first. WCAG 2.2 AA.
  */
 
 /* ---- Mobile-proof foundations -------------------------------------- */
 
-/* Use dvh, not vh ,  fixes mobile URL-bar jumping (Safari 15.4+). */
+/* Use dvh, not vh, fixes mobile URL-bar jumping (Safari 15.4+). */
 html, body { min-height: 100dvh; }
 
-/* Kill horizontal overflow everywhere ,  single biggest mobile bug. */
+/* Kill horizontal overflow everywhere, single biggest mobile bug. */
 html, body { overflow-x: clip; }
 img, video, iframe, svg, embed, object { max-width: 100%; height: auto; }
 
 /* Long words / URLs break instead of forcing horizontal scroll. */
 h1, h2, h3, h4, h5, h6, p, li, a { overflow-wrap: anywhere; }
 
-/* Form inputs ≥16px on iOS ,  prevents auto-zoom on focus. */
+/* Form inputs ≥16px on iOS, prevents auto-zoom on focus. */
 input, textarea, select, button { font-size: max(1rem, 16px); font-family: inherit; }
 
 /* Touch targets: 44×44 (WCAG 2.5.5 AAA / Apple HIG). Apply min, not exact. */
@@ -47,7 +47,7 @@ html { scroll-behavior: smooth; }
 
 body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
 
-/* Visible focus ring ,  WCAG 2.4.7. */
+/* Visible focus ring, WCAG 2.4.7. */
 :focus-visible { outline: 2px solid var(--wp--preset--color--booming-600); outline-offset: 2px; border-radius: 4px; }
 
 /* Container-query opt-in for cards (component-level responsive). */
@@ -88,7 +88,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	color: transparent;
 }
 
-/* ---- Hero ,  animated brand backdrop -------------------------------
+/* ---- Hero, animated brand backdrop -------------------------------
    Two morphing gradient blobs slowly orbit behind the hero content,
    plus a canvas particle layer (added by theme.js). The blobs are
    pure CSS, run at compositor-only properties (transform / opacity),
@@ -112,7 +112,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	animation: bv-blob-morph 34s ease-in-out infinite reverse;
 }
 
-/* Third subtle accent shape ,  gradient blend of both brand colours. */
+/* Third subtle accent shape, gradient blend of both brand colours. */
 .bv-hero > .bv-hero-orb-3 {
 	position: absolute; pointer-events: none; z-index: -1;
 	top: 40%; left: 45%;
@@ -369,7 +369,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	color: var(--wp--preset--color--booming-600);
 	display: block; margin-bottom: 0.5rem;
 }
-/* Connector lines between steps ,  desktop only. */
+/* Connector lines between steps, desktop only. */
 @media (min-width: 768px) {
 	.bv-steps > *:not(:last-child)::after {
 		content: '';
@@ -537,7 +537,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 
 
 /* ============================================================
- * Contact Form 7 ,  branded styling
+ * Contact Form 7, branded styling
  * Overrides CF7's defaults (brown spinner, p-wrapping, red tooltip,
  * inline border colours on response output) and aligns inputs with
  * the theme's design tokens.
@@ -694,13 +694,13 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 /* Submitting state on the form: dim controls, prevent double-clicks. */
 .wpcf7-form.submitting .wpcf7-form-control { opacity: 0.7; pointer-events: none; }
 
-/* Newsletter-inline form variant ,  used in the footer. Stacks tighter. */
+/* Newsletter-inline form variant, used in the footer. Stacks tighter. */
 .bv-footer .wpcf7-form,
 .bv-footer-newsletter .wpcf7-form { gap: 0.625rem; }
 .bv-footer .wpcf7-form-control,
 .bv-footer-newsletter .wpcf7-form-control { font-size: 0.9375rem; }
 
-/* Horizontal inline form (email + button on one row) ,  applied via the
+/* Horizontal inline form (email + button on one row), applied via the
    .bv-form-inline wrapper class in the newsletter-inline pattern. */
 .bv-form-inline .wpcf7-form {
 	grid-template-columns: 1fr;
@@ -730,7 +730,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 /* Print: hide forms when printing pages (Funnel Calc / ROI PDF export). */
 @media print { .wpcf7 { display: none; } }
 
-/* GEO answer capsule (Bible §5) ,  visually distinct paragraph that lives
+/* GEO answer capsule (Bible §5), visually distinct paragraph that lives
    immediately after each question-shaped H2. The visual cue also signals
    "definitive language" passages to the eye, matching the AI-cited
    linguistic patterns (Indig Feb 2026). */
@@ -782,7 +782,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 
 /* =================================================================
- * Lovable design system ,  exact recreation of the shadcn/ui look
+ * Lovable design system, exact recreation of the shadcn/ui look
  * the original site used (Navbar.tsx, button.tsx, index.css).
  * Variables map directly to the Tailwind tokens Lovable defined.
  * ================================================================= */
@@ -796,10 +796,10 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	--bv-shadow-lg: 0 12px 32px rgba(15,23,42,0.10);
 	--bv-shadow-cta-glow: 0 0 0 1px rgba(2,132,199,0.15), 0 20px 40px -10px rgba(2,132,199,0.35);
 	--bv-trans:     0.2s ease;
-	--bv-nav-h:     4.5rem; /* 72px ,  Lovable's sticky nav height */
+	--bv-nav-h:     4.5rem; /* 72px, Lovable's sticky nav height */
 }
 
-/* ---- Sticky header ,  pixel match to Navbar.tsx ------------------- */
+/* ---- Sticky header, pixel match to Navbar.tsx ------------------- */
 .bv-header {
 	position: sticky; top: 0; left: 0; right: 0;
 	z-index: 50;
@@ -827,7 +827,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 .bv-brand-wrap .wp-block-site-logo img { max-height: 40px; width: auto; }
 
-/* Brand lockup: BoomingVenture in two colours ,  exact Lovable look.
+/* Brand lockup: BoomingVenture in two colours, exact Lovable look.
  *
  * Uses inline-block (not inline-flex) so the descender on "g" never
  * gets clipped by flex baseline alignment. Padding + line-height give
@@ -912,7 +912,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .bv-header__cta { margin: 0; }
 .bv-header__cta .wp-block-button { margin: 0; }
 
-/* ============== Button system ,  exact Lovable variants ============== */
+/* ============== Button system, exact Lovable variants ============== */
 
 /* Default WP button override: behaves like Lovable's shadcn `default`
    (bg-primary, text-primary-foreground, h-10 px-4, rounded-md). */
@@ -945,7 +945,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	outline-offset: 2px;
 }
 
-/* Outline variant ,  border-2 border-black, hover swap to black bg white text */
+/* Outline variant, border-2 border-black, hover swap to black bg white text */
 .is-style-outline > .wp-block-button__link.wp-element-button,
 .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button {
 	background: transparent !important;
@@ -967,7 +967,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	box-shadow: 0 4px 12px -2px rgba(2,132,199,0.25);
 }
 
-/* Hero gradient CTA (used inside .bv-hero) ,  bigger, gradient, glow */
+/* Hero gradient CTA (used inside .bv-hero), bigger, gradient, glow */
 .bv-hero .wp-block-button .wp-block-button__link.wp-element-button,
 .bv-cta-gradient .wp-block-button__link.wp-element-button,
 .wp-block-button.bv-cta-gradient .wp-block-button__link.wp-element-button {
@@ -1004,16 +1004,18 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 .has-brand-gradient-background .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button,
 .has-brand-dark-gradient-background .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button {
-	background: rgba(255,255,255,0.08) !important;
+	background: rgba(255,255,255,0.16) !important;
 	color: #fff !important;
-	border-color: rgba(255,255,255,0.85) !important;
-	border-width: 2px !important;
-	backdrop-filter: blur(4px);
-	-webkit-backdrop-filter: blur(4px);
-	font-weight: 600 !important;
-	text-shadow: 0 1px 0 rgba(0,0,0,0.15);
-	box-shadow: 0 1px 0 rgba(255,255,255,0.10) inset, 0 8px 20px -10px rgba(0,0,0,0.35);
-	transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+	border: 2px solid #ffffff !important;
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	font-weight: 700 !important;
+	letter-spacing: 0.01em;
+	padding: 0.75rem 1.5rem !important;
+	min-height: 48px;
+	text-shadow: 0 1px 2px rgba(0,0,0,0.25);
+	box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset, 0 10px 24px -10px rgba(0,0,0,0.45);
+	transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
 }
 .has-brand-gradient-background .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button:hover,
 .has-brand-dark-gradient-background .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button:hover {
@@ -1053,7 +1055,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 
 
 /* =================================================================
- * Floating action buttons ,  Lovable-style with Lucide icons,
+ * Floating action buttons, Lovable-style with Lucide icons,
  * hover label pills, and a subtle pulse on the contact CTA.
  * ================================================================= */
 
@@ -1100,7 +1102,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 .bv-fab svg { display: block; }
 
-/* Accent variant (ROI Forecaster ,  uses dark venture gradient). */
+/* Accent variant (ROI Forecaster, uses dark venture gradient). */
 .bv-fab.bv-fab--accent {
 	background: linear-gradient(135deg, var(--wp--preset--color--venture-600), var(--wp--preset--color--booming-700));
 }
@@ -1148,7 +1150,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	transform: translate(0, -50%) rotate(45deg);
 }
 
-/* Pulse animation on the contact FAB only ,  draws attention without
+/* Pulse animation on the contact FAB only, draws attention without
  * being annoying. Disabled under prefers-reduced-motion. */
 .bv-fab--pulse {
 	animation: bv-fab-pulse 2.4s ease-in-out infinite;
@@ -1177,7 +1179,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
  * ================================================================= */
 
 :root {
-	/* Section vertical rhythm ,  every section uses these. */
+	/* Section vertical rhythm, every section uses these. */
 	--bv-section-py-lg: clamp(4rem, 6vw, 6rem);   /* 64, 96px */
 	--bv-section-py-md: clamp(3rem, 5vw, 4.5rem); /* 48, 72px */
 	--bv-section-py-sm: clamp(2rem, 4vw, 3rem);   /* 32, 48px */
@@ -1201,7 +1203,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	--bv-side-pad: clamp(1rem, 4vw, 2rem);
 }
 
-/* Cap every alignwide block at 1280px ,  keeps every section the
+/* Cap every alignwide block at 1280px, keeps every section the
  * exact same width so columns line up between sections. */
 :root .wp-block-group .alignwide,
 :root .wp-block-columns.alignwide,
@@ -1274,7 +1276,7 @@ section.wp-block-group > .wp-block-group:first-child {
 	.wp-block-columns.alignwide { gap: 2rem; }
 }
 
-/* Hero stat tiles ,  explicit 2x2 grid with consistent tile size. */
+/* Hero stat tiles, explicit 2x2 grid with consistent tile size. */
 .bv-hero-card .wp-block-columns .wp-block-column {
 	flex-basis: calc(50% - 0.5rem);
 }
@@ -1324,7 +1326,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 }
 
 /* =================================================================
- * Growth-guide-cta ,  2x2 features sub-grid (matches Lovable layout)
+ * Growth-guide-cta, 2x2 features sub-grid (matches Lovable layout)
  * ================================================================= */
 .bv-gg-features {
 	display: grid;
@@ -1437,7 +1439,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
  * Blog overview (templates/home.html + templates/archive.html)
  * ================================================================= */
 
-/* Hero on the blog index ,  gradient backdrop, big headline, signup form */
+/* Hero on the blog index, gradient backdrop, big headline, signup form */
 .bv-blog-hero {
 	position: relative;
 	text-align: center;
@@ -1453,7 +1455,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 }
 .bv-blog-hero__form { margin-top: 2rem; }
 
-/* Grid container ,  3 columns desktop, 2 tablet, 1 mobile, 1.5rem gap */
+/* Grid container, 3 columns desktop, 2 tablet, 1 mobile, 1.5rem gap */
 .wp-block-post-template.bv-blog-grid,
 .wp-block-post-template.is-layout-grid.bv-blog-grid {
 	gap: 1.5rem !important;
@@ -1473,7 +1475,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 	}
 }
 
-/* Individual post card ,  clean, hover-lift, brand on hover */
+/* Individual post card, clean, hover-lift, brand on hover */
 .bv-post-card {
 	overflow: hidden !important;
 	transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -1499,7 +1501,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 }
 .bv-post-card:hover .wp-block-post-featured-image img { transform: scale(1.04); }
 
-/* Placeholder for posts without a featured image ,  gradient fallback */
+/* Placeholder for posts without a featured image, gradient fallback */
 .bv-post-card .wp-block-post-featured-image:empty,
 .bv-post-card:not(:has(.wp-block-post-featured-image img))::before {
 	content: '';
@@ -1629,7 +1631,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 }
 
 /* =================================================================
- * Blog overview polish ,  pixel match to Lovable Blog.tsx
+ * Blog overview polish, pixel match to Lovable Blog.tsx
  * ================================================================= */
 
 .bv-blog-hero__title {
@@ -1706,7 +1708,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 }
 .bv-post-card__meta > * { margin: 0 !important; }
 
-/* Category badge ,  gradient pill */
+/* Category badge, gradient pill */
 .bv-post-card__badge,
 .bv-post-card__meta .wp-block-post-terms {
 	display: inline-flex !important;
@@ -1805,7 +1807,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 }
 
 /* =================================================================
- * Hero growth-guide form card ,  make sure the white background and
+ * Hero growth-guide form card, make sure the white background and
  * dark text always win against the hero gradient parent.
  * ================================================================= */
 .bv-hero .bv-hero-form,
@@ -1834,7 +1836,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 }
 
 /* =================================================================
- * Footer social icons ,  perfectly centre the SVG inside the circle.
+ * Footer social icons, perfectly centre the SVG inside the circle.
  * Core wp-block-social-link styles sometimes left the icon offset
  * inside the pill when iconBackgroundColor is set.
  * ================================================================= */

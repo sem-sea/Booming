@@ -1,5 +1,5 @@
 /**
- * Booming Venture ,  Funnel Calculator block (editor side).
+ * Booming Venture, Funnel Calculator block (editor side).
  * Renders a static preview in the editor; the real app runs on the front end.
  */
 (function (wp) {
@@ -46,7 +46,7 @@
 					'div',
 					blockProps,
 					el('strong', null, '📉 Funnel Leak Calculator'),
-					el('p', null, __('Interactive calculator ,  renders on the front end. Use the sidebar to set currency.'))
+					el('p', null, __('Interactive calculator, renders on the front end. Use the sidebar to set currency.'))
 				)
 			);
 		},
