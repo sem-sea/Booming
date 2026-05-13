@@ -24,7 +24,7 @@ const BV_INSTALL_FLAG    = 'bv_content_imported';
  * new posts, new patterns wired into existing pages). The install hook
  * re-runs the WXR import on the next activation when the stored value
  * does not match this constant. */
-const BV_INSTALL_VERSION = '1.4.0';
+const BV_INSTALL_VERSION = '1.5.2';
 
 /* Run after theme activation (priority 20 = after setup hooks). */
 add_action( 'after_switch_theme', 'bv_run_install', 20 );

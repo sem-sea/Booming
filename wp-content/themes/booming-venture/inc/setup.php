@@ -96,8 +96,16 @@ add_action( 'wp_head', function () {
  * resolves, so the markup never breaks.
  */
 function bv_image( string $slug ): string {
-	$map = (array) get_option( 'bv_media_map', [] );
-	$val = isset( $map[ $slug ] ) ? trim( (string) $map[ $slug ] ) : '';
+	/* CRITICAL: merge defaults inline. The option_bv_media_map filter
+	 * only fires when the option row exists in wp_options; on a fresh
+	 * install (or before anyone saves Settings -> Booming Venture for
+	 * the first time) the row does not exist, the filter does not fire,
+	 * and bv_image() previously fell back to theme assets that may not
+	 * exist. Merging inline guarantees the defaults always apply. */
+	$defaults = function_exists( 'bv_media_defaults' ) ? bv_media_defaults() : [];
+	$stored   = (array) get_option( 'bv_media_map', [] );
+	$map      = array_merge( $defaults, $stored );
+	$val      = isset( $map[ $slug ] ) ? trim( (string) $map[ $slug ] ) : '';
 
 	if ( $val === '' ) {
 		return esc_url( BV_THEME_URI . '/assets/images/' . $slug . '.jpg' );

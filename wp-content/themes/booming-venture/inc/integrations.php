@@ -251,9 +251,17 @@ add_filter( 'pre_option_bv_media_map', function ( $pre ) {
 	return array_merge( bv_media_defaults(), (array) $stored );
 } );
 
-/* Surface defaults transparently when no option row exists yet. */
+/* Surface defaults transparently when the option row exists. */
 add_filter( 'option_bv_media_map', function ( $value ) {
 	return array_merge( bv_media_defaults(), (array) $value );
+} );
+
+/* Surface defaults transparently when the option row does NOT yet exist.
+ * WordPress fires this filter, not option_<name>, when get_option finds
+ * no row in wp_options. Without it, a fresh install sees zero defaults
+ * and every brand image breaks. */
+add_filter( 'default_option_bv_media_map', function ( $default_value ) {
+	return array_merge( bv_media_defaults(), (array) $default_value );
 } );
 
 function bv_settings_page(): void {
