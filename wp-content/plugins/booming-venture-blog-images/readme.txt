@@ -4,7 +4,7 @@ Tags: featured image, media library, hero, blog overview, thumbnails
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,14 @@ It registers two image sizes but does not regenerate existing uploads. To resize
 No. The hero image uses `loading=eager fetchpriority=high` so it counts as the LCP candidate. The card thumbnails are `loading=lazy decoding=async`.
 
 == Changelog ==
+
+= 1.1.0 =
+* NEW: Tools -> Blog Images Pool admin page.
+* You pick a pool of allowed images from the Media Library (wp.media multi-select).
+* "Assign random images now" button: walks every published blog post; for any post WITHOUT a Featured image, picks one at random from the pool and sets it. Manual picks are never overwritten.
+* "Re-randomise" button: re-rolls only the posts the plugin previously random-assigned. Manual picks are protected forever , the moment you change a Featured image yourself, the random flag is dropped automatically.
+* Posts list table column: thumbnail + "(random)" / "(manual)" tag so you can scan which posts got auto-assigned vs manual.
+* Manual override works the standard way: open the post editor, click the Featured image panel, pick a different image from the Media Library, Update. The plugin will never touch that post again on subsequent rerolls.
 
 = 1.0.0 =
 * Initial release.
