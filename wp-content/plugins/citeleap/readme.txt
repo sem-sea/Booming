@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,13 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 1.5.0 =
+* NEW: Per-row "Pin datetime" control on every queued topic. Set a specific publish date+time via a native datetime-local input. The auto-tick respects per-post pins ahead of the auto-computed slot, so you can schedule a specific topic for "next Tuesday 10:00 CET" without disturbing the rest of the cadence. Clear the field and save to release the pin.
+* NEW: "Next / Scheduled for" column on the Planner queue table shows what WILL happen to each queued row: a purple "pinned: " timestamp if an override is set, a blue "next: " timestamp from the auto-tick if auto mode is on, or "auto mode off" if not. Operator can see at a glance whether a topic is in flight.
+* NEW: CiteLeap_Scheduler::eta_for( $row, $schedule ) helper exposes the resolved ETA per row for any UI / external integration.
+* CHANGE: tick_new_content scheduler logic. Per-row publish_at overrides win first. Auto-generated queue items continue to use priority desc + created_at asc (FIFO within priority) for ordering. Pinned rows are excluded from the normal queue-empty top-up so a pin never blocks brainstorming.
+* DOCS: behaviour clarified in HOW_IT_WORKS.md , manually-queued AND LLM-generated topics are both processed by the auto-tick.
 
 = 1.4.0 =
 * NEW: three-state Refresh mode (Off / Draft to pending review / Live overwrite). Pending review parks the proposed update in post meta until you Approve or Reject from the Planner. Live keeps the v1.3 immediate-overwrite behaviour.

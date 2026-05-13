@@ -46,6 +46,24 @@ class CiteLeap_Scheduler {
 		}
 	}
 
+	/**
+	 * What WILL happen to this queued row if nothing changes?
+	 * Used by the Planner to show "Next scheduled for ..." on each row.
+	 *
+	 * Returns a unix timestamp (0 if mode is off + no per-post override).
+	 */
+	public static function eta_for( array $row, ?array $schedule = null ): int {
+		$schedule = $schedule ?? (array) get_option( CITELEAP_OPTION_SCHEDULE, [] );
+		$mode     = self::auto_mode( $schedule );
+		if ( ! empty( $row['publish_at'] ) ) return (int) strtotime( (string) $row['publish_at'] );
+		if ( 'off' === $mode ) return 0;
+		if ( 'draft' === $mode ) {
+			$ts = wp_next_scheduled( CITELEAP_CRON_HOURLY );
+			return $ts ? (int) $ts : time() + HOUR_IN_SECONDS;
+		}
+		return self::next_slot( $schedule );
+	}
+
 	public static function auto_mode( ?array $schedule = null ): string {
 		$schedule = $schedule ?? (array) get_option( CITELEAP_OPTION_SCHEDULE, [] );
 		$m = (string) ( $schedule['auto_mode'] ?? '' );
@@ -55,32 +73,50 @@ class CiteLeap_Scheduler {
 
 	private static function tick_new_content( array $schedule, string $mode = 'publish' ): void {
 
-		/* In 'draft' mode we do not check the publish slot ,
-		 * we keep refilling the draft queue at the configured cadence
-		 * regardless of slot time. In 'publish' mode the next slot
-		 * gates how often we draft + schedule. */
-		if ( 'publish' === $mode ) {
-			$next_slot = self::next_slot( $schedule );
-			if ( $next_slot > time() ) return;
+		/* PER-POST OVERRIDE FIRST. Any queued row with a publish_at
+		 * timestamp at or before "now" wins, regardless of mode + slot.
+		 * Sorted by publish_at ascending so the oldest due slot fires
+		 * first. This is how the operator pins a specific topic to a
+		 * specific datetime. */
+		$queue   = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
+		$pinned  = [];
+		foreach ( $queue as $row ) {
+			if ( ( $row['status'] ?? '' ) !== 'queued' ) continue;
+			$pa = isset( $row['publish_at'] ) ? strtotime( (string) $row['publish_at'] ) : 0;
+			if ( $pa > 0 && $pa <= time() ) $pinned[] = $row + [ '_pa' => $pa ];
+		}
+		if ( $pinned ) {
+			usort( $pinned, fn( $a, $b ) => $a['_pa'] <=> $b['_pa'] );
+			$idea = $pinned[0];
+			$next_slot = (int) $idea['_pa'];
 		} else {
-			/* Throttle 'draft' mode to one draft per tick max. */
-			$next_slot = time();
+			/* In 'publish' mode the next slot gates how often we
+			 * draft+schedule. In 'draft' mode the tick runs every hour
+			 * regardless of slot. */
+			if ( 'publish' === $mode ) {
+				$next_slot = self::next_slot( $schedule );
+				if ( $next_slot > time() ) return;
+			} else {
+				$next_slot = time();
+			}
+			/* Make sure we have ideas. */
+			$queued = array_values( array_filter( $queue, fn( $r ) => ( $r['status'] ?? '' ) === 'queued' && empty( $r['publish_at'] ) ) );
+			if ( empty( $queued ) ) {
+				$gen = CiteLeap_Generator::generate_ideas( max( 5, (int) ( $schedule['posts_per_week'] ?? 3 ) ) );
+				if ( ! $gen['ok'] ) return;
+				$queue  = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
+				$queued = array_values( array_filter( $queue, fn( $r ) => ( $r['status'] ?? '' ) === 'queued' && empty( $r['publish_at'] ) ) );
+				if ( empty( $queued ) ) return;
+			}
+			/* Sort: priority desc, then created_at asc (FIFO within same priority). */
+			usort( $queued, function ( $a, $b ) {
+				$pa = (int) ( $a['priority'] ?? 5 );
+				$pb = (int) ( $b['priority'] ?? 5 );
+				if ( $pa !== $pb ) return $pb <=> $pa;
+				return strcmp( (string) ( $a['created_at'] ?? '' ), (string) ( $b['created_at'] ?? '' ) );
+			} );
+			$idea = $queued[0];
 		}
-
-		/* Make sure we have ideas. */
-		$queue = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
-		$queued = array_values( array_filter( $queue, fn( $r ) => ( $r['status'] ?? '' ) === 'queued' ) );
-		if ( empty( $queued ) ) {
-			$gen = CiteLeap_Generator::generate_ideas( max( 5, (int) ( $schedule['posts_per_week'] ?? 3 ) ) );
-			if ( ! $gen['ok'] ) return;
-			$queue = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
-			$queued = array_values( array_filter( $queue, fn( $r ) => ( $r['status'] ?? '' ) === 'queued' ) );
-			if ( empty( $queued ) ) return;
-		}
-
-		/* Pick the highest-priority queued idea. */
-		usort( $queued, fn( $a, $b ) => ( (int) ( $b['priority'] ?? 5 ) ) <=> ( (int) ( $a['priority'] ?? 5 ) ) );
-		$idea = $queued[0];
 
 		$res = CiteLeap_Generator::write_post_from_idea( (string) $idea['id'] );
 		if ( ! $res['ok'] || ! $res['post_id'] ) return;

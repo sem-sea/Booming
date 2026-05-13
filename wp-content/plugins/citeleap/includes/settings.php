@@ -94,6 +94,8 @@ function citeleap_render_flash(): void {
 		$text = __( 'Refresh rejected. Live post unchanged.', 'citeleap' );
 	} elseif ( 'reset' === $msg ) {
 		$text = __( 'Stuck refresh reset to failed. You can retry it.', 'citeleap' );
+	} elseif ( 'pinned' === $msg ) {
+		$text = __( 'Publish datetime pinned. The auto-tick will pick this topic at exactly that time.', 'citeleap' );
 	}
 	$class = ( 'error' === $kind ) ? 'notice-error' : 'notice-success';
 	echo '<div class="notice ' . esc_attr( $class ) . ' is-dismissible" style="margin-top:1rem;"><p>' . esc_html( $text ) . '</p></div>';

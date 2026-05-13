@@ -116,12 +116,12 @@ class CiteLeap_Planner {
 			<table class="widefat striped">
 				<thead>
 					<tr>
-						<th style="width:35%;"><?php echo esc_html__( 'Title', 'citeleap' ); ?></th>
+						<th style="width:32%;"><?php echo esc_html__( 'Title', 'citeleap' ); ?></th>
 						<th><?php echo esc_html__( 'Slug', 'citeleap' ); ?></th>
-						<th style="width:90px;"><?php echo esc_html__( 'Priority', 'citeleap' ); ?></th>
+						<th style="width:80px;"><?php echo esc_html__( 'Priority', 'citeleap' ); ?></th>
 						<th style="width:110px;"><?php echo esc_html__( 'Status', 'citeleap' ); ?></th>
-						<th style="width:160px;"><?php echo esc_html__( 'Scheduled for', 'citeleap' ); ?></th>
-						<th style="width:240px;"><?php echo esc_html__( 'Actions', 'citeleap' ); ?></th>
+						<th style="width:170px;"><?php echo esc_html__( 'Next / Scheduled for', 'citeleap' ); ?></th>
+						<th style="width:320px;"><?php echo esc_html__( 'Actions', 'citeleap' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -178,14 +178,45 @@ class CiteLeap_Planner {
 							echo '<span style="color:' . esc_attr( $color ) . ';font-weight:600;">' . esc_html( str_replace( '_', ' ', $status ) ) . '</span>';
 							?>
 						</td>
-						<td><?php echo esc_html( (string) ( $row['scheduled_for'] ?? $row['finished_at'] ?? '' ) ); ?></td>
 						<td>
-							<?php if ( 'queued' === $status ) : ?>
+							<?php
+							if ( ! empty( $row['scheduled_for'] ) ) {
+								echo esc_html( (string) $row['scheduled_for'] );
+							} elseif ( ! empty( $row['finished_at'] ) ) {
+								echo esc_html( (string) $row['finished_at'] );
+							} elseif ( 'queued' === $status ) {
+								$eta = CiteLeap_Scheduler::eta_for( $row, $schedule );
+								if ( $eta > 0 ) {
+									$pinned = ! empty( $row['publish_at'] );
+									echo '<small style="color:' . ( $pinned ? '#9333ea' : '#0369a1' ) . ';font-weight:600;">' . ( $pinned ? esc_html__( 'pinned: ', 'citeleap' ) : esc_html__( 'next: ', 'citeleap' ) ) . '</small>';
+									echo esc_html( citeleap_format( $eta ) );
+								} else {
+									echo '<small style="color:#9ca3af;">' . esc_html__( 'auto mode off', 'citeleap' ) . '</small>';
+								}
+							}
+							?>
+						</td>
+						<td>
+							<?php if ( 'queued' === $status ) :
+								$pinned_at = (string) ( $row['publish_at'] ?? '' );
+								$pinned_local = '';
+								if ( $pinned_at ) {
+									$pl = ( new DateTimeImmutable( $pinned_at, new DateTimeZone( 'UTC' ) ) )->setTimezone( citeleap_tz() );
+									$pinned_local = $pl->format( 'Y-m-d\TH:i' );
+								}
+							?>
 								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
 									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
 									<input type="hidden" name="action" value="citeleap_write_idea">
 									<input type="hidden" name="idea_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
 									<button class="button button-small"><?php echo esc_html__( 'Write draft', 'citeleap' ); ?></button>
+								</form>
+								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-flex;align-items:center;gap:0.25rem;">
+									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+									<input type="hidden" name="action" value="citeleap_pin_datetime">
+									<input type="hidden" name="idea_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
+									<input type="datetime-local" name="publish_at" value="<?php echo esc_attr( $pinned_local ); ?>" style="font-size:11px;padding:1px 2px;">
+									<button class="button button-small" title="<?php echo esc_attr__( 'Pin a specific publish datetime for this topic. The auto-tick will draft + schedule it for exactly that time. Clear the field to release the pin.', 'citeleap' ); ?>"><?php echo esc_html__( 'Pin', 'citeleap' ); ?></button>
 								</form>
 								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
 									<?php wp_nonce_field( CITELEAP_NONCE ); ?>
@@ -291,5 +322,32 @@ add_action( 'admin_post_citeleap_add_topics', function () {
 	$res    = CiteLeap_Generator::add_manual_topics( $lines );
 	$msg    = sprintf( 'topics:%d:%d:%d', $res['added'], $res['skipped_dupes'], $res['total_in'] );
 	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'planner', 'citeleap_msg' => $msg ], admin_url( 'admin.php' ) ) );
+	exit;
+} );
+
+/* Set or clear the per-row publish_at override. */
+add_action( 'admin_post_citeleap_pin_datetime', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( CITELEAP_NONCE );
+	$idea_id = sanitize_text_field( wp_unslash( (string) ( $_POST['idea_id'] ?? '' ) ) );
+	$dt      = sanitize_text_field( wp_unslash( (string) ( $_POST['publish_at'] ?? '' ) ) );
+	$queue   = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
+	$found   = false;
+	foreach ( $queue as $i => $row ) {
+		if ( ( $row['id'] ?? '' ) !== $idea_id ) continue;
+		if ( '' === $dt ) {
+			unset( $queue[ $i ]['publish_at'] );
+		} else {
+			$ts = strtotime( $dt );
+			if ( $ts > 0 ) $queue[ $i ]['publish_at'] = gmdate( 'Y-m-d H:i:s', $ts );
+		}
+		$found = true;
+		break;
+	}
+	if ( $found ) {
+		update_option( CITELEAP_OPTION_QUEUE, array_values( $queue ), false );
+		CiteLeap_Log::add( 'pin_datetime', $idea_id . ' -> ' . ( $dt ?: 'cleared' ), 'info' );
+	}
+	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'planner', 'citeleap_msg' => 'pinned' ], admin_url( 'admin.php' ) ) );
 	exit;
 } );
