@@ -25,13 +25,21 @@ defined( 'ABSPATH' ) || exit;
  * since CF7 5.7, numeric post IDs still accepted).
  */
 function bv_cf7_slug_map(): array {
+	/* Hash IDs are the live CF7 form IDs:
+	 *   Contact      = 231533b
+	 *   Newsletter   = 6c25a82
+	 *   Growth Guide = e46231e
+	 * Pages that do not have their own CF7 form fall back to the
+	 * Contact form, which is the natural enquiry surface for the
+	 * Boardroom Quickscan landing page and the Head of Growth
+	 * programme page. Override per-slug in Settings -> Booming Venture. */
 	$default = [
 		'contact'           => '231533b',
 		'newsletter'        => '6c25a82',
 		'newsletter-inline' => '6c25a82',
 		'growth-guide'      => 'e46231e',
-		'quickscan'         => '',
-		'head-of-growth'    => '',
+		'quickscan'         => '231533b', // fall back to Contact form
+		'head-of-growth'    => '231533b', // fall back to Contact form
 	];
 	$map = (array) get_option( 'bv_cf7_map', [] );
 	if ( defined( 'BV_CF7_MAP' ) && is_array( BV_CF7_MAP ) ) {
