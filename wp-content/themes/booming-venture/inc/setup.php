@@ -62,6 +62,16 @@ add_action( 'wp_head', function () {
 	echo '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">' . "\n";
 	echo '<meta name="theme-color" content="#0284c7">' . "\n";
 	echo '<meta name="color-scheme" content="light">' . "\n";
+
+	/* Diagnostic markers. Lets the operator (and me) confirm exactly which
+	 * build is live by viewing page source. If these say 1.0.0 after an
+	 * upload, the upload did not land. If they say 1.5.5 but the page
+	 * still looks broken, the install ran but the page hit a server-side
+	 * cache. Either way, the source of truth is right here in the HTML. */
+	$installed_v = (string) get_option( 'bv_content_imported', 'never-installed' );
+	echo '<meta name="bv-theme-version" content="' . esc_attr( BV_THEME_VERSION ) . '">' . "\n";
+	echo '<meta name="bv-install-version" content="' . esc_attr( $installed_v ) . '">' . "\n";
+	echo "<!-- Booming Venture theme " . esc_html( BV_THEME_VERSION ) . " | install-flag=" . esc_html( $installed_v ) . " -->\n";
 }, 0 );
 
 /* Favicon / site icon ,  falls back to the uploaded brand mark on Strato
