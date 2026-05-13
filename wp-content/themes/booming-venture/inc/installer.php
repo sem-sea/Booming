@@ -175,19 +175,24 @@ function bv_import_wxr(): bool {
 
 		$existing = get_page_by_path( $slug, OBJECT, $post_type );
 		if ( $existing ) {
-			if ( $is_structural ) {
+			if ( $is_structural && $existing->ID ) {
 				/* Refresh theme-owned structural page content so pattern
 				 * roster updates (e.g. new about-founder pattern) take
-				 * effect on every install-version bump. */
-				wp_update_post( [
-					'ID'           => $existing->ID,
-					'post_content' => $content,
-					'post_excerpt' => $excerpt,
-				] );
-				foreach ( $wp->postmeta as $meta ) {
-					if ( '_wp_page_template' === (string) $meta->meta_key ) {
-						update_post_meta( $existing->ID, '_wp_page_template', (string) $meta->meta_value );
+				 * effect on every install-version bump. Wrapped in a
+				 * try/catch so a single bad row never breaks activation. */
+				try {
+					wp_update_post( [
+						'ID'           => $existing->ID,
+						'post_content' => $content,
+						'post_excerpt' => $excerpt,
+					] );
+					foreach ( $wp->postmeta as $meta ) {
+						if ( '_wp_page_template' === (string) $meta->meta_key ) {
+							update_post_meta( $existing->ID, '_wp_page_template', (string) $meta->meta_value );
+						}
 					}
+				} catch ( \Throwable $e ) {
+					/* swallow ,  install must not break runtime */
 				}
 			}
 			continue;

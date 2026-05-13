@@ -166,25 +166,24 @@ add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
 	$mailto       = 'mailto:info@boomingventure.com?subject=' . rawurlencode( $mail_subject );
 	$action       = esc_url( $mailto );
 
-	ob_start();
-	if ( current_user_can( 'edit_posts' ) ) : ?>
-		<div class="bv-form-missing" style="padding:0.75rem 1rem;margin:0 0 0.75rem;border:2px dashed #fca5a5;border-radius:0.5rem;background:#fef2f2;color:#7f1d1d;font-size:0.875rem;line-height:1.5">
-			<strong>Admin-only notice:</strong> CF7 form <code><?php echo esc_html( $id_raw ); ?></code> not found.
-			Create it (Contact &rarr; Contact Forms) and name it <code><?php echo esc_html( $pretty ); ?></code>,
-			or paste its hash id under <strong>Settings &rarr; Booming Venture &rarr; Forms</strong>.
-			The visitor-facing fallback below is rendering in the meantime.
-		</div>
-	<?php endif; ?>
-	<form class="bv-form-fallback" method="get" action="<?php echo $action; ?>" novalidate>
-		<label class="bv-form-fallback__label" for="bv-ff-<?php echo esc_attr( $slug ); ?>">Your work email</label>
-		<div class="bv-form-fallback__row">
-			<input type="email" id="bv-ff-<?php echo esc_attr( $slug ); ?>" name="email" required placeholder="you@company.com" autocomplete="email" inputmode="email">
-			<button type="submit" class="bv-form-fallback__btn">Send</button>
-		</div>
-		<p class="bv-form-fallback__note">Opens your email app pre-filled. Or write to <a href="mailto:info@boomingventure.com">info@boomingventure.com</a> directly.</p>
-	</form>
-	<?php
-	return ob_get_clean();
+	$out = '';
+	if ( function_exists( 'current_user_can' ) && current_user_can( 'edit_posts' ) ) {
+		$out .= '<div class="bv-form-missing" style="padding:0.75rem 1rem;margin:0 0 0.75rem;border:2px dashed #fca5a5;border-radius:0.5rem;background:#fef2f2;color:#7f1d1d;font-size:0.875rem;line-height:1.5">';
+		$out .= '<strong>Admin-only notice:</strong> CF7 form <code>' . esc_html( $id_raw ) . '</code> not found. ';
+		$out .= 'Create it (Contact &rarr; Contact Forms) and name it <code>' . esc_html( $pretty ) . '</code>, ';
+		$out .= 'or paste its hash id under <strong>Settings &rarr; Booming Venture &rarr; Forms</strong>. ';
+		$out .= 'The visitor-facing fallback below is rendering in the meantime.';
+		$out .= '</div>';
+	}
+	$out .= '<form class="bv-form-fallback" method="get" action="' . $action . '" novalidate>';
+	$out .= '<label class="bv-form-fallback__label" for="bv-ff-' . esc_attr( $slug ) . '">Your work email</label>';
+	$out .= '<div class="bv-form-fallback__row">';
+	$out .= '<input type="email" id="bv-ff-' . esc_attr( $slug ) . '" name="email" required placeholder="you@company.com" autocomplete="email" inputmode="email">';
+	$out .= '<button type="submit" class="bv-form-fallback__btn">Send</button>';
+	$out .= '</div>';
+	$out .= '<p class="bv-form-fallback__note">Opens your email app pre-filled. Or write to <a href="mailto:info@boomingventure.com">info@boomingventure.com</a> directly.</p>';
+	$out .= '</form>';
+	return $out;
 }, 10, 3 );
 
 /* CF7 setup: disable autop so we keep CSS Grid control over the form layout.
