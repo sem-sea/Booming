@@ -1,6 +1,6 @@
 <?php
 /**
- * Theme setup — supports, image sizes, nav menus, editor styles.
+ * Theme setup ,  supports, image sizes, nav menus, editor styles.
  *
  * @package BoomingVenture
  */
@@ -55,16 +55,16 @@ add_action( 'init', function () {
 	remove_action( 'wp_print_styles', 'print_emoji_styles' );
 } );
 
-/* Viewport with viewport-fit=cover — needed for env(safe-area-inset-*) to fire
+/* Viewport with viewport-fit=cover ,  needed for env(safe-area-inset-*) to fire
  * on iPhone 14+ Dynamic Island / Android 15 edge-to-edge. Kept user-scalable
- * (WCAG 1.4.4 — never set maximum-scale=1). */
+ * (WCAG 1.4.4 ,  never set maximum-scale=1). */
 add_action( 'wp_head', function () {
 	echo '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">' . "\n";
 	echo '<meta name="theme-color" content="#0284c7">' . "\n";
 	echo '<meta name="color-scheme" content="light">' . "\n";
 }, 0 );
 
-/* Favicon / site icon — falls back to the uploaded brand mark on Strato
+/* Favicon / site icon ,  falls back to the uploaded brand mark on Strato
  * when no Customizer site_icon has been set. Filterable. */
 add_action( 'wp_head', function () {
 	if ( has_site_icon() ) {
@@ -116,7 +116,7 @@ function bv_image( string $slug ): string {
 		return esc_url( $resolved );
 	}
 
-	/* Last-resort fallback — assume PNG in current upload month folder. */
+	/* Last-resort fallback ,  assume PNG in current upload month folder. */
 	return esc_url( home_url( '/wp-content/uploads/2026/05/' . $val . '.png' ) );
 }
 

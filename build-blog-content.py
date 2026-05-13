@@ -1779,7 +1779,7 @@ def main():
 
     new_xml = pattern.sub(repl, xml)
 
-    # Slugs in WXR vs slugs we wrote — report
+    # Slugs in WXR vs slugs we wrote ,  report
     wxr_slugs = [m.group("slug") for m in pattern.finditer(xml)]
     for slug in POSTS:
         if slug not in wxr_slugs:

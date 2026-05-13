@@ -1,6 +1,6 @@
 <?php
 /**
- * GEO/AEO foundations — robots.txt, llms.txt, IndexNow, freshness,
+ * GEO/AEO foundations ,  robots.txt, llms.txt, IndexNow, freshness,
  * expanded JSON-LD (FAQPage / HowTo / Person / SoftwareApplication).
  *
  * Built against the Claude Code GEO/AEO Implementation Bible (May 2026).
@@ -21,7 +21,7 @@ add_filter( 'robots_txt', function ( $output, $public ) {
 	if ( ! $public ) return $output;
 
 	$lines = [];
-	$lines[] = '# robots.txt — GEO/AEO three-tier configuration (Bible May 2026)';
+	$lines[] = '# robots.txt ,  GEO/AEO three-tier configuration (Bible May 2026)';
 	$lines[] = '';
 	$lines[] = '# --- TIER 1: Training crawlers (BLOCKED) ---';
 	foreach ( [
@@ -223,7 +223,7 @@ add_filter( 'the_content', function ( $content ) {
 
 
 /* ============================================================
- * 4. IndexNow (Bible §11) — ping Bing on publish/update.
+ * 4. IndexNow (Bible §11) ,  ping Bing on publish/update.
  * IndexNow key file is served by a virtual endpoint at /{key}.txt.
  * Configure key via BV_INDEXNOW_KEY constant or bv_indexnow_key option.
  * ============================================================ */

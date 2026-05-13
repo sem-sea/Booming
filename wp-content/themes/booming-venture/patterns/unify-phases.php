@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: UNIFY — 5 phases (detail cards)
+ * Title: UNIFY ,  5 phases (detail cards)
  * Slug: booming-venture/unify-phases
  * Categories: booming-venture/landing, booming-venture/sections
  * Viewport Width: 1400
@@ -54,7 +54,7 @@
 			<div>
 				<h3 class="bv-phase-title"><?php echo bv_icon( "bar-chart-3", 22, "bv-phase-icon" ); ?> Forecast, Predict ROI Before You Spend</h3>
 				<p><strong>What it does:</strong> Build models that simulate ROI before campaign launch.</p>
-				<p><strong>Why it matters:</strong> Forecast confidently — no more flying blind on budget allocation.</p>
+				<p><strong>Why it matters:</strong> Forecast confidently ,  no more flying blind on budget allocation.</p>
 				<p class="bv-phase-tools"><strong>Key tools:</strong> ROI calculators, CAC/LTV dashboards, scenario planners.</p>
 			</div>
 		</article>

@@ -19,13 +19,13 @@ add_filter( 'rest_endpoints', function ( $endpoints ) {
 /* Hide login error specifics. */
 add_filter( 'login_errors', fn () => __( 'Invalid credentials.', 'booming-venture' ) );
 
-/* Disable XML-RPC pingbacks (still used for self-pings + Jetpack — toggle if needed). */
+/* Disable XML-RPC pingbacks (still used for self-pings + Jetpack ,  toggle if needed). */
 add_filter( 'xmlrpc_methods', function ( $methods ) {
 	unset( $methods['pingback.ping'], $methods['pingback.extensions.getPingbacks'] );
 	return $methods;
 } );
 
-/* Send sensible security headers on the front end. CSP intentionally omitted —
+/* Send sensible security headers on the front end. CSP intentionally omitted , 
  * configure per environment because of GTM / DataSpeak / Brevo / Unsplash. */
 add_action( 'send_headers', function () {
 	if ( is_admin() ) return;

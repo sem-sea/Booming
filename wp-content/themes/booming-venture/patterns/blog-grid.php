@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Blog — 3-column grid
+ * Title: Blog ,  3-column grid
  * Slug: booming-venture/blog-grid
  * Categories: booming-venture/sections
  * Viewport Width: 1400

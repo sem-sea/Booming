@@ -30,7 +30,7 @@ function bv_run_install(): void {
 
 	@set_time_limit( 120 );
 
-	/* Permalink structure: /blog/%postname%/ — re-asserted on every
+	/* Permalink structure: /blog/%postname%/ ,  re-asserted on every
 	 * activation so a plugin or theme switch can't strand it. */
 	update_option( 'permalink_structure', '/blog/%postname%/' );
 
@@ -44,7 +44,7 @@ function bv_run_install(): void {
 		set_transient( 'bv_install_success', true, 300 );
 	}
 
-	/* These must run on EVERY activation — not just first install —
+	/* These must run on EVERY activation ,  not just first install , 
 	 * so the home/blog wiring and rewrite cache reflect any changes
 	 * that ship in a theme update zip. */
 	bv_configure_homepage();
@@ -54,7 +54,7 @@ function bv_run_install(): void {
 }
 
 /**
- * One-shot cache flush — runs on theme activation and from the manual
+ * One-shot cache flush ,  runs on theme activation and from the manual
  * "Flush rewrite rules" button. Covers WP core, rewrite rules,
  * transients, OPcache, and the major caching plugins (WP Rocket,
  * W3 Total Cache, WP Super Cache, LiteSpeed, SG Optimizer,
@@ -70,7 +70,7 @@ function bv_flush_all_caches(): void {
 		delete_expired_transients( true );
 	}
 
-	/* WP global stylesheet (block-styles + theme.json) caches — these
+	/* WP global stylesheet (block-styles + theme.json) caches ,  these
 	 * hold the compiled CSS for the colour palette, layout sizes etc.
 	 * Without clearing them, a change to theme.json (e.g. contentSize)
 	 * won't show up until they expire. */
@@ -81,12 +81,12 @@ function bv_flush_all_caches(): void {
 		WP_Theme_JSON_Resolver::clean_cached_data();
 	}
 
-	/* PHP OPcache — clears bytecode so updated PHP files load. */
+	/* PHP OPcache ,  clears bytecode so updated PHP files load. */
 	if ( function_exists( 'opcache_reset' ) ) {
 		@opcache_reset();
 	}
 
-	/* Third-party caches — call only when present, so we don't fatal. */
+	/* Third-party caches ,  call only when present, so we don't fatal. */
 	if ( function_exists( 'rocket_clean_domain' ) )          { @rocket_clean_domain(); }
 	if ( function_exists( 'rocket_clean_minify' ) )          { @rocket_clean_minify(); }
 	if ( function_exists( 'w3tc_flush_all' ) )               { @w3tc_flush_all(); }
@@ -393,7 +393,7 @@ add_action( 'admin_print_footer_scripts-settings_page_booming-venture', function
 		. '<li>Blog posts published: <strong>' . $posts . '</strong> (expect 43)</li>'
 		. '<li>Services published: <strong>' . $services . '</strong> (expect 4)</li>'
 		. '<li>Front page set: <strong>' . ( $home_set ? esc_html( get_the_title( $home_set ) ) : 'NOT SET' ) . '</strong></li>'
-		. '<li>Posts page set: <strong>' . ( $blog_set ? esc_html( get_the_title( $blog_set ) ) : 'NOT SET — your blog will not show!' ) . '</strong></li>'
+		. '<li>Posts page set: <strong>' . ( $blog_set ? esc_html( get_the_title( $blog_set ) ) : 'NOT SET ,  your blog will not show!' ) . '</strong></li>'
 		. '<li>Show on front: <strong>' . esc_html( $front ) . '</strong></li>'
 		. '<li>Install flag: <strong>' . ( $installed ? esc_html( $installed ) : 'not run' ) . '</strong></li>'
 		. '</ul>'
@@ -413,7 +413,7 @@ add_action( 'admin_print_footer_scripts-settings_page_booming-venture', function
 
 
 /* ============================================================
- * [bv_read_time] shortcode — outputs the per-post _bv_read_time
+ * [bv_read_time] shortcode ,  outputs the per-post _bv_read_time
  * meta value. Used inside wp:post-template loops on the blog
  * index so each card can show "8 min read" / "12 min read" etc.
  * Falls back to a calculated estimate from word count if the
@@ -467,7 +467,7 @@ add_action( 'template_redirect', function () {
 
 
 /* ============================================================
- * Manual "Flush rewrite rules" endpoint — for when Settings →
+ * Manual "Flush rewrite rules" endpoint ,  for when Settings →
  * Permalinks → Save Changes did not pick up the new structure on
  * Strato (common when .htaccess is not writable).
  * ============================================================ */
@@ -503,7 +503,7 @@ add_action( 'admin_notices', function () {
 
 
 /* ============================================================
- * Diagnostics: extra fields for the Settings page panel —
+ * Diagnostics: extra fields for the Settings page panel , 
  * current permalink structure, .htaccess writability, and the
  * rules WordPress wants to write (so user can paste them
  * manually on Strato if needed).
@@ -537,8 +537,8 @@ RewriteRule . /index.php [L]
 		. '<li>Current permalink structure: <code>' . esc_html( $permalink ?: '(default ?p=N)' ) . '</code>'
 		. ( '/blog/%postname%/' === $permalink ? ' ✅' : ' ⚠️ Expected <code>/blog/%postname%/</code>' ) . '</li>'
 		. '<li><code>.htaccess</code> file: ' . ( $ht['exists'] ? 'exists' : 'MISSING' ) . ' at <code>' . esc_html( $ht['path'] ) . '</code></li>'
-		. '<li>Writable by WordPress: ' . ( $ht['writable'] ? '✅ yes' : '❌ no — WordPress cannot save permalink rules' ) . '</li>'
-		. '<li>Contains WP rewrite rules: ' . ( $ht['has_wp_rules'] ? '✅ yes' : '❌ no — pretty URLs will 404' ) . '</li>'
+		. '<li>Writable by WordPress: ' . ( $ht['writable'] ? '✅ yes' : '❌ no ,  WordPress cannot save permalink rules' ) . '</li>'
+		. '<li>Contains WP rewrite rules: ' . ( $ht['has_wp_rules'] ? '✅ yes' : '❌ no ,  pretty URLs will 404' ) . '</li>'
 		. '</ul>'
 		. '<form method="post" action="' . $action . '" style="display:inline;">'
 		. $nonce

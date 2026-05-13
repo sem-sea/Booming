@@ -1,6 +1,6 @@
-# Booming Venture — WordPress Theme
+# Booming Venture ,  WordPress Theme
 
-A modern, full-site-editing (block) theme for **Booming Venture** — an
+A modern, full-site-editing (block) theme for **Booming Venture** ,  an
 AI-powered performance-marketing agency from Rotterdam. Direct, faithful
 port of the original Lovable / React site, rebuilt the WordPress-native
 way so it can be edited entirely in `Appearance → Editor` without
@@ -15,7 +15,7 @@ touching code.
 | Folder                    | What it is |
 | ------------------------- | ---------- |
 | `style.css`               | Theme header for WordPress. |
-| `theme.json`              | Design tokens — brand palette (`booming-*`, `venture-*`), gradients, fluid typography, spacing scale, shadow presets. |
+| `theme.json`              | Design tokens ,  brand palette (`booming-*`, `venture-*`), gradients, fluid typography, spacing scale, shadow presets. |
 | `functions.php`           | Bootstraps `inc/*`. No business logic. |
 | `inc/setup.php`           | Theme supports, image sizes, nav menus, head cleanup. |
 | `inc/enqueue.php`         | Fonts, theme CSS/JS, GTM, DataSpeak chat (idle-loaded), preconnect hints. |
@@ -28,8 +28,8 @@ touching code.
 | `templates/`              | Block templates: `index`, `front-page`, `page`, `single`, `archive`, `search`, `404`, + custom templates for the tool/landing pages. |
 | `parts/`                  | `header.html`, `footer.html`. |
 | `patterns/`               | Sectioned block patterns (hero, services-grid, about, testimonials, contact, growth-guide-cta, cta-band, newsletter-cta, awards-banner, blog-grid, UNIFY framework). |
-| `blocks/funnel-calculator`| Custom block — Funnel Leak Calculator (vanilla JS, **ships working** — no build). |
-| `blocks/roi-forecaster`   | Custom block — ROI Forecaster with SVG chart + table + PDF export (vanilla JS, **ships working**). |
+| `blocks/funnel-calculator`| Custom block ,  Funnel Leak Calculator (vanilla JS, **ships working** ,  no build). |
+| `blocks/roi-forecaster`   | Custom block ,  ROI Forecaster with SVG chart + table + PDF export (vanilla JS, **ships working**). |
 | `assets/css/theme.css`    | Animations, glassmorphism, check-list pseudo-element, FABs, scroll-progress. |
 | `assets/css/editor.css`   | Editor preview tweaks. |
 | `assets/js/theme.js`      | Scroll progress, smooth scroll, FABs, external-link safety. |
@@ -39,12 +39,12 @@ touching code.
 
 ## 🎯 What makes this a 10/10 theme & site
 
-These are the choices that distinguish a good theme from a great one — every
+These are the choices that distinguish a good theme from a great one ,  every
 one of them is wired up in this codebase. If you change anything, keep these
 intact.
 
 1. **Block-first (FSE) architecture.** Every layout lives in `templates/*.html`
-   and `patterns/*.php`. You can re-skin the site in the editor — no PHP.
+   and `patterns/*.php`. You can re-skin the site in the editor ,  no PHP.
 2. **Design tokens in `theme.json`.** Brand palette, gradients, fluid typography,
    spacing scale, shadow presets. Change one variable, the whole site updates.
 3. **Patterns over page builders.** No Elementor / Divi bloat. Every section is
@@ -68,7 +68,7 @@ intact.
 7. **CPTs + meta done right.** `service`, `landing_page`, `case_study` with
    `show_in_rest: true`, post-meta registered for block bindings.
 8. **Custom blocks done right.** `block.json` API v3, server-side render,
-   `viewScript` for hydration only — no React shipped to pages without it.
+   `viewScript` for hydration only ,  no React shipped to pages without it.
 9. **Security defaults.** No author enumeration, locked-down login errors,
    sensible headers, REST users hidden for guests.
 10. **Editor parity.** `editor.css` mirrors front-end key styles so authors
@@ -97,7 +97,7 @@ Then set **Settings → Reading → Front page** to the imported `Home` page.
 
 ---
 
-## 🧩 Mapping — Lovable → WordPress
+## 🧩 Mapping ,  Lovable → WordPress
 
 | Lovable route                | WordPress equivalent                                       |
 | ---------------------------- | ---------------------------------------------------------- |
@@ -122,7 +122,7 @@ Then set **Settings → Reading → Front page** to the imported `Home` page.
 | DataSpeak chat               | Idle-loaded in `inc/enqueue.php`, interface ID `6863892dbcf4fea86a49e9f8` |
 | Google Tag Manager           | Auto-injected in `inc/enqueue.php`, ID `GTM-K9532WK5`      |
 | react-router-dom             | Native WordPress routing                                   |
-| Lottie preloader             | Removed — improved perf budget                             |
+| Lottie preloader             | Removed ,  improved perf budget                             |
 | Cookie consent (`CookieConsent.tsx`) | Add Complianz or CookieYes plugin (recommended)    |
 
 ---
@@ -131,14 +131,14 @@ Then set **Settings → Reading → Front page** to the imported `Home` page.
 
 - **Brand colours**: `theme.json → settings.color.palette`. Everything cascades.
 - **Logo**: `Appearance → Editor → Header → Site Logo`, or `wp option update`.
-- **Menus**: `Appearance → Menus` — five locations registered (primary, footer, legal, tools).
+- **Menus**: `Appearance → Menus` ,  five locations registered (primary, footer, legal, tools).
 - **GTM / DataSpeak IDs**: set as options `bv_gtm_id`, `bv_dataspeak_id` or
   drop into wp-config:
   ```php
   define( 'BV_BREVO_API_KEY', 'xkeysib-...' );
   ```
 - **Add a new section pattern**: drop a `.php` file in `patterns/` with the
-  pattern header — it auto-registers.
+  pattern header ,  it auto-registers.
 
 ---
 
@@ -153,7 +153,7 @@ Then set **Settings → Reading → Front page** to the imported `Home` page.
       list (Newsletter=3, Growth Guide=2, Contact=4), and paste each
       form's CF7 hash ID into *Settings → Booming Venture*
 - [ ] Install Rank Math (or Yoast) and import the JSON-LD already on-page
-- [ ] Install a cookie-consent plugin (Complianz / CookieYes) — required EU
+- [ ] Install a cookie-consent plugin (Complianz / CookieYes) ,  required EU
 - [ ] Run Lighthouse → target ≥95 across the board
 - [ ] Set up staging on a `develop` branch + CI deploy
 - [ ] Add `image-team.jpg`, `about-leader.jpg`, `og-default.jpg` to

@@ -1,5 +1,5 @@
 /**
- * Booming Venture — Funnel Leak Calculator
+ * Booming Venture ,  Funnel Leak Calculator
  * Vanilla JS, zero deps. Hydrates every <div data-bv-block="funnel-calculator">.
  */
 (function () {
@@ -25,7 +25,7 @@
 		const wins  = sqls     * winRate;
 		const revenue = wins * aov;
 
-		// Benchmarks (industry-average funnel) — used to compute "what you could be making"
+		// Benchmarks (industry-average funnel) ,  used to compute "what you could be making"
 		const benchmarks = { lead: 0.04, mql: 0.30, sql: 0.40, win: 0.25 };
 		const bLeads = visitors * benchmarks.lead;
 		const bMqls  = bLeads   * benchmarks.mql;
@@ -81,7 +81,7 @@
 					<g transform="translate(0, ${y})">
 						<rect x="0" y="0"   width="${benchW}" height="${h}" rx="2" fill="#e0f2fe"/>
 						<rect x="0" y="0"   width="${youW}"   height="${h}" rx="2" fill="url(#bvg)"/>
-						<text x="0" y="${h + gap + h - 1}" font-size="3.6" fill="#475569">${s.label} — you ${(s.you*100).toFixed(1)}% vs bench ${(s.bench*100).toFixed(0)}%</text>
+						<text x="0" y="${h + gap + h - 1}" font-size="3.6" fill="#475569">${s.label} ,  you ${(s.you*100).toFixed(1)}% vs bench ${(s.bench*100).toFixed(0)}%</text>
 					</g>
 				`;
 			}).join('')}
@@ -128,23 +128,23 @@
 					<div class="bv-fc__headline">
 						<div>
 							<div class="bv-fc__metric-label">Current monthly revenue</div>
-							<div class="bv-fc__metric bv-fc__metric--strong" data-out="revenue">—</div>
+							<div class="bv-fc__metric bv-fc__metric--strong" data-out="revenue">, </div>
 						</div>
 						<div>
 							<div class="bv-fc__metric-label">If your funnel hit benchmark</div>
-							<div class="bv-fc__metric" data-out="benchmark">—</div>
+							<div class="bv-fc__metric" data-out="benchmark">, </div>
 						</div>
 						<div class="bv-fc__leak">
 							<div class="bv-fc__metric-label">You're leaving on the table</div>
-							<div class="bv-fc__metric bv-fc__metric--leak" data-out="leak">—</div>
-							<div class="bv-fc__metric-sub" data-out="leakPct">—</div>
+							<div class="bv-fc__metric bv-fc__metric--leak" data-out="leak">, </div>
+							<div class="bv-fc__metric-sub" data-out="leakPct">, </div>
 						</div>
 					</div>
 
 					<div class="bv-fc__chart" data-out="chart"></div>
 
 					<div class="bv-fc__rec">
-						<strong>Biggest leak:</strong> <span data-out="worstLabel">—</span><br>
+						<strong>Biggest leak:</strong> <span data-out="worstLabel">, </span><br>
 						<span data-out="worstRec"></span>
 					</div>
 
@@ -166,7 +166,7 @@
 			out('revenue').textContent   = fmt(r.revenue, ccy);
 			out('benchmark').textContent = fmt(r.benchmarkRevenue, ccy);
 			out('leak').textContent      = fmt(r.leakage, ccy);
-			out('leakPct').textContent   = r.leakPct > 0 ? `≈ ${r.leakPct.toFixed(0)}% below benchmark · ${num(r.wins)} customers/mo today` : 'You\'re at or above benchmark — nice.';
+			out('leakPct').textContent   = r.leakPct > 0 ? `≈ ${r.leakPct.toFixed(0)}% below benchmark · ${num(r.wins)} customers/mo today` : 'You\'re at or above benchmark ,  nice.';
 			out('worstLabel').textContent = r.worst.label;
 			out('worstRec').textContent   = recommendation(r.worst);
 			out('chart').innerHTML        = svgBars(r.stages);

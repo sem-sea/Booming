@@ -1,6 +1,6 @@
 <?php
 /**
- * Asset enqueue — fonts, theme CSS/JS, GTM, DataSpeak.
+ * Asset enqueue ,  fonts, theme CSS/JS, GTM, DataSpeak.
  *
  * @package BoomingVenture
  */
@@ -52,7 +52,7 @@ add_action( 'wp_head', function () {
 	}
 }, 2 );
 
-/* Google Tag Manager — head. */
+/* Google Tag Manager ,  head. */
 add_action( 'wp_head', function () {
 	$gtm_id = get_option( 'bv_gtm_id', 'GTM-K9532WK5' );
 	if ( ! $gtm_id ) return;
@@ -67,7 +67,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 	<?php
 }, 1 );
 
-/* GTM noscript — body open. */
+/* GTM noscript ,  body open. */
 add_action( 'wp_body_open', function () {
 	$gtm_id = get_option( 'bv_gtm_id', 'GTM-K9532WK5' );
 	if ( ! $gtm_id ) return;
@@ -76,7 +76,7 @@ add_action( 'wp_body_open', function () {
 	<?php
 } );
 
-/* DataSpeak chat — footer, async, after consent if cookie present. */
+/* DataSpeak chat ,  footer, async, after consent if cookie present. */
 add_action( 'wp_footer', function () {
 	$interface_id = get_option( 'bv_dataspeak_id', '6863892dbcf4fea86a49e9f8' );
 	if ( ! $interface_id ) return;

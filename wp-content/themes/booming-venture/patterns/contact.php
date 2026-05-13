@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Contact — info + form
+ * Title: Contact ,  info + form
  * Slug: booming-venture/contact
  * Categories: booming-venture/home, booming-venture/sections
  * Keywords: contact, form, address

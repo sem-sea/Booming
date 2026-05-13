@@ -1,5 +1,5 @@
 /**
- * Booming Venture — ROI Forecaster block (editor side).
+ * Booming Venture ,  ROI Forecaster block (editor side).
  */
 (function (wp) {
 	if (!wp || !wp.blocks) return;
@@ -51,7 +51,7 @@
 					'div',
 					blockProps,
 					el('strong', null, '📈 ROI Forecaster'),
-					el('p', null, __('Interactive forecaster — renders on the front end. Adjust defaults from the sidebar.'))
+					el('p', null, __('Interactive forecaster ,  renders on the front end. Adjust defaults from the sidebar.'))
 				)
 			);
 		},

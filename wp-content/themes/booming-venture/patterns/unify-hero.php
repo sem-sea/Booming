@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: UNIFY — Hero with 5-node diagram
+ * Title: UNIFY ,  Hero with 5-node diagram
  * Slug: booming-venture/unify-hero
  * Categories: booming-venture/landing, booming-venture/sections
  * Viewport Width: 1400

@@ -6,7 +6,7 @@
   "title": "ROI Forecaster",
   "category": "booming-venture",
   "icon": "chart-line",
-  "description": "Interactive ROI forecaster with cumulative revenue chart, table view, and PDF export. Self-contained — no external dependencies.",
+  "description": "Interactive ROI forecaster with cumulative revenue chart, table view, and PDF export. Self-contained ,  no external dependencies.",
   "keywords": ["roi", "forecast", "growth", "calculator"],
   "supports": {
     "html": false,

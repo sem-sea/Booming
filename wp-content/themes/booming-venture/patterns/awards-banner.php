@@ -13,7 +13,7 @@
 	<!-- /wp:paragraph -->
 	<!-- wp:gallery {"columns":6,"linkTo":"none","sizeSlug":"medium","align":"wide"} -->
 	<figure class="wp-block-gallery has-nested-images columns-6 is-cropped alignwide">
-		<!-- placeholders — replace with real client/award logos -->
+		<!-- placeholders ,  replace with real client/award logos -->
 		<!-- wp:image {"sizeSlug":"medium"} --><figure class="wp-block-image size-medium"><img src="" alt="Client logo placeholder"/></figure><!-- /wp:image -->
 		<!-- wp:image {"sizeSlug":"medium"} --><figure class="wp-block-image size-medium"><img src="" alt="Client logo placeholder"/></figure><!-- /wp:image -->
 		<!-- wp:image {"sizeSlug":"medium"} --><figure class="wp-block-image size-medium"><img src="" alt="Client logo placeholder"/></figure><!-- /wp:image -->

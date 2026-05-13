@@ -1,4 +1,4 @@
-# INSTALL — Booming Venture theme
+# INSTALL ,  Booming Venture theme
 
 > 30-minute setup from a fresh WordPress install to a fully working
 > Booming Venture site with content seeded, forms wired up, and chat live.
@@ -9,7 +9,7 @@
 - Node **18+** (only required to build the custom blocks once)
 - WP-CLI (optional, makes the whole flow scriptable)
 - A Brevo account + API key (free tier is fine)
-- A Google Tag Manager container (optional — default `GTM-K9532WK5` ships)
+- A Google Tag Manager container (optional ,  default `GTM-K9532WK5` ships)
 
 ---
 
@@ -31,7 +31,7 @@ Activate it:
 ## 2. The custom Gutenberg blocks
 
 The **Funnel Leak Calculator** and **ROI Forecaster** ship as working
-vanilla-JS apps inside the theme — no `npm install`, no build step.
+vanilla-JS apps inside the theme ,  no `npm install`, no build step.
 They appear in the editor inserter under **Booming Venture** as soon as
 the theme is activated.
 
@@ -131,7 +131,7 @@ In **Contact → Contact Forms → Add New**, paste the form-tags below into
 the **Form** tab. Each form already gets the brand styling via
 `theme.css` because the CF7 default class hooks are styled.
 
-**`contact`** — full contact form:
+**`contact`** ,  full contact form:
 
 ```
 <label>Your name *
@@ -147,7 +147,7 @@ the **Form** tab. Each form already gets the brand styling via
 [submit "Send message"]
 ```
 
-**`newsletter`** — big newsletter CTA:
+**`newsletter`** ,  big newsletter CTA:
 
 ```
 <label>Email *
@@ -156,7 +156,7 @@ the **Form** tab. Each form already gets the brand styling via
 [submit "Join 700+ growth pros"]
 ```
 
-**`newsletter-inline`** — footer mini newsletter (wrap in `.bv-form-inline`):
+**`newsletter-inline`** ,  footer mini newsletter (wrap in `.bv-form-inline`):
 
 ```
 [email* your-email placeholder "Enter email" autocomplete:email]
@@ -164,7 +164,7 @@ the **Form** tab. Each form already gets the brand styling via
 [submit "Join"]
 ```
 
-**`growth-guide`** — lead magnet:
+**`growth-guide`** ,  lead magnet:
 
 ```
 <label>Business email *
@@ -173,7 +173,7 @@ the **Form** tab. Each form already gets the brand styling via
 [submit "Download the guide"]
 ```
 
-**`quickscan`** — Boardroom Quickscan landing form:
+**`quickscan`** ,  Boardroom Quickscan landing form:
 
 ```
 <label>Your name *
@@ -183,7 +183,7 @@ the **Form** tab. Each form already gets the brand styling via
 <label>Company *
   [text* your-company autocomplete:organization]</label>
 <label>Annual revenue
-  [select revenue "< €1M" "€1M – €5M" "€5M – €25M" "> €25M"]</label>
+  [select revenue "< €1M" "€1M ,  €5M" "€5M ,  €25M" "> €25M"]</label>
 <label>What's the single biggest growth question on your desk? *
   [textarea* your-message]</label>
 [honeypot website-2]
@@ -191,7 +191,7 @@ the **Form** tab. Each form already gets the brand styling via
 [submit "Request my Quickscan"]
 ```
 
-**`head-of-growth`** — fractional service intake:
+**`head-of-growth`** ,  fractional service intake:
 
 ```
 <label>Your name *
@@ -215,7 +215,7 @@ CF7 sends one email per submission. In each form's **Mail** tab, set:
 
 - **To:** `info@boomingventure.com`
 - **From:** `[your-name] <wordpress@boomingventure.com>`
-- **Subject:** `[BV] {slug} — [your-email]` (replace `{slug}` with the form name)
+- **Subject:** `[BV] {slug} ,  [your-email]` (replace `{slug}` with the form name)
 - **Body:** include every field token: `Name: [your-name]`, `Email: [your-email]`, `Company: [your-company]`, `Message: [your-message]`. Plus a footer line: `Submitted via {page-url}`.
 
 ### 5c. Push to Brevo
@@ -279,7 +279,7 @@ wp option update bv_gtm_id        'GTM-XXXXXXXX'
 wp option update bv_dataspeak_id  '6863892dbcf4fea86a49e9f8'
 ```
 
-The defaults are already wired to the Lovable site's IDs — change them
+The defaults are already wired to the Lovable site's IDs ,  change them
 once your new GA4/GTM property is live.
 
 ---
@@ -309,12 +309,12 @@ You can pull Inter + Space Grotesk from <https://gwfh.mranftl.com/fonts>.
 Run through this sanity check:
 
 - [ ] Home page renders hero, services, growth-guide CTA, about,
-      testimonials, contact — in that order.
+      testimonials, contact ,  in that order.
 - [ ] `/funnel-calculator` and `/roi-forecaster` show the calculator
       block with the data-attribute hydration mount point.
 - [ ] Submit a test contact form → contact lands in Brevo list **4**.
 - [ ] View source on any page: search for `<script type="application/ld+json">`
-      — should see Organization + WebSite (+ BlogPosting on posts).
+      ,  should see Organization + WebSite (+ BlogPosting on posts).
 - [ ] Lighthouse on home: Performance ≥ 90, Best Practices ≥ 95,
       Accessibility ≥ 95, SEO = 100.
 - [ ] `Appearance → Editor → Patterns` lists patterns under

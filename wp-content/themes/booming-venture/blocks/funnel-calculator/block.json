@@ -6,7 +6,7 @@
   "title": "Funnel Leak Calculator",
   "category": "booming-venture",
   "icon": "filter",
-  "description": "Interactive funnel calculator that pinpoints where revenue is leaking and recommends fixes. Self-contained — no external dependencies.",
+  "description": "Interactive funnel calculator that pinpoints where revenue is leaking and recommends fixes. Self-contained ,  no external dependencies.",
   "keywords": ["funnel", "calculator", "growth", "cro"],
   "supports": {
     "html": false,

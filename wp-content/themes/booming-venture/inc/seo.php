@@ -1,6 +1,6 @@
 <?php
 /**
- * SEO — JSON-LD schema, OpenGraph fallbacks, meta description.
+ * SEO ,  JSON-LD schema, OpenGraph fallbacks, meta description.
  * Plays nicely with Rank Math / Yoast (they win when present).
  *
  * @package BoomingVenture
@@ -148,7 +148,7 @@ add_action( 'wp_head', function () {
 		}
 		$graph[] = [ '@type' => 'BreadcrumbList', 'itemListElement' => $items ];
 
-		/* FAQPage schema — parse the post body's "Frequently asked questions"
+		/* FAQPage schema ,  parse the post body's "Frequently asked questions"
 		 * section, extracting H3 + paragraph pairs. */
 		$faq_items = bv_extract_faq_from_content( $post->post_content );
 		if ( count( $faq_items ) >= 2 ) {
@@ -165,7 +165,7 @@ add_action( 'wp_head', function () {
 			];
 		}
 
-		/* HowTo schema — if the post is "How to X" or contains an Ordered list
+		/* HowTo schema ,  if the post is "How to X" or contains an Ordered list
 		 * starting with "Step 1" style numbered headings. */
 		$howto = bv_extract_howto_from_content( $post->post_content, get_the_title() );
 		if ( $howto && count( $howto['step'] ) >= 3 ) {
@@ -208,7 +208,7 @@ add_action( 'wp_head', function () {
 	echo "\n<script type=\"application/ld+json\">" . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . "</script>\n";
 }, 5 );
 
-/* OpenGraph / Twitter card fallbacks — skip if SEO plugin present. */
+/* OpenGraph / Twitter card fallbacks ,  skip if SEO plugin present. */
 add_action( 'wp_head', function () {
 	if ( bv_seo_active_plugin_handles_meta() ) return;
 	if ( is_admin() ) return;

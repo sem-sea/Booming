@@ -1,5 +1,5 @@
 /**
- * Editor preview — small QoL tweaks. theme.json drives the rest.
+ * Editor preview ,  small QoL tweaks. theme.json drives the rest.
  */
 .editor-styles-wrapper { font-family: var(--wp--preset--font-family--sans); }
 .editor-styles-wrapper .bv-block-editor-placeholder { padding: 2rem; border: 2px dashed var(--wp--preset--color--booming-300); border-radius: 1rem; background: var(--wp--preset--color--booming-50); text-align: center; }

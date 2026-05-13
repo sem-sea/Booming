@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Newsletter — Join 700+
+ * Title: Newsletter ,  Join 700+
  * Slug: booming-venture/newsletter-cta
  * Categories: booming-venture/cta
  * Viewport Width: 1400

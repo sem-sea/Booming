@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Services — 4 services as alternating detail rows
+ * Title: Services ,  4 services as alternating detail rows
  * Slug: booming-venture/services-detail
  * Categories: booming-venture/landing, booming-venture/sections
  * Viewport Width: 1400

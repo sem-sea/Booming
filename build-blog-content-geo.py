@@ -5,12 +5,12 @@ GEO/AEO-compliant rebuild of all 43 blog posts in the WXR.
 Compliance against the Claude Code GEO/AEO Implementation Bible (May 2026):
 
 - Question-shaped H2s ("What is X?", "How does Y work?", "Why does Z fail?")
-- 20–25-word answer capsule (CSS class .bv-capsule) immediately after each
+- 20, 25-word answer capsule (CSS class .bv-capsule) immediately after each
   question H2, starting with "[X] is …" / "[X] refers to …" / "[X] means …"
 - Ski-ramp front-loading: ≥3 statistics with named source links inside the
-  first ~30% of body (Indig Feb 2026 — 44.2% of citations come from there)
+  first ~30% of body (Indig Feb 2026 ,  44.2% of citations come from there)
 - ≥3 external authoritative links per 1,000 words
-- FAQ block at the bottom (5–6 Q&A) — picked up by inc/seo.php into FAQPage
+- FAQ block at the bottom (5, 6 Q&A) ,  picked up by inc/seo.php into FAQPage
   JSON-LD automatically
 - Internal links to /services/, /funnel-calculator/, /roi-forecaster/
 - No em-dashes, no AI tells, no marketing filler

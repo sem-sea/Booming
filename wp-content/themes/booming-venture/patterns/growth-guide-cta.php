@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Growth Guide — lead magnet band (with 2x2 features grid)
+ * Title: Growth Guide ,  lead magnet band (with 2x2 features grid)
  * Slug: booming-venture/growth-guide-cta
  * Categories: booming-venture/home, booming-venture/cta
  * Keywords: lead magnet, ebook, download

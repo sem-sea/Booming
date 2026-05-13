@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Hero — Smarter growth
+ * Title: Hero ,  Smarter growth
  * Slug: booming-venture/hero
  * Categories: booming-venture/home, booming-venture/sections
  * Keywords: hero, home, headline
