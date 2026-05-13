@@ -1,0 +1,15 @@
+/* CiteLeap admin styles */
+.citeleap-planner table.widefat {
+	margin-top: 0.5rem;
+}
+.citeleap-planner code {
+	background: #f1f5f9;
+	padding: 1px 4px;
+	border-radius: 3px;
+	font-size: 12px;
+}
+.wrap textarea.large-text.code {
+	font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+	font-size: 12px;
+	line-height: 1.5;
+}
