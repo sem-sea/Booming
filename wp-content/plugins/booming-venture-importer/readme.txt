@@ -4,7 +4,7 @@ Tags: importer, demo content, booming venture, wxr
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,12 @@ The importer uses PHP 8.0 syntax (typed properties, arrow functions, named argum
 WordPress 6.6 and above. Tested through 6.8.
 
 == Changelog ==
+
+= 1.1.0 =
+* New "Refresh blog post bodies from bundled WXR" button on Tools -> Booming Venture Importer.
+* Overwrites the title, content, and excerpt of every existing blog post whose slug matches the bundled WXR. Pages, services, post meta, and categories are not touched.
+* Confirmation dialog before the destructive action runs.
+* Result log now reports inserted / refreshed / skipped counts per content type.
 
 = 1.0.1 =
 * Bundled WXR now ships every blog post at 1,200 words or more (median 1,294, max 1,964).

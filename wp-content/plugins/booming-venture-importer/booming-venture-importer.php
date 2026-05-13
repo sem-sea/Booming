@@ -3,7 +3,7 @@
  * Plugin Name:       Booming Venture Importer
  * Plugin URI:        https://boomingventure.com
  * Description:       One-click importer for the Booming Venture demo content (13 pages, 4 services, 83 blog posts, categories, menus). Bundled WXR is the source of truth. Re-runs are safe: existing slugs are skipped, structural pages get content refreshed. Adds Tools → Booming Venture Importer.
- * Version:           1.0.1
+ * Version:           1.1.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            Booming Venture
@@ -19,7 +19,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const BVI_VERSION  = '1.0.1';
+const BVI_VERSION  = '1.1.0';
 const BVI_FLAG     = 'bvi_content_imported';
 const BVI_LAST_LOG = 'bvi_last_import_log';
 const BVI_NONCE    = 'bvi_run_import';
@@ -155,6 +155,19 @@ function bvi_render_admin_page(): void {
 			<button type="submit" class="button button-primary button-hero"><?php echo esc_html__( 'Import / Re-import content', 'booming-venture-importer' ); ?></button>
 		</form>
 
+		<h2 style="margin-top:2rem;"><?php echo esc_html__( 'Refresh existing blog post bodies', 'booming-venture-importer' ); ?></h2>
+		<div class="notice" style="border-left:4px solid #f59e0b;padding:0.75rem 1rem;background:#fffbeb;">
+			<p style="margin:0;">
+				<strong><?php echo esc_html__( 'Destructive on blog posts:', 'booming-venture-importer' ); ?></strong>
+				<?php echo esc_html__( 'This overwrites the title, content, and excerpt of every existing blog post whose slug matches the bundled WXR. Use this to upgrade old short posts to the new long-form versions. Pages, services, and post meta are left alone. Categories are not changed. There is no undo.', 'booming-venture-importer' ); ?>
+			</p>
+		</div>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="margin-top:0.75rem;" onsubmit="return confirm('<?php echo esc_js( __( 'Overwrite the title, content, and excerpt of every matching blog post with the bundled long-form versions? There is no undo.', 'booming-venture-importer' ) ); ?>');">
+			<?php wp_nonce_field( BVI_NONCE ); ?>
+			<input type="hidden" name="action" value="bvi_refresh_posts">
+			<button type="submit" class="button button-secondary"><?php echo esc_html__( 'Refresh blog post bodies from bundled WXR', 'booming-venture-importer' ); ?></button>
+		</form>
+
 		<h2 style="margin-top:2rem;"><?php echo esc_html__( 'Or upload an alternative WXR file', 'booming-venture-importer' ); ?></h2>
 		<p>
 			<?php
@@ -190,6 +203,21 @@ function bvi_handle_run_import(): void {
 	update_option( BVI_LAST_LOG, $log, false );
 
 	wp_safe_redirect( add_query_arg( [ 'page' => 'booming-venture-importer', 'bvi_imported' => 1 ], admin_url( 'tools.php' ) ) );
+	exit;
+}
+
+add_action( 'admin_post_bvi_refresh_posts', 'bvi_handle_refresh_posts' );
+function bvi_handle_refresh_posts(): void {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'Insufficient permission.', 'booming-venture-importer' ), 403 );
+	}
+	check_admin_referer( BVI_NONCE );
+
+	$wxr = BVI_PLUGIN_DIR . 'import/booming-venture-content.xml';
+	$log = bvi_import_wxr( $wxr, true );
+	update_option( BVI_LAST_LOG, $log, false );
+
+	wp_safe_redirect( add_query_arg( [ 'page' => 'booming-venture-importer', 'bvi_refreshed' => 1 ], admin_url( 'tools.php' ) ) );
 	exit;
 }
 
@@ -231,8 +259,11 @@ function bvi_handle_upload_wxr(): void {
  * Refreshes structural-page content on every run.
  * Returns an array of log lines for the admin UI.
  * --------------------------------------------------------------------- */
-function bvi_import_wxr( string $wxr_path ): array {
+function bvi_import_wxr( string $wxr_path, bool $force_post_refresh = false ): array {
 	$log = [];
+	if ( $force_post_refresh ) {
+		$log[] = 'MODE: refresh existing blog post bodies (overwrites title + content + excerpt for matching slugs).';
+	}
 
 	if ( ! file_exists( $wxr_path ) ) {
 		$log[] = '✗ WXR file not found at: ' . $wxr_path;
@@ -293,6 +324,7 @@ function bvi_import_wxr( string $wxr_path ): array {
 		'page_refreshed'   => 0,
 		'page_skipped'     => 0,
 		'post_inserted'    => 0,
+		'post_refreshed'   => 0,
 		'post_skipped'     => 0,
 		'service_inserted' => 0,
 		'service_skipped'  => 0,
@@ -326,19 +358,25 @@ function bvi_import_wxr( string $wxr_path ): array {
 			}
 		}
 
-		$is_structural = ( 'page' === $post_type ) && in_array( $slug, $structural_slugs, true );
-		$existing      = get_page_by_path( $slug, OBJECT, $post_type );
+		$is_structural    = ( 'page' === $post_type ) && in_array( $slug, $structural_slugs, true );
+		$existing         = get_page_by_path( $slug, OBJECT, $post_type );
+		$refresh_this_one = $force_post_refresh && 'post' === $post_type;
 
 		if ( $existing ) {
-			if ( $is_structural && $existing->ID ) {
+			if ( ( $is_structural || $refresh_this_one ) && $existing->ID ) {
 				try {
 					wp_update_post( [
 						'ID'           => $existing->ID,
+						'post_title'   => $title,
 						'post_content' => wp_kses_post( $content ),
 						'post_excerpt' => wp_kses_post( $excerpt ),
 					] );
 					if ( $template ) update_post_meta( $existing->ID, '_wp_page_template', sanitize_text_field( $template ) );
-					$counts['page_refreshed']++;
+					if ( 'page' === $post_type ) {
+						$counts['page_refreshed']++;
+					} else {
+						$counts['post_refreshed'] = ( $counts['post_refreshed'] ?? 0 ) + 1;
+					}
 				} catch ( \Throwable $e ) {
 					$counts['errors']++;
 				}
@@ -410,7 +448,7 @@ function bvi_import_wxr( string $wxr_path ): array {
 
 	$log[] = '─── Import summary ───';
 	$log[] = 'Pages: inserted ' . $counts['page_inserted'] . ', refreshed ' . $counts['page_refreshed'] . ', skipped ' . $counts['page_skipped'];
-	$log[] = 'Blog posts: inserted ' . $counts['post_inserted'] . ', skipped ' . $counts['post_skipped'];
+	$log[] = 'Blog posts: inserted ' . $counts['post_inserted'] . ', refreshed ' . $counts['post_refreshed'] . ', skipped ' . $counts['post_skipped'];
 	$log[] = 'Services: inserted ' . $counts['service_inserted'] . ', skipped ' . $counts['service_skipped'];
 	$log[] = 'Errors: ' . $counts['errors'];
 
@@ -468,6 +506,17 @@ add_action( 'admin_notices', function () {
 			wp_kses(
 				/* translators: %s: blog page URL */
 				sprintf( __( 'See the result log on this page. Visit <a href="%s">/blog/</a> to verify.', 'booming-venture-importer' ), esc_url( home_url( '/blog/' ) ) ),
+				[ 'a' => [ 'href' => [] ] ]
+			)
+		);
+	}
+	if ( isset( $_GET['bvi_refreshed'] ) ) {
+		printf(
+			'<div class="notice notice-success is-dismissible"><p><strong>%s</strong> %s</p></div>',
+			esc_html__( 'Blog post bodies refreshed.', 'booming-venture-importer' ),
+			wp_kses(
+				/* translators: %s: blog page URL */
+				sprintf( __( 'Every matching blog post was updated with the bundled long-form version. See the result log below. Visit <a href="%s">/blog/</a> to verify.', 'booming-venture-importer' ), esc_url( home_url( '/blog/' ) ) ),
 				[ 'a' => [ 'href' => [] ] ]
 			)
 		);
