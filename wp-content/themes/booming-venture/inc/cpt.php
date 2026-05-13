@@ -17,8 +17,8 @@ add_action( 'init', function () {
 		],
 		'public'              => true,
 		'show_in_rest'        => true,
-		'has_archive'         => 'services',
-		'rewrite'             => [ 'slug' => 'services', 'with_front' => false ],
+		'has_archive'         => false,
+		'rewrite'             => [ 'slug' => 'service', 'with_front' => false ],
 		'menu_icon'           => 'dashicons-chart-area',
 		'supports'            => [ 'title', 'editor', 'thumbnail', 'excerpt', 'page-attributes', 'custom-fields', 'revisions' ],
 		'template'            => [

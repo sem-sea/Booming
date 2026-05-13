@@ -64,6 +64,22 @@ add_action( 'wp_head', function () {
 	echo '<meta name="color-scheme" content="light">' . "\n";
 }, 0 );
 
+/* Favicon / site icon — falls back to the uploaded brand mark on Strato
+ * when no Customizer site_icon has been set. Filterable. */
+add_action( 'wp_head', function () {
+	if ( has_site_icon() ) {
+		return; // Core already emits link tags.
+	}
+	$url = apply_filters(
+		'bv_site_icon_url',
+		'/wp-content/uploads/2026/05/icon-booming-venture.png'
+	);
+	$url = esc_url( $url );
+	echo '<link rel="icon" href="' . $url . '" type="image/png">' . "\n";
+	echo '<link rel="apple-touch-icon" href="' . $url . '">' . "\n";
+	echo '<link rel="shortcut icon" href="' . $url . '">' . "\n";
+}, 1 );
+
 /* Body class helpers. */
 add_filter( 'body_class', function ( $classes ) {
 	if ( is_singular( 'service' ) )      $classes[] = 'is-service';
