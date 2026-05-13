@@ -27,8 +27,8 @@ defined( 'ABSPATH' ) || exit;
 function bv_cf7_slug_map(): array {
 	$default = [
 		'contact'           => '231533b',
-		'newsletter'        => '231533b',
-		'newsletter-inline' => '231533b',
+		'newsletter'        => '6c25a82',
+		'newsletter-inline' => '6c25a82',
 		'growth-guide'      => 'e46231e',
 		'quickscan'         => '',
 		'head-of-growth'    => '',
