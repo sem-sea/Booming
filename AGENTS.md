@@ -65,6 +65,15 @@ rm -f wp-content/themes/booming-venture.zip
 - Conventional Commits: `feat:` / `fix:` / `chore:` / `docs:` / `content:`
 - One concern per commit. The blog rewrites in `build-blog-content.py` can be one commit per batch of ~10 posts
 
+## Version bump (every release)
+
+**ALWAYS bump the theme version when shipping a new zip.** Two files must stay in lock-step:
+
+1. `wp-content/themes/booming-venture/style.css` , the `Version:` header line.
+2. `wp-content/themes/booming-venture/functions.php` , the `BV_THEME_VERSION` constant.
+
+Use semver: `feat:` commits bump minor (1.2.0 -> 1.3.0), `fix:` and `chore:` commits bump patch (1.2.0 -> 1.2.1), breaking changes bump major. Reflect the new version in the commit message. Rebuild `booming-venture.zip` after the bump so the upload reflects the new version string.
+
 ## Branch
 
 All work happens on `claude/lovable-to-wordpress-theme-lnXza` per the upstream instructions.
