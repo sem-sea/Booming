@@ -1,0 +1,116 @@
+/* ============================================================
+ * Booming Venture , Blog Images
+ * Mobile-first, scoped to .bvimg-hero and .bvimg-card-link.
+ * Works on any active theme.
+ * ============================================================ */
+
+/* ---- Hero figure on single posts ---- */
+.bvimg-hero {
+	display: block;
+	margin: 0 0 1.5rem;
+	padding: 0;
+	border-radius: 0.5rem;
+	overflow: hidden;
+	background: #f1f5f9;
+	aspect-ratio: 16 / 9;
+	position: relative;
+}
+
+.bvimg-hero .bvimg-hero-img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	transition: transform 0.4s ease;
+}
+
+@media (min-width: 768px) {
+	.bvimg-hero {
+		border-radius: 0.875rem;
+		margin: 0 0 2rem;
+		box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.15);
+	}
+}
+
+.bvimg-hero-caption {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 0.5rem 0.875rem;
+	font-size: 0.8125rem;
+	color: #fff;
+	background: linear-gradient( to top, rgba(0,0,0,0.7), rgba(0,0,0,0) );
+}
+
+/* ---- Card image on blog overview / archive ---- */
+.bvimg-card-link {
+	display: block;
+	margin: 0 0 0.875rem;
+	border-radius: 0.5rem;
+	overflow: hidden;
+	background: #f1f5f9;
+	aspect-ratio: 16 / 9;
+	text-decoration: none !important;
+	border: 0 !important;
+}
+
+.bvimg-card-link:focus-visible {
+	outline: 2px solid #0284c7;
+	outline-offset: 2px;
+}
+
+.bvimg-card-link .bvimg-card-img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.bvimg-card-link:hover .bvimg-card-img,
+.bvimg-card-link:focus .bvimg-card-img {
+	transform: scale( 1.035 );
+	filter: brightness( 1.04 );
+}
+
+@media (min-width: 768px) {
+	.bvimg-card-link {
+		border-radius: 0.625rem;
+		margin: 0 0 1rem;
+	}
+}
+
+/* ---- Make sure parent containers do not crop weirdly ---- */
+.bvimg-hero img,
+.bvimg-card-link img {
+	max-width: 100%;
+	height: auto;
+}
+
+/* ---- Skeleton shimmer while the image loads ---- */
+.bvimg-hero,
+.bvimg-card-link {
+	background-image: linear-gradient( 90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100% );
+	background-size: 200% 100%;
+	animation: bvimgShimmer 1.6s ease-in-out infinite;
+}
+
+.bvimg-hero .bvimg-hero-img,
+.bvimg-card-link .bvimg-card-img {
+	position: relative;
+	z-index: 1;
+}
+
+@keyframes bvimgShimmer {
+	0%   { background-position: 200% 0; }
+	100% { background-position: -200% 0; }
+}
+
+/* Stop shimmer when the image has actually rendered. */
+.bvimg-hero img[src],
+.bvimg-card-link img[src] {
+	background: transparent;
+}
