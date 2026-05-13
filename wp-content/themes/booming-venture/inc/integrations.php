@@ -40,23 +40,108 @@ function bv_cf7_slug_map(): array {
 	return array_merge( $default, $map );
 }
 
-/* Rewrite `[contact-form-7 id="contact"]` → `[contact-form-7 id="<hash>"]`.
+/**
+ * Verify a CF7 form id or hash actually exists in the database.
+ * Accepts:
+ *   , a numeric post ID (post_type = wpcf7_contact_form)
+ *   , a CF7 hash (matches the postmeta key `_hash`)
+ * Returns the numeric post ID if found, otherwise 0.
+ */
+function bv_cf7_form_exists( string $id_or_hash ): int {
+	global $wpdb;
+	if ( '' === $id_or_hash ) return 0;
+	if ( ctype_digit( $id_or_hash ) ) {
+		$post = get_post( (int) $id_or_hash );
+		return ( $post && 'wpcf7_contact_form' === $post->post_type ) ? (int) $post->ID : 0;
+	}
+	$post_id = $wpdb->get_var( $wpdb->prepare(
+		"SELECT pm.post_id FROM {$wpdb->postmeta} pm
+		 INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+		 WHERE pm.meta_key = '_hash' AND pm.meta_value = %s
+		   AND p.post_type = 'wpcf7_contact_form' LIMIT 1",
+		$id_or_hash
+	) );
+	return $post_id ? (int) $post_id : 0;
+}
+
+/**
+ * Try to find a CF7 form by its post title, given a semantic slug.
+ * "newsletter-inline" -> Newsletter Inline, Newsletter inline, Newsletter
+ * Returns the form's id-or-hash if found, otherwise empty string.
+ */
+function bv_cf7_find_by_title( string $slug ): string {
+	$candidates = [
+		ucwords( str_replace( '-', ' ', $slug ) ),
+		ucfirst( str_replace( '-', ' ', $slug ) ),
+		str_replace( '-', ' ', $slug ),
+		strtoupper( str_replace( '-', ' ', $slug ) ),
+	];
+	if ( str_contains( $slug, '-' ) ) {
+		$candidates[] = ucwords( explode( '-', $slug )[0] );
+	}
+	global $wpdb;
+	foreach ( array_unique( $candidates ) as $title ) {
+		$post_id = $wpdb->get_var( $wpdb->prepare(
+			"SELECT ID FROM {$wpdb->posts} WHERE post_title = %s AND post_type = 'wpcf7_contact_form' AND post_status = 'publish' LIMIT 1",
+			$title
+		) );
+		if ( $post_id ) {
+			$hash = get_post_meta( (int) $post_id, '_hash', true );
+			return $hash ? (string) $hash : (string) (int) $post_id;
+		}
+	}
+	return '';
+}
+
+/**
+ * Smart resolver: turn any incoming shortcode id into a real, verified
+ * CF7 reference (numeric id or hash). Falls through these lookups:
+ *   1. The configured slug map (Settings -> Booming Venture).
+ *   2. Pass-through if it is already a real CF7 form.
+ *   3. Search CF7 forms by post title matching the slug.
+ */
+function bv_cf7_resolve_id( string $id_raw ): string {
+	$map  = bv_cf7_slug_map();
+	$slug = sanitize_key( $id_raw );
+
+	if ( isset( $map[ $slug ] ) && '' !== $map[ $slug ] ) {
+		$mapped = (string) $map[ $slug ];
+		if ( bv_cf7_form_exists( $mapped ) ) {
+			return $mapped;
+		}
+	}
+	if ( bv_cf7_form_exists( $id_raw ) ) {
+		return $id_raw;
+	}
+	$by_title = bv_cf7_find_by_title( $slug );
+	if ( '' !== $by_title ) {
+		return $by_title;
+	}
+	return '';
+}
+
+/* Rewrite `[contact-form-7 id="contact"]` -> `[contact-form-7 id="<real-id>"]`.
  *
- * NOTE: real CF7 hash IDs are 7 lowercase alphanumeric chars (e.g. "231533b"),
- * which means a slug like "contact" or "quickscan" matches the same shape.
- * So we ALWAYS check the slug map first and only fall through to a
- * passthrough if the value isn't a known slug. */
+ * Strategy: resolve the slug to a verified CF7 form, then call do_shortcode
+ * with the verified id so CF7's own handler renders. If we cannot resolve,
+ * show a helpful admin-only error so the operator knows what is missing. */
 add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
 	if ( 'contact-form-7' !== $tag ) return $output;
 	if ( ! isset( $attr['id'] ) ) return $output;
 
 	$id_raw = (string) $attr['id'];
-	$map    = bv_cf7_slug_map();
-	$slug   = sanitize_key( $id_raw );
 
-	/* Known semantic slug ,  rewrite to mapped CF7 ID. */
-	if ( isset( $map[ $slug ] ) && '' !== $map[ $slug ] ) {
-		$attr['id'] = sanitize_text_field( $map[ $slug ] );
+	/* Re-entrancy guard. CF7 is also registered as `contact-form-7`; once we
+	 * rewrite and call do_shortcode again, the recursion comes back through
+	 * here. Detect "already verified" ids and let CF7's own handler run. */
+	if ( bv_cf7_form_exists( $id_raw ) ) {
+		return $output;
+	}
+
+	$resolved = bv_cf7_resolve_id( $id_raw );
+
+	if ( '' !== $resolved ) {
+		$attr['id'] = sanitize_text_field( $resolved );
 		$attr_str = '';
 		foreach ( $attr as $k => $v ) {
 			$attr_str .= ' ' . $k . '="' . esc_attr( $v ) . '"';
@@ -64,13 +149,15 @@ add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
 		return do_shortcode( '[' . $tag . $attr_str . ']' );
 	}
 
-	/* Numeric ID or already-mapped hash ,  let CF7 handle it directly. */
-	if ( is_numeric( $id_raw ) || preg_match( '/^[a-f0-9]{6,8}$/i', $id_raw ) ) {
-		return $output;
-	}
-
+	/* Numeric or hash-shape we could not find. Probably a stale hash. */
 	if ( current_user_can( 'edit_posts' ) ) {
-		return '<div class="bv-form-missing" style="padding:1rem;border:2px dashed #fca5a5;border-radius:0.5rem;background:#fef2f2;color:#7f1d1d;">Form <code>' . esc_html( $slug ) . '</code> is not mapped to a Contact Form 7 ID. Set it in <strong>Settings → Booming Venture → Forms</strong> or via <code>BV_CF7_MAP</code>.</div>';
+		$slug = sanitize_key( $id_raw );
+		return '<div class="bv-form-missing" style="padding:1rem;border:2px dashed #fca5a5;border-radius:0.5rem;background:#fef2f2;color:#7f1d1d;line-height:1.55">'
+			. '<strong>Contact Form 7 form not found.</strong><br>'
+			. 'Slug or id: <code>' . esc_html( $id_raw ) . '</code>. '
+			. 'Create a CF7 form (Contact &rarr; Contact Forms), then either name it <code>' . esc_html( ucwords( str_replace( '-', ' ', $slug ) ) ) . '</code> '
+			. 'or paste its hash id under <strong>Settings &rarr; Booming Venture &rarr; Forms</strong> next to <code>' . esc_html( $slug ) . '</code>.'
+			. '</div>';
 	}
 	return '';
 }, 10, 3 );
@@ -174,15 +261,26 @@ function bv_settings_page(): void {
 		<h1>Booming Venture</h1>
 		<form method="post" action="options.php">
 			<?php settings_fields( 'bv_settings' ); ?>
-			<h2>Contact Form 7 ,  slug → CF7 form ID</h2>
-			<p class="description">After creating each form in <strong>Contact → Contact Forms</strong>, paste the CF7 hash ID (e.g. <code>a1b2c3d4</code>) or numeric form ID into the matching slug below.</p>
+			<h2>Contact Form 7 ,  slug → CF7 form</h2>
+			<p class="description">After creating each form in <strong>Contact → Contact Forms</strong>, either name the form to match the slug (e.g. "Contact") OR paste its CF7 hash id (e.g. <code>a1b2c3d4</code>) or numeric id into the box. The status column shows whether the form was found.</p>
 			<table class="form-table">
-			<?php foreach ( $map as $slug => $id ) : ?>
+				<thead><tr><th>Slug</th><th>Configured id or hash</th><th>Status</th></tr></thead>
+				<tbody>
+			<?php foreach ( $map as $slug => $id ) :
+				$resolved = bv_cf7_resolve_id( $slug );
+				if ( '' !== $resolved ) {
+					$status = '<span style="color:#16a34a">&#10003; Found</span> &mdash; using <code>' . esc_html( $resolved ) . '</code>';
+				} else {
+					$status = '<span style="color:#b91c1c">&#10007; Not found</span> &mdash; create the form or paste an id.';
+				}
+				?>
 				<tr>
 					<th><label for="bv-cf7-<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $slug ); ?></label></th>
 					<td><input type="text" id="bv-cf7-<?php echo esc_attr( $slug ); ?>" name="bv_cf7_map[<?php echo esc_attr( $slug ); ?>]" value="<?php echo esc_attr( (string) $id ); ?>" class="regular-text" placeholder="e.g. a1b2c3d4"></td>
+					<td><?php echo $status; ?></td>
 				</tr>
 			<?php endforeach; ?>
+				</tbody>
 			</table>
 
 			<h2>Brand images ,  slug → upload UUID or URL</h2>
