@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       Booming Venture , Brevo Form Fix
  * Plugin URI:        https://boomingventure.com
- * Description:       Stops the front-end form spinner from hanging on Brevo / Sendinblue submissions. Fixes three known issues: (1) PHP notice output corrupting REST JSON responses, (2) Brevo SMTP API rejecting payloads missing the recipient name, (3) Brevo Contacts API returning 400 on duplicate emails instead of upserting. Zero configuration. Activate and forget.
- * Version:           1.0.0
+ * Description:       Stops the front-end form spinner from hanging on Brevo / Sendinblue submissions. Auto-fills the Name field from the visitor's email as they type, and patches the server-side payload too. Fixes four known issues: (1) PHP notice output corrupting REST JSON responses, (2) Brevo SMTP API rejecting payloads missing the recipient name, (3) Brevo Contacts API returning 400 on duplicate emails instead of upserting, (4) forms without a visible Name input sending empty names to Brevo. Zero configuration. Activate and forget.
+ * Version:           1.1.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            Booming Venture
@@ -18,8 +18,28 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const BVBF_VERSION = '1.0.0';
+const BVBF_VERSION = '1.1.0';
 const BVBF_LOG_OPT = 'bvbf_event_log';
+
+/* ---------------------------------------------------------------------
+ * FIX 0 , front-end auto-fill of the Name field from the Email input
+ *
+ * A small dependency-free JS that watches every email input on the
+ * page and, on every keystroke, derives a name from the email
+ * local-part and writes it into the nearest empty Name field in the
+ * same form. Works on CF7, Fluent Forms, Gravity Forms, WPForms,
+ * Brevo native subscribe widget, and plain HTML forms. Uses a
+ * MutationObserver so AJAX-injected forms get picked up too.
+ *
+ * If the user has already typed a name themselves, we never overwrite
+ * it , we only fill empty fields or fields we previously auto-filled.
+ * --------------------------------------------------------------------- */
+add_action( 'wp_enqueue_scripts', function () {
+	$path = plugin_dir_path( __FILE__ ) . 'assets/auto-name.js';
+	$url  = plugins_url( 'assets/auto-name.js', __FILE__ );
+	$ver  = file_exists( $path ) ? (string) filemtime( $path ) : BVBF_VERSION;
+	wp_enqueue_script( 'bvbf-auto-name', $url, [], $ver, true );
+} );
 
 /* ---------------------------------------------------------------------
  * FIX 1 , suppress PHP notice / warning output during REST API requests

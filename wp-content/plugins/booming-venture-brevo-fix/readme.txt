@@ -4,7 +4,7 @@ Tags: brevo, sendinblue, contact-form-7, fluent-forms, smtp, rest-api
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -61,6 +61,13 @@ No. Errors are still written to `debug.log` exactly as before. Only their displa
 No. The plugin patches outbound requests in transit; it never talks to Brevo directly.
 
 == Changelog ==
+
+= 1.1.0 =
+* NEW: front-end auto-fill of the Name field from the visitor's email as they type. Works on CF7, Fluent Forms, Gravity Forms, WPForms, Brevo native subscribe widget, and plain HTML forms.
+* Detects email and name inputs by type, name, id, placeholder, and autocomplete attributes.
+* Uses MutationObserver so AJAX-injected forms get auto-bound after page load.
+* Never overwrites a name the user typed themselves , only fills empty fields or fields we previously auto-filled.
+* Dispatches input + change events so framework state stays in sync.
 
 = 1.0.0 =
 * Initial release.
