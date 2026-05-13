@@ -120,7 +120,10 @@ function bv_image( string $slug ): string {
 	$val      = isset( $map[ $slug ] ) ? trim( (string) $map[ $slug ] ) : '';
 
 	if ( $val === '' ) {
-		return esc_url( BV_THEME_URI . '/assets/images/' . $slug . '.jpg' );
+		/* No mapped image for this slug. Fall back to a guaranteed-live
+		 * brand photo on Strato so the markup never carries a broken
+		 * /assets/images/<slug>.jpg path. */
+		return 'https://boomingventure.com/wp-content/uploads/2026/05/4e357139-5a7e-4336-8796-94013f33dc3d.png';
 	}
 
 	if ( preg_match( '#^https?://#i', $val ) ) {

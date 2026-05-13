@@ -57,7 +57,7 @@
 			<!-- wp:group {"className":"bv-hero-card","style":{"border":{"radius":"1rem"},"shadow":"var:preset|shadow|xl","spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"backgroundColor":"base","layout":{"type":"constrained"}} -->
 				<div class="wp-block-group bv-hero-card has-base-background-color has-background" style="border-radius:1rem;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--xl)">
 				<!-- wp:image {"sizeSlug":"large","style":{"border":{"radius":"0.5rem"}}} -->
-				<figure class="wp-block-image size-large" style="border-radius:0.5rem"><img src="<?php echo esc_url( BV_THEME_URI ); ?>/assets/images/hero-team.jpg" alt="Booming Venture team collaborating in a modern office"/></figure>
+				<figure class="wp-block-image size-large" style="border-radius:0.5rem"><img src="<?php echo bv_image( 'hero-extra' ); ?>" alt="Booming Venture team collaborating in a modern office" loading="lazy" decoding="async" width="800" height="600"/></figure>
 				<!-- /wp:image -->
 				<!-- wp:columns -->
 				<div class="wp-block-columns">

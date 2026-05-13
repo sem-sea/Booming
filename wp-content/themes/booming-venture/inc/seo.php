@@ -268,7 +268,7 @@ add_action( 'wp_head', function () {
 	$title = wp_get_document_title();
 	$desc  = is_singular() ? get_the_excerpt() : get_bloginfo( 'description' );
 	$url   = is_singular() ? get_permalink() : home_url( add_query_arg( null, null ) );
-	$img   = is_singular() && has_post_thumbnail() ? get_the_post_thumbnail_url( get_the_ID(), 'bv-hero' ) : BV_THEME_URI . '/assets/images/og-default.jpg';
+	$img   = is_singular() && has_post_thumbnail() ? get_the_post_thumbnail_url( get_the_ID(), 'bv-hero' ) : ( function_exists( 'bv_image' ) ? bv_image( 'service-1' ) : 'https://boomingventure.com/wp-content/uploads/2026/05/4e357139-5a7e-4336-8796-94013f33dc3d.png' );
 
 	printf( "<meta name=\"description\" content=\"%s\">\n", esc_attr( wp_strip_all_tags( $desc ) ) );
 	printf( "<meta property=\"og:type\" content=\"%s\">\n", is_singular( 'post' ) ? 'article' : 'website' );

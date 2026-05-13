@@ -32,10 +32,10 @@
 		<div class="wp-block-column is-vertically-aligned-center">
 			<!-- wp:html -->
 			<div class="bv-photo-grid">
-				<img src="<?php echo esc_url( BV_THEME_URI ); ?>/assets/images/why-1.jpg" alt="Team collaborating around a laptop" loading="lazy" decoding="async" width="600" height="450">
-				<img src="<?php echo esc_url( BV_THEME_URI ); ?>/assets/images/why-2.jpg" alt="Strategy presentation in a modern office" loading="lazy" decoding="async" width="600" height="450">
-				<img src="<?php echo esc_url( BV_THEME_URI ); ?>/assets/images/why-3.jpg" alt="Two professionals reviewing analytics" loading="lazy" decoding="async" width="600" height="450">
-				<img src="<?php echo esc_url( BV_THEME_URI ); ?>/assets/images/why-4.jpg" alt="Designer at desk with creative materials" loading="lazy" decoding="async" width="600" height="450">
+				<img src="<?php echo bv_image( 'service-4' ); ?>" alt="Diverse team collaborating around laptops" loading="lazy" decoding="async" width="600" height="450">
+				<img src="<?php echo bv_image( 'service-1' ); ?>" alt="Consultants reviewing strategy on a tablet" loading="lazy" decoding="async" width="600" height="450">
+				<img src="<?php echo bv_image( 'service-3' ); ?>" alt="Two professionals reviewing AI dashboard insights" loading="lazy" decoding="async" width="600" height="450">
+				<img src="<?php echo bv_image( 'hero-extra' ); ?>" alt="Working session inside a modern office" loading="lazy" decoding="async" width="600" height="450">
 			</div>
 			<!-- /wp:html -->
 		</div>

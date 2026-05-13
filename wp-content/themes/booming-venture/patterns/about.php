@@ -18,7 +18,7 @@
 			<!-- wp:group {"style":{"border":{"radius":"1rem"},"shadow":"var:preset|shadow|lg","spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}},"backgroundColor":"base"} -->
 			<div class="wp-block-group has-base-background-color has-background" style="border-radius:1rem;padding:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--lg)">
 				<!-- wp:image {"sizeSlug":"large","style":{"border":{"radius":"0.625rem"}}} -->
-				<figure class="wp-block-image size-large" style="border-radius:0.625rem"><img src="<?php echo esc_url( BV_THEME_URI ); ?>/assets/images/about-leader.jpg" alt="Confident business leader presenting to a diverse team"/></figure>
+				<figure class="wp-block-image size-large" style="border-radius:0.625rem"><img src="<?php echo bv_image( 'service-2' ); ?>" alt="Confident business leader presenting to a diverse team" loading="lazy" decoding="async" width="800" height="600"/></figure>
 				<!-- /wp:image -->
 				<!-- wp:heading {"level":3,"fontSize":"3xl"} --><h3 class="wp-block-heading has-3-xl-font-size">Our Mission</h3><!-- /wp:heading -->
 				<!-- wp:paragraph {"textColor":"contrast-2"} -->
