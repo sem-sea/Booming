@@ -3,7 +3,7 @@
  * Plugin Name:       Booming Venture Blog Importer
  * Plugin URI:        https://boomingventure.com
  * Description:       Adds OR refreshes the Booming Venture long-form blog posts (83 articles, every one 1,200 to 1,969 words, refreshed for May 2026). Strictly blog posts only. Does NOT change pages, services, menus, theme settings, permalinks, the front page, or any post meta. Two buttons: Add new posts, and Refresh existing posts.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            Booming Venture
@@ -19,7 +19,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const BVBI_VERSION  = '1.0.0';
+const BVBI_VERSION  = '1.0.1';
 const BVBI_FLAG     = 'bvbi_last_run';
 const BVBI_LAST_LOG = 'bvbi_last_log';
 const BVBI_NONCE    = 'bvbi_run';

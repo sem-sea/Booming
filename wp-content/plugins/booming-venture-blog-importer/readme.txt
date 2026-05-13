@@ -4,7 +4,7 @@ Tags: importer, blog content, booming venture, wxr, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -64,6 +64,10 @@ Yes, the operation is idempotent. Running it again with the same WXR re-asserts 
 Yes. Every post has a question-shaped H2 with a 20-25 word answer capsule, 3+ statistics with named-source links in the first 30 percent of body, an ordered list with 5+ items, a 5-question FAQ block, and a CTA. No em-dashes, no AI-tell phrases anywhere in the WXR.
 
 == Changelog ==
+
+= 1.0.1 =
+* Re-package release with fresh versioned URL (per project convention: every release gets a new unique download filename).
+* No functional changes from 1.0.0.
 
 = 1.0.0 =
 * Initial release.
