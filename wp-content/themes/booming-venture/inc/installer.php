@@ -24,7 +24,7 @@ const BV_INSTALL_FLAG    = 'bv_content_imported';
  * new posts, new patterns wired into existing pages). The install hook
  * re-runs the WXR import on the next activation when the stored value
  * does not match this constant. */
-const BV_INSTALL_VERSION = '1.5.5';
+const BV_INSTALL_VERSION = '1.5.7';
 
 /* Run after theme activation (priority 20 = after setup hooks). */
 add_action( 'after_switch_theme', 'bv_run_install', 20 );
@@ -524,6 +524,25 @@ add_action( 'admin_post_bv_flush_rewrites', function () {
 	exit;
 } );
 
+/* ============================================================
+ * Manual "Force re-import content" endpoint. Clears the install
+ * flag and re-runs bv_import_wxr() + bv_configure_homepage() +
+ * bv_configure_menus(). Use when the WXR re-import did not run
+ * on theme activation (e.g. install flag already matched).
+ * Safe: existing pages are kept, structural pages get refreshed,
+ * missing blog posts are inserted.
+ * ============================================================ */
+add_action( 'admin_post_bv_force_reimport', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( 'bv_force_reimport' );
+
+	delete_option( BV_INSTALL_FLAG );
+	bv_run_install();
+
+	wp_safe_redirect( admin_url( 'options-general.php?page=booming-venture&bv_reimported=1' ) );
+	exit;
+} );
+
 add_action( 'admin_notices', function () {
 	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 	if ( ! $screen || 'settings_page_booming-venture' !== $screen->id ) return;
@@ -531,6 +550,15 @@ add_action( 'admin_notices', function () {
 		?>
 		<div class="notice notice-success is-dismissible">
 			<p><strong>Rewrite rules flushed.</strong> Visit any blog post URL to verify. Permalink structure: <code>/blog/%postname%/</code></p>
+		</div>
+		<?php
+	}
+	if ( isset( $_GET['bv_reimported'] ) ) {
+		global $wpdb;
+		$post_count = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->posts} WHERE post_type = 'post' AND post_status = 'publish'" );
+		?>
+		<div class="notice notice-success is-dismissible">
+			<p><strong>Content re-imported.</strong> Total published posts now: <strong><?php echo $post_count; ?></strong>. About page refreshed with founder section. Visit <a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">/blog/</a> and <a href="<?php echo esc_url( home_url( '/about/' ) ); ?>">/about/</a> to verify.</p>
 		</div>
 		<?php
 	}
@@ -580,7 +608,12 @@ RewriteRule . /index.php [L]
 		. '<input type="hidden" name="action" value="bv_flush_rewrites">'
 		. '<button type="submit" class="button button-primary">Flush rewrite rules now</button>'
 		. '</form>'
-		. ' <a href="' . esc_url( admin_url( 'options-permalink.php' ) ) . '" class="button">Open Permalinks page</a>';
+		. ' <a href="' . esc_url( admin_url( 'options-permalink.php' ) ) . '" class="button">Open Permalinks page</a>'
+		. ' <form method="post" action="' . $action . '" style="display:inline;margin-left:8px;">'
+		. wp_nonce_field( 'bv_force_reimport', '_wpnonce', true, false )
+		. '<input type="hidden" name="action" value="bv_force_reimport">'
+		. '<button type="submit" class="button button-secondary">Force re-import content (WXR)</button>'
+		. '</form>';
 
 	if ( ! $ht['writable'] || ! $ht['has_wp_rules'] ) {
 		$html .= '<div style="margin-top:1rem;padding:0.75rem 1rem;background:#fff;border:1px solid #f97316;border-radius:0.5rem;">'
