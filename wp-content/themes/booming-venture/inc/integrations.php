@@ -11,7 +11,7 @@
  *   - Map each semantic slug to the CF7 hash ID under
  *     Settings → Booming Venture.
  *
- * The patterns ship with `[contact-form-7 id="contact"]` etc. so the
+ * The patterns ship with `[contact-form-7 id="231533b" title="Contact"]` etc. so the
  * markup stays human-readable; this file rewrites the slug to the real
  * CF7 ID at render time.
  *
@@ -58,10 +58,22 @@ function bv_cf7_slug_map(): array {
 function bv_cf7_form_exists( string $id_or_hash ): int {
 	global $wpdb;
 	if ( '' === $id_or_hash ) return 0;
+
+	/* Numeric post ID lookup. */
 	if ( ctype_digit( $id_or_hash ) ) {
 		$post = get_post( (int) $id_or_hash );
 		return ( $post && 'wpcf7_contact_form' === $post->post_type ) ? (int) $post->ID : 0;
 	}
+
+	/* CF7 stores the form hash in multiple places depending on plugin
+	 * version: as postmeta `_hash`, OR as the post_name (slug), OR via
+	 * WPCF7_ContactForm::get_instance(). Check all three. */
+	$post_id = $wpdb->get_var( $wpdb->prepare(
+		"SELECT ID FROM {$wpdb->posts} WHERE post_name = %s AND post_type = 'wpcf7_contact_form' LIMIT 1",
+		$id_or_hash
+	) );
+	if ( $post_id ) return (int) $post_id;
+
 	$post_id = $wpdb->get_var( $wpdb->prepare(
 		"SELECT pm.post_id FROM {$wpdb->postmeta} pm
 		 INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
@@ -69,7 +81,18 @@ function bv_cf7_form_exists( string $id_or_hash ): int {
 		   AND p.post_type = 'wpcf7_contact_form' LIMIT 1",
 		$id_or_hash
 	) );
-	return $post_id ? (int) $post_id : 0;
+	if ( $post_id ) return (int) $post_id;
+
+	/* CF7 API: WPCF7_ContactForm::get_instance accepts hash or id. */
+	if ( class_exists( 'WPCF7_ContactForm' ) ) {
+		$form = \WPCF7_ContactForm::get_instance( $id_or_hash );
+		if ( $form && method_exists( $form, 'id' ) ) {
+			$fid = (int) $form->id();
+			if ( $fid > 0 ) return $fid;
+		}
+	}
+
+	return 0;
 }
 
 /**
@@ -128,7 +151,7 @@ function bv_cf7_resolve_id( string $id_raw ): string {
 	return '';
 }
 
-/* Rewrite `[contact-form-7 id="contact"]` -> `[contact-form-7 id="<real-id>"]`.
+/* Rewrite `[contact-form-7 id="231533b" title="Contact"]` -> `[contact-form-7 id="<real-id>"]`.
  *
  * Strategy: resolve the slug to a verified CF7 form, then call do_shortcode
  * with the verified id so CF7's own handler renders. If we cannot resolve,
@@ -139,9 +162,16 @@ add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
 
 	$id_raw = (string) $attr['id'];
 
-	/* Re-entrancy guard. CF7 is also registered as `contact-form-7`; once we
-	 * rewrite and call do_shortcode again, the recursion comes back through
-	 * here. Detect "already verified" ids and let CF7's own handler run. */
+	/* TRUST mode: if the id_raw is numeric or a hex-hash shape (6 to 8
+	 * lowercase hex chars, the CF7 hash format), let CF7's own handler
+	 * render it directly. No DB lookup, no resolver. This is the
+	 * common case in production once forms are wired correctly and it
+	 * prevents the resolver from ever interfering with a working hash. */
+	if ( is_numeric( $id_raw ) || preg_match( '/^[a-f0-9]{6,8}$/i', $id_raw ) ) {
+		return $output;
+	}
+
+	/* Re-entrancy / verification path for non-hash inputs (slugs). */
 	if ( bv_cf7_form_exists( $id_raw ) ) {
 		return $output;
 	}

@@ -74,7 +74,18 @@ $img   = bv_image( 'growth-guide' );
 				<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} -->
 				<p class="has-muted-color has-text-color has-sm-font-size">Frameworks, templates and real case studies, delivered in one PDF.</p>
 				<!-- /wp:paragraph -->
-				<!-- wp:shortcode -->[contact-form-7 id="growth-guide"]<!-- /wp:shortcode -->
+				<!-- wp:html -->
+				<div class="bv-cf7-slot">
+					<?php echo do_shortcode( '[contact-form-7 id="e46231e" title="Growth Guide"]' ); ?>
+				</div>
+				<form class="bv-form-fallback bv-form-fallback--inline" method="get" action="mailto:info@boomingventure.com?subject=Send%20me%20the%20free%20Growth%20Strategy%20Guide">
+					<label class="bv-form-fallback__label" for="bv-ff-gg">Email address</label>
+					<div class="bv-form-fallback__row">
+						<input type="email" id="bv-ff-gg" name="email" required placeholder="you@company.com" autocomplete="email" inputmode="email">
+						<button type="submit" class="bv-form-fallback__btn">Send</button>
+					</div>
+				</form>
+				<!-- /wp:html -->
 				<!-- wp:paragraph {"fontSize":"xs","textColor":"muted"} -->
 				<p class="has-muted-color has-text-color has-xs-font-size">✓ No spam, unsubscribe anytime.</p>
 				<!-- /wp:paragraph -->

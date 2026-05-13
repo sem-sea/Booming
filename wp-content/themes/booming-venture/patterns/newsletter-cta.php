@@ -14,7 +14,7 @@
 	<!-- /wp:paragraph -->
 	<!-- wp:group {"layout":{"type":"constrained","contentSize":"480px"}} -->
 	<div class="wp-block-group">
-		<!-- wp:shortcode -->[contact-form-7 id="newsletter"]<!-- /wp:shortcode -->
+		<!-- wp:shortcode -->[contact-form-7 id="6c25a82" title="Newsletter"]<!-- /wp:shortcode -->
 	</div>
 	<!-- /wp:group -->
 </section>

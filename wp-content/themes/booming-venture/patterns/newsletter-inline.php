@@ -12,6 +12,6 @@
 	<!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600"}}} -->
 	<p class="has-sm-font-size" style="font-weight:600">Join 700+ Members getting growth insights</p>
 	<!-- /wp:paragraph -->
-	<!-- wp:shortcode -->[contact-form-7 id="newsletter-inline"]<!-- /wp:shortcode -->
+	<!-- wp:shortcode -->[contact-form-7 id="6c25a82" title="Newsletter"]<!-- /wp:shortcode -->
 </div>
 <!-- /wp:group -->
