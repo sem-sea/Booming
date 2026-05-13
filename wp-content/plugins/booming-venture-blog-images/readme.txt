@@ -4,7 +4,7 @@ Tags: featured image, media library, hero, blog overview, thumbnails
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,9 @@ It registers two image sizes but does not regenerate existing uploads. To resize
 No. The hero image uses `loading=eager fetchpriority=high` so it counts as the LCP candidate. The card thumbnails are `loading=lazy decoding=async`.
 
 == Changelog ==
+
+= 1.4.0 =
+* Width fix: featured image on single post views now matches the article body width (the `--wp--style--global--content-size` token, default 720px), centred. Overrides any `.alignwide` / `.alignfull` the theme applied. 16:9 aspect ratio retained.
 
 = 1.3.0 =
 * Size fix: constrain the theme's core/post-featured-image block on single post views to a tidy 16:9 box (rounded corners, soft shadow on tablet+, max-height 60vh on cover variants). Matches the compact size profile of our own injected hero from v1.0 to v1.1. Archive thumbnails are left untouched.

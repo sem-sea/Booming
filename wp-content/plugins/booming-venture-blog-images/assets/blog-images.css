@@ -14,13 +14,23 @@
  * Archive views are left alone , the theme can render thumbnails
  * however it wants there.
  * ============================================================ */
-body.single-post .wp-block-post-featured-image {
-	max-width: 100%;
-	margin: 0 0 1.5rem;
+body.single-post .wp-block-post-featured-image,
+body.single-post .wp-block-post-featured-image.alignwide,
+body.single-post .wp-block-post-featured-image.alignfull,
+body.single-post header.entry-header .wp-block-post-featured-image,
+body.single-post main .wp-block-post-featured-image {
+	max-width: var( --wp--style--global--content-size, 720px );
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0;
+	margin-bottom: 1.5rem;
 	border-radius: 0.5rem;
 	overflow: hidden;
 	aspect-ratio: 16 / 9;
 	background: #f1f5f9;
+	display: block;
+	float: none;
 }
 
 body.single-post .wp-block-post-featured-image a,
@@ -41,9 +51,12 @@ body.single-post .wp-block-post-featured-image img {
 }
 
 @media (min-width: 768px) {
-	body.single-post .wp-block-post-featured-image {
+	body.single-post .wp-block-post-featured-image,
+	body.single-post .wp-block-post-featured-image.alignwide,
+	body.single-post .wp-block-post-featured-image.alignfull {
 		border-radius: 0.875rem;
-		margin: 0 0 2rem;
+		margin-top: 0;
+		margin-bottom: 2rem;
 		box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.15);
 	}
 	body.single-post .wp-block-post-featured-image img {
