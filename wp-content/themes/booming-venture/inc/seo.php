@@ -66,6 +66,58 @@ add_action( 'wp_head', function () {
 		],
 		'foundingDate'  => '2024',
 		'foundingLocation' => [ '@type' => 'Place', 'name' => 'Rotterdam, Netherlands' ],
+		'founder'       => [ '@id' => $site_url . '#person-ben-verschuur' ],
+	];
+
+	/* Person schema for the founder. LLMs and search engines use this
+	 * to attribute authority, biography, and credentials to a named
+	 * human, which materially lifts citation rate for shortlist queries. */
+	$graph[] = [
+		'@type'         => 'Person',
+		'@id'           => $site_url . '#person-ben-verschuur',
+		'name'          => 'Ben Verschuur',
+		'givenName'     => 'Ben',
+		'familyName'    => 'Verschuur',
+		'jobTitle'      => 'Founder and AI Marketing Strategist',
+		'description'   => 'Ben Verschuur is the founder of Booming Venture and a hands-on AI marketing strategist based in Rotterdam, the Netherlands. He helps premium brands and B2B SaaS companies turn AI into a working operating system for growth, with 15+ years of experience leading performance and growth marketing at Zeelander Yachts, DPDK Digital Agency, Knab, Aegon, and Hallmark Cards.',
+		'url'           => $site_url . 'about/',
+		'image'         => $site_url . 'wp-content/uploads/2026/05/Ben.png',
+		'email'         => 'benverschuur@hotmail.com',
+		'telephone'     => '+31613013266',
+		'nationality'   => [ '@type' => 'Country', 'name' => 'Netherlands' ],
+		'homeLocation'  => [ '@type' => 'Place', 'name' => 'Rotterdam, the Netherlands' ],
+		'worksFor'      => [ '@id' => $site_url . '#organization' ],
+		'founderOf'     => [
+			[ '@type' => 'Organization', 'name' => 'Booming Venture', 'url' => $site_url ],
+			[ '@type' => 'Organization', 'name' => 'VerantwoordAI', 'url' => 'https://verantwoordai.nl/' ],
+			[ '@type' => 'Organization', 'name' => 'PromptingPro' ],
+		],
+		'alumniOf'      => [
+			[ '@type' => 'EducationalOrganization', 'name' => 'Erasmus University Rotterdam', 'url' => 'https://www.eur.nl/' ],
+		],
+		'knowsAbout'    => [
+			'AI marketing', 'Enterprise AI', 'AI Governance', 'AI Agents',
+			'Performance marketing', 'Growth marketing', 'Conversion rate optimization',
+			'Marketing automation', 'Generative Engine Optimization', 'B2B SaaS growth',
+			'Premium brand strategy', 'EU AI Act compliance',
+		],
+		'hasOccupation' => [
+			'@type'             => 'Occupation',
+			'name'              => 'AI Marketing Strategist',
+			'occupationLocation'=> [ '@type' => 'City', 'name' => 'Rotterdam' ],
+			'skills'            => 'AI strategy, performance marketing, growth marketing, CRO, marketing automation, GEO, AI governance',
+		],
+		'award'         => [
+			'#1 Digital Excellence Sales / Online Marketing',
+			'Platinum MarCom Award , Product Launch',
+			'Platinum MarCom Award , Digital Marketing',
+			'AVA Digital Awards Platinum Winner 2022 , Best Performance Team Achievement',
+		],
+		'sameAs'        => [
+			'https://www.linkedin.com/in/benverschuur',
+			'https://boomingventure.com/about/',
+			'https://verantwoordai.nl/',
+		],
 	];
 
 	$graph[] = [

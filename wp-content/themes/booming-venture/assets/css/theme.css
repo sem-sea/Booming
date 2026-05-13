@@ -244,6 +244,108 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .bv-story { max-width: 720px; margin: 0 auto; }
 .bv-story p { font-size: clamp(1rem, 0.95rem + 0.2vw, 1.125rem); line-height: 1.75; }
 
+/* ============ Pattern: about-founder (Ben Verschuur) ============ */
+.bv-founder__card {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 2rem;
+	max-width: 1100px;
+	margin: 0 auto;
+	background: var(--wp--preset--color--base);
+	border: 1px solid var(--wp--preset--color--border);
+	border-radius: 1.25rem;
+	padding: 1.75rem;
+	box-shadow: var(--wp--preset--shadow--md);
+}
+@media (min-width: 880px) {
+	.bv-founder__card { grid-template-columns: 320px 1fr; gap: 2.5rem; padding: 2.25rem; align-items: start; }
+}
+.bv-founder__photo {
+	position: relative;
+	border-radius: 1rem;
+	overflow: hidden;
+	background: linear-gradient(135deg, var(--wp--preset--color--booming-100), var(--wp--preset--color--venture-100));
+	aspect-ratio: 1 / 1;
+}
+.bv-founder__photo img {
+	width: 100%; height: 100%;
+	object-fit: cover;
+	display: block;
+}
+.bv-founder__body { display: flex; flex-direction: column; gap: 0.75rem; }
+.bv-founder__eyebrow {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--wp--preset--color--booming-700);
+	margin: 0;
+}
+.bv-founder__name {
+	font: 700 clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem)/1.15 var(--wp--preset--font-family--display);
+	margin: 0;
+	letter-spacing: -0.01em;
+}
+.bv-founder__role { color: var(--wp--preset--color--muted); margin: 0 0 0.5rem; font-size: 1.0625rem; }
+.bv-founder__body p { line-height: 1.7; margin: 0; }
+.bv-founder__honors {
+	font-size: 0.9375rem;
+	color: var(--wp--preset--color--contrast-2);
+	background: var(--wp--preset--color--booming-50);
+	border-radius: 0.625rem;
+	padding: 0.75rem 1rem;
+}
+.bv-founder__chips {
+	list-style: none;
+	padding: 0;
+	margin: 0.25rem 0 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+.bv-founder__chips li {
+	font-size: 0.8125rem;
+	font-weight: 500;
+	padding: 0.375rem 0.75rem;
+	border-radius: 9999px;
+	background: var(--wp--preset--color--base-50);
+	border: 1px solid var(--wp--preset--color--border);
+	color: var(--wp--preset--color--contrast-2);
+}
+.bv-founder__cta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	margin-top: 0.75rem;
+}
+.bv-founder__cta .bv-btn { text-decoration: none; }
+
+/* ============ Symmetric grid for About-page card sections ============
+ * Ensures core-values, approach-steps and why-choose grids match
+ * heights and widths across the page. */
+.bv-founder + .wp-block-group .wp-block-columns,
+section + section .wp-block-columns.alignwide {
+	gap: 1.5rem !important;
+}
+.bv-value-card,
+.bv-step-card,
+.bv-why-card {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.bv-value-card h3,
+.bv-step-card h3,
+.bv-why-card h3 { min-height: 1.5em; }
+.bv-value-card p,
+.bv-step-card p,
+.bv-why-card p { margin-top: auto; }
+@media (min-width: 768px) {
+	.wp-block-columns.alignwide > .wp-block-column { display: flex; }
+	.wp-block-columns.alignwide > .wp-block-column > .wp-block-html,
+	.wp-block-columns.alignwide > .wp-block-column > .wp-block-html > * { width: 100%; }
+}
+
 /* ============ Pattern: core-values / 4-card grid ============ */
 .bv-value-card {
 	background: var(--wp--preset--color--base);

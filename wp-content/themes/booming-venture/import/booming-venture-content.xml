@@ -88,6 +88,7 @@
 		<wp:status><![CDATA[publish]]></wp:status>
 		<wp:post_type><![CDATA[page]]></wp:post_type>
 		<content:encoded><![CDATA[<!-- wp:pattern {"slug":"booming-venture/about-story"} /-->
+<!-- wp:pattern {"slug":"booming-venture/about-founder"} /-->
 <!-- wp:pattern {"slug":"booming-venture/core-values"} /-->
 <!-- wp:pattern {"slug":"booming-venture/approach-steps"} /-->
 <!-- wp:pattern {"slug":"booming-venture/why-choose-checklist"} /-->

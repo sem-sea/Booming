@@ -155,6 +155,8 @@ function bv_media_defaults(): array {
 		'service-4'    => '12b0da47-c27a-4cb5-b98a-61b5ddd8dcf4',
 		// Free Growth Guide ,  booklets on a desk with notes.
 		'growth-guide' => '0100bc15-cf04-42bc-827d-1ecfe72c1ff6',
+		// Founder portrait , Ben Verschuur.
+		'ben-founder'  => 'https://boomingventure.com/wp-content/uploads/2026/05/Ben.png',
 	];
 }
 
