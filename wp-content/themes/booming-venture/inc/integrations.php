@@ -140,11 +140,16 @@ add_action( 'admin_init', function () {
  * Override per-slug in Settings -> Booming Venture -> Brand images. */
 function bv_media_defaults(): array {
 	return [
+		// Strategic Consulting — consultants with tablet, cyan wall.
 		'service-1'    => '4e357139-5a7e-4336-8796-94013f33dc3d',
-		'service-2'    => '',
-		'service-3'    => '',
-		'service-4'    => '',
-		'growth-guide' => '',
+		// Performance Marketing — speaker on stage with brand slide.
+		'service-2'    => '64a1eea5-ff4d-4a89-83d2-1e2e9c5258d6',
+		// AI-Powered Solutions — consultants reviewing dashboard, lockers bg.
+		'service-3'    => '8ae06510-02a0-453f-a984-f0642561707e',
+		// Growth Optimization — diverse team around laptops.
+		'service-4'    => '12b0da47-c27a-4cb5-b98a-61b5ddd8dcf4',
+		// Free Growth Guide — booklets on a desk with notes.
+		'growth-guide' => '0100bc15-cf04-42bc-827d-1ecfe72c1ff6',
 	];
 }
 
