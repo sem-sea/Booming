@@ -74,6 +74,21 @@ rm -f wp-content/themes/booming-venture.zip
 
 Use semver: `feat:` commits bump minor (1.2.0 -> 1.3.0), `fix:` and `chore:` commits bump patch (1.2.0 -> 1.2.1), breaking changes bump major. Reflect the new version in the commit message. Rebuild `booming-venture.zip` after the bump so the upload reflects the new version string.
 
+## Versioned download artefact (every release)
+
+**ALWAYS ship a versioned zip alongside the latest.** Two artefacts get committed every release:
+
+1. `wp-content/themes/booming-venture.zip` , the rolling latest. Same URL every time.
+2. `wp-content/themes/booming-venture-<version>.zip` , a clean copy with the version in the filename.
+
+The release reply to the user must include BOTH download links: the latest URL plus the versioned URL. The versioned filename is the one that proves which version the user is downloading and avoids the "same version" confusion in WP admin.
+
+Verify the version string inside the zip before linking it:
+```bash
+unzip -p wp-content/themes/booming-venture.zip booming-venture/style.css | head -8 | grep Version
+unzip -p wp-content/themes/booming-venture.zip booming-venture/functions.php | grep BV_THEME_VERSION
+```
+
 ## Branch
 
 All work happens on `claude/lovable-to-wordpress-theme-lnXza` per the upstream instructions.
