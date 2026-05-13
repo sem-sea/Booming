@@ -378,3 +378,129 @@ add_shortcode( 'bv_read_time', function () {
 	}
 	return esc_html( $rt );
 } );
+
+
+/* ============================================================
+ * 301 redirect catcher for old-style URLs.
+ *
+ * Posts now live at /blog/{slug}/. If someone hits the legacy URL
+ * /{slug}/ (which would happen with bookmarks, external links, or
+ * permalink_structure briefly being /%postname%/ during a previous
+ * theme), look up the post by slug and 301 to the canonical URL.
+ *
+ * This runs only on 404s so it doesn't intercept any real page or
+ * CPT URL.
+ * ============================================================ */
+add_action( 'template_redirect', function () {
+	if ( ! is_404() ) return;
+
+	$req = trim( wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ) ?: '', '/' );
+	if ( ! $req || str_contains( $req, '/' ) ) return; // multi-segment paths handled elsewhere
+
+	$slug = sanitize_title( $req );
+	if ( ! $slug ) return;
+
+	/* Direct slug match against any post type that should be public. */
+	foreach ( [ 'post', 'page', 'service', 'landing_page', 'case_study' ] as $pt ) {
+		$post = get_page_by_path( $slug, OBJECT, $pt );
+		if ( $post && 'publish' === $post->post_status ) {
+			$dest = get_permalink( $post );
+			if ( $dest && trailingslashit( $dest ) !== trailingslashit( home_url( $_SERVER['REQUEST_URI'] ?? '' ) ) ) {
+				wp_safe_redirect( $dest, 301 );
+				exit;
+			}
+		}
+	}
+}, 1 );
+
+
+/* ============================================================
+ * Manual "Flush rewrite rules" endpoint — for when Settings →
+ * Permalinks → Save Changes did not pick up the new structure on
+ * Strato (common when .htaccess is not writable).
+ * ============================================================ */
+add_action( 'admin_post_bv_flush_rewrites', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( 'bv_flush_rewrites' );
+
+	/* Force the structure to /blog/%postname%/ again, in case a
+	 * plugin or theme switch reset it. */
+	update_option( 'permalink_structure', '/blog/%postname%/' );
+
+	/* WP regenerates rules and tries to write .htaccess. */
+	flush_rewrite_rules( true );
+
+	wp_safe_redirect( admin_url( 'options-general.php?page=booming-venture&bv_flushed=1' ) );
+	exit;
+} );
+
+add_action( 'admin_notices', function () {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( ! $screen || 'settings_page_booming-venture' !== $screen->id ) return;
+	if ( isset( $_GET['bv_flushed'] ) ) {
+		?>
+		<div class="notice notice-success is-dismissible">
+			<p><strong>Rewrite rules flushed.</strong> Visit any blog post URL to verify. Permalink structure: <code>/blog/%postname%/</code></p>
+		</div>
+		<?php
+	}
+} );
+
+
+/* ============================================================
+ * Diagnostics: extra fields for the Settings page panel —
+ * current permalink structure, .htaccess writability, and the
+ * rules WordPress wants to write (so user can paste them
+ * manually on Strato if needed).
+ * ============================================================ */
+function bv_htaccess_status(): array {
+	$path = ABSPATH . '.htaccess';
+	$exists   = file_exists( $path );
+	$writable = $exists ? is_writable( $path ) : is_writable( ABSPATH );
+	$has_wp_rules = $exists && false !== strpos( @file_get_contents( $path ) ?: '', '# BEGIN WordPress' );
+	return [ 'path' => $path, 'exists' => $exists, 'writable' => $writable, 'has_wp_rules' => $has_wp_rules ];
+}
+
+add_action( 'admin_print_footer_scripts-settings_page_booming-venture', function () {
+	$permalink = get_option( 'permalink_structure' );
+	$ht        = bv_htaccess_status();
+	$nonce     = wp_nonce_field( 'bv_flush_rewrites', '_wpnonce', true, false );
+	$action    = esc_url( admin_url( 'admin-post.php' ) );
+
+	$expected_rules = '<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+</IfModule>';
+
+	$html = '<div class="notice" style="margin:1rem 20px;border-left:4px solid #f97316;padding:1rem 1.25rem;background:#fff7ed;">'
+		. '<h3 style="margin:0 0 0.5rem;">Permalink / rewrite diagnostics</h3>'
+		. '<ul style="margin:0 0 1rem;font-size:13px;line-height:1.7;">'
+		. '<li>Current permalink structure: <code>' . esc_html( $permalink ?: '(default ?p=N)' ) . '</code>'
+		. ( '/blog/%postname%/' === $permalink ? ' ✅' : ' ⚠️ Expected <code>/blog/%postname%/</code>' ) . '</li>'
+		. '<li><code>.htaccess</code> file: ' . ( $ht['exists'] ? 'exists' : 'MISSING' ) . ' at <code>' . esc_html( $ht['path'] ) . '</code></li>'
+		. '<li>Writable by WordPress: ' . ( $ht['writable'] ? '✅ yes' : '❌ no — WordPress cannot save permalink rules' ) . '</li>'
+		. '<li>Contains WP rewrite rules: ' . ( $ht['has_wp_rules'] ? '✅ yes' : '❌ no — pretty URLs will 404' ) . '</li>'
+		. '</ul>'
+		. '<form method="post" action="' . $action . '" style="display:inline;">'
+		. $nonce
+		. '<input type="hidden" name="action" value="bv_flush_rewrites">'
+		. '<button type="submit" class="button button-primary">Flush rewrite rules now</button>'
+		. '</form>'
+		. ' <a href="' . esc_url( admin_url( 'options-permalink.php' ) ) . '" class="button">Open Permalinks page</a>';
+
+	if ( ! $ht['writable'] || ! $ht['has_wp_rules'] ) {
+		$html .= '<div style="margin-top:1rem;padding:0.75rem 1rem;background:#fff;border:1px solid #f97316;border-radius:0.5rem;">'
+			. '<p style="margin:0 0 0.5rem;font-weight:600;">Manual fix for Strato (when .htaccess is not writable)</p>'
+			. '<p style="margin:0 0 0.5rem;font-size:13px;">Paste these rules at the top of <code>.htaccess</code> in your WordPress root via Strato File Manager:</p>'
+			. '<pre style="margin:0;padding:0.75rem;background:#0f172a;color:#e2e8f0;border-radius:0.375rem;font-size:12px;overflow:auto;">' . esc_html( $expected_rules ) . '</pre>'
+			. '</div>';
+	}
+
+	$html .= '</div>';
+
+	echo "<script>(function(){var t=document.querySelector('.wrap h1');if(t)t.insertAdjacentHTML('beforeend'," . wp_json_encode( $html ) . ");})();</script>";
+}, 11 );
