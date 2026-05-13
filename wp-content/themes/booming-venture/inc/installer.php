@@ -50,8 +50,51 @@ function bv_run_install(): void {
 	bv_configure_menus();
 
 	flush_rewrite_rules( false );
+	bv_flush_all_caches();
 	update_option( BV_INSTALL_FLAG, BV_INSTALL_VERSION );
 	set_transient( 'bv_install_success', true, 300 );
+}
+
+/**
+ * One-shot cache flush — runs on theme activation and from the manual
+ * "Flush rewrite rules" button. Covers WP core, rewrite rules,
+ * transients, OPcache, and the major caching plugins (WP Rocket,
+ * W3 Total Cache, WP Super Cache, LiteSpeed, SG Optimizer,
+ * Autoptimize, Cache Enabler, Hummingbird, Breeze).
+ */
+function bv_flush_all_caches(): void {
+	if ( function_exists( 'wp_cache_flush' ) ) {
+		wp_cache_flush();
+	}
+
+	/* Site transients in the options table. */
+	if ( function_exists( 'delete_expired_transients' ) ) {
+		delete_expired_transients( true );
+	}
+
+	/* PHP OPcache — clears bytecode so updated PHP files load. */
+	if ( function_exists( 'opcache_reset' ) ) {
+		@opcache_reset();
+	}
+
+	/* Third-party caches — call only when present, so we don't fatal. */
+	if ( function_exists( 'rocket_clean_domain' ) )          { @rocket_clean_domain(); }
+	if ( function_exists( 'rocket_clean_minify' ) )          { @rocket_clean_minify(); }
+	if ( function_exists( 'w3tc_flush_all' ) )               { @w3tc_flush_all(); }
+	if ( function_exists( 'wp_cache_clear_cache' ) )         { @wp_cache_clear_cache(); }
+	if ( has_action( 'litespeed_purge_all' ) )               { do_action( 'litespeed_purge_all' ); }
+	if ( function_exists( 'sg_cachepress_purge_cache' ) )    { @sg_cachepress_purge_cache(); }
+	if ( class_exists( 'autoptimizeCache' )
+		&& method_exists( 'autoptimizeCache', 'clearall' ) )  { @autoptimizeCache::clearall(); }
+	if ( has_action( 'cache_enabler_clear_complete_cache' ) ){ do_action( 'cache_enabler_clear_complete_cache' ); }
+	if ( has_action( 'wphb_clear_cache_url' ) )              { do_action( 'wphb_clear_cache_url' ); }
+	if ( function_exists( 'breeze_clear_all_cache' ) )       { @breeze_clear_all_cache(); }
+
+	/* Cloudflare via the official plugin. */
+	if ( function_exists( 'cloudflare_purge_everything' ) )  { @cloudflare_purge_everything(); }
+
+	/* Let other code hook in. */
+	do_action( 'bv_after_cache_flush' );
 }
 
 /**
@@ -429,6 +472,9 @@ add_action( 'admin_post_bv_flush_rewrites', function () {
 
 	/* WP regenerates rules and tries to write .htaccess. */
 	flush_rewrite_rules( true );
+
+	/* Plus all object / plugin / OPcache layers. */
+	bv_flush_all_caches();
 
 	wp_safe_redirect( admin_url( 'options-general.php?page=booming-venture&bv_flushed=1' ) );
 	exit;
