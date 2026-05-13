@@ -6,6 +6,10 @@
  * Viewport Width: 1400
  */
 $theme = esc_url( BV_THEME_URI );
+$img1  = bv_image( 'service-1' );
+$img2  = bv_image( 'service-2' );
+$img3  = bv_image( 'service-3' );
+$img4  = bv_image( 'service-4' );
 ?>
 <!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
 <section class="wp-block-group" style="padding-top:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--60)">
@@ -30,7 +34,7 @@ $theme = esc_url( BV_THEME_URI );
 				<a href="/#contact" class="wp-block-button__link wp-element-button" style="display:inline-block;margin-top:1.25rem;background:var(--wp--preset--gradient--brand);color:#fff;padding:.75rem 1.5rem;border-radius:.625rem;text-decoration:none;font-weight:600;">Get Started →</a>
 			</div>
 			<div>
-				<img src="<?php echo $theme; ?>/assets/images/service-1.jpg" alt="Two consultants reviewing a strategy document" loading="lazy" decoding="async" width="800" height="600">
+				<img src="<?php echo $img1; ?>" alt="Two consultants reviewing a strategy on a tablet" loading="lazy" decoding="async" width="800" height="600">
 			</div>
 		</article>
 
@@ -51,7 +55,7 @@ $theme = esc_url( BV_THEME_URI );
 				<a href="/#contact" class="wp-block-button__link wp-element-button" style="display:inline-block;margin-top:1.25rem;background:var(--wp--preset--gradient--brand);color:#fff;padding:.75rem 1.5rem;border-radius:.625rem;text-decoration:none;font-weight:600;">Get Started →</a>
 			</div>
 			<div>
-				<img src="<?php echo $theme; ?>/assets/images/service-2.jpg" alt="Marketing team presenting campaign results on a screen" loading="lazy" decoding="async" width="800" height="600">
+				<img src="<?php echo $img2; ?>" alt="Speaker presenting campaign results on a screen at a venue" loading="lazy" decoding="async" width="800" height="600">
 			</div>
 		</article>
 
@@ -72,7 +76,7 @@ $theme = esc_url( BV_THEME_URI );
 				<a href="/#contact" class="wp-block-button__link wp-element-button" style="display:inline-block;margin-top:1.25rem;background:var(--wp--preset--gradient--brand);color:#fff;padding:.75rem 1.5rem;border-radius:.625rem;text-decoration:none;font-weight:600;">Get Started →</a>
 			</div>
 			<div>
-				<img src="<?php echo $theme; ?>/assets/images/service-3.jpg" alt="Diverse team discussing AI dashboard insights" loading="lazy" decoding="async" width="800" height="600">
+				<img src="<?php echo $img3; ?>" alt="Two professionals reviewing AI dashboard insights on a tablet" loading="lazy" decoding="async" width="800" height="600">
 			</div>
 		</article>
 
@@ -93,7 +97,7 @@ $theme = esc_url( BV_THEME_URI );
 				<a href="/#contact" class="wp-block-button__link wp-element-button" style="display:inline-block;margin-top:1.25rem;background:var(--wp--preset--gradient--brand);color:#fff;padding:.75rem 1.5rem;border-radius:.625rem;text-decoration:none;font-weight:600;">Get Started →</a>
 			</div>
 			<div>
-				<img src="<?php echo $theme; ?>/assets/images/service-4.jpg" alt="Team celebrating campaign success around a laptop" loading="lazy" decoding="async" width="800" height="600">
+				<img src="<?php echo $img4; ?>" alt="Diverse team collaborating around laptops in a modern office" loading="lazy" decoding="async" width="800" height="600">
 			</div>
 		</article>
 

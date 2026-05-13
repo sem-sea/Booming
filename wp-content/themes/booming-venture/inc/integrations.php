@@ -123,6 +123,41 @@ add_action( 'admin_init', function () {
 	] );
 	register_setting( 'bv_settings', 'bv_gtm_id', [ 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ] );
 	register_setting( 'bv_settings', 'bv_dataspeak_id', [ 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ] );
+	register_setting( 'bv_settings', 'bv_media_map', [
+		'type'              => 'array',
+		'sanitize_callback' => function ( $value ) {
+			$out = [];
+			foreach ( (array) $value as $k => $v ) {
+				$out[ sanitize_key( $k ) ] = sanitize_text_field( $v );
+			}
+			return $out;
+		},
+		'default'           => [],
+	] );
+} );
+
+/* Default brand image map — UUIDs / URLs the user uploaded to Strato.
+ * Override per-slug in Settings -> Booming Venture -> Brand images. */
+function bv_media_defaults(): array {
+	return [
+		'service-1'    => '4e357139-5a7e-4336-8796-94013f33dc3d',
+		'service-2'    => '',
+		'service-3'    => '',
+		'service-4'    => '',
+		'growth-guide' => '',
+	];
+}
+
+add_filter( 'pre_option_bv_media_map', function ( $pre ) {
+	if ( false !== $pre ) return $pre;
+	$stored = get_option( 'bv_media_map_stored', null );
+	if ( null === $stored ) return $pre;
+	return array_merge( bv_media_defaults(), (array) $stored );
+} );
+
+/* Surface defaults transparently when no option row exists yet. */
+add_filter( 'option_bv_media_map', function ( $value ) {
+	return array_merge( bv_media_defaults(), (array) $value );
 } );
 
 function bv_settings_page(): void {
@@ -140,6 +175,17 @@ function bv_settings_page(): void {
 				<tr>
 					<th><label for="bv-cf7-<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $slug ); ?></label></th>
 					<td><input type="text" id="bv-cf7-<?php echo esc_attr( $slug ); ?>" name="bv_cf7_map[<?php echo esc_attr( $slug ); ?>]" value="<?php echo esc_attr( (string) $id ); ?>" class="regular-text" placeholder="e.g. a1b2c3d4"></td>
+				</tr>
+			<?php endforeach; ?>
+			</table>
+
+			<h2>Brand images — slug → upload UUID or URL</h2>
+			<p class="description">Paste either the bare UUID (e.g. <code>4e357139-5a7e-4336-8796-94013f33dc3d</code> — resolved against <code>/wp-content/uploads/2026/05/&lt;uuid&gt;.png</code>), a path starting with <code>/wp-content/</code>, or a full <code>https://</code> URL.</p>
+			<table class="form-table">
+			<?php $media = (array) get_option( 'bv_media_map', [] ); foreach ( bv_media_defaults() as $slug => $default ) : $val = $media[ $slug ] ?? $default; ?>
+				<tr>
+					<th><label for="bv-media-<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $slug ); ?></label></th>
+					<td><input type="text" id="bv-media-<?php echo esc_attr( $slug ); ?>" name="bv_media_map[<?php echo esc_attr( $slug ); ?>]" value="<?php echo esc_attr( (string) $val ); ?>" class="regular-text code" placeholder="UUID, /wp-content/uploads/... or https://..."></td>
 				</tr>
 			<?php endforeach; ?>
 			</table>

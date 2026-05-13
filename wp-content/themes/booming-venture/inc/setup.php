@@ -80,6 +80,37 @@ add_action( 'wp_head', function () {
 	echo '<link rel="shortcut icon" href="' . $url . '">' . "\n";
 }, 1 );
 
+/**
+ * Resolve a brand image slug to a full URL.
+ *
+ * Each slug (service-1 … service-4, growth-guide, etc.) can be mapped
+ * in Settings → Booming Venture → Brand images to a Strato-hosted
+ * /wp-content/uploads/<yyyy>/<mm>/<filename> URL, or just a filename
+ * (we prepend /wp-content/uploads/2026/05/). Falls back to the
+ * theme's assets/images/<slug>.jpg.
+ */
+function bv_image( string $slug, string $ext = 'png' ): string {
+	$map = (array) get_option( 'bv_media_map', [] );
+	$val = isset( $map[ $slug ] ) ? trim( (string) $map[ $slug ] ) : '';
+
+	if ( $val !== '' ) {
+		if ( preg_match( '#^https?://#', $val ) ) {
+			return esc_url( $val );
+		}
+		if ( str_starts_with( $val, '/wp-content/' ) ) {
+			return esc_url( home_url( $val ) );
+		}
+		// Bare filename or UUID — assume current upload month folder.
+		$file = ltrim( $val, '/' );
+		if ( ! preg_match( '/\.[a-z0-9]+$/i', $file ) ) {
+			$file .= '.' . $ext;
+		}
+		return esc_url( home_url( '/wp-content/uploads/2026/05/' . $file ) );
+	}
+
+	return esc_url( BV_THEME_URI . '/assets/images/' . $slug . '.jpg' );
+}
+
 /* Body class helpers. */
 add_filter( 'body_class', function ( $classes ) {
 	if ( is_singular( 'service' ) )      $classes[] = 'is-service';

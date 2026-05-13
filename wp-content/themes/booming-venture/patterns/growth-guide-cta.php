@@ -7,6 +7,7 @@
  * Viewport Width: 1400
  */
 $theme = esc_url( BV_THEME_URI );
+$img   = bv_image( 'growth-guide' );
 ?>
 <!-- wp:group {"tagName":"section","gradient":"brand","textColor":"base","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}},"layout":{"type":"constrained"}} -->
 <section class="wp-block-group has-base-color has-brand-gradient-background has-text-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
@@ -17,7 +18,7 @@ $theme = esc_url( BV_THEME_URI );
 		<!-- wp:column {"verticalAlignment":"center","width":"42%"} -->
 		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:42%">
 			<!-- wp:image {"sizeSlug":"large","style":{"border":{"radius":"1rem"}}} -->
-			<figure class="wp-block-image size-large" style="border-radius:1rem"><img src="<?php echo $theme; ?>/assets/images/growth-guide.jpg" alt="Open book showing the Booming Venture Growth Strategy Guide" loading="lazy" decoding="async" width="800" height="600"/></figure>
+			<figure class="wp-block-image size-large" style="border-radius:1rem"><img src="<?php echo $img; ?>" alt="Booming Venture Growth Strategy Guide booklets on a desk with notes" loading="lazy" decoding="async" width="800" height="600"/></figure>
 			<!-- /wp:image -->
 		</div>
 		<!-- /wp:column -->
