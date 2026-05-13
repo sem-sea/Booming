@@ -8,7 +8,7 @@
 ?>
 <!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|60"}}},"backgroundColor":"base-50","layout":{"type":"constrained"}} -->
 <section class="wp-block-group has-base-50-background-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60)">
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"720px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"880px"}} -->
 	<div class="wp-block-group">
 		<!-- wp:paragraph {"align":"center","style":{"typography":{"textTransform":"uppercase","letterSpacing":"0.12em","fontWeight":"600"}},"fontSize":"sm","textColor":"venture-700"} -->
 		<p class="has-text-align-center has-venture-700-color has-text-color has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.12em">Our Methodology</p>

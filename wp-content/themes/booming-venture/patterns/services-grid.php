@@ -10,7 +10,7 @@
 <!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|70"}}},"backgroundColor":"base","layout":{"type":"constrained"}} -->
 <section id="services" class="wp-block-group has-base-background-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--70)">
 
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"640px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"880px"}} -->
 	<div class="wp-block-group">
 		<!-- wp:heading {"textAlign":"center","level":2,"fontSize":"5xl"} -->
 		<h2 class="wp-block-heading has-text-align-center has-5-xl-font-size">Our Services</h2>

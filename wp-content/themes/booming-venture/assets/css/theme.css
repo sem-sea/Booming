@@ -733,19 +733,28 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 .bv-brand-wrap .wp-block-site-logo img { max-height: 40px; width: auto; }
 
-/* Brand lockup: BoomingVenture in two colours — exact Lovable look. */
+/* Brand lockup: BoomingVenture in two colours — exact Lovable look.
+ *
+ * Uses inline-block (not inline-flex) so the descender on "g" never
+ * gets clipped by flex baseline alignment. Padding + line-height give
+ * the descender vertical room regardless of containing layout. */
 .bv-brand {
-	display: inline-flex; align-items: baseline;
+	display: inline-block !important;
 	text-decoration: none;
-	font: 700 1.5rem/1.15 var(--wp--preset--font-family--display, system-ui);
+	font: 700 1.5rem/1.35 var(--wp--preset--font-family--display, system-ui) !important;
 	letter-spacing: -0.01em;
 	white-space: nowrap;
-	overflow: visible;
+	overflow: visible !important;
 	flex-shrink: 0;
-	padding-bottom: 0.05em; /* room for the descender on the "g" */
+	padding: 0.05em 0 0.15em !important;
+	vertical-align: middle;
 }
 .bv-brand__primary,
-.bv-brand__accent { display: inline-block; white-space: nowrap; }
+.bv-brand__accent {
+	display: inline;
+	white-space: nowrap;
+	line-height: inherit;
+}
 @media (max-width: 480px) {
 	.bv-brand { font-size: 1.25rem; }
 }

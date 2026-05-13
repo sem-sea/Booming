@@ -40,28 +40,33 @@ function bv_cf7_slug_map(): array {
 	return array_merge( $default, $map );
 }
 
-/* Rewrite `[contact-form-7 id="contact"]` → `[contact-form-7 id="<hash>"]`. */
+/* Rewrite `[contact-form-7 id="contact"]` → `[contact-form-7 id="<hash>"]`.
+ *
+ * NOTE: real CF7 hash IDs are 7 lowercase alphanumeric chars (e.g. "231533b"),
+ * which means a slug like "contact" or "quickscan" matches the same shape.
+ * So we ALWAYS check the slug map first and only fall through to a
+ * passthrough if the value isn't a known slug. */
 add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
 	if ( 'contact-form-7' !== $tag ) return $output;
 	if ( ! isset( $attr['id'] ) ) return $output;
 
 	$id_raw = (string) $attr['id'];
+	$map    = bv_cf7_slug_map();
+	$slug   = sanitize_key( $id_raw );
 
-	/* If it's already numeric or a CF7 hash (lowercase alnum 6+ chars), pass through. */
-	if ( is_numeric( $id_raw ) || preg_match( '/^[a-z0-9]{6,}$/i', $id_raw ) ) {
-		return $output;
-	}
-
-	$map  = bv_cf7_slug_map();
-	$slug = sanitize_key( $id_raw );
-
-	if ( ! empty( $map[ $slug ] ) ) {
+	/* Known semantic slug — rewrite to mapped CF7 ID. */
+	if ( isset( $map[ $slug ] ) && '' !== $map[ $slug ] ) {
 		$attr['id'] = sanitize_text_field( $map[ $slug ] );
 		$attr_str = '';
 		foreach ( $attr as $k => $v ) {
 			$attr_str .= ' ' . $k . '="' . esc_attr( $v ) . '"';
 		}
 		return do_shortcode( '[' . $tag . $attr_str . ']' );
+	}
+
+	/* Numeric ID or already-mapped hash — let CF7 handle it directly. */
+	if ( is_numeric( $id_raw ) || preg_match( '/^[a-f0-9]{6,8}$/i', $id_raw ) ) {
+		return $output;
 	}
 
 	if ( current_user_can( 'edit_posts' ) ) {

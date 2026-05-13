@@ -10,7 +10,7 @@
 <!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"var:preset|spacing|70","bottom":"var:preset|spacing|70"}}},"backgroundColor":"base-50","layout":{"type":"constrained"}} -->
 <section class="wp-block-group has-base-50-background-color has-background" style="padding-top:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70)">
 
-	<!-- wp:group {"layout":{"type":"constrained","contentSize":"640px"}} -->
+	<!-- wp:group {"layout":{"type":"constrained","contentSize":"880px"}} -->
 	<div class="wp-block-group">
 		<!-- wp:heading {"textAlign":"center","level":2,"fontSize":"5xl"} --><h2 class="wp-block-heading has-text-align-center has-5-xl-font-size">Client Success Stories</h2><!-- /wp:heading -->
 		<!-- wp:paragraph {"align":"center","fontSize":"xl","textColor":"muted"} -->

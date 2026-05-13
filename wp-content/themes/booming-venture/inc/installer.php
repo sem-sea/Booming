@@ -26,33 +26,31 @@ const BV_INSTALL_VERSION = '1.0.0';
 add_action( 'after_switch_theme', 'bv_run_install', 20 );
 
 function bv_run_install(): void {
-	if ( get_option( BV_INSTALL_FLAG ) === BV_INSTALL_VERSION ) {
-		return;
-	}
+	$already_installed = ( get_option( BV_INSTALL_FLAG ) === BV_INSTALL_VERSION );
 
 	@set_time_limit( 120 );
 
-	/* Permalink structure: /blog/%postname%/ — gives clean
-	 * /blog/{slug}/ URLs for posts while leaving pages and CPTs
-	 * (services, landing pages, case studies) on their own slugs.
-	 * WordPress handles the conflict between the "blog" page slug
-	 * and the /blog/ prefix natively as long as page_for_posts is
-	 * set to that page (done below in bv_configure_homepage). */
+	/* Permalink structure: /blog/%postname%/ — re-asserted on every
+	 * activation so a plugin or theme switch can't strand it. */
 	update_option( 'permalink_structure', '/blog/%postname%/' );
 
-	$ok = bv_import_wxr();
-	if ( ! $ok ) {
-		set_transient( 'bv_install_error', 'WXR file missing or invalid.', 300 );
-		return;
+	if ( ! $already_installed ) {
+		$ok = bv_import_wxr();
+		if ( ! $ok ) {
+			set_transient( 'bv_install_error', 'WXR file missing or invalid.', 300 );
+			return;
+		}
+		update_option( BV_INSTALL_FLAG, BV_INSTALL_VERSION );
+		set_transient( 'bv_install_success', true, 300 );
 	}
 
+	/* These must run on EVERY activation — not just first install —
+	 * so the home/blog wiring and rewrite cache reflect any changes
+	 * that ship in a theme update zip. */
 	bv_configure_homepage();
 	bv_configure_menus();
-
-	flush_rewrite_rules( false );
+	flush_rewrite_rules( true );
 	bv_flush_all_caches();
-	update_option( BV_INSTALL_FLAG, BV_INSTALL_VERSION );
-	set_transient( 'bv_install_success', true, 300 );
 }
 
 /**
@@ -70,6 +68,17 @@ function bv_flush_all_caches(): void {
 	/* Site transients in the options table. */
 	if ( function_exists( 'delete_expired_transients' ) ) {
 		delete_expired_transients( true );
+	}
+
+	/* WP global stylesheet (block-styles + theme.json) caches — these
+	 * hold the compiled CSS for the colour palette, layout sizes etc.
+	 * Without clearing them, a change to theme.json (e.g. contentSize)
+	 * won't show up until they expire. */
+	delete_transient( 'global_styles' );
+	delete_transient( 'gutenberg_global_styles' );
+	delete_option( '_transient_global_styles' );
+	if ( class_exists( 'WP_Theme_JSON_Resolver' ) && method_exists( 'WP_Theme_JSON_Resolver', 'clean_cached_data' ) ) {
+		WP_Theme_JSON_Resolver::clean_cached_data();
 	}
 
 	/* PHP OPcache — clears bytecode so updated PHP files load. */

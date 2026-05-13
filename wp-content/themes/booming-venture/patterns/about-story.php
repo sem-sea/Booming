@@ -6,7 +6,7 @@
  * Viewport Width: 1400
  */
 ?>
-<!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|40"}}},"layout":{"type":"constrained","contentSize":"760px"}} -->
+<!-- wp:group {"tagName":"section","style":{"spacing":{"padding":{"top":"var:preset|spacing|60","bottom":"var:preset|spacing|40"}}},"layout":{"type":"constrained","contentSize":"880px"}} -->
 <section class="wp-block-group" style="padding-top:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--40)">
 	<!-- wp:heading {"textAlign":"center","level":2,"fontSize":"5xl"} -->
 	<h2 class="wp-block-heading has-text-align-center has-5-xl-font-size">About <span class="bv-gradient-text">Booming Venture</span></h2>

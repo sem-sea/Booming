@@ -83,32 +83,69 @@ add_action( 'wp_head', function () {
 /**
  * Resolve a brand image slug to a full URL.
  *
- * Each slug (service-1 … service-4, growth-guide, etc.) can be mapped
- * in Settings → Booming Venture → Brand images to a Strato-hosted
- * /wp-content/uploads/<yyyy>/<mm>/<filename> URL, or just a filename
- * (we prepend /wp-content/uploads/2026/05/). Falls back to the
- * theme's assets/images/<slug>.jpg.
+ * Accepts in bv_media_map:
+ *   - A full https:// URL  (returned verbatim)
+ *   - A /wp-content/... path  (prefixed with home_url)
+ *   - A bare filename or UUID  (resolved via attachment query)
+ *
+ * The attachment query searches _wp_attached_file for any row that
+ * contains the given string, so the extension doesn't have to match.
+ * Result is cached per-request and in a 1-day transient.
+ *
+ * Falls back to the theme's assets/images/<slug>.jpg when nothing
+ * resolves, so the markup never breaks.
  */
-function bv_image( string $slug, string $ext = 'png' ): string {
+function bv_image( string $slug ): string {
 	$map = (array) get_option( 'bv_media_map', [] );
 	$val = isset( $map[ $slug ] ) ? trim( (string) $map[ $slug ] ) : '';
 
-	if ( $val !== '' ) {
-		if ( preg_match( '#^https?://#', $val ) ) {
-			return esc_url( $val );
-		}
-		if ( str_starts_with( $val, '/wp-content/' ) ) {
-			return esc_url( home_url( $val ) );
-		}
-		// Bare filename or UUID — assume current upload month folder.
-		$file = ltrim( $val, '/' );
-		if ( ! preg_match( '/\.[a-z0-9]+$/i', $file ) ) {
-			$file .= '.' . $ext;
-		}
-		return esc_url( home_url( '/wp-content/uploads/2026/05/' . $file ) );
+	if ( $val === '' ) {
+		return esc_url( BV_THEME_URI . '/assets/images/' . $slug . '.jpg' );
 	}
 
-	return esc_url( BV_THEME_URI . '/assets/images/' . $slug . '.jpg' );
+	if ( preg_match( '#^https?://#i', $val ) ) {
+		return esc_url( $val );
+	}
+
+	if ( str_starts_with( $val, '/wp-content/' ) ) {
+		return esc_url( home_url( $val ) );
+	}
+
+	$resolved = bv_resolve_attachment_url( $val );
+	if ( $resolved ) {
+		return esc_url( $resolved );
+	}
+
+	/* Last-resort fallback — assume PNG in current upload month folder. */
+	return esc_url( home_url( '/wp-content/uploads/2026/05/' . $val . '.png' ) );
+}
+
+/**
+ * Look up an attachment URL by filename / UUID fragment.
+ */
+function bv_resolve_attachment_url( string $needle ): string {
+	static $memo = [];
+	if ( isset( $memo[ $needle ] ) ) return $memo[ $needle ];
+
+	$key    = 'bv_attach_' . md5( $needle );
+	$cached = get_transient( $key );
+	if ( is_string( $cached ) && $cached !== '' ) {
+		return $memo[ $needle ] = $cached;
+	}
+
+	global $wpdb;
+	$like = '%' . $wpdb->esc_like( $needle ) . '%';
+	$file = $wpdb->get_var( $wpdb->prepare(
+		"SELECT meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s ORDER BY post_id DESC LIMIT 1",
+		$like
+	) );
+
+	if ( ! $file ) return $memo[ $needle ] = '';
+
+	$uploads = wp_get_upload_dir();
+	$url     = trailingslashit( $uploads['baseurl'] ) . ltrim( (string) $file, '/' );
+	set_transient( $key, $url, DAY_IN_SECONDS );
+	return $memo[ $needle ] = $url;
 }
 
 /* Body class helpers. */
