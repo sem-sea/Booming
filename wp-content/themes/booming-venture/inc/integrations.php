@@ -225,19 +225,22 @@ add_action( 'admin_init', function () {
 /* Default brand image map ,  UUIDs / URLs the user uploaded to Strato.
  * Override per-slug in Settings -> Booming Venture -> Brand images. */
 function bv_media_defaults(): array {
+	$base = 'https://boomingventure.com/wp-content/uploads/2026/05/';
 	return [
-		// Strategic Consulting ,  consultants with tablet, cyan wall.
-		'service-1'    => '4e357139-5a7e-4336-8796-94013f33dc3d',
-		// Performance Marketing ,  speaker on stage with brand slide.
-		'service-2'    => '64a1eea5-ff4d-4a89-83d2-1e2e9c5258d6',
-		// AI-Powered Solutions ,  consultants reviewing dashboard, lockers bg.
-		'service-3'    => '8ae06510-02a0-453f-a984-f0642561707e',
-		// Growth Optimization ,  diverse team around laptops.
-		'service-4'    => '12b0da47-c27a-4cb5-b98a-61b5ddd8dcf4',
-		// Free Growth Guide ,  booklets on a desk with notes.
-		'growth-guide' => '0100bc15-cf04-42bc-827d-1ecfe72c1ff6',
+		// Strategic Consulting , consultants with tablet, cyan wall.
+		'service-1'    => $base . '4e357139-5a7e-4336-8796-94013f33dc3d.png',
+		// Performance Marketing , speaker on stage with brand slide.
+		'service-2'    => $base . '64a1eea5-ff4d-4a89-83d2-1e2e9c5258d6.png',
+		// AI-Powered Solutions , consultants reviewing dashboard, lockers bg.
+		'service-3'    => $base . '8ae06510-02a0-453f-a984-f0642561707e.png',
+		// Growth Optimization , diverse team around laptops.
+		'service-4'    => $base . '12b0da47-c27a-4cb5-b98a-61b5ddd8dcf4.png',
+		// Free Growth Guide , booklets on a desk with notes.
+		'growth-guide' => $base . '0100bc15-cf04-42bc-827d-1ecfe72c1ff6.png',
 		// Founder portrait , Ben Verschuur.
-		'ben-founder'  => 'https://boomingventure.com/wp-content/uploads/2026/05/Ben.png',
+		'ben-founder'  => $base . 'Ben.png',
+		// Extra brand image , available for future patterns.
+		'hero-extra'   => $base . 'ab7934c4-0ed7-4a27-b7fd-aa2bcee19255.png',
 	];
 }
 
