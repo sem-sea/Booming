@@ -737,11 +737,12 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 .bv-brand {
 	display: inline-flex; align-items: baseline;
 	text-decoration: none;
-	font: 700 1.5rem/1 var(--wp--preset--font-family--display, system-ui);
+	font: 700 1.5rem/1.15 var(--wp--preset--font-family--display, system-ui);
 	letter-spacing: -0.01em;
 	white-space: nowrap;
 	overflow: visible;
 	flex-shrink: 0;
+	padding-bottom: 0.05em; /* room for the descender on the "g" */
 }
 .bv-brand__primary,
 .bv-brand__accent { display: inline-block; white-space: nowrap; }
@@ -900,14 +901,24 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 }
 .has-brand-gradient-background .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button,
 .has-brand-dark-gradient-background .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button {
-	background: transparent !important;
+	background: rgba(255,255,255,0.08) !important;
 	color: #fff !important;
-	border-color: #fff !important;
+	border-color: rgba(255,255,255,0.85) !important;
+	border-width: 2px !important;
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	font-weight: 600 !important;
+	text-shadow: 0 1px 0 rgba(0,0,0,0.15);
+	box-shadow: 0 1px 0 rgba(255,255,255,0.10) inset, 0 8px 20px -10px rgba(0,0,0,0.35);
+	transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 .has-brand-gradient-background .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button:hover,
 .has-brand-dark-gradient-background .wp-block-button.is-style-outline .wp-block-button__link.wp-element-button:hover {
 	background: #fff !important;
 	color: var(--wp--preset--color--booming-700) !important;
+	border-color: #fff !important;
+	transform: translateY(-1px);
+	text-shadow: none;
 }
 
 /* Footer bottom row alignment */
@@ -1615,6 +1626,25 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 .bv-post-card:hover .bv-post-card__arrow {
 	transform: translateX(4px);
 }
+
+/* =================================================================
+ * Hero growth-guide form card — make sure the white background and
+ * dark text always win against the hero gradient parent.
+ * ================================================================= */
+.bv-hero .bv-hero-form,
+.bv-hero-form {
+	background: #ffffff !important;
+	color: var(--wp--preset--color--contrast) !important;
+	position: relative;
+	z-index: 2;
+}
+.bv-hero-form h1, .bv-hero-form h2, .bv-hero-form h3,
+.bv-hero-form h4, .bv-hero-form h5, .bv-hero-form h6 {
+	color: var(--wp--preset--color--contrast) !important;
+}
+.bv-hero-form p { color: var(--wp--preset--color--contrast-2); }
+.bv-hero-form .has-muted-color { color: var(--wp--preset--color--muted) !important; }
+.bv-hero-form .bv-check-list li { color: var(--wp--preset--color--contrast); }
 
 /* Hide the WP-injected post-template UL bullets / wrappers */
 .wp-block-post-template.bv-blog-grid {
