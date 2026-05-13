@@ -7,9 +7,20 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BV_THEME_VERSION', '1.0.0' );
+define( 'BV_THEME_VERSION', '1.1.0' );
 define( 'BV_THEME_DIR', get_template_directory() );
 define( 'BV_THEME_URI', get_template_directory_uri() );
+
+/**
+ * Per-asset version string — uses filemtime() in dev so any CSS / JS
+ * edit auto-busts the browser and proxy cache. Falls back to the
+ * BV_THEME_VERSION constant if the file is unreadable.
+ */
+function bv_asset_ver( string $relative ): string {
+	$path = BV_THEME_DIR . '/' . ltrim( $relative, '/' );
+	$mtime = @filemtime( $path );
+	return $mtime ? (string) $mtime : BV_THEME_VERSION;
+}
 
 require_once BV_THEME_DIR . '/inc/icons.php';
 require_once BV_THEME_DIR . '/inc/setup.php';

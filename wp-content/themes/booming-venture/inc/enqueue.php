@@ -13,14 +13,14 @@ add_action( 'wp_enqueue_scripts', function () {
 		'booming-venture',
 		BV_THEME_URI . '/assets/css/theme.css',
 		[],
-		BV_THEME_VERSION
+		bv_asset_ver( 'assets/css/theme.css' )
 	);
 
 	wp_enqueue_script(
 		'booming-venture',
 		BV_THEME_URI . '/assets/js/theme.js',
 		[],
-		BV_THEME_VERSION,
+		bv_asset_ver( 'assets/js/theme.js' ),
 		[ 'strategy' => 'defer', 'in_footer' => true ]
 	);
 }, 20 );
@@ -31,7 +31,7 @@ add_action( 'enqueue_block_editor_assets', function () {
 		'booming-venture-editor',
 		BV_THEME_URI . '/assets/css/editor.css',
 		[],
-		BV_THEME_VERSION
+		bv_asset_ver( 'assets/css/editor.css' )
 	);
 } );
 
