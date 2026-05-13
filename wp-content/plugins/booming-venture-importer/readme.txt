@@ -4,7 +4,7 @@ Tags: importer, demo content, booming venture, wxr
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,12 @@ The importer uses PHP 8.0 syntax (typed properties, arrow functions, named argum
 WordPress 6.6 and above. Tested through 6.8.
 
 == Changelog ==
+
+= 1.0.1 =
+* Bundled WXR now ships every blog post at 1,200 words or more (median 1,294, max 1,964).
+* All 43 previously-thin posts expanded with question-shaped H2s, 20-25 word answer capsules, 3+ ski-ramp statistics with named sources, comparison lists, FAQ blocks.
+* Voice cleanup: zero em-dashes, zero banned AI tells anywhere in the import.
+* No functional plugin changes; install path and admin UI unchanged.
 
 = 1.0.0 =
 * Initial public release.

@@ -3,7 +3,7 @@
  * Plugin Name:       Booming Venture Importer
  * Plugin URI:        https://boomingventure.com
  * Description:       One-click importer for the Booming Venture demo content (13 pages, 4 services, 83 blog posts, categories, menus). Bundled WXR is the source of truth. Re-runs are safe: existing slugs are skipped, structural pages get content refreshed. Adds Tools → Booming Venture Importer.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            Booming Venture
@@ -19,7 +19,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const BVI_VERSION  = '1.0.0';
+const BVI_VERSION  = '1.0.1';
 const BVI_FLAG     = 'bvi_content_imported';
 const BVI_LAST_LOG = 'bvi_last_import_log';
 const BVI_NONCE    = 'bvi_run_import';
