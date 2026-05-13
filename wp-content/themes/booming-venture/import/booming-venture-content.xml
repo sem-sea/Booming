@@ -2774,6 +2774,14 @@
 <li>Audit layer. Weekly anomaly detection and a monthly creative refresh cadence.</li>
 </ol><!-- /wp:list -->
 <!-- wp:paragraph --><p>Run your funnel through the <a href="/funnel-calculator/" rel="noopener" target="_blank">free Funnel Leak Calculator</a> to see which layer is bleeding revenue first.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/advantage-plus-vs-performance-max-vs-pinterest/">Advantage+ vs Performance Max vs Pinterest Performance+</a></li>
+<li><a href="/blog/ai-paid-media-roi-b2b-90-day-test/">Measuring AI paid-media ROI in B2B with a 90-day test</a></li>
+<li><a href="/blog/ai-replacing-marketing-hire-saas/">Where AI replaces a marketing hire for SaaS under 50</a></li>
+<li><a href="/blog/d2c-beyond-meta-channel-mix-2026/">Going beyond Meta: 2026 D2C channel allocation</a></li>
+<li><a href="/blog/last-click-is-dead-d2c-attribution-2026/">What replaces last-click attribution in 2026</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Do I need all four layers from day one?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>No. Start with delivery and creative. Add the data and measurement layers in months three and four.</p><!-- /wp:paragraph -->
@@ -2828,6 +2836,14 @@
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">A premium D2C brand at 5M EUR plus revenue typically allocates 45 to 55% to Meta, 30 to 40% to Google, 5 to 12% to Pinterest, and tests the rest. The exact mix is category-dependent.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>For home, fashion, and beauty, lift Pinterest by 5 to 10 points. For supplements and health, lift Meta. For B2B SaaS, the comparison does not apply; LinkedIn and Google Search dominate.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Use the <a href="/roi-forecaster/" rel="noopener" target="_blank">ROI Forecaster</a> to model a three-channel split before you commit.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/ai-performance-marketing-stack-2026/">How AI is actually used in a 2026 performance stack</a></li>
+<li><a href="/blog/ai-paid-media-roi-b2b-90-day-test/">Measuring AI paid-media ROI in B2B with a 90-day test</a></li>
+<li><a href="/blog/ai-replacing-marketing-hire-saas/">Where AI replaces a marketing hire for SaaS under 50</a></li>
+<li><a href="/blog/meta-ads-premium-d2c-2026/">Meta Ads for premium D2C in 2026</a></li>
+<li><a href="/blog/incrementality-testing-geo-holdout-playbook/">Geo-holdout incrementality testing playbook</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Can I run all three at once?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Yes, with budget guardrails. Most accounts under 50k EUR per month run two well rather than three poorly.</p><!-- /wp:paragraph -->
@@ -2889,6 +2905,14 @@
 <li>Account-based targeting. AI does not replace ABM list discipline.</li>
 <li>Sales handover. The lift dies in CRM if sales rejects MQLs without feedback to the model.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/ai-performance-marketing-stack-2026/">How AI is actually used in a 2026 performance stack</a></li>
+<li><a href="/blog/advantage-plus-vs-performance-max-vs-pinterest/">Advantage+ vs Performance Max vs Pinterest Performance+</a></li>
+<li><a href="/blog/ai-replacing-marketing-hire-saas/">Where AI replaces a marketing hire for SaaS under 50</a></li>
+<li><a href="/blog/cac-payback-saas-board-metrics-2026/">CAC payback and the SaaS metrics boards care about</a></li>
+<li><a href="/blog/linkedin-ads-saas-2026-benchmarks/">LinkedIn Ads for B2B SaaS with 2026 benchmarks</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Can I run the test without a baseline?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>No. Without a baseline you have a story, not a result.</p><!-- /wp:paragraph -->
@@ -2945,6 +2969,14 @@
 <!-- wp:heading --><h2 class="wp-block-heading">What does this save (or cost)?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Replacing two junior production roles with one AI ops generalist plus tooling typically saves 60k to 110k EUR a year while increasing throughput 2 to 3x. The savings are real but conditional.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Conditional on having a head of marketing who can design the loops. Without that, AI tools are expensive shelfware. The variable cost has gone down. The strategic cost (knowing what to do) has gone up.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/ai-performance-marketing-stack-2026/">How AI is actually used in a 2026 performance stack</a></li>
+<li><a href="/blog/advantage-plus-vs-performance-max-vs-pinterest/">Advantage+ vs Performance Max vs Pinterest Performance+</a></li>
+<li><a href="/blog/ai-paid-media-roi-b2b-90-day-test/">Measuring AI paid-media ROI in B2B with a 90-day test</a></li>
+<li><a href="/blog/b2b-saas-demand-gen-stack-2026/">The 2026 B2B SaaS demand-gen stack</a></li>
+<li><a href="/blog/ai-agents-marketing-2026/">What AI marketing agents can run autonomously in 2026</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Will AI eventually replace the senior roles?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Some, slowly. Positioning and brand will resist longest. Production will fall fastest.</p><!-- /wp:paragraph -->
@@ -3021,6 +3053,14 @@
 <li>Audit this PDP for premium signals. Score 1 to 10 on five dimensions: hero imagery, social proof, scarcity, return policy clarity, mobile-first.</li>
 <li>List the 3 highest-ROI experiments from last quarter and propose how to extend each one.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/ai-performance-marketing-stack-2026/">How AI is actually used in a 2026 performance stack</a></li>
+<li><a href="/blog/advantage-plus-vs-performance-max-vs-pinterest/">Advantage+ vs Performance Max vs Pinterest Performance+</a></li>
+<li><a href="/blog/ai-paid-media-roi-b2b-90-day-test/">Measuring AI paid-media ROI in B2B with a 90-day test</a></li>
+<li><a href="/blog/ai-creative-100-variants-no-slop/">Generating 100 D2C ad variants without AI slop</a></li>
+<li><a href="/blog/seven-content-formats-llms-cite-most/">Seven content formats LLMs cite most in B2B SaaS</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I use ChatGPT or Claude for these?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Both. Claude tends to write more carefully for premium voice. ChatGPT iterates faster. Test.</p><!-- /wp:paragraph -->
@@ -3085,6 +3125,14 @@
 <!-- wp:heading --><h2 class="wp-block-heading">What is the realistic ROI on a 2026 marketing agent program?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Realistic ROI: 30 to 60% productivity gain on the tasks the agents own, plus a quality lift from the human attention freed up. Cost: 8 to 15% of marketing headcount cost on tooling and AI ops.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Productivity gains are real and measurable. Productivity does not always translate to revenue. The lift only converts when the freed humans do strategy work that was previously starved. Without that conversion, the agents replace the wrong work and create more decks, not more revenue.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/ai-performance-marketing-stack-2026/">How AI is actually used in a 2026 performance stack</a></li>
+<li><a href="/blog/advantage-plus-vs-performance-max-vs-pinterest/">Advantage+ vs Performance Max vs Pinterest Performance+</a></li>
+<li><a href="/blog/ai-paid-media-roi-b2b-90-day-test/">Measuring AI paid-media ROI in B2B with a 90-day test</a></li>
+<li><a href="/blog/ai-replacing-marketing-hire-saas/">Where AI replaces a marketing hire for SaaS under 50</a></li>
+<li><a href="/blog/pipeline-forecasting-ai-saas/">Pipeline forecasting with AI for long-cycle SaaS</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Do agents need their own platform?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Some do. n8n, Zapier Central, LangGraph, or proprietary builds. Most teams start with off-the-shelf platforms.</p><!-- /wp:paragraph -->
@@ -3147,6 +3195,14 @@
 <li>Raise prices annually. 5 to 8% is invisible to customers, transformative to margin.</li>
 <li>Hold the line under pressure. Margin compounding beats short-term volume.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/meta-ads-premium-d2c-2026/">Meta Ads for premium D2C in 2026</a></li>
+<li><a href="/blog/scaling-premium-d2c-1m-to-10m/">The real cost of scaling premium D2C from 1M to 10M</a></li>
+<li><a href="/blog/d2c-beyond-meta-channel-mix-2026/">Going beyond Meta: 2026 D2C channel allocation</a></li>
+<li><a href="/blog/clv-modelling-premium-d2c-cohort/">Cohort-based CLV modelling for premium D2C</a></li>
+<li><a href="/blog/premium-pdp-audit-20-brands/">A conversion audit of 20 premium D2C PDPs</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Is premium possible under 50 EUR AOV?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Difficult. The maths gets brutal. Most premium plays sit at 80 to 250 EUR AOV.</p><!-- /wp:paragraph -->
@@ -3209,6 +3265,14 @@
 <!-- wp:heading --><h2 class="wp-block-heading">How do you measure premium D2C on Meta without lying to yourself?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Triangulate three signals: Meta-reported ROAS, MMM-modelled contribution, and a quarterly geo-holdout test. Trust none of them alone.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Meta reports ROAS using a 7-day click 1-day view window. <a href="https://www.northbeam.io/blog" rel="noopener" target="_blank">Northbeam</a> or <a href="https://www.measured.com/learn" rel="noopener" target="_blank">Measured</a> will give you a contribution number. A geo-holdout test gives you a causal lift number. Real ROAS sits in the range these three describe, not at any one point estimate.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/what-premium-actually-means-d2c/">What premium really means in D2C marketing</a></li>
+<li><a href="/blog/scaling-premium-d2c-1m-to-10m/">The real cost of scaling premium D2C from 1M to 10M</a></li>
+<li><a href="/blog/d2c-beyond-meta-channel-mix-2026/">Going beyond Meta: 2026 D2C channel allocation</a></li>
+<li><a href="/blog/advantage-plus-vs-performance-max-vs-pinterest/">Advantage+ vs Performance Max vs Pinterest Performance+</a></li>
+<li><a href="/blog/killing-ad-fatigue-2026-refresh-cadence/">Ad fatigue and the 2026 refresh cadence</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">How many ads should I have running at once?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>20 to 40 active for a 100k EUR per month account.</p><!-- /wp:paragraph -->
@@ -3273,6 +3337,13 @@
 <!-- wp:heading --><h2 class="wp-block-heading">What does a healthy 10M EUR premium D2C P&L look like?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">A healthy 10M premium D2C P&L hits 65 to 72% gross margin, 22 to 26% total marketing, 12 to 16% ops, 8 to 12% salaries, with 8 to 14% operating profit.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Use the <a href="/roi-forecaster/" rel="noopener" target="_blank">free ROI Forecaster</a> to model your own scale-up curve and stress test it.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/what-premium-actually-means-d2c/">What premium really means in D2C marketing</a></li>
+<li><a href="/blog/meta-ads-premium-d2c-2026/">Meta Ads for premium D2C in 2026</a></li>
+<li><a href="/blog/d2c-beyond-meta-channel-mix-2026/">Going beyond Meta: 2026 D2C channel allocation</a></li>
+<li><a href="/blog/clv-modelling-premium-d2c-cohort/">Cohort-based CLV modelling for premium D2C</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">How long does 1M to 10M take?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>3 to 5 years for most premium brands. Faster is possible, rarely advisable.</p><!-- /wp:paragraph -->
@@ -3335,6 +3406,14 @@
 <li>Self-reported attribution at checkout adds qualitative colour.</li>
 <li>Brand search velocity is the slowest but truest signal.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/what-premium-actually-means-d2c/">What premium really means in D2C marketing</a></li>
+<li><a href="/blog/meta-ads-premium-d2c-2026/">Meta Ads for premium D2C in 2026</a></li>
+<li><a href="/blog/scaling-premium-d2c-1m-to-10m/">The real cost of scaling premium D2C from 1M to 10M</a></li>
+<li><a href="/blog/ai-performance-marketing-stack-2026/">How AI is actually used in a 2026 performance stack</a></li>
+<li><a href="/blog/mmm-d2c-under-20m-when-it-pays-off/">MMM for D2C brands under 20M EUR</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">How much spend before I diversify?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Usually 80k EUR per month on Meta. Some categories earlier.</p><!-- /wp:paragraph -->
@@ -3397,6 +3476,14 @@
 <!-- wp:heading --><h2 class="wp-block-heading">How do you build a founder content engine that survives a year?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Two principles: a content lead translates founder thinking into drafts, and the founder approves and posts personally. The founder is the source, not the typist.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Most failed founder programs put the founder in the typist seat. The role is wrong. The founder talks, the content lead drafts, the founder edits and posts. Recording weekly 20-minute calls with the founder produces enough source material for 4 posts a week.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/what-premium-actually-means-d2c/">What premium really means in D2C marketing</a></li>
+<li><a href="/blog/meta-ads-premium-d2c-2026/">Meta Ads for premium D2C in 2026</a></li>
+<li><a href="/blog/scaling-premium-d2c-1m-to-10m/">The real cost of scaling premium D2C from 1M to 10M</a></li>
+<li><a href="/blog/founder-thought-leadership-saas-pipeline-system/">Founder thought leadership as a posting system</a></li>
+<li><a href="/blog/get-cited-by-chatgpt-d2c-best-of/">How to get cited by ChatGPT for D2C category queries</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">What if I am not a natural writer?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>You do not need to be. Voice notes plus a content lead works.</p><!-- /wp:paragraph -->
@@ -3465,6 +3552,13 @@
 <li>Annual brand review meeting with each retailer.</li>
 <li>Walk if the partner refuses MAP or merchandising standards.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/what-premium-actually-means-d2c/">What premium really means in D2C marketing</a></li>
+<li><a href="/blog/meta-ads-premium-d2c-2026/">Meta Ads for premium D2C in 2026</a></li>
+<li><a href="/blog/scaling-premium-d2c-1m-to-10m/">The real cost of scaling premium D2C from 1M to 10M</a></li>
+<li><a href="/blog/clv-modelling-premium-d2c-cohort/">Cohort-based CLV modelling for premium D2C</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Is Amazon wholesale?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Treat Amazon as its own channel with its own playbook. Different game.</p><!-- /wp:paragraph -->
@@ -3528,6 +3622,12 @@
 <!-- wp:heading --><h2 class="wp-block-heading">How do you build the stack without 20 people?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Most healthy stacks are run by 3 to 5 people: demand-gen lead, content owner, paid ops, partnerships PM, plus an AI ops generalist. Contractors fill design, video, and PR.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Headcount discipline forces channel discipline. A team of three runs the channels that actually create pipeline and ignores the rest. A team of fifteen runs everything and produces only marginally more pipeline.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/dark-social-dark-funnel-saas-2026/">Dark social and the LLM dark funnel for B2B SaaS</a></li>
+<li><a href="/blog/linkedin-ads-saas-2026-benchmarks/">LinkedIn Ads for B2B SaaS with 2026 benchmarks</a></li>
+<li><a href="/blog/product-led-content-saas-2026/">Product-led content for SaaS demand generation</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I still gate content?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Sometimes. Gate when the buyer is ready to identify. Ungate everything else.</p><!-- /wp:paragraph -->
@@ -3591,6 +3691,14 @@
 <!-- wp:heading --><h2 class="wp-block-heading">How do you measure the dark funnel without faking it?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Measure the dark funnel by triangulating self-reported attribution, branded search velocity, and LLM citation volume. None alone is enough.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Self-reported attribution at the demo form (a question like 'how did you first hear about us?') routinely shows dark-funnel sources are 4 to 7x more influential than analytics suggest. Branded search velocity correlates strongly with dark-funnel effort. LLM citation volume tracked manually with prompts gives a third signal.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/b2b-saas-demand-gen-stack-2026/">The 2026 B2B SaaS demand-gen stack</a></li>
+<li><a href="/blog/linkedin-ads-saas-2026-benchmarks/">LinkedIn Ads for B2B SaaS with 2026 benchmarks</a></li>
+<li><a href="/blog/product-led-content-saas-2026/">Product-led content for SaaS demand generation</a></li>
+<li><a href="/blog/get-cited-by-chatgpt-d2c-best-of/">How to get cited by ChatGPT for D2C category queries</a></li>
+<li><a href="/blog/multi-touch-attribution-b2b-mostly-theatre/">Why multi-touch attribution is mostly theatre in B2B</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Can I track the dark funnel?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Not directly. You triangulate.</p><!-- /wp:paragraph -->
@@ -3659,6 +3767,14 @@
 <li>Stop ignoring auto-bid caps. Weekly review prevents budget waste.</li>
 <li>Stop refreshing creative only at end of quarter. Every 3 to 4 weeks for top performers.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/b2b-saas-demand-gen-stack-2026/">The 2026 B2B SaaS demand-gen stack</a></li>
+<li><a href="/blog/dark-social-dark-funnel-saas-2026/">Dark social and the LLM dark funnel for B2B SaaS</a></li>
+<li><a href="/blog/product-led-content-saas-2026/">Product-led content for SaaS demand generation</a></li>
+<li><a href="/blog/ai-paid-media-roi-b2b-90-day-test/">Measuring AI paid-media ROI in B2B with a 90-day test</a></li>
+<li><a href="/blog/cac-payback-saas-board-metrics-2026/">CAC payback and the SaaS metrics boards care about</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">How much should I spend on LinkedIn to test?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>5k EUR per month minimum for two months. Below that, signal is thin.</p><!-- /wp:paragraph -->
@@ -3732,6 +3848,14 @@
 <li>Distribute. SEO is the lagging benefit; LinkedIn, newsletter, and AI search citations are leading.</li>
 <li>Quarterly audit. Cut the topics that did not earn pipeline.</li>
 </ol><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/b2b-saas-demand-gen-stack-2026/">The 2026 B2B SaaS demand-gen stack</a></li>
+<li><a href="/blog/dark-social-dark-funnel-saas-2026/">Dark social and the LLM dark funnel for B2B SaaS</a></li>
+<li><a href="/blog/linkedin-ads-saas-2026-benchmarks/">LinkedIn Ads for B2B SaaS with 2026 benchmarks</a></li>
+<li><a href="/blog/seven-content-formats-llms-cite-most/">Seven content formats LLMs cite most in B2B SaaS</a></li>
+<li><a href="/blog/founder-thought-leadership-saas-pipeline-system/">Founder thought leadership as a posting system</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Is product-led content the same as PLG?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Related but different. PLG is a go-to-market motion. Product-led content is a content style.</p><!-- /wp:paragraph -->
@@ -3800,6 +3924,13 @@
 <!-- wp:heading --><h2 class="wp-block-heading">What should small-team ABM skip from the enterprise version?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Skip 6sense's full intent data, custom-printed direct mail, multi-week orchestration tools, and persona-based content libraries. The complexity does not pay back below 50 accounts of scale.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Enterprise ABM tooling is expensive and assumes 10+ people executing. Small-team ABM uses LinkedIn, Notion, a CRM, and a spreadsheet. The team is the leverage; the stack stays light.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/b2b-saas-demand-gen-stack-2026/">The 2026 B2B SaaS demand-gen stack</a></li>
+<li><a href="/blog/dark-social-dark-funnel-saas-2026/">Dark social and the LLM dark funnel for B2B SaaS</a></li>
+<li><a href="/blog/linkedin-ads-saas-2026-benchmarks/">LinkedIn Ads for B2B SaaS with 2026 benchmarks</a></li>
+<li><a href="/blog/pipeline-forecasting-ai-saas/">Pipeline forecasting with AI for long-cycle SaaS</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Do I need an intent data tool?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Not under 5M ARR. Add at 5 to 20M if budgets allow.</p><!-- /wp:paragraph -->
@@ -3868,6 +3999,14 @@
 <li>Do not DM users unsolicited. Spam flag.</li>
 <li>Do not buy upvotes. Recoverable bans turn into permanent ones.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/b2b-saas-demand-gen-stack-2026/">The 2026 B2B SaaS demand-gen stack</a></li>
+<li><a href="/blog/dark-social-dark-funnel-saas-2026/">Dark social and the LLM dark funnel for B2B SaaS</a></li>
+<li><a href="/blog/linkedin-ads-saas-2026-benchmarks/">LinkedIn Ads for B2B SaaS with 2026 benchmarks</a></li>
+<li><a href="/blog/g2-reddit-wikipedia-matter-more-than-blog/">Why G2, Reddit, Wikipedia drive LLM citations</a></li>
+<li><a href="/blog/get-cited-by-chatgpt-d2c-best-of/">How to get cited by ChatGPT for D2C category queries</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Can a brand account work?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Yes if it is consistently helpful. Most do not have the patience.</p><!-- /wp:paragraph -->
@@ -3930,6 +4069,12 @@
 <!-- wp:heading --><h2 class="wp-block-heading">How much does MMM actually cost?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Vendor MMM lands at 60 to 200k EUR per year for D2C accounts. In-house Bayesian MMM (Meta's Robyn, Google's Meridian) is free in software but needs an analyst at 80 to 130k EUR salary.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>The hidden cost is interpretation time. Without an internal owner spending 5 to 10 hours per week reading the model's outputs, the deliverable becomes a PDF nobody acts on.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/incrementality-testing-geo-holdout-playbook/">Geo-holdout incrementality testing playbook</a></li>
+<li><a href="/blog/last-click-is-dead-d2c-attribution-2026/">What replaces last-click attribution in 2026</a></li>
+<li><a href="/blog/cac-payback-saas-board-metrics-2026/">CAC payback and the SaaS metrics boards care about</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Is Robyn good enough for a 5M EUR brand?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Yes if you have an analyst. Without one, no.</p><!-- /wp:paragraph -->
@@ -3992,6 +4137,13 @@
 <li>After major creative or audience changes. Re-test sooner if structure shifted.</li>
 <li>Maintain a results log. Year-over-year trends are the highest signal of all.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/mmm-d2c-under-20m-when-it-pays-off/">MMM for D2C brands under 20M EUR</a></li>
+<li><a href="/blog/last-click-is-dead-d2c-attribution-2026/">What replaces last-click attribution in 2026</a></li>
+<li><a href="/blog/cac-payback-saas-board-metrics-2026/">CAC payback and the SaaS metrics boards care about</a></li>
+<li><a href="/blog/advantage-plus-vs-performance-max-vs-pinterest/">Advantage+ vs Performance Max vs Pinterest Performance+</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Can I run a holdout on Meta and Google at the same time?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Yes but in different regions. Otherwise the bundle effect contaminates the read.</p><!-- /wp:paragraph -->
@@ -4060,6 +4212,14 @@
 <li>Stop running quarterly attribution audits as audits; treat them as decisions.</li>
 <li>Stop pretending one tool gives a single number.</li>
 </ol><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/mmm-d2c-under-20m-when-it-pays-off/">MMM for D2C brands under 20M EUR</a></li>
+<li><a href="/blog/incrementality-testing-geo-holdout-playbook/">Geo-holdout incrementality testing playbook</a></li>
+<li><a href="/blog/cac-payback-saas-board-metrics-2026/">CAC payback and the SaaS metrics boards care about</a></li>
+<li><a href="/blog/multi-touch-attribution-b2b-mostly-theatre/">Why multi-touch attribution is mostly theatre in B2B</a></li>
+<li><a href="/blog/ai-performance-marketing-stack-2026/">How AI is actually used in a 2026 performance stack</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Is the platform's self-reported ROAS lying?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Not lying. Just biased upward and not causal.</p><!-- /wp:paragraph -->
@@ -4128,6 +4288,14 @@
 <li>Content views without source quality.</li>
 <li>Last-quarter-only snapshots. Trends matter; snapshots distort.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/mmm-d2c-under-20m-when-it-pays-off/">MMM for D2C brands under 20M EUR</a></li>
+<li><a href="/blog/incrementality-testing-geo-holdout-playbook/">Geo-holdout incrementality testing playbook</a></li>
+<li><a href="/blog/last-click-is-dead-d2c-attribution-2026/">What replaces last-click attribution in 2026</a></li>
+<li><a href="/blog/nrr-saas-marketing-influences/">Net Revenue Retention and how marketing moves it</a></li>
+<li><a href="/blog/ai-paid-media-roi-b2b-90-day-test/">Measuring AI paid-media ROI in B2B with a 90-day test</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Is CAC payback the same as LTV/CAC?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Related, not identical. CAC payback is months; LTV/CAC is a ratio. Boards care more about the months.</p><!-- /wp:paragraph -->
@@ -4190,6 +4358,14 @@
 <li>Annual: a scenario range, not a number.</li>
 <li>Track the error itself. Yearly improvement in error is the real win.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/mmm-d2c-under-20m-when-it-pays-off/">MMM for D2C brands under 20M EUR</a></li>
+<li><a href="/blog/incrementality-testing-geo-holdout-playbook/">Geo-holdout incrementality testing playbook</a></li>
+<li><a href="/blog/last-click-is-dead-d2c-attribution-2026/">What replaces last-click attribution in 2026</a></li>
+<li><a href="/blog/ai-agents-marketing-2026/">What AI marketing agents can run autonomously in 2026</a></li>
+<li><a href="/blog/cac-payback-saas-board-metrics-2026/">CAC payback and the SaaS metrics boards care about</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I use Clari or build my own?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Most teams over-buy tooling. Spreadsheet plus weekly discipline beats vendor tools without ownership.</p><!-- /wp:paragraph -->
@@ -4258,6 +4434,13 @@
 <li>None of these reach the LLM dark funnel or peer chat.</li>
 <li>Treat MTA as one of three signals, never the only signal.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/mmm-d2c-under-20m-when-it-pays-off/">MMM for D2C brands under 20M EUR</a></li>
+<li><a href="/blog/incrementality-testing-geo-holdout-playbook/">Geo-holdout incrementality testing playbook</a></li>
+<li><a href="/blog/last-click-is-dead-d2c-attribution-2026/">What replaces last-click attribution in 2026</a></li>
+<li><a href="/blog/dark-social-dark-funnel-saas-2026/">Dark social and the LLM dark funnel for B2B SaaS</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I cancel my attribution tool?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Probably not. Use it as one layer. Reduce its weight in decisions.</p><!-- /wp:paragraph -->
@@ -4327,6 +4510,14 @@
 <li>Track changes over time. The trend is the signal.</li>
 <li>Adjust content and PR roadmap based on the gaps.</li>
 </ol><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/schema-markup-ecommerce-2026/">Schema markup priorities for premium ecommerce</a></li>
+<li><a href="/blog/geo-aeo-seo-definitions-2026/">GEO vs AEO vs SEO: a working 2026 definition</a></li>
+<li><a href="/blog/seven-content-formats-llms-cite-most/">Seven content formats LLMs cite most in B2B SaaS</a></li>
+<li><a href="/blog/reddit-b2b-playbook-llm-citations/">The Reddit B2B playbook for visibility and LLM citations</a></li>
+<li><a href="/blog/g2-reddit-wikipedia-matter-more-than-blog/">Why G2, Reddit, Wikipedia drive LLM citations</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Does llms.txt help?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Marginally. Low-cost insurance. Not a strategy.</p><!-- /wp:paragraph -->
@@ -4399,6 +4590,13 @@
 <li>Bing Webmaster Tools for parity.</li>
 <li>Spot-check via curl with a user-agent string of the major LLM crawlers.</li>
 </ol><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/get-cited-by-chatgpt-d2c-best-of/">How to get cited by ChatGPT for D2C category queries</a></li>
+<li><a href="/blog/geo-aeo-seo-definitions-2026/">GEO vs AEO vs SEO: a working 2026 definition</a></li>
+<li><a href="/blog/seven-content-formats-llms-cite-most/">Seven content formats LLMs cite most in B2B SaaS</a></li>
+<li><a href="/blog/premium-pdp-audit-20-brands/">A conversion audit of 20 premium D2C PDPs</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Does WordPress automate schema?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Yoast, Rank Math, and many themes do. Validate the output; defaults are often incomplete.</p><!-- /wp:paragraph -->
@@ -4467,6 +4665,13 @@
 <li>5 to 10%. Measurement and tooling.</li>
 <li>Annual: review the split as the channels mature.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/get-cited-by-chatgpt-d2c-best-of/">How to get cited by ChatGPT for D2C category queries</a></li>
+<li><a href="/blog/schema-markup-ecommerce-2026/">Schema markup priorities for premium ecommerce</a></li>
+<li><a href="/blog/seven-content-formats-llms-cite-most/">Seven content formats LLMs cite most in B2B SaaS</a></li>
+<li><a href="/blog/audit-ai-visibility-without-paying-profound/">A DIY AI visibility audit method</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Is SEO dead?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>No. Traffic is shifting; SEO is not.</p><!-- /wp:paragraph -->
@@ -4540,6 +4745,13 @@
 <li>Common failure modes.</li>
 <li>FAQ as H3 with concise answers and FAQPage schema.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/get-cited-by-chatgpt-d2c-best-of/">How to get cited by ChatGPT for D2C category queries</a></li>
+<li><a href="/blog/schema-markup-ecommerce-2026/">Schema markup priorities for premium ecommerce</a></li>
+<li><a href="/blog/geo-aeo-seo-definitions-2026/">GEO vs AEO vs SEO: a working 2026 definition</a></li>
+<li><a href="/blog/product-led-content-saas-2026/">Product-led content for SaaS demand generation</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should every post try to hit all seven formats?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>No. Pick the right format for the topic.</p><!-- /wp:paragraph -->
@@ -4608,6 +4820,13 @@
 <!-- wp:heading --><h2 class="wp-block-heading">When do you need a paid tool like Profound?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Need a paid tool when monthly DIY auditing exceeds 3 to 4 hours, you need cross-brand competitive intelligence, or you want automated alerts when citations change.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>Paid tools justify themselves at roughly 30 to 50M ARR or when the team running the audit has higher-value uses for the time. Below that, the DIY method gives the signal you can actually act on.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/get-cited-by-chatgpt-d2c-best-of/">How to get cited by ChatGPT for D2C category queries</a></li>
+<li><a href="/blog/schema-markup-ecommerce-2026/">Schema markup priorities for premium ecommerce</a></li>
+<li><a href="/blog/geo-aeo-seo-definitions-2026/">GEO vs AEO vs SEO: a working 2026 definition</a></li>
+<li><a href="/blog/g2-reddit-wikipedia-matter-more-than-blog/">Why G2, Reddit, Wikipedia drive LLM citations</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Can I use the same prompts every month?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Yes. Same prompts each month is the comparable baseline.</p><!-- /wp:paragraph -->
@@ -4677,6 +4896,14 @@
 <li>Newsletter mentions. Substack newsletters cited often by Perplexity.</li>
 <li>Podcast guesting. The founder, not a delegate.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/get-cited-by-chatgpt-d2c-best-of/">How to get cited by ChatGPT for D2C category queries</a></li>
+<li><a href="/blog/schema-markup-ecommerce-2026/">Schema markup priorities for premium ecommerce</a></li>
+<li><a href="/blog/geo-aeo-seo-definitions-2026/">GEO vs AEO vs SEO: a working 2026 definition</a></li>
+<li><a href="/blog/reddit-b2b-playbook-llm-citations/">The Reddit B2B playbook for visibility and LLM citations</a></li>
+<li><a href="/blog/audit-ai-visibility-without-paying-profound/">A DIY AI visibility audit method</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I stop investing in my blog?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>No. Reduce blog share to 40 to 50%, invest the rest off-site.</p><!-- /wp:paragraph -->
@@ -4748,6 +4975,14 @@
 <li>Repeat monthly for one quarter.</li>
 <li>Lock in winners; audit the rest of the funnel next.</li>
 </ol><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/ai-creative-100-variants-no-slop/">Generating 100 D2C ad variants without AI slop</a></li>
+<li><a href="/blog/killing-ad-fatigue-2026-refresh-cadence/">Ad fatigue and the 2026 refresh cadence</a></li>
+<li><a href="/blog/saas-pricing-page-patterns-2026/">12 SaaS pricing-page patterns that beat 3-tier</a></li>
+<li><a href="/blog/meta-ads-premium-d2c-2026/">Meta Ads for premium D2C in 2026</a></li>
+<li><a href="/blog/what-premium-actually-means-d2c/">What premium really means in D2C marketing</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">How long does a full PDP audit take?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>60 to 90 minutes per PDP. Three to four hours per category.</p><!-- /wp:paragraph -->
@@ -4823,6 +5058,14 @@
 <li>Brand health. Quarterly check that the brand voice still holds.</li>
 <li>Quarterly competitor scan. Are your variants distinctive enough?</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/premium-pdp-audit-20-brands/">A conversion audit of 20 premium D2C PDPs</a></li>
+<li><a href="/blog/killing-ad-fatigue-2026-refresh-cadence/">Ad fatigue and the 2026 refresh cadence</a></li>
+<li><a href="/blog/saas-pricing-page-patterns-2026/">12 SaaS pricing-page patterns that beat 3-tier</a></li>
+<li><a href="/blog/prompt-library-performance-marketers/">40 tested prompts for ads, email, and CRO</a></li>
+<li><a href="/blog/meta-ads-premium-d2c-2026/">Meta Ads for premium D2C in 2026</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I generate the photography itself with AI?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Not for premium. Use real photography as the input layer; AI for variation.</p><!-- /wp:paragraph -->
@@ -4897,6 +5140,13 @@
 <li>Do not stop the winners. Just rotate.</li>
 <li>Do not skip the post-fatigue review. The pattern is the signal.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/premium-pdp-audit-20-brands/">A conversion audit of 20 premium D2C PDPs</a></li>
+<li><a href="/blog/ai-creative-100-variants-no-slop/">Generating 100 D2C ad variants without AI slop</a></li>
+<li><a href="/blog/saas-pricing-page-patterns-2026/">12 SaaS pricing-page patterns that beat 3-tier</a></li>
+<li><a href="/blog/meta-ads-premium-d2c-2026/">Meta Ads for premium D2C in 2026</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I have new creative ready before fatigue hits?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Yes. A 2-week creative pipeline at minimum.</p><!-- /wp:paragraph -->
@@ -4978,6 +5228,14 @@
 <li>Missing comparison table. Direct competitor naming converts.</li>
 <li>No testimonial inside pricing. A quote at the decision moment lifts conversion 8 to 15%.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/premium-pdp-audit-20-brands/">A conversion audit of 20 premium D2C PDPs</a></li>
+<li><a href="/blog/ai-creative-100-variants-no-slop/">Generating 100 D2C ad variants without AI slop</a></li>
+<li><a href="/blog/killing-ad-fatigue-2026-refresh-cadence/">Ad fatigue and the 2026 refresh cadence</a></li>
+<li><a href="/blog/nrr-saas-marketing-influences/">Net Revenue Retention and how marketing moves it</a></li>
+<li><a href="/blog/cac-payback-saas-board-metrics-2026/">CAC payback and the SaaS metrics boards care about</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I show prices for enterprise?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Yes, even as a range. 'Contact us' loses self-serve buyers.</p><!-- /wp:paragraph -->
@@ -5046,6 +5304,14 @@
 <li>Founder profile views (leading indicator).</li>
 <li>Newsletter open rates and replies.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/premium-pdp-audit-20-brands/">A conversion audit of 20 premium D2C PDPs</a></li>
+<li><a href="/blog/ai-creative-100-variants-no-slop/">Generating 100 D2C ad variants without AI slop</a></li>
+<li><a href="/blog/killing-ad-fatigue-2026-refresh-cadence/">Ad fatigue and the 2026 refresh cadence</a></li>
+<li><a href="/blog/founder-led-content-d2c-playbook/">The founder-led content playbook for premium D2C</a></li>
+<li><a href="/blog/product-led-content-saas-2026/">Product-led content for SaaS demand generation</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">How fast does founder content show pipeline impact?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Visible inbound demand 60 to 90 days. Compounds past 6 months.</p><!-- /wp:paragraph -->
@@ -5114,6 +5380,14 @@
 <li>Pricing power. Track gross margin and discount frequency.</li>
 <li>Long-term CAC trajectory. Should fall with brand investment.</li>
 </ol><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/premium-pdp-audit-20-brands/">A conversion audit of 20 premium D2C PDPs</a></li>
+<li><a href="/blog/ai-creative-100-variants-no-slop/">Generating 100 D2C ad variants without AI slop</a></li>
+<li><a href="/blog/killing-ad-fatigue-2026-refresh-cadence/">Ad fatigue and the 2026 refresh cadence</a></li>
+<li><a href="/blog/founder-thought-leadership-saas-pipeline-system/">Founder thought leadership as a posting system</a></li>
+<li><a href="/blog/founder-led-content-d2c-playbook/">The founder-led content playbook for premium D2C</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Will the CFO accept long-horizon defence?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>If you build the trend over 4 quarters, yes.</p><!-- /wp:paragraph -->
@@ -5183,6 +5457,14 @@
 <li>365-day CLV: 180 to 320 EUR.</li>
 <li>Slope continues upward past 365: retention engine working.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/email-sms-premium-d2c-flows/">Email and SMS retention flows for premium D2C</a></li>
+<li><a href="/blog/nrr-saas-marketing-influences/">Net Revenue Retention and how marketing moves it</a></li>
+<li><a href="/blog/saas-lifecycle-email-14-sequences/">14 SaaS lifecycle email sequences</a></li>
+<li><a href="/blog/scaling-premium-d2c-1m-to-10m/">The real cost of scaling premium D2C from 1M to 10M</a></li>
+<li><a href="/blog/what-premium-actually-means-d2c/">What premium really means in D2C marketing</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Do I need a data analyst for cohort CLV?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Not initially. Spreadsheet works to 5M EUR revenue. Analyst beyond that.</p><!-- /wp:paragraph -->
@@ -5259,6 +5541,13 @@
 <li>Urgency timers. Cheap signal.</li>
 <li>Generic templates. Voice has to be the brand's voice.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/clv-modelling-premium-d2c-cohort/">Cohort-based CLV modelling for premium D2C</a></li>
+<li><a href="/blog/nrr-saas-marketing-influences/">Net Revenue Retention and how marketing moves it</a></li>
+<li><a href="/blog/saas-lifecycle-email-14-sequences/">14 SaaS lifecycle email sequences</a></li>
+<li><a href="/blog/what-premium-actually-means-d2c/">What premium really means in D2C marketing</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should I use Klaviyo for premium?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Yes. Configuration discipline matters more than the platform.</p><!-- /wp:paragraph -->
@@ -5321,6 +5610,13 @@
 <!-- wp:heading --><h2 class="wp-block-heading">How does this change marketing's role inside SaaS?</h2><!-- /wp:heading -->
 <!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} --><p class="bv-capsule has-lg-font-size" style="font-weight:500">Marketing's role shifts from pure pipeline creation to revenue retention partner. Less focus on MQL count, more focus on existing-customer marketing, references, and brand health.</p><!-- /wp:paragraph -->
 <!-- wp:paragraph --><p>The shift takes years for most SaaS organisations. The teams that make it have a marketing leader who reports on NRR alongside CAC, and a customer-marketing function that reports into marketing rather than customer success.</p><!-- /wp:paragraph -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/clv-modelling-premium-d2c-cohort/">Cohort-based CLV modelling for premium D2C</a></li>
+<li><a href="/blog/email-sms-premium-d2c-flows/">Email and SMS retention flows for premium D2C</a></li>
+<li><a href="/blog/saas-lifecycle-email-14-sequences/">14 SaaS lifecycle email sequences</a></li>
+<li><a href="/blog/cac-payback-saas-board-metrics-2026/">CAC payback and the SaaS metrics boards care about</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Should marketing own NRR?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Co-own. Customer success owns delivery. Marketing owns expansion campaigns and brand.</p><!-- /wp:paragraph -->
@@ -5404,6 +5700,13 @@
 <li>Stop multi-button CTAs.</li>
 <li>Stop hiding unsubscribe.</li>
 </ul><!-- /wp:list -->
+<!-- bv-related-reading -->
+<!-- wp:group {"className":"bv-related","style":{"border":{"radius":"0.75rem","width":"1px","color":"var:preset|color|border"},"spacing":{"padding":{"top":"1.25rem","right":"1.5rem","bottom":"1.25rem","left":"1.5rem"},"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} --><div class="wp-block-group bv-related has-border-color" style="border-color:var(--wp--preset--color--border);border-width:1px;border-radius:0.75rem;margin-top:var(--wp--preset--spacing--50);padding:1.25rem 1.5rem"><!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Related reading</h3><!-- /wp:heading --><!-- wp:list --><ul class="wp-block-list">
+<li><a href="/blog/clv-modelling-premium-d2c-cohort/">Cohort-based CLV modelling for premium D2C</a></li>
+<li><a href="/blog/email-sms-premium-d2c-flows/">Email and SMS retention flows for premium D2C</a></li>
+<li><a href="/blog/nrr-saas-marketing-influences/">Net Revenue Retention and how marketing moves it</a></li>
+<li><a href="/blog/product-led-content-saas-2026/">Product-led content for SaaS demand generation</a></li>
+</ul><!-- /wp:list --></div><!-- /wp:group -->
 <!-- wp:heading --><h2 class="wp-block-heading">Frequently asked questions</h2><!-- /wp:heading -->
 <!-- wp:heading {"level":3} --><h3 class="wp-block-heading">Which tool is best for SaaS lifecycle?</h3><!-- /wp:heading -->
 <!-- wp:paragraph --><p>Customer.io and Userlist are SaaS-native. HubSpot works at scale. Klaviyo is ecommerce-shaped but usable.</p><!-- /wp:paragraph -->
