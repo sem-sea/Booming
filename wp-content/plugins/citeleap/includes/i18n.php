@@ -32,20 +32,17 @@ class CiteLeap_I18n {
 	 *  [code, native_name, english_name, locale]. Operators can extend
 	 *  via the citeleap_supported_languages filter. */
 	public static function supported(): array {
+		/* Trimmed to the most spoken in the Western world + Dutch, in
+		 * order of native-speaker count (English > Spanish > Portuguese
+		 * > French > German > Italian > Dutch). Add more via the filter. */
 		$base = [
 			'en' => [ 'en', 'English',    'English',    'en_US' ],
-			'nl' => [ 'nl', 'Nederlands', 'Dutch',      'nl_NL' ],
+			'es' => [ 'es', 'Español',    'Spanish',    'es_ES' ],
+			'pt' => [ 'pt', 'Português',  'Portuguese', 'pt_PT' ],
 			'fr' => [ 'fr', 'Français',   'French',     'fr_FR' ],
 			'de' => [ 'de', 'Deutsch',    'German',     'de_DE' ],
-			'es' => [ 'es', 'Español',    'Spanish',    'es_ES' ],
 			'it' => [ 'it', 'Italiano',   'Italian',    'it_IT' ],
-			'pt' => [ 'pt', 'Português',  'Portuguese', 'pt_PT' ],
-			'da' => [ 'da', 'Dansk',      'Danish',     'da_DK' ],
-			'sv' => [ 'sv', 'Svenska',    'Swedish',    'sv_SE' ],
-			'fi' => [ 'fi', 'Suomi',      'Finnish',    'fi' ],
-			'pl' => [ 'pl', 'Polski',     'Polish',     'pl_PL' ],
-			'cs' => [ 'cs', 'Čeština',    'Czech',      'cs_CZ' ],
-			'tr' => [ 'tr', 'Türkçe',     'Turkish',    'tr_TR' ],
+			'nl' => [ 'nl', 'Nederlands', 'Dutch',      'nl_NL' ],
 		];
 		return (array) apply_filters( 'citeleap_supported_languages', $base );
 	}

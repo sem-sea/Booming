@@ -44,10 +44,19 @@ Internal-link allowlist: {internal_links}
 
 {layout_block}
 
+{voice_samples_block}
+
 {research_block}
 
 {internal_links_block}
-Allowed external sources for citations: any reputable named outlet (McKinsey, HubSpot, Gartner, Tinuiti, Klaviyo, Ahrefs, Semrush, Princeton GEO study, OpenAI, Anthropic, Google, Bing, peer-reviewed papers, named industry benchmarks). Link to the live source.
+
+ABSOLUTE RULES (NON-NEGOTIABLE, READ FIRST)
+- ALWAYS do real online research. ALWAYS cite at least 3 real online sources as outbound <a href="..."> links with named publisher anchor text (never a bare URL). If you have access to a web search tool, USE IT. If you have a sources list above, cite from it. Never invent statistics or quotes that are not in your sources.
+- NO em-dashes anywhere. Not in the title, slug, body, FAQ, meta description, or excerpt. Use commas or full stops instead. The character "—" is banned. The character "–" is also banned. Replace any urge to use them with a comma or a new sentence.
+- Write in plain, simple, human English (or the selected language). A bright 14-year-old should understand every sentence. Short sentences. Active voice. Fragments allowed. "And" and "But" at the start of a sentence are fine. No AI tells: avoid delve, elevate, harness, leverage, navigate, tapestry, unlock, realm, landscape, robust, seamless, foster, moreover, furthermore, "it's worth noting", "in conclusion", "in today's fast-paced world", "ever-evolving", "game-changer", "revolutionize".
+- Match the voice of the site's existing posts (see the voice samples block above). Read those samples. Notice the sentence length, the directness, the use of opinions, the tone with the reader. Write the new post in that same voice.
+- The category_name field is REQUIRED. Always pick exactly one from the category list shown in the CONTEXT block. If the list is empty, return "Uncategorized".
+Allowed external sources for citations: any reputable named outlet (McKinsey, HubSpot, Gartner, Tinuiti, Klaviyo, Ahrefs, Semrush, Princeton GEO study, OpenAI, Anthropic, Google, Bing, CBS Netherlands, INSEE, Statistisches Bundesamt, peer-reviewed papers, named industry benchmarks). Link to the live source.
 
 GEO / AEO RULES (May 2026 Bible , non-negotiable)
 1. STATISTICS: include >=3 statistics with named sources inside the first 30% of body. Each stat states the number, the source name, and the year. Pattern: "[number/percent] [thing], according to [Named Source] ([year])."

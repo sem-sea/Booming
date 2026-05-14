@@ -111,11 +111,14 @@ class CiteLeap_Refresh {
 		if ( ! $lang ) $lang = CiteLeap_I18n::settings()['default_lang'];
 		$vars['language_block']       = CiteLeap_I18n::as_prompt_text( $lang );
 		$vars['layout_block']         = CiteLeap_Layout::as_prompt_text();
+		$vars['voice_samples_block']  = CiteLeap_Voice::as_prompt_text( 3, (int) $post_id );
 		$research_cfg                 = CiteLeap_Research::settings();
-		$sources                      = $research_cfg['enabled'] && 'claude_native' !== $research_cfg['provider']
+		$sources                      = 'claude_native' !== $research_cfg['provider']
 			? CiteLeap_Research::fetch_sources( $post->post_title )
 			: [];
-		$vars['research_block']       = $sources ? CiteLeap_Research::as_prompt_text( $sources, $research_cfg['min_citations'] ) : '';
+		$vars['research_block']       = $sources
+			? CiteLeap_Research::as_prompt_text( $sources, $research_cfg['min_citations'] )
+			: 'RESEARCH: use your built-in web search tool to find at least ' . (int) $research_cfg['min_citations'] . ' real, current online sources for this topic. Cite each one inline. No bare URLs. No invented statistics.';
 		$candidates                   = CiteLeap_Linking::candidates( 40, (int) $post_id, $lang );
 		$vars['internal_links_block'] = CiteLeap_Linking::as_prompt_text( $candidates, $research_cfg['min_internal'] );
 
@@ -141,6 +144,12 @@ class CiteLeap_Refresh {
 			CiteLeap_Log::add( 'refresh_parse_failed', '#' . $post_id . ' ' . mb_substr( $res['text'], 0, 200 ), 'error' );
 			return [ 'ok' => false, 'post_id' => $post_id, 'error' => 'Unparsable model response.' ];
 		}
+
+		/* v2.1 , defensive em-dash strip on every field. */
+		$data['title']            = CiteLeap_Generator::strip_dashes( (string) ( $data['title']            ?? '' ) );
+		$data['body']             = CiteLeap_Generator::strip_dashes( (string) ( $data['body']             ?? '' ) );
+		$data['excerpt']          = CiteLeap_Generator::strip_dashes( (string) ( $data['excerpt']          ?? '' ) );
+		$data['meta_description'] = CiteLeap_Generator::strip_dashes( (string) ( $data['meta_description'] ?? '' ) );
 
 		$new_word_count = str_word_count( wp_strip_all_tags( (string) $data['body'] ) );
 		$settings = self::settings();

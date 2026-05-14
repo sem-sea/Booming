@@ -39,6 +39,18 @@ class CiteLeap_Generator {
 	public static function render_template_public( string $template, array $vars ): string {
 		return self::render_template( $template, $vars );
 	}
+
+	/** v2.1 , defensive em-dash / en-dash strip. The master prompt
+	 *  forbids them, but LLMs slip. Replace em / en dashes with ", ",
+	 *  also replace stray hyphen-as-em "  - " (space-hyphen-space) with
+	 *  a comma. Cleans the title, body, excerpt, meta description. */
+	public static function strip_dashes( string $s ): string {
+		if ( '' === $s ) return $s;
+		$s = str_replace( [ "\xE2\x80\x94", "\xE2\x80\x93" ], ', ', $s ); // em, en
+		$s = str_replace( [ ' — ', ' – ' ], ', ', $s );
+		$s = preg_replace( '/\s+\-\s+/', ', ', $s );
+		return $s;
+	}
 	public static function parse_json_object_public( string $text ): array {
 		return self::parse_json_object( $text );
 	}
@@ -181,11 +193,14 @@ class CiteLeap_Generator {
 		$lang = (string) ( $idea['lang'] ?? CiteLeap_I18n::settings()['default_lang'] );
 		$vars['language_block']       = CiteLeap_I18n::as_prompt_text( $lang );
 		$vars['layout_block']         = CiteLeap_Layout::as_prompt_text();
+		$vars['voice_samples_block']  = CiteLeap_Voice::as_prompt_text( 3, 0 );
 		$research_cfg                 = CiteLeap_Research::settings();
-		$sources                      = $research_cfg['enabled'] && 'claude_native' !== $research_cfg['provider']
+		$sources                      = 'claude_native' !== $research_cfg['provider']
 			? CiteLeap_Research::fetch_sources( $idea['title'] )
 			: [];
-		$vars['research_block']       = $sources ? CiteLeap_Research::as_prompt_text( $sources, $research_cfg['min_citations'] ) : '';
+		$vars['research_block']       = $sources
+			? CiteLeap_Research::as_prompt_text( $sources, $research_cfg['min_citations'] )
+			: 'RESEARCH: use your built-in web search tool to find at least ' . (int) $research_cfg['min_citations'] . ' real, current online sources for this topic. Cite each one as an inline outbound <a href="..."> with the publisher name as anchor text. No bare URLs. No invented statistics.';
 		$candidates                   = CiteLeap_Linking::candidates( 40, 0, $lang );
 		$vars['internal_links_block'] = CiteLeap_Linking::as_prompt_text( $candidates, $research_cfg['min_internal'] );
 
@@ -208,6 +223,14 @@ class CiteLeap_Generator {
 		if ( $word_count < 1000 ) {
 			CiteLeap_Log::add( 'write_too_short', sprintf( '%d words, below 1000 threshold', $word_count ), 'warn' );
 		}
+
+		/* v2.1 , defensive em-dash strip on every text field the model
+		 * produced. The prompt forbids them but models slip. Replace
+		 * with ", " so prose stays readable. */
+		$post_data['title']            = self::strip_dashes( (string) ( $post_data['title']            ?? '' ) );
+		$post_data['body']             = self::strip_dashes( (string) ( $post_data['body']             ?? '' ) );
+		$post_data['excerpt']          = self::strip_dashes( (string) ( $post_data['excerpt']          ?? '' ) );
+		$post_data['meta_description'] = self::strip_dashes( (string) ( $post_data['meta_description'] ?? '' ) );
 
 		$post_id = wp_insert_post( [
 			'post_title'     => sanitize_text_field( (string) $post_data['title'] ),
@@ -249,15 +272,25 @@ class CiteLeap_Generator {
 		update_post_meta( (int) $post_id, CITELEAP_META_PROVIDER, $res['provider'] . '/' . $res['model'] );
 		update_post_meta( (int) $post_id, '_citeleap_word_count', (int) $word_count );
 
-		/* Category assignment. */
-		$cat_name = (string) ( $post_data['category_name'] ?? $idea['category_name'] ?? '' );
-		if ( $cat_name ) {
-			$term = get_term_by( 'name', $cat_name, 'category' );
-			if ( ! $term ) {
-				$inserted = wp_insert_term( $cat_name, 'category' );
-				if ( ! is_wp_error( $inserted ) ) $term = get_term( (int) $inserted['term_id'], 'category' );
-			}
-			if ( $term && ! is_wp_error( $term ) ) wp_set_post_categories( (int) $post_id, [ (int) $term->term_id ] );
+		/* Category assignment , MANDATORY in v2.1. Fallback chain:
+		 *   model-returned category_name -> idea's category_name ->
+		 *   first existing category on the site -> "Uncategorized". */
+		$cat_name = trim( (string) ( $post_data['category_name'] ?? $idea['category_name'] ?? '' ) );
+		if ( '' === $cat_name ) {
+			$existing = get_terms( [ 'taxonomy' => 'category', 'hide_empty' => false, 'number' => 1, 'fields' => 'names' ] );
+			$cat_name = is_array( $existing ) && ! empty( $existing[0] ) ? (string) $existing[0] : 'Uncategorized';
+			CiteLeap_Log::add( 'category_fallback', '#' . $post_id . ' -> ' . $cat_name, 'warn' );
+		}
+		$term = get_term_by( 'name', $cat_name, 'category' );
+		if ( ! $term ) {
+			$inserted = wp_insert_term( $cat_name, 'category' );
+			if ( ! is_wp_error( $inserted ) ) $term = get_term( (int) $inserted['term_id'], 'category' );
+		}
+		if ( $term && ! is_wp_error( $term ) ) {
+			wp_set_post_categories( (int) $post_id, [ (int) $term->term_id ] );
+		} else {
+			/* Truly nothing worked , assign the default category. */
+			wp_set_post_categories( (int) $post_id, [ (int) get_option( 'default_category', 1 ) ] );
 		}
 
 		/* Mark idea as drafted in queue. */

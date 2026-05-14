@@ -33,13 +33,16 @@ class CiteLeap_Research {
 
 	public static function settings(): array {
 		$r = (array) get_option( CITELEAP_OPTION_RESEARCH, [] );
+		/* v2.1: research is ALWAYS on. The toggle was removed. The
+		 * 'enabled' key is kept in the array shape for back-compat with
+		 * code that reads it, but it is hard-coded to true. */
 		return [
-			'enabled'       => isset( $r['enabled'] )       ? (bool) $r['enabled']       : true,
-			'provider'      => (string) ( $r['provider']    ?? 'claude_native' ),       // claude_native | serper | brave | tavily | off
-			'api_key'       => (string) ( $r['api_key']     ?? '' ),                    // encrypted via Crypto on save
-			'max_searches'  => max( 1, min( 10, (int) ( $r['max_searches']  ?? 5 ) ) ),
-			'min_citations' => max( 1, min( 10, (int) ( $r['min_citations'] ?? 3 ) ) ),
-			'min_internal'  => max( 0, min( 10, (int) ( $r['min_internal']  ?? 2 ) ) ),
+			'enabled'       => true,
+			'provider'      => (string) ( $r['provider']    ?? 'claude_native' ),
+			'api_key'       => (string) ( $r['api_key']     ?? '' ),
+			'max_searches'  => max( 3, min( 10, (int) ( $r['max_searches']  ?? 5 ) ) ),
+			'min_citations' => max( 3, min( 10, (int) ( $r['min_citations'] ?? 3 ) ) ),
+			'min_internal'  => max( 2, min( 10, (int) ( $r['min_internal']  ?? 2 ) ) ),
 		];
 	}
 
@@ -47,17 +50,18 @@ class CiteLeap_Research {
 		$prev = (array) get_option( CITELEAP_OPTION_RESEARCH, [] );
 		$key  = (string) ( $args['api_key'] ?? '' );
 		if ( '' === $key ) {
-			$key = (string) ( $prev['api_key'] ?? '' );   // preserve existing on blank submit
+			$key = (string) ( $prev['api_key'] ?? '' );
 		} else {
 			$key = CiteLeap_Crypto::encrypt( sanitize_text_field( $key ) );
 		}
+		/* v2.1: 'enabled' is always true. 'off' provider is removed. */
 		update_option( CITELEAP_OPTION_RESEARCH, [
-			'enabled'       => ! empty( $args['enabled'] ),
-			'provider'      => in_array( (string) ( $args['provider'] ?? '' ), [ 'claude_native', 'serper', 'brave', 'tavily', 'off' ], true ) ? (string) $args['provider'] : 'claude_native',
+			'enabled'       => true,
+			'provider'      => in_array( (string) ( $args['provider'] ?? '' ), [ 'claude_native', 'serper', 'brave', 'tavily' ], true ) ? (string) $args['provider'] : 'claude_native',
 			'api_key'       => $key,
-			'max_searches'  => max( 1, min( 10, (int) ( $args['max_searches']  ?? 5 ) ) ),
-			'min_citations' => max( 1, min( 10, (int) ( $args['min_citations'] ?? 3 ) ) ),
-			'min_internal'  => max( 0, min( 10, (int) ( $args['min_internal']  ?? 2 ) ) ),
+			'max_searches'  => max( 3, min( 10, (int) ( $args['max_searches']  ?? 5 ) ) ),
+			'min_citations' => max( 3, min( 10, (int) ( $args['min_citations'] ?? 3 ) ) ),
+			'min_internal'  => max( 2, min( 10, (int) ( $args['min_internal']  ?? 2 ) ) ),
 		], false );
 	}
 
@@ -90,7 +94,6 @@ class CiteLeap_Research {
 	 *  of [title, url, snippet] entries. */
 	public static function fetch_sources( string $query ): array {
 		$r   = self::settings();
-		if ( ! $r['enabled'] || 'off' === $r['provider'] ) return [];
 		$key = self::decrypt_key();
 		if ( ! $key && in_array( $r['provider'], [ 'serper', 'brave', 'tavily' ], true ) ) return [];
 

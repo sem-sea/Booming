@@ -207,7 +207,9 @@ class CiteLeap_Planner {
 								$eta = CiteLeap_Scheduler::eta_for( $row, $schedule );
 								if ( $eta > 0 ) {
 									$pinned = ! empty( $row['publish_at'] );
-									echo '<small style="color:' . ( $pinned ? '#9333ea' : '#0369a1' ) . ';font-weight:600;">' . ( $pinned ? esc_html__( 'pinned: ', 'citeleap' ) : esc_html__( 'next: ', 'citeleap' ) ) . '</small>';
+									echo $pinned
+									? '<span title="' . esc_attr__( 'Manually planned for a specific date and time.', 'citeleap' ) . '" style="color:#16a34a;font-weight:700;font-size:13px;">&#10003;</span> <small style="color:#16a34a;font-weight:600;">' . esc_html__( 'planned: ', 'citeleap' ) . '</small>'
+									: '<span title="' . esc_attr__( 'Auto-planned by the scheduler at the next slot.', 'citeleap' ) . '" style="color:#0369a1;font-weight:700;font-size:13px;">&#10003;</span> <small style="color:#0369a1;font-weight:600;">' . esc_html__( 'auto-planned: ', 'citeleap' ) . '</small>';
 									echo esc_html( citeleap_format( $eta ) );
 								} else {
 									echo '<small style="color:#9ca3af;">' . esc_html__( 'auto mode off', 'citeleap' ) . '</small>';
@@ -235,7 +237,7 @@ class CiteLeap_Planner {
 									<input type="hidden" name="action" value="citeleap_pin_datetime">
 									<input type="hidden" name="idea_id" value="<?php echo esc_attr( (string) $row['id'] ); ?>">
 									<input type="datetime-local" name="publish_at" value="<?php echo esc_attr( $pinned_local ); ?>" style="font-size:11px;padding:1px 2px;">
-									<button class="button button-small" title="<?php echo esc_attr__( 'Pin a specific publish datetime for this topic. The auto-tick will draft + schedule it for exactly that time. Clear the field to release the pin.', 'citeleap' ); ?>"><?php echo esc_html__( 'Pin', 'citeleap' ); ?></button>
+									<button class="button button-small" title="<?php echo esc_attr__( 'Plan a specific publish date and time for this topic. The auto-tick will draft and schedule it for exactly that moment. Clear the field and click Plan again to release.', 'citeleap' ); ?>"><?php echo esc_html__( 'Plan', 'citeleap' ); ?></button>
 								</form>
 								<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline;">
 									<?php wp_nonce_field( CITELEAP_NONCE ); ?>

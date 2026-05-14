@@ -32,7 +32,7 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 function citeleap_render_admin(): void {
 	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
 	$tab = isset( $_GET['tab'] ) ? sanitize_key( (string) $_GET['tab'] ) : 'dashboard';
-	$tab = in_array( $tab, [ 'dashboard', 'settings', 'planner', 'prompts', 'images', 'seo', 'research', 'languages', 'log' ], true ) ? $tab : 'dashboard';
+	$tab = in_array( $tab, [ 'dashboard', 'settings', 'planner', 'calendar', 'prompts', 'images', 'seo', 'research', 'languages', 'log' ], true ) ? $tab : 'dashboard';
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html__( 'CiteLeap', 'citeleap' ); ?> <span style="font-size:0.6em;color:#64748b;font-weight:normal;">v<?php echo esc_html( CITELEAP_VERSION ); ?></span></h1>
@@ -42,6 +42,7 @@ function citeleap_render_admin(): void {
 		<nav class="nav-tab-wrapper" style="margin-top:1rem;">
 			<a class="nav-tab <?php echo 'dashboard' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=dashboard' ) ); ?>"><?php echo esc_html__( 'Dashboard', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'planner' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=planner' ) ); ?>"><?php echo esc_html__( 'Planner', 'citeleap' ); ?></a>
+			<a class="nav-tab <?php echo 'calendar' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=calendar' ) ); ?>"><?php echo esc_html__( 'Calendar', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'prompts' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=prompts' ) ); ?>"><?php echo esc_html__( 'Prompts', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'research' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=research' ) ); ?>"><?php echo esc_html__( 'Research', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'images' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=images' ) ); ?>"><?php echo esc_html__( 'Images', 'citeleap' ); ?></a>
@@ -56,6 +57,7 @@ function citeleap_render_admin(): void {
 			switch ( $tab ) {
 				case 'dashboard':  CiteLeap_Dashboard::render(); break;
 				case 'planner':    CiteLeap_Planner::render(); break;
+				case 'calendar':   CiteLeap_Calendar::render(); break;
 				case 'prompts':    citeleap_render_prompts(); break;
 				case 'images':     citeleap_render_images_tab(); break;
 				case 'seo':        citeleap_render_seo_tab(); break;
@@ -107,7 +109,7 @@ function citeleap_render_flash(): void {
 	} elseif ( 'reset' === $msg ) {
 		$text = __( 'Stuck refresh reset to failed. You can retry it.', 'citeleap' );
 	} elseif ( 'pinned' === $msg ) {
-		$text = __( 'Publish datetime pinned. The auto-tick will pick this topic at exactly that time.', 'citeleap' );
+		$text = __( 'Planned. The auto-tick will draft and publish this topic at exactly that date and time.', 'citeleap' );
 	} elseif ( 0 === strpos( $msg, 'action-' ) ) {
 		$labels = [
 			'action-pause'           => __( 'Paused. Cron tick will skip this row until you resume.', 'citeleap' ),
