@@ -3,7 +3,7 @@
  * Plugin Name:       Booming Venture , Blog Images
  * Plugin URI:        https://boomingventure.com
  * Description:       Adds a "Featured image" picker to every blog post so you can manually choose an image from the Media Library. The image renders nicely as a hero on the single post and as a card thumbnail in the blog overview. Mobile-first. Works on any active theme.
- * Version:           1.4.0
+ * Version:           1.5.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            Booming Venture
@@ -479,6 +479,69 @@ function bvimg_assign_random( bool $reroll ): int {
 	$GLOBALS['bvimg_bulk_running'] = false;
 	return $updated;
 }
+
+/* ---------------------------------------------------------------------
+ * AUTO-ASSIGN on new post creation.
+ *
+ * Reason this exists: before v1.5.0, the random pool was only consumed
+ * by two manual buttons. Posts inserted programmatically by other
+ * plugins (e.g. CiteLeap calling wp_insert_post) never received an
+ * image until the operator clicked "Assign random images now" again.
+ *
+ * save_post_post fires for every save of a post-type=post (Block
+ * Editor save, classic editor save, Quick Draft, wp_insert_post,
+ * wp_update_post, REST API publish, WP-Cron auto-publish of a future
+ * post). We guard:
+ *   - Skip autosaves / revisions / metaboxes-only saves
+ *   - Skip if post already has a _thumbnail_id (manual pick wins)
+ *   - Skip if the pool is empty (graceful no-op)
+ *   - Skip if we are inside the bulk runner already (prevents
+ *     duplicate writes during bvimg_assign_random)
+ * --------------------------------------------------------------------- */
+add_action( 'save_post_post', function ( $post_id, $post, $update ) {
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+	if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) return;
+	if ( ! in_array( $post->post_status, [ 'publish', 'future', 'draft', 'pending' ], true ) ) return;
+	if ( ! empty( $GLOBALS['bvimg_bulk_running'] ) ) return;
+	if ( (int) get_post_thumbnail_id( (int) $post_id ) ) return;        // operator-set pick wins
+
+	$pool = (array) get_option( BVIMG_POOL_OPT, [] );
+	$pool = array_values( array_filter( array_map( 'intval', $pool ) ) );
+	if ( empty( $pool ) ) return;                                       // pool empty -> nothing to do
+
+	$pick = (int) $pool[ array_rand( $pool ) ];
+	if ( ! $pick ) return;
+
+	$GLOBALS['bvimg_bulk_running'] = true;
+	set_post_thumbnail( (int) $post_id, $pick );
+	update_post_meta( (int) $post_id, BVIMG_RANDOM_KEY, '1' );
+	$GLOBALS['bvimg_bulk_running'] = false;
+}, 20, 3 );
+
+/* Belt-and-braces: also fire on transition_post_status for the
+ * future->publish step when WP-Cron auto-publishes a scheduled
+ * CiteLeap post. save_post_post fires too, but transition_post_status
+ * also fires from wp_publish_post in some code paths. */
+add_action( 'transition_post_status', function ( $new, $old, $post ) {
+	if ( ! $post instanceof WP_Post )            return;
+	if ( 'post' !== $post->post_type )           return;
+	if ( $new === $old )                         return;
+	if ( ! in_array( $new, [ 'publish', 'future' ], true ) ) return;
+	if ( ! empty( $GLOBALS['bvimg_bulk_running'] ) ) return;
+	if ( (int) get_post_thumbnail_id( $post->ID ) ) return;
+
+	$pool = (array) get_option( BVIMG_POOL_OPT, [] );
+	$pool = array_values( array_filter( array_map( 'intval', $pool ) ) );
+	if ( empty( $pool ) ) return;
+
+	$pick = (int) $pool[ array_rand( $pool ) ];
+	if ( ! $pick ) return;
+
+	$GLOBALS['bvimg_bulk_running'] = true;
+	set_post_thumbnail( $post->ID, $pick );
+	update_post_meta( $post->ID, BVIMG_RANDOM_KEY, '1' );
+	$GLOBALS['bvimg_bulk_running'] = false;
+}, 20, 3 );
 
 /* Counts for the status panel */
 function bvimg_count_posts_without_thumbnail(): int {

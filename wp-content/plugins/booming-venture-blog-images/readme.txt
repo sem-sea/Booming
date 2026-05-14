@@ -4,7 +4,7 @@ Tags: featured image, media library, hero, blog overview, thumbnails
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,6 +57,12 @@ It registers two image sizes but does not regenerate existing uploads. To resize
 No. The hero image uses `loading=eager fetchpriority=high` so it counts as the LCP candidate. The card thumbnails are `loading=lazy decoding=async`.
 
 == Changelog ==
+
+= 1.5.0 =
+* FIX: posts created programmatically by other plugins (e.g. CiteLeap calling `wp_insert_post`) now receive a random image from the pool the moment they are saved or published. Before this version, the pool was only consumed by the two manual buttons.
+* Adds `save_post_post` hook that auto-assigns from the pool when a new post is saved without a featured image. Skips autosaves, revisions, posts that already have a `_thumbnail_id`, and runs inside the existing bulk-run guard so manual assigns are not duplicated.
+* Adds `transition_post_status` hook as belt-and-braces for the `future -> publish` step when WP-Cron auto-publishes a scheduled CiteLeap post.
+* Manual override still wins: setting a Featured Image yourself drops the `_bvimg_random_assigned` flag (existing behaviour from v1.1.0), and the auto-assign hook never overwrites a post that already has a Featured Image.
 
 = 1.4.0 =
 * Width fix: featured image on single post views now matches the article body width (the `--wp--style--global--content-size` token, default 720px), centred. Overrides any `.alignwide` / `.alignfull` the theme applied. 16:9 aspect ratio retained.
