@@ -154,13 +154,86 @@ class CiteLeap_Scheduler {
 		CiteLeap_Log::add( 'post_scheduled', sprintf( '#%d for %s', $res['post_id'], $publish_at ) );
 	}
 
+	/** v2.2 , cadence math. Returns [interval_seconds, label]. Reads
+	 *  schedule.cadence_unit (day|week|month|half_year|year) + schedule
+	 *  .posts_per_unit. Falls back to legacy posts_per_week when the
+	 *  new fields are absent (v2.0 / v2.1 sites upgrade cleanly). */
+	public static function cadence_interval( array $schedule ): int {
+		$unit  = (string) ( $schedule['cadence_unit']   ?? '' );
+		$ppu   = (int)    ( $schedule['posts_per_unit'] ?? 0 );
+		if ( $unit && $ppu > 0 ) {
+			$unit_seconds = match ( $unit ) {
+				'day'       => DAY_IN_SECONDS,
+				'week'      => WEEK_IN_SECONDS,
+				'month'     => MONTH_IN_SECONDS,
+				'half_year' => MONTH_IN_SECONDS * 6,
+				'year'      => YEAR_IN_SECONDS,
+				default     => WEEK_IN_SECONDS,
+			};
+			return max( HOUR_IN_SECONDS, (int) round( $unit_seconds / $ppu ) );
+		}
+		/* Legacy fallback. */
+		$ppw = max( 1, (int) ( $schedule['posts_per_week'] ?? 3 ) );
+		return (int) round( WEEK_IN_SECONDS / $ppw );
+	}
+
+	/** v2.2 , Auto-distribute all queued+unplanned topics across the
+	 *  cadence. Each gets its own publish_at, stepping by one interval
+	 *  starting from the next slot. Skips paused rows and rows that
+	 *  already carry a publish_at (operator manual plans win). Returns
+	 *  the number of rows touched. */
+	public static function distribute_queue(): int {
+		$schedule = (array) get_option( CITELEAP_OPTION_SCHEDULE, [] );
+		$interval = self::cadence_interval( $schedule );
+		$hour     = self::publish_hour( $schedule );
+		$tz       = citeleap_tz();
+		$start_ts = isset( $schedule['start_date'] ) ? strtotime( (string) $schedule['start_date'] ) : time();
+		if ( $start_ts < time() ) $start_ts = time();
+		$last     = self::last_scheduled_time();
+		$cursor   = $last && $last >= $start_ts ? $last + $interval : $start_ts;
+
+		$queue = (array) get_option( CITELEAP_OPTION_QUEUE, [] );
+		/* Sort by priority desc then created_at asc for deterministic order. */
+		$indices = [];
+		foreach ( $queue as $i => $row ) {
+			if ( ( $row['status'] ?? '' ) !== 'queued' ) continue;
+			if ( ! empty( $row['publish_at'] ) ) continue;
+			if ( ! empty( $row['paused'] ) ) continue;
+			$indices[] = $i;
+		}
+		usort( $indices, function ( $a, $b ) use ( $queue ) {
+			$pa = (int) ( $queue[ $a ]['priority'] ?? 5 );
+			$pb = (int) ( $queue[ $b ]['priority'] ?? 5 );
+			if ( $pa !== $pb ) return $pb <=> $pa;
+			return strcmp( (string) ( $queue[ $a ]['created_at'] ?? '' ), (string) ( $queue[ $b ]['created_at'] ?? '' ) );
+		} );
+
+		$touched = 0;
+		foreach ( $indices as $i ) {
+			/* Snap to publish_hour in plugin tz. */
+			$d = ( new DateTimeImmutable( '@' . $cursor ) )->setTimezone( $tz )->setTime( $hour, 0, 0 );
+			$queue[ $i ]['publish_at'] = $d->setTimezone( new DateTimeZone( 'UTC' ) )->format( 'Y-m-d H:i:s' );
+			$cursor += $interval;
+			$touched++;
+		}
+		if ( $touched ) {
+			update_option( CITELEAP_OPTION_QUEUE, $queue, false );
+			CiteLeap_Log::add( 'queue_distributed', $touched . ' queued items spread across cadence', 'info' );
+		}
+		return $touched;
+	}
+
+	public static function publish_hour( array $schedule ): int {
+		$h = (int) ( $schedule['publish_hour'] ?? 10 );
+		return max( 0, min( 23, $h ) );
+	}
+
 	public static function next_slot( array $schedule ): int {
-		$ppw    = max( 1, (int) ( $schedule['posts_per_week'] ?? 3 ) );
 		$start  = isset( $schedule['start_date'] ) ? strtotime( (string) $schedule['start_date'] ) : time();
 		$now    = time();
 		if ( $start > $now ) return $start;
 
-		$interval = (int) round( WEEK_IN_SECONDS / $ppw );
+		$interval = self::cadence_interval( $schedule );
 		$elapsed  = $now - $start;
 		$slot_idx = (int) floor( $elapsed / $interval );
 		$last     = self::last_scheduled_time();

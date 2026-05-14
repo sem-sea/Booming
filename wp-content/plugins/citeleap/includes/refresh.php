@@ -31,17 +31,28 @@ class CiteLeap_Refresh {
 			'auto_mode'         => $mode,                              // 'off' | 'draft' | 'live'
 			'cadence_days'      => max( 7, (int) ( $r['cadence_days']      ?? 90 ) ),
 			'posts_per_week'    => max( 1, (int) ( $r['posts_per_week']    ?? 2 ) ),
+			'cadence_unit'      => (string) ( $r['cadence_unit']   ?? 'week' ),
+			'posts_per_unit'    => max( 1, (int) ( $r['posts_per_unit'] ?? ( $r['posts_per_week'] ?? 2 ) ) ),
 		];
 	}
 
 	public static function save_settings( array $args ): void {
 		$mode = sanitize_key( (string) ( $args['auto_mode'] ?? 'off' ) );
 		if ( ! in_array( $mode, [ 'off', 'draft', 'live' ], true ) ) $mode = 'off';
+		$unit = in_array( (string) ( $args['cadence_unit'] ?? '' ), [ 'day', 'week', 'month', 'half_year', 'year' ], true ) ? (string) $args['cadence_unit'] : 'week';
+		$ppu  = max( 1, min( 365, (int) ( $args['posts_per_unit'] ?? ( $args['posts_per_week'] ?? 2 ) ) ) );
+		$unit_secs = match ( $unit ) {
+			'day' => DAY_IN_SECONDS, 'month' => MONTH_IN_SECONDS,
+			'half_year' => MONTH_IN_SECONDS * 6, 'year' => YEAR_IN_SECONDS,
+			default => WEEK_IN_SECONDS,
+		};
 		update_option( CITELEAP_OPTION_REFRESH, [
 			'auto'           => ( 'off' !== $mode ) ? 1 : 0,
 			'auto_mode'      => $mode,
 			'cadence_days'   => max( 7,  min( 365, (int) ( $args['cadence_days']   ?? 90 ) ) ),
-			'posts_per_week' => max( 1,  min( 14,  (int) ( $args['posts_per_week'] ?? 2  ) ) ),
+			'cadence_unit'   => $unit,
+			'posts_per_unit' => $ppu,
+			'posts_per_week' => max( 1, min( 14, (int) ceil( $ppu * ( WEEK_IN_SECONDS / $unit_secs ) ) ) ),
 		], false );
 	}
 

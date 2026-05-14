@@ -110,6 +110,10 @@ function citeleap_render_flash(): void {
 		$text = __( 'Stuck refresh reset to failed. You can retry it.', 'citeleap' );
 	} elseif ( 'pinned' === $msg ) {
 		$text = __( 'Planned. The auto-tick will draft and publish this topic at exactly that date and time.', 'citeleap' );
+	} elseif ( 0 === strpos( $msg, 'distributed:' ) ) {
+		$parts = explode( ':', $msg );
+		$n     = (int) ( $parts[1] ?? 0 );
+		$text  = sprintf( __( 'Spread %d queued topic(s) evenly across the calendar.', 'citeleap' ), $n );
 	} elseif ( 0 === strpos( $msg, 'action-' ) ) {
 		$labels = [
 			'action-pause'           => __( 'Paused. Cron tick will skip this row until you resume.', 'citeleap' ),
@@ -205,8 +209,31 @@ function citeleap_render_settings(): void {
 				<td><input type="datetime-local" id="start_date" name="start_date" value="<?php echo esc_attr( (string) ( $schedule['start_date'] ?? '' ) ); ?>"></td>
 			</tr>
 			<tr>
-				<th><label for="posts_per_week"><?php echo esc_html__( 'Posts per week', 'citeleap' ); ?></label></th>
-				<td><input type="number" id="posts_per_week" name="posts_per_week" min="1" max="14" value="<?php echo (int) ( $schedule['posts_per_week'] ?? 3 ); ?>"></td>
+				<th><label for="posts_per_unit"><?php echo esc_html__( 'Cadence', 'citeleap' ); ?></label></th>
+				<td>
+					<input type="number" id="posts_per_unit" name="posts_per_unit" min="1" max="365" value="<?php echo (int) ( $schedule['posts_per_unit'] ?? ( $schedule['posts_per_week'] ?? 3 ) ); ?>" style="width:5rem;"> posts per
+					<select name="cadence_unit" style="margin-left:0.25rem;">
+						<?php $cu = (string) ( $schedule['cadence_unit'] ?? 'week' ); ?>
+						<option value="day"       <?php selected( $cu, 'day' );       ?>><?php echo esc_html__( 'day',        'citeleap' ); ?></option>
+						<option value="week"      <?php selected( $cu, 'week' );      ?>><?php echo esc_html__( 'week',       'citeleap' ); ?></option>
+						<option value="month"     <?php selected( $cu, 'month' );     ?>><?php echo esc_html__( 'month',      'citeleap' ); ?></option>
+						<option value="half_year" <?php selected( $cu, 'half_year' ); ?>><?php echo esc_html__( 'half year',  'citeleap' ); ?></option>
+						<option value="year"      <?php selected( $cu, 'year' );      ?>><?php echo esc_html__( 'year',       'citeleap' ); ?></option>
+					</select>
+					<p class="description"><?php echo esc_html__( 'The scheduler spreads posts evenly across this period. Example: 30 posts per month publishes one every 24 hours; 6 posts per year publishes one every 2 months.', 'citeleap' ); ?></p>
+				</td>
+			</tr>
+			<tr>
+				<th><label for="publish_hour"><?php echo esc_html__( 'Publish hour (local time)', 'citeleap' ); ?></label></th>
+				<td>
+					<select id="publish_hour" name="publish_hour">
+						<?php $ph = (int) ( $schedule['publish_hour'] ?? 10 );
+						for ( $h = 0; $h < 24; $h++ ) : ?>
+							<option value="<?php echo $h; ?>" <?php selected( $ph, $h ); ?>><?php echo sprintf( '%02d:00', $h ); ?></option>
+						<?php endfor; ?>
+					</select>
+					<p class="description"><?php echo esc_html__( 'Each auto-planned slot snaps to this hour in your local timezone.', 'citeleap' ); ?></p>
+				</td>
 			</tr>
 			<tr>
 				<th><label for="audience"><?php echo esc_html__( 'Audience', 'citeleap' ); ?></label></th>
@@ -257,8 +284,18 @@ function citeleap_render_settings(): void {
 				<td><input type="number" id="refresh_cadence_days" name="refresh_cadence_days" min="7" max="365" value="<?php echo (int) $r['cadence_days']; ?>"> <span class="description"><?php echo esc_html__( 'A post is "due" if its last-modified date is older than this.', 'citeleap' ); ?></span></td>
 			</tr>
 			<tr>
-				<th><label for="refresh_posts_per_week"><?php echo esc_html__( 'Refresh posts per week', 'citeleap' ); ?></label></th>
-				<td><input type="number" id="refresh_posts_per_week" name="refresh_posts_per_week" min="1" max="14" value="<?php echo (int) $r['posts_per_week']; ?>"></td>
+				<th><label><?php echo esc_html__( 'Refresh cadence', 'citeleap' ); ?></label></th>
+				<td>
+					<input type="number" name="refresh_posts_per_unit" min="1" max="365" value="<?php echo (int) ( $r['posts_per_unit'] ?? ( $r['posts_per_week'] ?? 2 ) ); ?>" style="width:5rem;"> posts per
+					<select name="refresh_cadence_unit" style="margin-left:0.25rem;">
+						<?php $rcu = (string) ( $r['cadence_unit'] ?? 'week' ); ?>
+						<option value="day"       <?php selected( $rcu, 'day' );       ?>><?php echo esc_html__( 'day',        'citeleap' ); ?></option>
+						<option value="week"      <?php selected( $rcu, 'week' );      ?>><?php echo esc_html__( 'week',       'citeleap' ); ?></option>
+						<option value="month"     <?php selected( $rcu, 'month' );     ?>><?php echo esc_html__( 'month',      'citeleap' ); ?></option>
+						<option value="half_year" <?php selected( $rcu, 'half_year' ); ?>><?php echo esc_html__( 'half year',  'citeleap' ); ?></option>
+						<option value="year"      <?php selected( $rcu, 'year' );      ?>><?php echo esc_html__( 'year',       'citeleap' ); ?></option>
+					</select>
+				</td>
 			</tr>
 		</table>
 
@@ -360,7 +397,21 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 		'auto'           => ( 'off' !== $mode ) ? 1 : 0,    // legacy boolean kept for back-compat
 		'auto_mode'      => $mode,
 		'start_date'     => sanitize_text_field( wp_unslash( (string) ( $_POST['start_date'] ?? '' ) ) ),
-		'posts_per_week' => max( 1, min( 14, (int) ( $_POST['posts_per_week'] ?? 3 ) ) ),
+		'posts_per_unit' => max( 1, min( 365, (int) ( $_POST['posts_per_unit'] ?? 3 ) ) ),
+		'cadence_unit'   => in_array( (string) ( $_POST['cadence_unit'] ?? '' ), [ 'day', 'week', 'month', 'half_year', 'year' ], true ) ? (string) $_POST['cadence_unit'] : 'week',
+		'publish_hour'   => max( 0, min( 23, (int) ( $_POST['publish_hour'] ?? 10 ) ) ),
+		/* legacy back-compat , derive a posts_per_week from the new
+		 * fields so v2.0/v2.1 code paths that still read it stay sane. */
+		'posts_per_week' => max( 1, min( 14, (int) ceil(
+			( (int) ( $_POST['posts_per_unit'] ?? 3 ) )
+			* ( WEEK_IN_SECONDS / match ( (string) ( $_POST['cadence_unit'] ?? 'week' ) ) {
+				'day'       => DAY_IN_SECONDS,
+				'month'     => MONTH_IN_SECONDS,
+				'half_year' => MONTH_IN_SECONDS * 6,
+				'year'      => YEAR_IN_SECONDS,
+				default     => WEEK_IN_SECONDS,
+			} )
+		) ) ),
 		'audience'       => sanitize_text_field( wp_unslash( (string) ( $_POST['audience'] ?? '' ) ) ),
 		'topics'         => sanitize_textarea_field( wp_unslash( (string) ( $_POST['topics'] ?? '' ) ) ),
 		'internal_links' => sanitize_text_field( wp_unslash( (string) ( $_POST['internal_links'] ?? '' ) ) ),
@@ -379,7 +430,8 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 	CiteLeap_Refresh::save_settings( [
 		'auto_mode'      => $_POST['refresh_auto_mode']      ?? 'off',
 		'cadence_days'   => $_POST['refresh_cadence_days']   ?? 90,
-		'posts_per_week' => $_POST['refresh_posts_per_week'] ?? 2,
+		'posts_per_unit' => $_POST['refresh_posts_per_unit'] ?? 2,
+		'cadence_unit'   => $_POST['refresh_cadence_unit']   ?? 'week',
 	] );
 
 	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'settings', 'citeleap_msg' => 'saved' ], admin_url( 'admin.php' ) ) );

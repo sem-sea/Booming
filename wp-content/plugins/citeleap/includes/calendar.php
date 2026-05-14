@@ -102,10 +102,9 @@ class CiteLeap_Calendar {
 			}
 		}
 		if ( in_array( $mode, [ 'draft', 'publish' ], true ) && $has_runnable ) {
-			$ppw   = max( 1, (int) ( $schedule['posts_per_week'] ?? 3 ) );
 			$start = isset( $schedule['start_date'] ) ? strtotime( (string) $schedule['start_date'] ) : 0;
 			if ( ! $start ) $start = time();
-			$interval = (int) round( WEEK_IN_SECONDS / $ppw );
+			$interval = CiteLeap_Scheduler::cadence_interval( $schedule );
 			$end_ts   = strtotime( sprintf( '%04d-%02d-%02d 23:59:59', $year, $month_n, $days_in_month ) );
 			$slot     = $start;
 			while ( $slot <= $end_ts ) {
@@ -127,9 +126,8 @@ class CiteLeap_Calendar {
 		$rs = class_exists( 'CiteLeap_Refresh' ) ? CiteLeap_Refresh::settings() : [];
 		$rmode = (string) ( $rs['auto_mode'] ?? 'off' );
 		if ( in_array( $rmode, [ 'draft', 'live' ], true ) ) {
-			$rppw      = max( 1, (int) ( $rs['posts_per_week'] ?? 2 ) );
 			$rstart    = time();
-			$rinterval = (int) round( WEEK_IN_SECONDS / $rppw );
+			$rinterval = CiteLeap_Scheduler::cadence_interval( $rs );
 			$rend_ts   = strtotime( sprintf( '%04d-%02d-%02d 23:59:59', $year, $month_n, $days_in_month ) );
 			$rslot     = $rstart;
 			while ( $rslot <= $rend_ts ) {

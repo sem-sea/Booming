@@ -53,6 +53,11 @@ class CiteLeap_Planner {
 				<input type="hidden" name="action" value="citeleap_run_tick">
 				<button class="button"><?php echo esc_html__( 'Run scheduler tick now', 'citeleap' ); ?></button>
 			</form>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-block;" onsubmit="return confirm('<?php echo esc_js( __( 'Spread every unplanned queued topic across the cadence (e.g. 30 posts / month becomes one every 24 hours). Manually planned topics are not touched. Continue?', 'citeleap' ) ); ?>');">
+				<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+				<input type="hidden" name="action" value="citeleap_distribute_queue">
+				<button class="button"><?php echo esc_html__( 'Auto-distribute across calendar', 'citeleap' ); ?></button>
+			</form>
 			<p class="citeleap-help"><strong><?php echo esc_html__( 'Generate ideas now:', 'citeleap' ); ?></strong> <?php echo esc_html__( 'calls your reasoning model with the idea prompt, returns N unique titles, dedupes against existing slugs, persists to the queue. Takes 5 to 15 seconds. Cost: roughly $0.005 per idea on Claude.', 'citeleap' ); ?>
 			<br><strong><?php echo esc_html__( 'Run scheduler tick now:', 'citeleap' ); ?></strong> <?php echo esc_html__( 'manually fires the hourly cron. Useful if you do not want to wait. Runs refresh tick first, then content tick. Honors Auto mode (Off / Draft / Publish).', 'citeleap' ); ?></p>
 
@@ -401,6 +406,14 @@ add_action( 'admin_post_citeleap_remove_idea', function () {
 	$queue = array_values( array_filter( $queue, fn( $r ) => ( $r['id'] ?? '' ) !== $id ) );
 	update_option( CITELEAP_OPTION_QUEUE, $queue, false );
 	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'planner' ], admin_url( 'admin.php' ) ) );
+	exit;
+} );
+
+add_action( 'admin_post_citeleap_distribute_queue', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( CITELEAP_NONCE );
+	$n = CiteLeap_Scheduler::distribute_queue();
+	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'planner', 'citeleap_msg' => 'distributed:' . $n ], admin_url( 'admin.php' ) ) );
 	exit;
 } );
 
