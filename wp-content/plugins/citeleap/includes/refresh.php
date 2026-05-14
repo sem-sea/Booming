@@ -106,6 +106,19 @@ class CiteLeap_Refresh {
 		$vars['topic'] = 'REFRESH AN EXISTING POST. The post slug is "' . $post->post_name . '". Keep the slug. Title may stay or be improved. Update statistics to current May 2026 data. Strengthen any weak section. Replace any retired "2025" year references with "2026" or "last year" where natural. Preserve the post URL and SEO authority. Keep the FAQ count at 5. Original title: ' . $post->post_title . '. Original body (markup, for reference): ' . wp_strip_all_tags( $post->post_content );
 		$vars['user_additional'] = $custom;
 
+		/* v2.0 , research + linking + language + layout context. */
+		$lang = (string) get_post_meta( (int) $post_id, CITELEAP_META_LANG, true );
+		if ( ! $lang ) $lang = CiteLeap_I18n::settings()['default_lang'];
+		$vars['language_block']       = CiteLeap_I18n::as_prompt_text( $lang );
+		$vars['layout_block']         = CiteLeap_Layout::as_prompt_text();
+		$research_cfg                 = CiteLeap_Research::settings();
+		$sources                      = $research_cfg['enabled'] && 'claude_native' !== $research_cfg['provider']
+			? CiteLeap_Research::fetch_sources( $post->post_title )
+			: [];
+		$vars['research_block']       = $sources ? CiteLeap_Research::as_prompt_text( $sources, $research_cfg['min_citations'] ) : '';
+		$candidates                   = CiteLeap_Linking::candidates( 40, (int) $post_id, $lang );
+		$vars['internal_links_block'] = CiteLeap_Linking::as_prompt_text( $candidates, $research_cfg['min_internal'] );
+
 		/* Mark refreshing while in-flight. */
 		$queue[ $idx ]['status']       = 'refreshing';
 		$queue[ $idx ]['started_at']   = current_time( 'mysql' );

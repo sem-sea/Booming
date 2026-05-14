@@ -177,6 +177,18 @@ class CiteLeap_Generator {
 		$vars['topic']           = $idea['title'] . ' , ' . $idea['angle'];
 		$vars['user_additional'] = $custom;
 
+		/* v2.0 , inject language, layout, research, internal-links blocks. */
+		$lang = (string) ( $idea['lang'] ?? CiteLeap_I18n::settings()['default_lang'] );
+		$vars['language_block']       = CiteLeap_I18n::as_prompt_text( $lang );
+		$vars['layout_block']         = CiteLeap_Layout::as_prompt_text();
+		$research_cfg                 = CiteLeap_Research::settings();
+		$sources                      = $research_cfg['enabled'] && 'claude_native' !== $research_cfg['provider']
+			? CiteLeap_Research::fetch_sources( $idea['title'] )
+			: [];
+		$vars['research_block']       = $sources ? CiteLeap_Research::as_prompt_text( $sources, $research_cfg['min_citations'] ) : '';
+		$candidates                   = CiteLeap_Linking::candidates( 40, 0, $lang );
+		$vars['internal_links_block'] = CiteLeap_Linking::as_prompt_text( $candidates, $research_cfg['min_internal'] );
+
 		$user_prompt = self::render_template( $tpl, $vars );
 		$system      = 'You are a precise long-form content writer. Return only the JSON object requested. No commentary, no markdown fences.';
 
@@ -224,6 +236,13 @@ class CiteLeap_Generator {
 		if ( ! empty( $post_data['primary_keyword'] ) ) {
 			update_post_meta( (int) $post_id, '_citeleap_primary_keyword', sanitize_text_field( (string) $post_data['primary_keyword'] ) );
 		}
+
+		/* v2.0: tag language + harvest research sources + internal-link slugs used. */
+		CiteLeap_I18n::assign_post_language( (int) $post_id, $lang );
+		$outbound = CiteLeap_Research::extract_outbound( (string) $post_data['body'] );
+		if ( $outbound ) update_post_meta( (int) $post_id, CITELEAP_META_SOURCES, $outbound );
+		$internal = CiteLeap_Linking::extract_used_slugs( (string) $post_data['body'] );
+		if ( $internal ) update_post_meta( (int) $post_id, CITELEAP_META_LINKS, $internal );
 
 		update_post_meta( (int) $post_id, CITELEAP_META_SOURCE, 'auto' );
 		update_post_meta( (int) $post_id, CITELEAP_META_IDEA, $idea_id );

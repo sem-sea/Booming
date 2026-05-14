@@ -39,6 +39,14 @@ Site description: {site_description}
 Primary audience: {audience}
 Primary categories: {category_list}
 Internal-link allowlist: {internal_links}
+
+{language_block}
+
+{layout_block}
+
+{research_block}
+
+{internal_links_block}
 Allowed external sources for citations: any reputable named outlet (McKinsey, HubSpot, Gartner, Tinuiti, Klaviyo, Ahrefs, Semrush, Princeton GEO study, OpenAI, Anthropic, Google, Bing, peer-reviewed papers, named industry benchmarks). Link to the live source.
 
 GEO / AEO RULES (May 2026 Bible , non-negotiable)

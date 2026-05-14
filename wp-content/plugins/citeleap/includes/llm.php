@@ -106,8 +106,16 @@ class CiteLeap_LLM {
 			return [ 'ok' => false, 'text' => '', 'raw' => [], 'provider' => $provider, 'model' => $model, 'error' => $cap['reason'] ];
 		}
 
+		/* v2.0 , attach Claude's native web-search tool for writing calls when enabled. */
+		$tools = [];
+		if ( 'claude' === $provider && 'writing' === $role
+			&& class_exists( 'CiteLeap_Research' )
+			&& CiteLeap_Research::should_attach_web_search( $provider, $model ) ) {
+			$tools[] = CiteLeap_Research::claude_web_search_tool_spec();
+		}
+
 		$res = match ( $provider ) {
-			'claude' => self::call_claude( $key, $model, $system, $user, $max_tokens ),
+			'claude' => self::call_claude( $key, $model, $system, $user, $max_tokens, $tools ),
 			'openai' => self::call_openai( $key, $model, $system, $user, $max_tokens ),
 			'gemini' => self::call_gemini( $key, $model, $system, $user, $max_tokens ),
 			default  => [ 'ok' => false, 'text' => '', 'raw' => [], 'provider' => $provider, 'model' => $model, 'error' => 'unknown provider' ],
@@ -136,22 +144,24 @@ class CiteLeap_LLM {
 		return [ 'in' => $in, 'out' => $out ];
 	}
 
-	private static function call_claude( string $key, string $model, string $system, string $user, int $max_tokens ): array {
+	private static function call_claude( string $key, string $model, string $system, string $user, int $max_tokens, array $tools = [] ): array {
+		$payload = [
+			'model'      => $model,
+			'max_tokens' => $max_tokens,
+			'system'     => $system,
+			'messages'   => [
+				[ 'role' => 'user', 'content' => $user ],
+			],
+		];
+		if ( ! empty( $tools ) ) $payload['tools'] = $tools;
 		$resp = wp_remote_post( 'https://api.anthropic.com/v1/messages', [
-			'timeout' => 120,
+			'timeout' => 180,
 			'headers' => [
 				'x-api-key'         => $key,
 				'anthropic-version' => '2023-06-01',
 				'content-type'      => 'application/json',
 			],
-			'body'    => wp_json_encode( [
-				'model'      => $model,
-				'max_tokens' => $max_tokens,
-				'system'     => $system,
-				'messages'   => [
-					[ 'role' => 'user', 'content' => $user ],
-				],
-			] ),
+			'body'    => wp_json_encode( $payload ),
 		] );
 		if ( is_wp_error( $resp ) ) {
 			return [ 'ok' => false, 'text' => '', 'raw' => [], 'provider' => 'claude', 'model' => $model, 'error' => $resp->get_error_message() ];

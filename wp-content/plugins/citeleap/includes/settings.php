@@ -32,7 +32,7 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 function citeleap_render_admin(): void {
 	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
 	$tab = isset( $_GET['tab'] ) ? sanitize_key( (string) $_GET['tab'] ) : 'dashboard';
-	$tab = in_array( $tab, [ 'dashboard', 'settings', 'planner', 'prompts', 'log' ], true ) ? $tab : 'dashboard';
+	$tab = in_array( $tab, [ 'dashboard', 'settings', 'planner', 'prompts', 'images', 'seo', 'research', 'languages', 'log' ], true ) ? $tab : 'dashboard';
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html__( 'CiteLeap', 'citeleap' ); ?> <span style="font-size:0.6em;color:#64748b;font-weight:normal;">v<?php echo esc_html( CITELEAP_VERSION ); ?></span></h1>
@@ -43,6 +43,10 @@ function citeleap_render_admin(): void {
 			<a class="nav-tab <?php echo 'dashboard' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=dashboard' ) ); ?>"><?php echo esc_html__( 'Dashboard', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'planner' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=planner' ) ); ?>"><?php echo esc_html__( 'Planner', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'prompts' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=prompts' ) ); ?>"><?php echo esc_html__( 'Prompts', 'citeleap' ); ?></a>
+			<a class="nav-tab <?php echo 'research' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=research' ) ); ?>"><?php echo esc_html__( 'Research', 'citeleap' ); ?></a>
+			<a class="nav-tab <?php echo 'images' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=images' ) ); ?>"><?php echo esc_html__( 'Images', 'citeleap' ); ?></a>
+			<a class="nav-tab <?php echo 'seo' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=seo' ) ); ?>"><?php echo esc_html__( 'SEO', 'citeleap' ); ?></a>
+			<a class="nav-tab <?php echo 'languages' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=languages' ) ); ?>"><?php echo esc_html__( 'Languages', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'settings' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=settings' ) ); ?>"><?php echo esc_html__( 'Settings', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'log' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=log' ) ); ?>"><?php echo esc_html__( 'Log', 'citeleap' ); ?></a>
 		</nav>
@@ -50,11 +54,15 @@ function citeleap_render_admin(): void {
 		<div style="background:#fff;padding:1.25rem 1.5rem;border:1px solid #e2e8f0;border-top:0;">
 			<?php
 			switch ( $tab ) {
-				case 'dashboard': CiteLeap_Dashboard::render(); break;
-				case 'planner':   CiteLeap_Planner::render(); break;
-				case 'prompts':   citeleap_render_prompts(); break;
-				case 'log':       citeleap_render_log(); break;
-				default:          citeleap_render_settings();
+				case 'dashboard':  CiteLeap_Dashboard::render(); break;
+				case 'planner':    CiteLeap_Planner::render(); break;
+				case 'prompts':    citeleap_render_prompts(); break;
+				case 'images':     citeleap_render_images_tab(); break;
+				case 'seo':        citeleap_render_seo_tab(); break;
+				case 'research':   citeleap_render_research_tab(); break;
+				case 'languages':  citeleap_render_languages_tab(); break;
+				case 'log':        citeleap_render_log(); break;
+				default:           citeleap_render_settings();
 			}
 			?>
 		</div>
@@ -412,5 +420,258 @@ add_action( 'admin_post_citeleap_save_prompts', function () {
 	update_option( CITELEAP_OPTION_PROMPTS, $prompts, false );
 
 	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'prompts', 'citeleap_msg' => 'saved' ], admin_url( 'admin.php' ) ) );
+	exit;
+} );
+
+/* =====================================================================
+ * v2.0 tab renderers + admin-post handlers
+ * ===================================================================== */
+
+function citeleap_render_research_tab(): void {
+	$r = CiteLeap_Research::settings();
+	$decrypted_key = CiteLeap_Research::decrypt_key();
+	$mask = $decrypted_key ? CiteLeap_Crypto::mask( $decrypted_key ) : '';
+	?>
+	<h2><?php echo esc_html__( 'Research module', 'citeleap' ); ?></h2>
+	<p style="color:#64748b;"><?php echo esc_html__( 'The writer model uses real research with named-source citations. Two paths: (1) Claude\'s native web-search tool , no extra key, no extra config , just keep Provider = "claude_native" and pick claude-sonnet-4-6 or claude-opus-4-7 as your writing model. (2) An operator-supplied SERP API key (Serper.dev / Brave Search / Tavily) for OpenAI or Gemini writing.', 'citeleap' ); ?></p>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+		<input type="hidden" name="action" value="citeleap_save_research">
+		<table class="form-table">
+			<tr><th><label for="enabled"><?php echo esc_html__( 'Research enabled', 'citeleap' ); ?></label></th>
+				<td><label><input type="checkbox" name="enabled" value="1" <?php checked( $r['enabled'] ); ?>> <?php echo esc_html__( 'Off = no research, generic prose. On = real sources with named-source citations.', 'citeleap' ); ?></label></td></tr>
+			<tr><th><label for="provider"><?php echo esc_html__( 'Research provider', 'citeleap' ); ?></label></th>
+				<td>
+					<select name="provider">
+						<option value="claude_native" <?php selected( $r['provider'], 'claude_native' ); ?>>Claude native web search (recommended, no API key)</option>
+						<option value="serper" <?php selected( $r['provider'], 'serper' ); ?>>Serper.dev (Google SERP)</option>
+						<option value="brave"  <?php selected( $r['provider'], 'brave' );  ?>>Brave Search API</option>
+						<option value="tavily" <?php selected( $r['provider'], 'tavily' ); ?>>Tavily</option>
+						<option value="off"    <?php selected( $r['provider'], 'off' );    ?>>Off</option>
+					</select>
+				</td></tr>
+			<tr><th><label for="api_key"><?php echo esc_html__( 'SERP API key (only for serper / brave / tavily)', 'citeleap' ); ?></label></th>
+				<td><input type="password" name="api_key" class="regular-text" autocomplete="new-password" placeholder="<?php echo $mask ? esc_attr( sprintf( __( 'Keep current (%s)', 'citeleap' ), $mask ) ) : esc_attr__( 'Paste your key', 'citeleap' ); ?>"><br>
+				<span class="description"><?php echo esc_html__( 'Stored encrypted (AES-256-CBC, AUTH_KEY-derived). Leave blank to keep the existing key.', 'citeleap' ); ?></span></td></tr>
+			<tr><th><label for="max_searches"><?php echo esc_html__( 'Max searches per post', 'citeleap' ); ?></label></th>
+				<td><input type="number" name="max_searches" value="<?php echo (int) $r['max_searches']; ?>" min="1" max="10"></td></tr>
+			<tr><th><label for="min_citations"><?php echo esc_html__( 'Min source citations per post', 'citeleap' ); ?></label></th>
+				<td><input type="number" name="min_citations" value="<?php echo (int) $r['min_citations']; ?>" min="1" max="10"></td></tr>
+			<tr><th><label for="min_internal"><?php echo esc_html__( 'Min internal links per post', 'citeleap' ); ?></label></th>
+				<td><input type="number" name="min_internal" value="<?php echo (int) $r['min_internal']; ?>" min="0" max="10"></td></tr>
+		</table>
+		<p><button class="button button-primary"><?php echo esc_html__( 'Save research settings', 'citeleap' ); ?></button></p>
+	</form>
+	<?php
+}
+
+function citeleap_render_images_tab(): void {
+	$s = CiteLeap_Images::settings();
+	$pool_ids = $s['pool'];
+	?>
+	<h2><?php echo esc_html__( 'Featured-image pool', 'citeleap' ); ?></h2>
+	<p style="color:#64748b;"><?php echo esc_html__( 'Pick a pool of Media Library images. Every new blog post (manual or CiteLeap-generated) without a Featured image gets one at random from this pool. The picked image becomes the og:image automatically and renders as a hero on single posts and as a card on the blog archive. Manual operator picks always win , the moment you set a Featured image yourself, the random flag drops.', 'citeleap' ); ?></p>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+		<input type="hidden" name="action" value="citeleap_save_images">
+		<input type="hidden" name="pool_ids" id="citeleap-pool-ids" value="<?php echo esc_attr( implode( ',', $pool_ids ) ); ?>">
+		<p>
+			<button type="button" class="button button-primary" id="citeleap-pick-images"><?php echo esc_html__( 'Open Media Library', 'citeleap' ); ?></button>
+			<button type="submit" class="button"><?php echo esc_html__( 'Save pool', 'citeleap' ); ?></button>
+		</p>
+		<div id="citeleap-pool-preview" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:0.5rem;margin:0.75rem 0;">
+			<?php foreach ( $pool_ids as $id ) :
+				$src = wp_get_attachment_image_src( (int) $id, 'thumbnail' );
+				if ( ! $src ) continue;
+			?>
+				<div data-id="<?php echo (int) $id; ?>" style="border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:#f8fafc;">
+					<img src="<?php echo esc_url( $src[0] ); ?>" alt="" style="display:block;width:100%;height:90px;object-fit:cover;">
+				</div>
+			<?php endforeach; ?>
+		</div>
+		<h3><?php echo esc_html__( 'Toggles', 'citeleap' ); ?></h3>
+		<table class="form-table">
+			<tr><th><label><?php echo esc_html__( 'Auto-assign on new post', 'citeleap' ); ?></label></th>
+				<td><label><input type="checkbox" name="auto_assign" value="1" <?php checked( $s['auto_assign'] ); ?>> <?php echo esc_html__( 'Pick from the pool whenever a post is saved without a Featured image.', 'citeleap' ); ?></label></td></tr>
+			<tr><th><label><?php echo esc_html__( 'Hero on single post', 'citeleap' ); ?></label></th>
+				<td><label><input type="checkbox" name="render_hero" value="1" <?php checked( $s['render_hero'] ); ?>> <?php echo esc_html__( 'Inject a hero figure above the_content. Skips when the theme already renders core/post-featured-image.', 'citeleap' ); ?></label></td></tr>
+			<tr><th><label><?php echo esc_html__( 'Card on archive', 'citeleap' ); ?></label></th>
+				<td><label><input type="checkbox" name="render_card" value="1" <?php checked( $s['render_card'] ); ?>> <?php echo esc_html__( 'Inject a clickable card thumbnail in the blog archive.', 'citeleap' ); ?></label></td></tr>
+		</table>
+		<p><button class="button button-primary"><?php echo esc_html__( 'Save', 'citeleap' ); ?></button></p>
+	</form>
+	<script>
+	jQuery( function ( $ ) {
+		if ( typeof wp === 'undefined' || ! wp.media ) return;
+		var $btn = $( '#citeleap-pick-images' ), $hidden = $( '#citeleap-pool-ids' ), $preview = $( '#citeleap-pool-preview' ), frame = null;
+		function setIds( ids ) {
+			ids = ids.filter( function ( id, i, a ) { return id > 0 && a.indexOf( id ) === i; } );
+			$hidden.val( ids.join( ',' ) );
+		}
+		function ids() {
+			var raw = ($hidden.val() || '').trim();
+			return raw ? raw.split(',').map(function(s){return parseInt(s,10);}).filter(function(n){return n>0;}) : [];
+		}
+		$btn.on( 'click', function () {
+			if ( frame ) { frame.open(); return; }
+			frame = wp.media({ title: 'Pick images for the blog pool', multiple: 'add', library: { type: 'image' }, button: { text: 'Use these' } });
+			frame.on( 'open', function () {
+				var sel = frame.state().get( 'selection' );
+				ids().forEach( function ( id ) { var att = wp.media.attachment( id ); att.fetch(); sel.add( att ? [att] : [] ); } );
+			} );
+			frame.on( 'select', function () {
+				var sel = frame.state().get( 'selection' ).toJSON();
+				setIds( sel.map( function ( a ) { return a.id; } ) );
+				$preview.empty();
+				sel.forEach( function ( a ) {
+					var url = (a.sizes && a.sizes.thumbnail && a.sizes.thumbnail.url) || a.url;
+					$preview.append( '<div data-id="' + a.id + '" style="border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:#f8fafc;"><img src="' + url + '" alt="" style="display:block;width:100%;height:90px;object-fit:cover;"></div>' );
+				} );
+			} );
+			frame.open();
+		} );
+	} );
+	</script>
+	<?php
+	wp_enqueue_media();
+}
+
+function citeleap_render_seo_tab(): void {
+	$s = CiteLeap_SEO::settings();
+	$d = CiteLeap_SEO::detected_seo_sources();
+	?>
+	<h2><?php echo esc_html__( 'SEO module', 'citeleap' ); ?></h2>
+	<p style="color:#64748b;"><?php echo esc_html__( 'Auto-injects JSON-LD (Organization + WebSite + BlogPosting + auto FAQ/HowTo), Open Graph, Twitter Card, canonical, and meta-description on every page render , BUT only when no other SEO plugin already wrote them. On every post publish, pings Google + Bing sitemaps and fires IndexNow.', 'citeleap' ); ?></p>
+	<h3><?php echo esc_html__( 'Detected SEO plugins (CiteLeap stands down per-tag if any are active)', 'citeleap' ); ?></h3>
+	<ul style="margin:0 0 1rem 1.25rem;">
+		<?php foreach ( $d as $k => $v ) : ?>
+			<li><?php echo esc_html( ucfirst( str_replace( '_', ' ', $k ) ) ); ?>: <?php echo $v ? '<span style="color:#16a34a">&#10003; active</span>' : '<span style="color:#9ca3af">&mdash; not installed</span>'; ?></li>
+		<?php endforeach; ?>
+	</ul>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+		<input type="hidden" name="action" value="citeleap_save_seo">
+		<table class="form-table">
+			<tr><th><label><?php echo esc_html__( 'SEO module enabled', 'citeleap' ); ?></label></th>
+				<td><label><input type="checkbox" name="enabled" value="1" <?php checked( $s['enabled'] ); ?>> <?php echo esc_html__( 'Master switch for the SEO module.', 'citeleap' ); ?></label></td></tr>
+			<tr><th><?php echo esc_html__( 'Inject', 'citeleap' ); ?></th>
+				<td>
+					<label><input type="checkbox" name="inject_schema"    value="1" <?php checked( $s['inject_schema'] ); ?>> <?php echo esc_html__( 'JSON-LD schema (Organization + WebSite + BlogPosting + Breadcrumb + auto FAQ/HowTo)', 'citeleap' ); ?></label><br>
+					<label><input type="checkbox" name="inject_og"        value="1" <?php checked( $s['inject_og'] ); ?>> <?php echo esc_html__( 'Open Graph + Twitter Card', 'citeleap' ); ?></label><br>
+					<label><input type="checkbox" name="inject_canonical" value="1" <?php checked( $s['inject_canonical'] ); ?>> <?php echo esc_html__( 'Canonical URL', 'citeleap' ); ?></label>
+				</td></tr>
+			<tr><th><?php echo esc_html__( 'On every publish', 'citeleap' ); ?></th>
+				<td>
+					<label><input type="checkbox" name="ping_sitemap" value="1" <?php checked( $s['ping_sitemap'] ); ?>> <?php echo esc_html__( 'Ping Google + Bing sitemap', 'citeleap' ); ?></label><br>
+					<label><input type="checkbox" name="indexnow"     value="1" <?php checked( $s['indexnow'] ); ?>> <?php echo esc_html__( 'Fire IndexNow (Bing / Yandex / Naver)', 'citeleap' ); ?></label>
+				</td></tr>
+		</table>
+		<p><button class="button button-primary"><?php echo esc_html__( 'Save SEO settings', 'citeleap' ); ?></button></p>
+	</form>
+	<?php
+}
+
+function citeleap_render_languages_tab(): void {
+	$i = CiteLeap_I18n::settings();
+	$supported = CiteLeap_I18n::supported();
+	?>
+	<h2><?php echo esc_html__( 'Languages + hreflang', 'citeleap' ); ?></h2>
+	<p style="color:#64748b;"><?php echo esc_html__( 'Pick one or more target languages. Each queued topic carries a language code. The writer produces native-quality output with locally adapted statistics and sources. If Polylang or WPML is installed the post is assigned to the right language automatically. If neither is installed, CiteLeap emits hreflang tags itself based on the per-post language tag.', 'citeleap' ); ?></p>
+	<p>
+		<?php if ( CiteLeap_I18n::has_polylang() ) : ?>
+			<span style="color:#16a34a;font-weight:600;">&#10003; <?php echo esc_html__( 'Polylang detected. New posts will be assigned to the target language via pll_set_post_language.', 'citeleap' ); ?></span>
+		<?php elseif ( CiteLeap_I18n::has_wpml() ) : ?>
+			<span style="color:#16a34a;font-weight:600;">&#10003; <?php echo esc_html__( 'WPML detected. New posts will be assigned to the target language via the wpml_set_element_language_details action.', 'citeleap' ); ?></span>
+		<?php else : ?>
+			<span style="color:#b45309;font-weight:600;"><?php echo esc_html__( 'Neither Polylang nor WPML detected. CiteLeap will emit hreflang tags directly from its own _citeleap_lang post meta if you enable "Inject hreflang" below.', 'citeleap' ); ?></span>
+		<?php endif; ?>
+	</p>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+		<input type="hidden" name="action" value="citeleap_save_i18n">
+		<table class="form-table">
+			<tr><th><label><?php echo esc_html__( 'Default language', 'citeleap' ); ?></label></th>
+				<td><select name="default_lang">
+					<?php foreach ( $supported as $code => $row ) : ?>
+						<option value="<?php echo esc_attr( $code ); ?>" <?php selected( $i['default_lang'], $code ); ?>><?php echo esc_html( $row[1] . ' (' . $row[2] . ')' ); ?></option>
+					<?php endforeach; ?>
+				</select></td></tr>
+			<tr><th><label><?php echo esc_html__( 'Enabled languages', 'citeleap' ); ?></label></th>
+				<td>
+					<?php foreach ( $supported as $code => $row ) : ?>
+						<label style="display:inline-block;margin:0 1rem 0.5rem 0;">
+							<input type="checkbox" name="enabled_langs[]" value="<?php echo esc_attr( $code ); ?>" <?php checked( in_array( $code, $i['enabled_langs'], true ) ); ?>>
+							<?php echo esc_html( $row[1] . ' (' . $row[2] . ')' ); ?>
+						</label>
+					<?php endforeach; ?>
+					<p class="description"><?php echo esc_html__( 'Operators can pick from this list per topic on the Planner tab.', 'citeleap' ); ?></p>
+				</td></tr>
+			<tr><th><label><?php echo esc_html__( 'Auto-translate refresh', 'citeleap' ); ?></label></th>
+				<td><label><input type="checkbox" name="auto_translate" value="1" <?php checked( $i['auto_translate'] ); ?>> <?php echo esc_html__( 'When a post is refreshed, also produce a refreshed version in every enabled language (uses additional tokens).', 'citeleap' ); ?></label></td></tr>
+			<tr><th><label><?php echo esc_html__( 'Inject hreflang', 'citeleap' ); ?></label></th>
+				<td><label><input type="checkbox" name="inject_hreflang" value="1" <?php checked( $i['inject_hreflang'] ); ?>> <?php echo esc_html__( 'Emit hreflang tags in wp_head when no other multilingual plugin handles it. Skipped automatically if Yoast / Polylang / WPML are detected.', 'citeleap' ); ?></label></td></tr>
+		</table>
+		<p><button class="button button-primary"><?php echo esc_html__( 'Save language settings', 'citeleap' ); ?></button></p>
+	</form>
+	<?php
+}
+
+/* ---- handlers ----------------------------------------------------------- */
+
+add_action( 'admin_post_citeleap_save_research', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( CITELEAP_NONCE );
+	CiteLeap_Research::save_settings( [
+		'enabled'       => $_POST['enabled']       ?? 0,
+		'provider'      => $_POST['provider']      ?? 'claude_native',
+		'api_key'       => $_POST['api_key']       ?? '',
+		'max_searches'  => $_POST['max_searches']  ?? 5,
+		'min_citations' => $_POST['min_citations'] ?? 3,
+		'min_internal'  => $_POST['min_internal']  ?? 2,
+	] );
+	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'research', 'citeleap_msg' => 'saved' ], admin_url( 'admin.php' ) ) );
+	exit;
+} );
+
+add_action( 'admin_post_citeleap_save_images', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( CITELEAP_NONCE );
+	$raw  = isset( $_POST['pool_ids'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['pool_ids'] ) ) : '';
+	$ids  = array_filter( array_map( 'intval', explode( ',', $raw ) ) );
+	CiteLeap_Images::save_settings( [
+		'pool'         => $ids,
+		'auto_assign'  => $_POST['auto_assign']  ?? 0,
+		'render_hero'  => $_POST['render_hero']  ?? 0,
+		'render_card'  => $_POST['render_card']  ?? 0,
+	] );
+	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'images', 'citeleap_msg' => 'saved' ], admin_url( 'admin.php' ) ) );
+	exit;
+} );
+
+add_action( 'admin_post_citeleap_save_seo', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( CITELEAP_NONCE );
+	CiteLeap_SEO::save_settings( [
+		'enabled'          => $_POST['enabled']          ?? 0,
+		'inject_schema'    => $_POST['inject_schema']    ?? 0,
+		'inject_og'        => $_POST['inject_og']        ?? 0,
+		'inject_canonical' => $_POST['inject_canonical'] ?? 0,
+		'ping_sitemap'     => $_POST['ping_sitemap']     ?? 0,
+		'indexnow'         => $_POST['indexnow']         ?? 0,
+	] );
+	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'seo', 'citeleap_msg' => 'saved' ], admin_url( 'admin.php' ) ) );
+	exit;
+} );
+
+add_action( 'admin_post_citeleap_save_i18n', function () {
+	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	check_admin_referer( CITELEAP_NONCE );
+	CiteLeap_I18n::save_settings( [
+		'default_lang'    => $_POST['default_lang']    ?? 'en',
+		'enabled_langs'   => $_POST['enabled_langs']   ?? [],
+		'auto_translate'  => $_POST['auto_translate']  ?? 0,
+		'inject_hreflang' => $_POST['inject_hreflang'] ?? 0,
+	] );
+	wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'languages', 'citeleap_msg' => 'saved' ], admin_url( 'admin.php' ) ) );
 	exit;
 } );

@@ -2,8 +2,8 @@
 /**
  * Plugin Name:       CiteLeap
  * Plugin URI:        https://boomingventure.com/citeleap
- * Description:       AI-powered blog content engine. Uses a reasoning model to ideate, a writing model to draft, and WP-Cron to publish on schedule. Bring your own API keys for Anthropic Claude, OpenAI, or Google Gemini. Default output format is GEO/AEO compliant (May 2026 Bible). Designed for lead-generation sites.
- * Version:           1.6.0
+ * Description:       AI-powered blog content engine v2.0. Multi-LLM router (Claude / OpenAI / Gemini, BYOK) ideates, researches with real web citations, drafts long-form GEO/AEO posts that link to sources AND to your own existing posts, picks a Featured image from your Media Library pool, ships schema + Open Graph + IndexNow on publish, supports multilingual output with hreflang. Refresh existing posts. Pin publish dates. Pause / resume / retry per row. Works on any active theme.
+ * Version:           2.0.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            CiteLeap (by Booming Venture)
@@ -18,8 +18,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const CITELEAP_VERSION         = '1.6.0';
-const CITELEAP_DEFAULT_TZ      = 'Europe/Amsterdam'; // CET / CEST per DST
+const CITELEAP_VERSION         = '2.0.0';
+const CITELEAP_DEFAULT_TZ      = 'Europe/Amsterdam';
 const CITELEAP_META_PENDING    = '_citeleap_pending_refresh';
 const CITELEAP_OPTION_API_KEYS = 'citeleap_api_keys';
 const CITELEAP_OPTION_MODELS   = 'citeleap_models';
@@ -27,14 +27,23 @@ const CITELEAP_OPTION_PROMPTS  = 'citeleap_prompts';
 const CITELEAP_OPTION_SCHEDULE = 'citeleap_schedule';
 const CITELEAP_OPTION_QUEUE    = 'citeleap_queue';
 const CITELEAP_OPTION_LOG      = 'citeleap_log';
-const CITELEAP_OPTION_USAGE    = 'citeleap_token_usage';   // per-month token + cost ledger
-const CITELEAP_OPTION_CAPS     = 'citeleap_budget_caps';   // per-provider monthly USD cap
-const CITELEAP_OPTION_REFRESH  = 'citeleap_refresh';       // refresh mode + cadence
-const CITELEAP_META_SOURCE     = '_citeleap_source';       // 'auto' | 'manual' | 'refresh'
+const CITELEAP_OPTION_USAGE    = 'citeleap_token_usage';
+const CITELEAP_OPTION_CAPS     = 'citeleap_budget_caps';
+const CITELEAP_OPTION_REFRESH  = 'citeleap_refresh';
+/* v2.0 additions */
+const CITELEAP_OPTION_IMAGES   = 'citeleap_images';        // image pool + render settings
+const CITELEAP_OPTION_SEO      = 'citeleap_seo';           // schema / OG / IndexNow toggles + key
+const CITELEAP_OPTION_RESEARCH = 'citeleap_research';      // research mode + max sources
+const CITELEAP_OPTION_I18N     = 'citeleap_i18n';          // language pool + plugin detection
+const CITELEAP_META_SOURCE     = '_citeleap_source';
 const CITELEAP_META_IDEA       = '_citeleap_idea_id';
 const CITELEAP_META_PROVIDER   = '_citeleap_provider';
 const CITELEAP_META_REFRESH_N  = '_citeleap_refresh_count';
 const CITELEAP_META_REFRESH_AT = '_citeleap_last_refreshed';
+const CITELEAP_META_SOURCES    = '_citeleap_sources';      // per-post research citation list
+const CITELEAP_META_LINKS      = '_citeleap_internal_links'; // per-post internal-link slugs used
+const CITELEAP_META_LANG       = '_citeleap_lang';         // per-post language code
+const CITELEAP_META_RANDOM_IMG = '_citeleap_random_img';   // post had image auto-assigned
 const CITELEAP_NONCE           = 'citeleap_action';
 const CITELEAP_CRON_HOURLY     = 'citeleap_cron_hourly';
 
@@ -47,6 +56,12 @@ require_once CITELEAP_DIR . 'includes/prompts.php';
 require_once CITELEAP_DIR . 'includes/pricing.php';
 require_once CITELEAP_DIR . 'includes/usage.php';
 require_once CITELEAP_DIR . 'includes/llm.php';
+require_once CITELEAP_DIR . 'includes/layout.php';   // NEW v2.0
+require_once CITELEAP_DIR . 'includes/linking.php';  // NEW v2.0
+require_once CITELEAP_DIR . 'includes/research.php'; // NEW v2.0
+require_once CITELEAP_DIR . 'includes/i18n.php';     // NEW v2.0
+require_once CITELEAP_DIR . 'includes/images.php';   // NEW v2.0
+require_once CITELEAP_DIR . 'includes/seo.php';      // NEW v2.0
 require_once CITELEAP_DIR . 'includes/generator.php';
 require_once CITELEAP_DIR . 'includes/refresh.php';
 require_once CITELEAP_DIR . 'includes/actions.php';
@@ -107,12 +122,13 @@ register_deactivation_hook( CITELEAP_FILE, function () {
 
 function citeleap_on_uninstall(): void {
 	if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) return;
-	delete_option( CITELEAP_OPTION_API_KEYS );
-	delete_option( CITELEAP_OPTION_MODELS );
-	delete_option( CITELEAP_OPTION_PROMPTS );
-	delete_option( CITELEAP_OPTION_SCHEDULE );
-	delete_option( CITELEAP_OPTION_QUEUE );
-	delete_option( CITELEAP_OPTION_LOG );
+	foreach ( [
+		CITELEAP_OPTION_API_KEYS, CITELEAP_OPTION_MODELS, CITELEAP_OPTION_PROMPTS,
+		CITELEAP_OPTION_SCHEDULE, CITELEAP_OPTION_QUEUE,    CITELEAP_OPTION_LOG,
+		CITELEAP_OPTION_USAGE,    CITELEAP_OPTION_CAPS,     CITELEAP_OPTION_REFRESH,
+		CITELEAP_OPTION_IMAGES,   CITELEAP_OPTION_SEO,      CITELEAP_OPTION_RESEARCH,
+		CITELEAP_OPTION_I18N,
+	] as $opt ) delete_option( $opt );
 }
 
 /* i18n */
