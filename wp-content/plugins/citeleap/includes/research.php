@@ -97,12 +97,52 @@ class CiteLeap_Research {
 		$key = self::decrypt_key();
 		if ( ! $key && in_array( $r['provider'], [ 'serper', 'brave', 'tavily' ], true ) ) return [];
 
+		/* v2.3 , when provider is claude_native, run the research model
+		 * out-of-band so the writer doesn't have to be Claude. The
+		 * research-role model (operator-chosen) does the search and
+		 * returns a JSON array of {title, url, snippet}. */
+		if ( 'claude_native' === $r['provider'] && class_exists( 'CiteLeap_LLM' ) && 'claude' === CiteLeap_LLM::get_provider( 'research' ) ) {
+			return self::fetch_via_research_role( $query, (int) $r['max_searches'] );
+		}
+
 		return match ( $r['provider'] ) {
 			'serper' => self::fetch_serper( $key, $query, (int) $r['max_searches'] ),
 			'brave'  => self::fetch_brave(  $key, $query, (int) $r['max_searches'] ),
 			'tavily' => self::fetch_tavily( $key, $query, (int) $r['max_searches'] ),
 			default  => [],
 		};
+	}
+
+	/** v2.3 , out-of-band research via the dedicated research model.
+	 *  Uses Claude's native web_search tool to gather sources, then
+	 *  asks the same model to return the top-N as strict JSON. */
+	private static function fetch_via_research_role( string $query, int $n ): array {
+		$n = max( 3, min( 10, $n ) );
+		$system = 'You are a research assistant. Use the web_search tool to find the most relevant, authoritative, and current sources for the user query. After searching, return ONLY a JSON array of the top ' . $n . ' results, each with keys: title (string), url (string, https), snippet (string, 200 chars max). No commentary, no markdown fences, no explanation. Just the JSON array.';
+		$user   = 'Find the top ' . $n . ' real online sources for this topic: ' . $query;
+		$res = CiteLeap_LLM::chat( 'research', $system, $user, 3000 );
+		if ( ! $res['ok'] ) return [];
+		$text = trim( (string) $res['text'] );
+		$text = preg_replace( '/^```(?:json)?\s*\n?/m', '', $text );
+		$text = preg_replace( '/\n?```\s*$/m', '', $text );
+		$decoded = json_decode( $text, true );
+		if ( ! is_array( $decoded ) && preg_match( '/\[\s*\{.*\}\s*\]/s', $text, $m ) ) {
+			$decoded = json_decode( $m[0], true );
+		}
+		if ( ! is_array( $decoded ) ) return [];
+		$out = [];
+		foreach ( $decoded as $row ) {
+			if ( ! is_array( $row ) ) continue;
+			$url = (string) ( $row['url'] ?? '' );
+			if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) continue;
+			$out[] = [
+				'title'   => (string) ( $row['title']   ?? '' ),
+				'url'     => $url,
+				'snippet' => mb_substr( (string) ( $row['snippet'] ?? '' ), 0, 240 ),
+			];
+			if ( count( $out ) >= $n ) break;
+		}
+		return $out;
 	}
 
 	private static function fetch_serper( string $key, string $query, int $n ): array {

@@ -124,9 +124,7 @@ class CiteLeap_Refresh {
 		$vars['layout_block']         = CiteLeap_Layout::as_prompt_text();
 		$vars['voice_samples_block']  = CiteLeap_Voice::as_prompt_text( 3, (int) $post_id );
 		$research_cfg                 = CiteLeap_Research::settings();
-		$sources                      = 'claude_native' !== $research_cfg['provider']
-			? CiteLeap_Research::fetch_sources( $post->post_title )
-			: [];
+		$sources                      = CiteLeap_Research::fetch_sources( $post->post_title );
 		$vars['research_block']       = $sources
 			? CiteLeap_Research::as_prompt_text( $sources, $research_cfg['min_citations'] )
 			: 'RESEARCH: use your built-in web search tool to find at least ' . (int) $research_cfg['min_citations'] . ' real, current online sources for this topic. Cite each one inline. No bare URLs. No invented statistics.';

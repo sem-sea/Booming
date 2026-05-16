@@ -166,7 +166,11 @@ function citeleap_render_settings(): void {
 		<h2 style="margin-top:1.5rem;"><?php echo esc_html__( 'Model selection', 'citeleap' ); ?></h2>
 		<p style="color:#64748b;"><?php echo esc_html__( 'Pick the provider per role + the model within that provider. Reasoning = idea brainstorm. Writing = full draft.', 'citeleap' ); ?></p>
 		<table class="form-table">
-			<?php foreach ( [ 'reasoning' => __( 'Reasoning model (ideas)', 'citeleap' ), 'writing' => __( 'Writing model (drafts)', 'citeleap' ) ] as $role => $label ) : ?>
+			<?php foreach ( [
+				'reasoning' => __( 'Reasoning model (idea brainstorming, planning)', 'citeleap' ),
+				'research'  => __( 'Research model (real web search, sources, citations)', 'citeleap' ),
+				'writing'   => __( 'Writing model (full long-form draft)', 'citeleap' ),
+			] as $role => $label ) : ?>
 				<tr>
 					<th><label><?php echo esc_html( $label ); ?></label></th>
 					<td>
@@ -381,11 +385,13 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 	$defaults = CiteLeap_LLM::defaults();
 	$models = [
 		'provider_reasoning' => sanitize_key( (string) ( $_POST['provider_reasoning'] ?? 'claude' ) ),
+		'provider_research'  => sanitize_key( (string) ( $_POST['provider_research']  ?? 'claude' ) ),
 		'provider_writing'   => sanitize_key( (string) ( $_POST['provider_writing']   ?? 'claude' ) ),
 	];
 	foreach ( $defaults['providers'] as $p ) {
 		$models[ $p ] = [
 			'reasoning' => sanitize_text_field( wp_unslash( (string) ( $_POST[ 'model_' . $p . '_reasoning' ] ?? $defaults['models'][ $p ]['reasoning'] ) ) ),
+			'research'  => sanitize_text_field( wp_unslash( (string) ( $_POST[ 'model_' . $p . '_research'  ] ?? $defaults['models'][ $p ]['research']  ?? $defaults['models'][ $p ]['reasoning'] ) ) ),
 			'writing'   => sanitize_text_field( wp_unslash( (string) ( $_POST[ 'model_' . $p . '_writing' ]   ?? $defaults['models'][ $p ]['writing'] ) ) ),
 		];
 	}

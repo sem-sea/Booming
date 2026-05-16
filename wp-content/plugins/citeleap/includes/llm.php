@@ -38,16 +38,19 @@ class CiteLeap_LLM {
 			'models'    => [
 				'claude' => [
 					'reasoning' => 'claude-opus-4-7',
+					'research'  => 'claude-opus-4-7',     // best web-search + extended thinking
 					'writing'   => 'claude-sonnet-4-6',
 					'cheap'     => 'claude-haiku-4-5',
 				],
 				'openai' => [
 					'reasoning' => 'gpt-5.5-pro',
+					'research'  => 'gpt-5.5-pro',          // Responses API + web search tool
 					'writing'   => 'gpt-5.5',
 					'cheap'     => 'gpt-5.4-mini',
 				],
 				'gemini' => [
 					'reasoning' => 'gemini-3.1-pro',
+					'research'  => 'gemini-3.1-pro',       // grounded search built in
 					'writing'   => 'gemini-2.5-pro',
 					'cheap'     => 'gemini-2.5-flash',
 				],
@@ -56,6 +59,11 @@ class CiteLeap_LLM {
 				'claude' => [ 'claude-opus-4-7', 'claude-sonnet-4-6', 'claude-haiku-4-5' ],
 				'openai' => [ 'gpt-5.5-pro', 'gpt-5.5', 'gpt-5.4', 'gpt-5.4-mini' ],
 				'gemini' => [ 'gemini-3.1-pro', 'gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.5-flash-lite' ],
+			],
+			'roles' => [
+				'reasoning' => __( 'Reasoning model (ideas, planning)', 'citeleap' ),
+				'research'  => __( 'Research model (sources, citations, web search)', 'citeleap' ),
+				'writing'   => __( 'Writing model (full draft)', 'citeleap' ),
 			],
 		];
 	}
@@ -106,20 +114,44 @@ class CiteLeap_LLM {
 			return [ 'ok' => false, 'text' => '', 'raw' => [], 'provider' => $provider, 'model' => $model, 'error' => $cap['reason'] ];
 		}
 
-		/* v2.0 , attach Claude's native web-search tool for writing calls when enabled. */
+		/* v2.0 , attach Claude's native web-search tool for writing AND
+		 *        research calls when the model supports it.
+		 * v2.3 , 'research' role also triggers web-search attachment. */
 		$tools = [];
-		if ( 'claude' === $provider && 'writing' === $role
+		if ( 'claude' === $provider
+			&& in_array( $role, [ 'writing', 'research' ], true )
 			&& class_exists( 'CiteLeap_Research' )
 			&& CiteLeap_Research::should_attach_web_search( $provider, $model ) ) {
 			$tools[] = CiteLeap_Research::claude_web_search_tool_spec();
 		}
 
-		$res = match ( $provider ) {
-			'claude' => self::call_claude( $key, $model, $system, $user, $max_tokens, $tools ),
-			'openai' => self::call_openai( $key, $model, $system, $user, $max_tokens ),
-			'gemini' => self::call_gemini( $key, $model, $system, $user, $max_tokens ),
-			default  => [ 'ok' => false, 'text' => '', 'raw' => [], 'provider' => $provider, 'model' => $model, 'error' => 'unknown provider' ],
-		};
+		/* v2.3 , retry-with-backoff on transient errors. Retries up to
+		 * 3 times with 1s, 3s, 7s delays on:
+		 *   - HTTP 429 (rate limited)
+		 *   - HTTP 5xx (provider outage)
+		 *   - wp_remote_post returning WP_Error (network blip)
+		 * Hard errors (401, 400, content policy) fail immediately. */
+		$attempts = 0;
+		$max_attempts = 3;
+		$backoff = [ 1, 3, 7 ];
+		$res = null;
+		while ( $attempts < $max_attempts ) {
+			$res = match ( $provider ) {
+				'claude' => self::call_claude( $key, $model, $system, $user, $max_tokens, $tools ),
+				'openai' => self::call_openai( $key, $model, $system, $user, $max_tokens ),
+				'gemini' => self::call_gemini( $key, $model, $system, $user, $max_tokens ),
+				default  => [ 'ok' => false, 'text' => '', 'raw' => [], 'provider' => $provider, 'model' => $model, 'error' => 'unknown provider' ],
+			};
+			if ( $res['ok'] ) break;
+
+			$err = (string) ( $res['error'] ?? '' );
+			$transient = self::is_transient_error( $err );
+			if ( ! $transient ) break;
+
+			CiteLeap_Log::add( 'llm_retry', sprintf( '%s/%s attempt %d/%d , %s', $provider, $model, $attempts + 1, $max_attempts, mb_substr( $err, 0, 120 ) ), 'warn' );
+			if ( $attempts + 1 < $max_attempts ) sleep( $backoff[ $attempts ] );
+			$attempts++;
+		}
 
 		/* Record usage on success. */
 		if ( $res['ok'] ) {
@@ -127,6 +159,20 @@ class CiteLeap_LLM {
 			CiteLeap_Usage::record( $provider, $model, (int) $tokens['in'], (int) $tokens['out'] );
 		}
 		return $res;
+	}
+
+	/** Decide if an LLM error is retryable. Match common transient
+	 *  signatures across the three provider APIs. */
+	private static function is_transient_error( string $err ): bool {
+		if ( '' === $err ) return false;
+		if ( preg_match( '/\bHTTP\s*(?:429|5\d\d)\b/i', $err ) )         return true;
+		if ( false !== stripos( $err, 'rate limit' ) )                 return true;
+		if ( false !== stripos( $err, 'overloaded' ) )                 return true;
+		if ( false !== stripos( $err, 'timeout' ) )                    return true;
+		if ( false !== stripos( $err, 'connection' ) )                 return true;
+		if ( false !== stripos( $err, 'unavailable' ) )                return true;
+		if ( false !== stripos( $err, 'curl error 28' ) )              return true;
+		return false;
 	}
 
 	private static function extract_token_counts( string $provider, array $raw ): array {
