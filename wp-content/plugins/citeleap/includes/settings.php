@@ -32,7 +32,7 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 function citeleap_render_admin(): void {
 	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
 	$tab = isset( $_GET['tab'] ) ? sanitize_key( (string) $_GET['tab'] ) : 'dashboard';
-	$tab = in_array( $tab, [ 'dashboard', 'settings', 'planner', 'calendar', 'prompts', 'images', 'seo', 'research', 'languages', 'log' ], true ) ? $tab : 'dashboard';
+	$tab = in_array( $tab, [ 'dashboard', 'settings', 'planner', 'calendar', 'prompts', 'images', 'seo', 'research', 'languages', 'license', 'log' ], true ) ? $tab : 'dashboard';
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html__( 'CiteLeap', 'citeleap' ); ?> <span style="font-size:0.6em;color:#64748b;font-weight:normal;">v<?php echo esc_html( CITELEAP_VERSION ); ?></span></h1>
@@ -49,6 +49,7 @@ function citeleap_render_admin(): void {
 			<a class="nav-tab <?php echo 'seo' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=seo' ) ); ?>"><?php echo esc_html__( 'SEO', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'languages' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=languages' ) ); ?>"><?php echo esc_html__( 'Languages', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'settings' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=settings' ) ); ?>"><?php echo esc_html__( 'Settings', 'citeleap' ); ?></a>
+			<a class="nav-tab <?php echo 'license' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=license' ) ); ?>"><?php echo esc_html__( 'License & Credits', 'citeleap' ); ?></a>
 			<a class="nav-tab <?php echo 'log' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=log' ) ); ?>"><?php echo esc_html__( 'Log', 'citeleap' ); ?></a>
 		</nav>
 
@@ -63,6 +64,7 @@ function citeleap_render_admin(): void {
 				case 'seo':        citeleap_render_seo_tab(); break;
 				case 'research':   citeleap_render_research_tab(); break;
 				case 'languages':  citeleap_render_languages_tab(); break;
+				case 'license':    citeleap_render_license_tab(); break;
 				case 'log':        citeleap_render_log(); break;
 				default:           citeleap_render_settings();
 			}
@@ -734,6 +736,116 @@ function citeleap_render_languages_tab(): void {
 		</table>
 		<p><button class="button button-primary"><?php echo esc_html__( 'Save language settings', 'citeleap' ); ?></button></p>
 	</form>
+	<?php
+}
+
+function citeleap_render_license_tab(): void {
+	$plan_slug  = CiteLeap_Plan::current();
+	$plan_def   = CiteLeap_Plan::definition( $plan_slug );
+	$plan_label = CiteLeap_License::plan_label();
+	$inc        = CiteLeap_Credits::included();
+	$used       = CiteLeap_Credits::used();
+	$top_up     = CiteLeap_Credits::top_up();
+	$remain     = CiteLeap_Credits::remaining();
+	$lifetime   = CiteLeap_Credits::lifetime_used();
+	$pct        = CiteLeap_Credits::percent_used();
+	$is_paying  = CiteLeap_License::is_paying();
+	$is_trial   = CiteLeap_License::is_trial();
+	$trial_days = CiteLeap_License::trial_days_left();
+	$fs_loaded  = (bool) CiteLeap_License::freemius();
+	$upgrade    = CiteLeap_License::checkout_url();
+	$top_url    = CiteLeap_License::top_up_url( 'growth' );
+	$account    = CiteLeap_License::account_url();
+	?>
+	<h2><?php echo esc_html__( 'License & credits', 'citeleap' ); ?></h2>
+	<p style="color:#64748b;max-width:780px;"><?php echo esc_html__( 'Each draft and each refresh consumes one credit. Monthly credits reset on the 1st of each calendar month. Top-up packs never expire and are consumed after monthly credits. Manual operator actions (pause / resume / publish-now / approve / reject) are free.', 'citeleap' ); ?></p>
+
+	<div class="notice" style="border-left:4px solid #0284c7;padding:1rem 1.25rem;background:#f0f9ff;margin:1rem 0 1.5rem;">
+		<h3 style="margin:0 0 0.5rem;font-size:16px;"><?php echo esc_html__( 'Current plan', 'citeleap' ); ?></h3>
+		<table class="form-table" style="margin:0;">
+			<tr><th style="width:280px;"><?php echo esc_html__( 'Plan', 'citeleap' ); ?></th><td><strong><?php echo esc_html( $plan_label ); ?></strong> <code style="background:#e2e8f0;padding:0.125rem 0.375rem;border-radius:3px;"><?php echo esc_html( $plan_slug ); ?></code></td></tr>
+			<tr><th><?php echo esc_html__( 'Billing status', 'citeleap' ); ?></th><td>
+				<?php if ( defined( 'CITELEAP_DEV_MODE' ) && CITELEAP_DEV_MODE ) : ?>
+					<span style="color:#16a34a;">&#10003; <?php echo esc_html__( 'Developer mode , unlimited, no billing.', 'citeleap' ); ?></span>
+				<?php elseif ( $is_paying ) : ?>
+					<span style="color:#16a34a;">&#10003; <?php echo esc_html__( 'Active paid subscription.', 'citeleap' ); ?></span>
+				<?php elseif ( $is_trial ) : ?>
+					<span style="color:#0284c7;">&#9201; <?php echo esc_html( sprintf( __( 'Trial , %d day(s) remaining.', 'citeleap' ), $trial_days ) ); ?></span>
+				<?php else : ?>
+					<span style="color:#b45309;">&#9888; <?php echo esc_html__( 'Free plan , upgrade to unlock more credits + features.', 'citeleap' ); ?></span>
+				<?php endif; ?>
+			</td></tr>
+			<tr><th><?php echo esc_html__( 'Included per cycle', 'citeleap' ); ?></th><td><strong><?php echo ( PHP_INT_MAX === $inc ) ? esc_html__( 'unlimited', 'citeleap' ) : (int) $inc; ?></strong> <?php echo esc_html__( 'credits', 'citeleap' ); ?> <?php echo CiteLeap_Plan::is_lifetime_credits() ? '<span style="color:#64748b;">(' . esc_html__( 'lifetime, does not reset', 'citeleap' ) . ')</span>' : '<span style="color:#64748b;">(' . esc_html__( 'resets on the 1st of every month', 'citeleap' ) . ')</span>'; ?></td></tr>
+			<tr><th><?php echo esc_html__( 'Used this cycle', 'citeleap' ); ?></th><td><strong><?php echo (int) $used; ?></strong> (<?php echo (int) $pct; ?>%)</td></tr>
+			<tr><th><?php echo esc_html__( 'Top-up balance', 'citeleap' ); ?></th><td><strong><?php echo (int) $top_up; ?></strong> <?php echo esc_html__( 'credits in reserve', 'citeleap' ); ?></td></tr>
+			<tr><th><?php echo esc_html__( 'Remaining now', 'citeleap' ); ?></th><td><strong style="color:<?php echo $remain > 0 ? '#16a34a' : '#b91c1c'; ?>;"><?php echo (int) $remain; ?></strong></td></tr>
+			<tr><th><?php echo esc_html__( 'Lifetime consumed', 'citeleap' ); ?></th><td><?php echo (int) $lifetime; ?></td></tr>
+			<tr><th><?php echo esc_html__( 'Sites allowed on this license', 'citeleap' ); ?></th><td><?php echo ( PHP_INT_MAX === (int) $plan_def['sites'] ) ? esc_html__( 'unlimited', 'citeleap' ) : (int) $plan_def['sites']; ?></td></tr>
+			<tr><th><?php echo esc_html__( 'Overage rate', 'citeleap' ); ?></th><td><?php echo $plan_def['overage_per_credit'] > 0 ? '$' . esc_html( number_format( (float) $plan_def['overage_per_credit'], 2 ) ) . ' / ' . esc_html__( 'extra credit', 'citeleap' ) : esc_html__( 'no overage (paid via top-up packs only)', 'citeleap' ); ?></td></tr>
+		</table>
+		<p style="margin-top:1rem;">
+			<a class="button button-primary" href="<?php echo esc_url( $upgrade ); ?>"><?php echo $is_paying ? esc_html__( 'Change plan', 'citeleap' ) : esc_html__( 'Upgrade plan', 'citeleap' ); ?></a>
+			<a class="button" href="<?php echo esc_url( $top_url ); ?>"><?php echo esc_html__( 'Buy top-up pack', 'citeleap' ); ?></a>
+			<a class="button" href="<?php echo esc_url( $account ); ?>"><?php echo esc_html__( 'Account & invoices', 'citeleap' ); ?></a>
+		</p>
+	</div>
+
+	<h3><?php echo esc_html__( 'Capabilities on the current plan', 'citeleap' ); ?></h3>
+	<table class="form-table" style="max-width:780px;">
+		<?php foreach ( [
+			'auto_publish'    => __( 'Auto-publish (scheduler publishes drafts on cadence)', 'citeleap' ),
+			'refresh'         => __( 'Refresh existing posts', 'citeleap' ),
+			'scheduling'      => __( 'Per-row pinning + Plan datetimes', 'citeleap' ),
+			'calendar'        => __( 'Calendar overview', 'citeleap' ),
+			'multilingual'    => __( 'Multilingual (7 languages)', 'citeleap' ),
+			'top_ups'         => __( 'Buy top-up credit packs', 'citeleap' ),
+			'white_label'     => __( 'White-label admin (remove CiteLeap branding)', 'citeleap' ),
+			'priority_support'=> __( 'Priority support (12h SLA)', 'citeleap' ),
+			'images_bulk'     => __( 'Bulk image pool operations', 'citeleap' ),
+		] as $cap => $label ) : ?>
+			<tr><th style="width:360px;"><?php echo esc_html( $label ); ?></th><td>
+				<?php if ( CiteLeap_Plan::has( $cap ) ) : ?>
+					<span style="color:#16a34a;">&#10003; <?php echo esc_html__( 'included', 'citeleap' ); ?></span>
+				<?php else : ?>
+					<span style="color:#9ca3af;">&mdash; <?php echo esc_html__( 'not on this plan', 'citeleap' ); ?></span>
+				<?php endif; ?>
+			</td></tr>
+		<?php endforeach; ?>
+	</table>
+
+	<h3 style="margin-top:2rem;"><?php echo esc_html__( 'Compare plans', 'citeleap' ); ?></h3>
+	<table class="widefat striped" style="max-width:920px;">
+		<thead><tr>
+			<th><?php echo esc_html__( 'Plan', 'citeleap' ); ?></th>
+			<th><?php echo esc_html__( 'Monthly', 'citeleap' ); ?></th>
+			<th><?php echo esc_html__( 'Annual', 'citeleap' ); ?></th>
+			<th><?php echo esc_html__( 'Credits / cycle', 'citeleap' ); ?></th>
+			<th><?php echo esc_html__( 'Sites', 'citeleap' ); ?></th>
+			<th><?php echo esc_html__( 'Overage', 'citeleap' ); ?></th>
+		</tr></thead>
+		<tbody>
+			<?php foreach ( [ 'free', 'solo', 'pro', 'agency', 'enterprise' ] as $slug ) :
+				$d = CiteLeap_Plan::definition( $slug );
+				$is_current = ( $slug === $plan_slug );
+			?>
+				<tr<?php echo $is_current ? ' style="background:#f0f9ff;font-weight:600;"' : ''; ?>>
+					<td><?php echo esc_html( $d['label'] ); ?><?php echo $is_current ? ' <span style="color:#0284c7;">&larr; ' . esc_html__( 'current', 'citeleap' ) . '</span>' : ''; ?></td>
+					<td><?php echo $d['price_monthly'] > 0 ? '$' . esc_html( (string) $d['price_monthly'] ) : esc_html__( 'free', 'citeleap' ); ?></td>
+					<td><?php echo $d['price_annual']  > 0 ? '$' . esc_html( (string) $d['price_annual'] )  : '&mdash;'; ?></td>
+					<td><?php echo (int) $d['credits_per_cycle']; ?><?php echo ! empty( $d['lifetime_credits'] ) ? ' <small>(' . esc_html__( 'lifetime', 'citeleap' ) . ')</small>' : ''; ?></td>
+					<td><?php echo ( PHP_INT_MAX === (int) $d['sites'] ) ? esc_html__( 'unlimited', 'citeleap' ) : (int) $d['sites']; ?></td>
+					<td><?php echo $d['overage_per_credit'] > 0 ? '$' . esc_html( number_format( (float) $d['overage_per_credit'], 2 ) ) : '&mdash;'; ?></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+
+	<?php if ( ! $fs_loaded && ! ( defined( 'CITELEAP_DEV_MODE' ) && CITELEAP_DEV_MODE ) ) : ?>
+		<div class="notice notice-info" style="margin-top:1.5rem;"><p>
+			<strong><?php echo esc_html__( 'Freemius SDK not yet loaded.', 'citeleap' ); ?></strong>
+			<?php echo esc_html__( 'Drop the SDK at vendor/freemius/wordpress-sdk/start.php and set CITELEAP_FS_ID + CITELEAP_FS_PUBLIC_KEY in wp-config.php to activate billing + checkout. Until then this install runs on the Free plan, or on dev mode if CITELEAP_DEV_MODE is true.', 'citeleap' ); ?>
+		</p></div>
+	<?php endif; ?>
 	<?php
 }
 

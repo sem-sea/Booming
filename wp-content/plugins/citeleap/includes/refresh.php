@@ -109,6 +109,15 @@ class CiteLeap_Refresh {
 		$post    = $post_id ? get_post( $post_id ) : null;
 		if ( ! $post ) return [ 'ok' => false, 'post_id' => 0, 'error' => 'Underlying post no longer exists.' ];
 
+		if ( ! CiteLeap_Plan::has( 'refresh' ) ) {
+			CiteLeap_Log::add( 'refresh_blocked_plan', sprintf( 'plan=%s post=%d', CiteLeap_Plan::current(), $post_id ), 'warn' );
+			return [ 'ok' => false, 'post_id' => $post_id, 'error' => __( 'Refresh is not available on the Free plan. Upgrade to Solo or higher.', 'citeleap' ) ];
+		}
+		if ( ! CiteLeap_Credits::can_consume( 1 ) ) {
+			CiteLeap_Log::add( 'refresh_blocked_no_credits', sprintf( 'plan=%s used=%d', CiteLeap_Plan::current(), CiteLeap_Credits::used() ), 'warn' );
+			return [ 'ok' => false, 'post_id' => $post_id, 'error' => __( 'Out of credits this cycle. Upgrade your plan or buy a top-up pack.', 'citeleap' ) ];
+		}
+
 		$prompts = (array) get_option( CITELEAP_OPTION_PROMPTS, [] );
 		$tpl     = (string) ( $prompts['master_prompt'] ?? citeleap_default_master_prompt() );
 		$custom  = (string) ( $prompts['custom_prompt'] ?? '' );
@@ -187,6 +196,7 @@ class CiteLeap_Refresh {
 				}
 			}
 			update_option( CITELEAP_OPTION_QUEUE, $queue, false );
+			CiteLeap_Credits::consume( 1, 'refresh_pending' );
 			CiteLeap_Log::add( 'refresh_pending_review', sprintf( '#%d "%s" awaiting approval (%d words, %s/%s)', $post_id, $post->post_title, $new_word_count, $res['provider'], $res['model'] ) );
 			return [ 'ok' => true, 'post_id' => $post_id, 'error' => '' ];
 		}
@@ -224,6 +234,7 @@ class CiteLeap_Refresh {
 		}
 		update_option( CITELEAP_OPTION_QUEUE, $queue, false );
 
+		CiteLeap_Credits::consume( 1, 'refresh_live' );
 		CiteLeap_Log::add( 'post_refreshed', sprintf( '#%d "%s" -> %d words (%s/%s)', $post_id, $post->post_title, $new_word_count, $res['provider'], $res['model'] ) );
 		return [ 'ok' => true, 'post_id' => $post_id, 'error' => '' ];
 	}

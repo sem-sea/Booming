@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.4.0
+Stable tag: 2.5.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,20 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 2.5.0 =
+* NEW: commercial layer , three new modules ship the bones of the paid SaaS.
+  - includes/license.php , Freemius SDK wrapper. When the SDK is dropped into vendor/freemius/wordpress-sdk/start.php and CITELEAP_FS_ID + CITELEAP_FS_PUBLIC_KEY are defined in wp-config.php, the plugin reads the real plan + trial state + checkout URLs straight from Freemius. Until then, the install runs on the Free plan (or on Developer mode if CITELEAP_DEV_MODE is true).
+  - includes/plan.php , single source of truth for the five plans (Free, Solo, Pro, Agency, Enterprise) plus the Developer slug. Defines credits per cycle, sites allowed, overage rate, and a per-plan capability list (auto_publish, refresh, multilingual, calendar, scheduling, top_ups, white_label, priority_support, images_bulk). CiteLeap_Plan::has( $cap ) is the gate everywhere in the plugin.
+  - includes/credits.php , per-cycle credit ledger in CITELEAP_OPTION_CREDITS. Tracks used + top_up + lifetime, auto-resets on the 1st of each calendar month for paid plans, never resets on Free (3 lifetime credits). consume() decrements monthly credits first, then dips into top-ups.
+* NEW: hard credit gate. Drafting (CiteLeap_Generator::write_post_from_idea) and refreshing (CiteLeap_Refresh::refresh_from_queue) check can_consume() before touching the LLM; if exhausted they log credit_blocked and return a clear upgrade message. Successful drafts + refreshes consume one credit and log credit_consumed with plan + remaining.
+* NEW: refresh is plan-gated. The Free plan cannot run refreshes (returns a "Upgrade to Solo or higher" message). All other paid plans + Developer mode have it.
+* NEW: admin banner on every CiteLeap admin page. Three states: red error (exhausted) with Upgrade + Buy top-up CTAs; amber warning (under 20% remaining) with the same CTAs; quiet info pill (healthy) showing plan + usage + a link to the License tab. Developer mode shows a green "unlimited" pill.
+* NEW: License & Credits tab. Plan label + billing status (paying / trial-days-left / free), included-per-cycle, used + percent, top-up balance, remaining, lifetime consumed, sites allowed, overage rate, full capability matrix vs current plan, and a Compare-plans table highlighting the active row. Upgrade / Buy top-up / Account & invoices buttons all wire through to Freemius when loaded, or to the License tab itself as a placeholder until then.
+* NEW: Freemius bootstrap stub in citeleap.php. Conditional require on vendor/freemius/wordpress-sdk/start.php with the standard fs_dynamic_init shape (id, slug, public_key, premium, paid plans, 14-day trial no-card, plugin menu slug). Fires the citeleap_fs_loaded action when ready so listeners can hook checkout / subscription events. No-op when the SDK file is absent.
+* NEW: CITELEAP_DEV_MODE constant. Define in wp-config.php to bypass every plan gate and credit check (for the author's own site + local development). Banner shows a green "Developer mode" pill so the state is visible.
+* NEW: CITELEAP_OPTION_CREDITS option registered in the uninstall hook so the ledger is wiped when the plugin is removed.
+* CHANGE: bumped Version + CITELEAP_VERSION + readme Stable tag to 2.5.0.
 
 = 2.4.0 =
 * NEW: full Blog-Images plugin functionality ported into CiteLeap. The Images tab now ships the bulk "Assign random images now" and "Re-randomise" operators alongside the existing pool picker. Walks every published post: posts without a Featured image get a fresh random pick from the pool, posts previously random-assigned can be re-rolled without touching manual operator picks.

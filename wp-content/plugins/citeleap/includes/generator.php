@@ -181,6 +181,11 @@ class CiteLeap_Generator {
 		}
 		$idea = $queue[ $idx ];
 
+		if ( ! CiteLeap_Credits::can_consume( 1 ) ) {
+			CiteLeap_Log::add( 'draft_blocked_no_credits', sprintf( 'plan=%s used=%d', CiteLeap_Plan::current(), CiteLeap_Credits::used() ), 'warn' );
+			return [ 'ok' => false, 'post_id' => 0, 'error' => __( 'Out of credits this cycle. Upgrade your plan or buy a top-up pack to draft more posts.', 'citeleap' ) ];
+		}
+
 		$prompts = (array) get_option( CITELEAP_OPTION_PROMPTS, [] );
 		$tpl     = (string) ( $prompts['master_prompt'] ?? citeleap_default_master_prompt() );
 		$custom  = (string) ( $prompts['custom_prompt'] ?? '' );
@@ -297,6 +302,7 @@ class CiteLeap_Generator {
 		$queue[ $idx ]['drafted_at']  = current_time( 'mysql' );
 		update_option( CITELEAP_OPTION_QUEUE, $queue, false );
 
+		CiteLeap_Credits::consume( 1, 'draft' );
 		CiteLeap_Log::add( 'post_drafted', sprintf( '#%d "%s" (%d words, %s/%s)', $post_id, $post_data['title'], $word_count, $res['provider'], $res['model'] ) );
 		return [ 'ok' => true, 'post_id' => (int) $post_id, 'error' => '' ];
 	}
