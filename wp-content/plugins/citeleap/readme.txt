@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.3.0
+Stable tag: 2.4.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,17 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 2.4.0 =
+* NEW: full Blog-Images plugin functionality ported into CiteLeap. The Images tab now ships the bulk "Assign random images now" and "Re-randomise" operators alongside the existing pool picker. Walks every published post: posts without a Featured image get a fresh random pick from the pool, posts previously random-assigned can be re-rolled without touching manual operator picks.
+* NEW: pool status panel on the Images tab , images in pool, published posts, posts without a Featured image, posts with a random-assigned image. All four counters refresh on every load.
+* NEW: per-thumbnail remove (X) button on every pool preview tile so the operator can drop an image from the pool without re-opening the Media Library.
+* NEW: block-theme card injection. A render_block hook on core/post-excerpt prepends a clickable card thumbnail in archive views for themes whose post template uses post-excerpt without a featured-image block.
+* NEW: editor nudge , an info notice appears on the post edit screen when publishing a post without a Featured image, pointing the operator to the pool.
+* NEW: thumbnail column on the Posts list with a small (random) / (manual) tag so the operator can scan at a glance which posts got auto-assigned vs operator-picked.
+* NEW: theme-override CSS that constrains body.single-post .wp-block-post-featured-image to a 16:9 box with the global content-size width, so the giant edge-to-edge hero look the operator complained about is gone without us swapping blocks.
+* NEW: skeleton-shimmer placeholder while the hero / card image loads.
+* CHANGE: bumped Version + CITELEAP_VERSION to 2.4.0.
 
 = 1.6.0 =
 * NEW: progression overlay shown while long synchronous operations run. When you click any CiteLeap form button, a centered card appears with the action title, a 4 to 5 step narrative explaining what is happening behind the scenes, a spinner, and a hint that the page will reload when finished. Pure vanilla JS, no AJAX rewrite needed.

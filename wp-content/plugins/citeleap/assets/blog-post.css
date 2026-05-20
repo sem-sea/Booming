@@ -2,17 +2,77 @@
  * Mobile-first. Scoped to .citeleap-* wrappers. Works on any active
  * WordPress theme. */
 
+/* ============================================================
+ * THEME OVERRIDE , constrain the theme's core/post-featured-image
+ * block on single post views to a sensible 16:9 box. This stops
+ * the giant edge-to-edge hero look without us needing to swap the
+ * block, and matches the size profile of our own injected hero.
+ *
+ * Applied only to body.single-post. Archive views are untouched.
+ * ============================================================ */
+body.single-post .wp-block-post-featured-image,
+body.single-post .wp-block-post-featured-image.alignwide,
+body.single-post .wp-block-post-featured-image.alignfull,
+body.single-post header.entry-header .wp-block-post-featured-image,
+body.single-post main .wp-block-post-featured-image {
+	max-width: var( --wp--style--global--content-size, 720px );
+	width: 100%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 0;
+	margin-bottom: 1.5rem;
+	border-radius: 0.5rem;
+	overflow: hidden;
+	aspect-ratio: 16 / 9;
+	background: #f1f5f9;
+	display: block;
+	float: none;
+}
+body.single-post .wp-block-post-featured-image a,
+body.single-post .wp-block-post-featured-image > img {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+body.single-post .wp-block-post-featured-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+	border-radius: 0.5rem;
+	display: block;
+	max-height: none;
+}
+@media (min-width: 768px) {
+	body.single-post .wp-block-post-featured-image,
+	body.single-post .wp-block-post-featured-image.alignwide,
+	body.single-post .wp-block-post-featured-image.alignfull {
+		border-radius: 0.875rem;
+		margin-top: 0;
+		margin-bottom: 2rem;
+		box-shadow: 0 8px 24px -12px rgba(15, 23, 42, 0.15);
+	}
+	body.single-post .wp-block-post-featured-image img {
+		border-radius: 0.875rem;
+	}
+}
+body.single-post .wp-block-cover.has-featured-image,
+body.single-post .wp-block-cover.is-featured-image,
+body.single-post header.entry-header .wp-block-post-featured-image {
+	aspect-ratio: 16 / 9;
+	max-height: 60vh;
+}
+
+/* ---- Hero figure on single posts ---- */
 .citeleap-hero {
 	display: block;
-	margin: 0 0 1.5rem;
+	margin: 0 auto 1.5rem;
 	border-radius: 0.5rem;
 	overflow: hidden;
 	background: #f1f5f9;
 	aspect-ratio: 16 / 9;
 	position: relative;
 	max-width: var( --wp--style--global--content-size, 720px );
-	margin-left: auto;
-	margin-right: auto;
 }
 .citeleap-hero .citeleap-hero-img {
 	display: block;
@@ -38,6 +98,7 @@
 	background: linear-gradient( to top, rgba(0,0,0,0.7), rgba(0,0,0,0) );
 }
 
+/* ---- Card image on blog overview / archive ---- */
 .citeleap-card-link {
 	display: block;
 	margin: 0 0 0.875rem;
@@ -70,4 +131,25 @@
 		border-radius: 0.625rem;
 		margin: 0 0 1rem;
 	}
+}
+
+/* ---- Skeleton shimmer while the image loads ---- */
+.citeleap-hero,
+.citeleap-card-link {
+	background-image: linear-gradient( 90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100% );
+	background-size: 200% 100%;
+	animation: citeleapShimmer 1.6s ease-in-out infinite;
+}
+.citeleap-hero .citeleap-hero-img,
+.citeleap-card-link .citeleap-card-img {
+	position: relative;
+	z-index: 1;
+}
+@keyframes citeleapShimmer {
+	0%   { background-position: 200% 0; }
+	100% { background-position: -200% 0; }
+}
+.citeleap-hero img[src],
+.citeleap-card-link img[src] {
+	background: transparent;
 }

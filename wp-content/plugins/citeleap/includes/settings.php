@@ -526,11 +526,34 @@ function citeleap_render_research_tab(): void {
 }
 
 function citeleap_render_images_tab(): void {
-	$s = CiteLeap_Images::settings();
-	$pool_ids = $s['pool'];
+	$s             = CiteLeap_Images::settings();
+	$pool_ids      = $s['pool'];
+	$posts_total   = CiteLeap_Images::count_posts_total();
+	$posts_without = CiteLeap_Images::count_posts_without_thumbnail();
+	$random_count  = CiteLeap_Images::count_random_assigned();
+	$msg           = isset( $_GET['citeleap_msg'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['citeleap_msg'] ) ) : '';
+	$n             = isset( $_GET['n'] ) ? (int) $_GET['n'] : 0;
 	?>
 	<h2><?php echo esc_html__( 'Featured-image pool', 'citeleap' ); ?></h2>
 	<p style="color:#64748b;"><?php echo esc_html__( 'Pick a pool of Media Library images. Every new blog post (manual or CiteLeap-generated) without a Featured image gets one at random from this pool. The picked image becomes the og:image automatically and renders as a hero on single posts and as a card on the blog archive. Manual operator picks always win , the moment you set a Featured image yourself, the random flag drops.', 'citeleap' ); ?></p>
+
+	<?php if ( 'assigned' === $msg ) : ?>
+		<div class="notice notice-success is-dismissible"><p><?php echo esc_html( sprintf( __( 'Assigned random images to %d post(s).', 'citeleap' ), $n ) ); ?></p></div>
+	<?php elseif ( 'rerolled' === $msg ) : ?>
+		<div class="notice notice-success is-dismissible"><p><?php echo esc_html( sprintf( __( 'Re-randomised %d post(s).', 'citeleap' ), $n ) ); ?></p></div>
+	<?php endif; ?>
+
+	<div class="notice" style="border-left:4px solid #0284c7;padding:1rem 1.25rem;background:#f0f9ff;margin:1rem 0 1.5rem;">
+		<h3 style="margin:0 0 0.5rem;font-size:16px;"><?php echo esc_html__( 'Pool status', 'citeleap' ); ?></h3>
+		<table class="form-table" style="margin:0;">
+			<tr><th style="width:280px;"><?php echo esc_html__( 'Images in pool', 'citeleap' ); ?></th><td><strong><?php echo (int) count( $pool_ids ); ?></strong></td></tr>
+			<tr><th><?php echo esc_html__( 'Published blog posts', 'citeleap' ); ?></th><td><strong><?php echo (int) $posts_total; ?></strong></td></tr>
+			<tr><th><?php echo esc_html__( 'Posts without a Featured image', 'citeleap' ); ?></th><td><strong><?php echo (int) $posts_without; ?></strong></td></tr>
+			<tr><th><?php echo esc_html__( 'Posts with a random-assigned image', 'citeleap' ); ?></th><td><strong><?php echo (int) $random_count; ?></strong></td></tr>
+		</table>
+	</div>
+
+	<h3><?php echo esc_html__( 'Step 1 , pick the pool of allowed images', 'citeleap' ); ?></h3>
 	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 		<?php wp_nonce_field( CITELEAP_NONCE ); ?>
 		<input type="hidden" name="action" value="citeleap_save_images">
@@ -544,8 +567,9 @@ function citeleap_render_images_tab(): void {
 				$src = wp_get_attachment_image_src( (int) $id, 'thumbnail' );
 				if ( ! $src ) continue;
 			?>
-				<div data-id="<?php echo (int) $id; ?>" style="border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:#f8fafc;">
+				<div class="citeleap-pool-thumb" data-id="<?php echo (int) $id; ?>" style="position:relative;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:#f8fafc;">
 					<img src="<?php echo esc_url( $src[0] ); ?>" alt="" style="display:block;width:100%;height:90px;object-fit:cover;">
+					<button type="button" class="citeleap-pool-remove" aria-label="<?php echo esc_attr__( 'Remove from pool', 'citeleap' ); ?>" style="position:absolute;top:4px;right:4px;border:0;background:rgba(15,23,42,0.85);color:#fff;border-radius:50%;width:22px;height:22px;line-height:1;cursor:pointer;font-size:14px;padding:0;">&times;</button>
 				</div>
 			<?php endforeach; ?>
 		</div>
@@ -558,8 +582,32 @@ function citeleap_render_images_tab(): void {
 			<tr><th><label><?php echo esc_html__( 'Card on archive', 'citeleap' ); ?></label></th>
 				<td><label><input type="checkbox" name="render_card" value="1" <?php checked( $s['render_card'] ); ?>> <?php echo esc_html__( 'Inject a clickable card thumbnail in the blog archive.', 'citeleap' ); ?></label></td></tr>
 		</table>
-		<p><button class="button button-primary"><?php echo esc_html__( 'Save', 'citeleap' ); ?></button></p>
+		<p><button class="button button-primary"><?php echo esc_html__( 'Save settings', 'citeleap' ); ?></button></p>
 	</form>
+
+	<h3 style="margin-top:2rem;"><?php echo esc_html__( 'Step 2 , assign random images now', 'citeleap' ); ?></h3>
+	<p style="color:#64748b;max-width:780px;"><?php echo wp_kses( __( 'Walks every published blog post. If the post has <strong>no</strong> Featured image, picks one at random from the pool and assigns it. Posts with a manually-picked Featured image are <strong>never touched</strong>.', 'citeleap' ), [ 'strong' => [] ] ); ?></p>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+		<input type="hidden" name="action" value="citeleap_assign_images">
+		<button type="submit" class="button button-primary"<?php echo empty( $pool_ids ) ? ' disabled' : ''; ?>>
+			<?php echo esc_html__( 'Assign random images now', 'citeleap' ); ?>
+		</button>
+		<?php if ( empty( $pool_ids ) ) : ?>
+			<span style="color:#b91c1c;margin-left:0.5rem;"><?php echo esc_html__( 'Pool is empty , pick images first.', 'citeleap' ); ?></span>
+		<?php endif; ?>
+	</form>
+
+	<h3 style="margin-top:2rem;"><?php echo esc_html__( 'Step 3 , re-randomise (optional)', 'citeleap' ); ?></h3>
+	<p style="color:#64748b;max-width:780px;"><?php echo wp_kses( __( 'Re-picks a new random image, from the current pool, ONLY for posts that were previously random-assigned. Posts where you set a Featured image manually are <strong>not touched</strong>.', 'citeleap' ), [ 'strong' => [] ] ); ?></p>
+	<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" onsubmit="return confirm('<?php echo esc_js( __( 'Re-pick random images for every post previously random-assigned?', 'citeleap' ) ); ?>');">
+		<?php wp_nonce_field( CITELEAP_NONCE ); ?>
+		<input type="hidden" name="action" value="citeleap_reroll_images">
+		<button type="submit" class="button"<?php echo ( empty( $pool_ids ) || ! $random_count ) ? ' disabled' : ''; ?>>
+			<?php echo esc_html__( 'Re-randomise random-assigned posts', 'citeleap' ); ?>
+		</button>
+	</form>
+
 	<script>
 	jQuery( function ( $ ) {
 		if ( typeof wp === 'undefined' || ! wp.media ) return;
@@ -571,6 +619,12 @@ function citeleap_render_images_tab(): void {
 		function ids() {
 			var raw = ($hidden.val() || '').trim();
 			return raw ? raw.split(',').map(function(s){return parseInt(s,10);}).filter(function(n){return n>0;}) : [];
+		}
+		function thumbMarkup( id, url ) {
+			return '<div class="citeleap-pool-thumb" data-id="' + id + '" style="position:relative;border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:#f8fafc;">' +
+				'<img src="' + url + '" alt="" style="display:block;width:100%;height:90px;object-fit:cover;">' +
+				'<button type="button" class="citeleap-pool-remove" aria-label="Remove from pool" style="position:absolute;top:4px;right:4px;border:0;background:rgba(15,23,42,0.85);color:#fff;border-radius:50%;width:22px;height:22px;line-height:1;cursor:pointer;font-size:14px;padding:0;">&times;</button>' +
+			'</div>';
 		}
 		$btn.on( 'click', function () {
 			if ( frame ) { frame.open(); return; }
@@ -585,10 +639,17 @@ function citeleap_render_images_tab(): void {
 				$preview.empty();
 				sel.forEach( function ( a ) {
 					var url = (a.sizes && a.sizes.thumbnail && a.sizes.thumbnail.url) || a.url;
-					$preview.append( '<div data-id="' + a.id + '" style="border:1px solid #e2e8f0;border-radius:6px;overflow:hidden;background:#f8fafc;"><img src="' + url + '" alt="" style="display:block;width:100%;height:90px;object-fit:cover;"></div>' );
+					$preview.append( thumbMarkup( a.id, url ) );
 				} );
 			} );
 			frame.open();
+		} );
+		$preview.on( 'click', '.citeleap-pool-remove', function ( e ) {
+			e.preventDefault();
+			var $t = $( this ).closest( '.citeleap-pool-thumb' );
+			var id = parseInt( $t.data( 'id' ), 10 );
+			$t.remove();
+			setIds( ids().filter( function ( x ) { return x !== id; } ) );
 		} );
 	} );
 	</script>

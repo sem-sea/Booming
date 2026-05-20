@@ -85,12 +85,23 @@ class CiteLeap_Images {
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_css' ] );
 		add_filter( 'the_content',      [ __CLASS__, 'inject_hero' ], 5 );
 		add_filter( 'get_the_excerpt',  [ __CLASS__, 'inject_card' ], 10, 2 );
+		add_filter( 'render_block',     [ __CLASS__, 'inject_card_block' ], 10, 2 );
 
 		/* Duplicate-detection: if the theme already renders the
 		 * Featured image via core/post-featured-image OR via
 		 * the_post_thumbnail in a classic template, skip our injection. */
 		add_filter( 'render_block_core/post-featured-image', [ __CLASS__, 'mark_rendered_block' ], 10, 2 );
 		add_filter( 'post_thumbnail_html',                   [ __CLASS__, 'mark_rendered_html'  ], 10, 2 );
+
+		/* Admin niceties , gentle nudge when publishing without a
+		 * Featured image, plus a thumbnail column on the posts list. */
+		add_action( 'admin_notices',                  [ __CLASS__, 'admin_notice_missing_thumb' ] );
+		add_filter( 'manage_post_posts_columns',      [ __CLASS__, 'posts_list_column' ] );
+		add_action( 'manage_post_posts_custom_column',[ __CLASS__, 'posts_list_column_render' ], 10, 2 );
+
+		/* Bulk operators , Assign / Re-roll buttons on the Images tab. */
+		add_action( 'admin_post_citeleap_assign_images', [ __CLASS__, 'handle_bulk_assign' ] );
+		add_action( 'admin_post_citeleap_reroll_images', [ __CLASS__, 'handle_bulk_reroll' ] );
 	}
 
 	public static function register_sizes(): void {
@@ -209,6 +220,161 @@ class CiteLeap_Images {
 		$alt  = (string) get_post_meta( $id, '_wp_attachment_image_alt', true );
 		$link = (string) get_permalink( $pid );
 		return '<a class="citeleap-card-link" href="' . esc_url( $link ) . '" aria-label="' . esc_attr( $alt ?: get_the_title( $pid ) ) . '">' . $img . '</a>' . $excerpt;
+	}
+
+	public static function inject_card_block( $block_content, $block ) {
+		if ( empty( $block['blockName'] ) || 'core/post-excerpt' !== $block['blockName'] ) return $block_content;
+		if ( is_singular() ) return $block_content;
+		$s = self::settings();
+		if ( ! $s['render_card'] ) return $block_content;
+		global $post;
+		$pid = $post ? (int) $post->ID : (int) get_the_ID();
+		if ( 'post' !== get_post_type( $pid ) ) return $block_content;
+		if ( self::already_rendered( $pid ) ) return $block_content;
+		$id = (int) get_post_thumbnail_id( $pid );
+		if ( ! $id ) return $block_content;
+		self::mark_rendered( $pid );
+		$img  = wp_get_attachment_image( $id, 'citeleap_card', false, [
+			'class' => 'citeleap-card-img', 'loading' => 'lazy', 'decoding' => 'async',
+		] );
+		$alt  = (string) get_post_meta( $id, '_wp_attachment_image_alt', true );
+		$link = (string) get_permalink( $pid );
+		return '<a class="citeleap-card-link" href="' . esc_url( $link ) . '" aria-label="' . esc_attr( $alt ?: get_the_title( $pid ) ) . '">' . $img . '</a>' . $block_content;
+	}
+
+	/* --------------------------------------------------------------
+	 * Bulk pool operations , walk all published posts and assign a
+	 * random image from the pool. Two modes:
+	 *   - assign : only posts WITHOUT a Featured image are touched.
+	 *   - reroll : only posts previously random-assigned by us get a
+	 *              fresh random pick. Manual operator picks survive.
+	 * -------------------------------------------------------------- */
+	public static function assign_random_bulk( bool $reroll ): int {
+		$pool = self::pool();
+		if ( empty( $pool ) ) return 0;
+
+		$args = [
+			'post_type'      => 'post',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+		];
+		if ( $reroll ) {
+			$args['meta_query'] = [ [ 'key' => CITELEAP_META_RANDOM_IMG, 'value' => '1', 'compare' => '=' ] ];
+		} else {
+			$args['meta_query'] = [ [ 'key' => '_thumbnail_id', 'compare' => 'NOT EXISTS' ] ];
+		}
+		$ids = get_posts( $args );
+		if ( empty( $ids ) ) return 0;
+
+		$GLOBALS['citeleap_img_bulk'] = true;
+		$updated = 0;
+		foreach ( $ids as $post_id ) {
+			$pick = (int) $pool[ array_rand( $pool ) ];
+			if ( ! $pick ) continue;
+			set_post_thumbnail( (int) $post_id, $pick );
+			update_post_meta( (int) $post_id, CITELEAP_META_RANDOM_IMG, '1' );
+			$updated++;
+		}
+		$GLOBALS['citeleap_img_bulk'] = false;
+		return $updated;
+	}
+
+	public static function count_posts_total(): int {
+		$c = wp_count_posts( 'post' );
+		return (int) ( $c->publish ?? 0 );
+	}
+
+	public static function count_posts_without_thumbnail(): int {
+		$q = get_posts( [
+			'post_type'      => 'post',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'meta_query'     => [ [ 'key' => '_thumbnail_id', 'compare' => 'NOT EXISTS' ] ],
+		] );
+		return count( $q );
+	}
+
+	public static function count_random_assigned(): int {
+		$q = get_posts( [
+			'post_type'      => 'post',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'fields'         => 'ids',
+			'no_found_rows'  => true,
+			'meta_query'     => [ [ 'key' => CITELEAP_META_RANDOM_IMG, 'value' => '1', 'compare' => '=' ] ],
+		] );
+		return count( $q );
+	}
+
+	/* --------------------------------------------------------------
+	 * Bulk admin-post handlers.
+	 * -------------------------------------------------------------- */
+	public static function handle_bulk_assign(): void {
+		if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+		check_admin_referer( CITELEAP_NONCE );
+		$n = self::assign_random_bulk( false );
+		wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'images', 'citeleap_msg' => 'assigned', 'n' => $n ], admin_url( 'admin.php' ) ) );
+		exit;
+	}
+
+	public static function handle_bulk_reroll(): void {
+		if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+		check_admin_referer( CITELEAP_NONCE );
+		$n = self::assign_random_bulk( true );
+		wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'images', 'citeleap_msg' => 'rerolled', 'n' => $n ], admin_url( 'admin.php' ) ) );
+		exit;
+	}
+
+	/* --------------------------------------------------------------
+	 * Editor nudge: visible info notice if a post is published
+	 * without a Featured image and the pool is empty (otherwise
+	 * auto-assign already handles it).
+	 * -------------------------------------------------------------- */
+	public static function admin_notice_missing_thumb(): void {
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || 'post' !== $screen->id || 'post' !== $screen->post_type ) return;
+		global $post;
+		if ( ! $post || 'publish' !== $post->post_status ) return;
+		if ( get_post_thumbnail_id( $post->ID ) ) return;
+		echo '<div class="notice notice-info"><p><strong>' . esc_html__( 'Tip:', 'citeleap' ) . '</strong> '
+			. esc_html__( 'Pick a Featured image in the sidebar, or add images to the CiteLeap pool so this post gets a hero and a card thumbnail automatically.', 'citeleap' )
+			. '</p></div>';
+	}
+
+	/* --------------------------------------------------------------
+	 * Posts list table , thumbnail column with (random)/(manual) tag.
+	 * -------------------------------------------------------------- */
+	public static function posts_list_column( array $cols ): array {
+		$new = [];
+		foreach ( $cols as $k => $v ) {
+			$new[ $k ] = $v;
+			if ( 'title' === $k ) {
+				$new['citeleap_thumb'] = __( 'Image', 'citeleap' );
+			}
+		}
+		return $new;
+	}
+
+	public static function posts_list_column_render( string $column, int $post_id ): void {
+		if ( 'citeleap_thumb' !== $column ) return;
+		$id = (int) get_post_thumbnail_id( $post_id );
+		if ( ! $id ) {
+			echo '<span style="color:#9ca3af;">' . esc_html__( '— none', 'citeleap' ) . '</span>';
+			return;
+		}
+		$src = wp_get_attachment_image_src( $id, 'thumbnail' );
+		if ( ! $src ) return;
+		$is_random = '1' === get_post_meta( $post_id, CITELEAP_META_RANDOM_IMG, true );
+		echo '<img src="' . esc_url( $src[0] ) . '" alt="" style="display:block;width:60px;height:40px;object-fit:cover;border-radius:4px;">';
+		if ( $is_random ) {
+			echo '<span style="display:inline-block;margin-top:2px;font-size:11px;color:#0369a1;">' . esc_html__( '(random)', 'citeleap' ) . '</span>';
+		} else {
+			echo '<span style="display:inline-block;margin-top:2px;font-size:11px;color:#16a34a;">' . esc_html__( '(manual)', 'citeleap' ) . '</span>';
+		}
 	}
 
 	/** Helper for seo.php , best image URL for og:image. */
