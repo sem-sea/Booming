@@ -72,11 +72,12 @@ class CiteLeap_License {
 		return admin_url( 'admin.php?page=citeleap&tab=license' );
 	}
 
-	/** One-time top-up purchase URL. */
+	/** One-time top-up purchase URL. Routes through CiteLeap_TopUps so
+	 *  the buy buttons match the on-page catalog (and fall back to the
+	 *  in-admin simulator when the SDK is not loaded). */
 	public static function top_up_url( string $pack = 'growth' ): string {
-		$fs = self::freemius();
-		if ( $fs && method_exists( $fs, 'addon_url' ) ) {
-			return (string) $fs->checkout_url( WP_FS__PERIOD_LIFETIME ?? 'lifetime', false, [ 'pack' => $pack ] );
+		if ( class_exists( 'CiteLeap_TopUps' ) ) {
+			return CiteLeap_TopUps::buy_url( $pack );
 		}
 		return admin_url( 'admin.php?page=citeleap&tab=license' );
 	}

@@ -3,7 +3,7 @@
  * Plugin Name:       CiteLeap
  * Plugin URI:        https://boomingventure.com/citeleap
  * Description:       AI-powered blog content engine v2.0. Multi-LLM router (Claude / OpenAI / Gemini, BYOK) ideates, researches with real web citations, drafts long-form GEO/AEO posts that link to sources AND to your own existing posts, picks a Featured image from your Media Library pool, ships schema + Open Graph + IndexNow on publish, supports multilingual output with hreflang. Refresh existing posts. Pin publish dates. Pause / resume / retry per row. Works on any active theme.
- * Version:           2.5.0
+ * Version:           2.6.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            CiteLeap (by Booming Venture)
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const CITELEAP_VERSION         = '2.5.0';
+const CITELEAP_VERSION         = '2.6.0';
 const CITELEAP_DEFAULT_TZ      = 'Europe/Amsterdam';
 const CITELEAP_META_PENDING    = '_citeleap_pending_refresh';
 const CITELEAP_OPTION_API_KEYS = 'citeleap_api_keys';
@@ -57,6 +57,7 @@ require_once CITELEAP_DIR . 'includes/crypto.php';
 require_once CITELEAP_DIR . 'includes/license.php';  // NEW v2.5
 require_once CITELEAP_DIR . 'includes/plan.php';     // NEW v2.5
 require_once CITELEAP_DIR . 'includes/credits.php';  // NEW v2.5
+require_once CITELEAP_DIR . 'includes/topups.php';   // NEW v2.6
 require_once CITELEAP_DIR . 'includes/prompts.php';
 require_once CITELEAP_DIR . 'includes/pricing.php';
 require_once CITELEAP_DIR . 'includes/usage.php';

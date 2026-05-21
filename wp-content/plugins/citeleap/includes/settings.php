@@ -116,6 +116,15 @@ function citeleap_render_flash(): void {
 		$parts = explode( ':', $msg );
 		$n     = (int) ( $parts[1] ?? 0 );
 		$text  = sprintf( __( 'Spread %d queued topic(s) evenly across the calendar.', 'citeleap' ), $n );
+	} elseif ( 0 === strpos( $msg, 'topup-ok:' ) ) {
+		$parts   = explode( ':', $msg, 3 );
+		$label   = rawurldecode( (string) ( $parts[1] ?? '' ) );
+		$credits = (int) ( $parts[2] ?? 0 );
+		$text    = sprintf( __( '%1$s purchased , %2$d credits added to your reserve.', 'citeleap' ), $label, $credits );
+	} elseif ( 'topup-unknown' === $msg ) {
+		$kind = 'error'; $text = __( 'Top-up pack not recognised.', 'citeleap' );
+	} elseif ( 'topup-blocked' === $msg ) {
+		$kind = 'error'; $text = __( 'Simulator blocked: Freemius is live. Use the real checkout to buy credits.', 'citeleap' );
 	} elseif ( 0 === strpos( $msg, 'action-' ) ) {
 		$labels = [
 			'action-pause'           => __( 'Paused. Cron tick will skip this row until you resume.', 'citeleap' ),
@@ -840,10 +849,12 @@ function citeleap_render_license_tab(): void {
 		</tbody>
 	</table>
 
+	<?php CiteLeap_TopUps::render_grid(); ?>
+
 	<?php if ( ! $fs_loaded && ! ( defined( 'CITELEAP_DEV_MODE' ) && CITELEAP_DEV_MODE ) ) : ?>
 		<div class="notice notice-info" style="margin-top:1.5rem;"><p>
 			<strong><?php echo esc_html__( 'Freemius SDK not yet loaded.', 'citeleap' ); ?></strong>
-			<?php echo esc_html__( 'Drop the SDK at vendor/freemius/wordpress-sdk/start.php and set CITELEAP_FS_ID + CITELEAP_FS_PUBLIC_KEY in wp-config.php to activate billing + checkout. Until then this install runs on the Free plan, or on dev mode if CITELEAP_DEV_MODE is true.', 'citeleap' ); ?>
+			<?php echo esc_html__( 'Drop the SDK at vendor/freemius/wordpress-sdk/start.php and set CITELEAP_FS_ID + CITELEAP_FS_PUBLIC_KEY in wp-config.php to activate real billing + checkout. The top-up grid above runs in simulator mode until then.', 'citeleap' ); ?>
 		</p></div>
 	<?php endif; ?>
 	<?php

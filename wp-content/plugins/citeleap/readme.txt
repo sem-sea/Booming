@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.5.0
+Stable tag: 2.6.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,15 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 2.6.0 =
+* NEW: top-up credit packs , Starter (10 credits / $49), Growth (50 / $199), Scale (100 / $349), Bulk (500 / $1499). Per-credit price drops from $4.90 down to $3.00 as the pack scales. Top-up credits never expire while the license stays active and are consumed AFTER monthly included credits each cycle.
+* NEW: top-up grid on the License & Credits tab. Mobile-first card layout, "Best value for solo" + "Most credits" badges, per-pack description, real Freemius checkout buttons when the SDK is loaded.
+* NEW: simulator mode , when the Freemius SDK is not yet present, the Buy buttons add the pack credits straight to the local ledger (after a manage_options + nonce check) so the operator can validate the full credit-grant + spend pipeline before connecting real billing. A guardrail blocks the simulator the moment the SDK goes live, so credits cannot be granted without payment in production.
+* NEW: Freemius webhook listeners. citeleap_fs_loaded fires after init; CiteLeap_TopUps::register_freemius_listeners() then hooks fs_after_purchase_citeleap (grants pack credits by matching fs_plan_id), fs_after_account_plan_change_citeleap (resets the monthly cycle on plan up/down-grade), and fs_after_account_user_change_citeleap (resets cycle on account swap).
+* NEW: success flash on the License tab when a top-up is granted ("Growth pack purchased , 50 credits added to your reserve"). Error flashes for unknown pack + simulator-blocked-in-production.
+* CHANGE: CiteLeap_License::top_up_url() now routes through CiteLeap_TopUps so the credit banner's "Buy top-up pack" CTA matches the on-page catalog and the simulator URL when applicable.
+* CHANGE: bumped Version + CITELEAP_VERSION + readme Stable tag to 2.6.0.
 
 = 2.5.0 =
 * NEW: commercial layer , three new modules ship the bones of the paid SaaS.
