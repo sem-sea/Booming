@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.6.0
+Stable tag: 2.7.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,14 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 2.7.0 =
+* NEW: locked-feature upgrade cards. Gated tabs (Calendar, Languages) now render a big "Upgrade to Pro" card showing the lowest plan that includes the feature, a one-paragraph explanation of what is being missed, the per-month price, and side-by-side "Upgrade" + "Compare plans" CTAs. Turns the plan gate into an in-product sales surface rather than a dead end.
+* NEW: inline upgrade nudges on settings rows. Auto-publish + Refresh section headers on the Settings tab carry a small "Solo+" pill + Upgrade link when the current plan does not include the feature, so the operator sees what they would unlock without having to leave the page.
+* NEW: form-level gating , the Auto mode + Refresh mode <select>s render disabled when the plan does not include the feature, so the gate is visible BEFORE the operator tries to save.
+* NEW: server-side defense in the save_settings handler. Auto-publish saves are clamped to "off" when the plan does not include auto_publish; refresh mode is clamped to "off" when refresh is not on the plan. A Free user POSTing directly with developer tools can no longer enable a paid feature.
+* NEW: helper API on CiteLeap_Plan , lowest_plan_with( $feature ), render_locked_notice( $feature, $title, $why ), render_inline_nudge( $feature ). One place to maintain the upgrade-card design system; every gated screen reads from it.
+* CHANGE: bumped Version + CITELEAP_VERSION + readme Stable tag to 2.7.0.
 
 = 2.6.0 =
 * NEW: top-up credit packs , Starter (10 credits / $49), Growth (50 / $199), Scale (100 / $349), Bulk (500 / $1499). Per-credit price drops from $4.90 down to $3.00 as the pack scales. Top-up credits never expire while the license stays active and are consumed AFTER monthly included credits each cycle.

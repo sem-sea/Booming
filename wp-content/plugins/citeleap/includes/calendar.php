@@ -155,6 +155,14 @@ class CiteLeap_Calendar {
 	}
 
 	public static function render(): void {
+		if ( ! CiteLeap_Plan::has( 'calendar' ) ) {
+			CiteLeap_Plan::render_locked_notice(
+				'calendar',
+				__( 'Calendar overview', 'citeleap' ),
+				__( 'The month-grid calendar shows planned + auto-planned + refresh entries at a glance, with pin / drag rescheduling. Available on Pro and above. Solo accounts get the Planner queue with the same data in list form.', 'citeleap' )
+			);
+			return;
+		}
 		$today_month = wp_date( 'Y-m' );
 		$month       = isset( $_GET['m'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['m'] ) ) : $today_month;
 		if ( ! preg_match( '/^\d{4}-\d{2}$/', $month ) ) $month = $today_month;

@@ -205,13 +205,13 @@ function citeleap_render_settings(): void {
 			<?php endforeach; ?>
 		</table>
 
-		<h2 style="margin-top:1.5rem;"><?php echo esc_html__( 'Auto-publish schedule', 'citeleap' ); ?></h2>
+		<h2 style="margin-top:1.5rem;"><?php echo esc_html__( 'Auto-publish schedule', 'citeleap' ); ?><?php if ( ! CiteLeap_Plan::has( 'auto_publish' ) ) CiteLeap_Plan::render_inline_nudge( 'auto_publish' ); ?></h2>
 		<table class="form-table">
 			<tr>
 				<th><label for="auto_mode"><?php echo esc_html__( 'Auto mode', 'citeleap' ); ?></label></th>
 				<td>
 					<?php $auto_mode = (string) ( $schedule['auto_mode'] ?? ( ! empty( $schedule['auto'] ) ? 'publish' : 'off' ) ); ?>
-					<select id="auto_mode" name="auto_mode">
+					<select id="auto_mode" name="auto_mode"<?php echo CiteLeap_Plan::has( 'auto_publish' ) ? '' : ' disabled'; ?>>
 						<option value="off"     <?php selected( $auto_mode, 'off' );     ?>><?php echo esc_html__( 'Off (manual only)', 'citeleap' ); ?></option>
 						<option value="draft"   <?php selected( $auto_mode, 'draft' );   ?>><?php echo esc_html__( 'Auto-generate to DRAFT only (you publish manually)', 'citeleap' ); ?></option>
 						<option value="publish" <?php selected( $auto_mode, 'publish' ); ?>><?php echo esc_html__( 'Auto-generate + auto-publish on schedule', 'citeleap' ); ?></option>
@@ -279,14 +279,14 @@ function citeleap_render_settings(): void {
 			<?php endforeach; ?>
 		</table>
 
-		<h2 style="margin-top:1.5rem;"><?php echo esc_html__( 'Refresh existing content', 'citeleap' ); ?></h2>
+		<h2 style="margin-top:1.5rem;"><?php echo esc_html__( 'Refresh existing content', 'citeleap' ); ?><?php if ( ! CiteLeap_Plan::has( 'refresh' ) ) CiteLeap_Plan::render_inline_nudge( 'refresh' ); ?></h2>
 		<p style="color:#64748b;"><?php echo esc_html__( 'Periodically refresh older posts. Posts queue from the Planner tab (or auto-pick the oldest-modified once cadence is met). Existing slug, ID, date, comments, and meta are preserved.', 'citeleap' ); ?></p>
 		<?php $r = CiteLeap_Refresh::settings(); ?>
 		<table class="form-table">
 			<tr>
 				<th><label for="refresh_auto_mode"><?php echo esc_html__( 'Refresh mode', 'citeleap' ); ?></label></th>
 				<td>
-					<select id="refresh_auto_mode" name="refresh_auto_mode">
+					<select id="refresh_auto_mode" name="refresh_auto_mode"<?php echo CiteLeap_Plan::has( 'refresh' ) ? '' : ' disabled'; ?>>
 						<option value="off"   <?php selected( $r['auto_mode'], 'off' );   ?>><?php echo esc_html__( 'Off (manual only)', 'citeleap' ); ?></option>
 						<option value="draft" <?php selected( $r['auto_mode'], 'draft' ); ?>><?php echo esc_html__( 'Auto-research to PENDING REVIEW (you approve before live)', 'citeleap' ); ?></option>
 						<option value="live"  <?php selected( $r['auto_mode'], 'live' );  ?>><?php echo esc_html__( 'Auto-research and OVERWRITE the live post directly', 'citeleap' ); ?></option>
@@ -410,6 +410,7 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 
 	$mode = sanitize_key( (string) ( $_POST['auto_mode'] ?? 'off' ) );
 	if ( ! in_array( $mode, [ 'off', 'draft', 'publish' ], true ) ) $mode = 'off';
+	if ( ! CiteLeap_Plan::has( 'auto_publish' ) && 'off' !== $mode ) $mode = 'off';
 	$schedule = [
 		'auto'           => ( 'off' !== $mode ) ? 1 : 0,    // legacy boolean kept for back-compat
 		'auto_mode'      => $mode,
@@ -443,9 +444,12 @@ add_action( 'admin_post_citeleap_save_settings', function () {
 		'overall' => max( 0, (float) ( $_POST['cap_overall'] ?? 0 ) ),
 	], false );
 
-	/* Refresh module settings. */
+	/* Refresh module settings , server-side plan gate so a Free user
+	 * posting directly can't enable a paid feature. */
+	$refresh_mode = (string) ( $_POST['refresh_auto_mode'] ?? 'off' );
+	if ( ! CiteLeap_Plan::has( 'refresh' ) ) $refresh_mode = 'off';
 	CiteLeap_Refresh::save_settings( [
-		'auto_mode'      => $_POST['refresh_auto_mode']      ?? 'off',
+		'auto_mode'      => $refresh_mode,
 		'cadence_days'   => $_POST['refresh_cadence_days']   ?? 90,
 		'posts_per_unit' => $_POST['refresh_posts_per_unit'] ?? 2,
 		'cadence_unit'   => $_POST['refresh_cadence_unit']   ?? 'week',
@@ -704,6 +708,14 @@ function citeleap_render_seo_tab(): void {
 }
 
 function citeleap_render_languages_tab(): void {
+	if ( ! CiteLeap_Plan::has( 'multilingual' ) ) {
+		CiteLeap_Plan::render_locked_notice(
+			'multilingual',
+			__( 'Multilingual (7 languages)', 'citeleap' ),
+			__( 'Generate posts in English, Spanish, Portuguese, French, German, Italian, or Dutch. Automatic hreflang emission, Polylang + WPML integration. Available on Pro and above. Solo accounts ship in your single default language.', 'citeleap' )
+		);
+		return;
+	}
 	$i = CiteLeap_I18n::settings();
 	$supported = CiteLeap_I18n::supported();
 	?>
