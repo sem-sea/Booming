@@ -1,0 +1,24 @@
+{
+    "name": "boomingventure/citeleap",
+    "description": "CiteLeap , AI-powered blog content engine. Dev tooling only; the plugin itself has zero runtime dependencies.",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=8.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^11"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CiteLeap\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:coverage": "phpunit --coverage-text"
+    },
+    "config": {
+        "sort-packages": true
+    }
+}

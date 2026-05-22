@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.7.0
+Stable tag: 2.8.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,13 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 2.8.0 =
+* NEW: PHPUnit test suite for the commercial layer. 41 tests across 4 test files (Plan, Credits, License, TopUps) covering capability gates per plan, credit ledger arithmetic (consume, reset, top-up consumption order, low/exhausted thresholds), license resolution with no SDK, top-up catalog ordering + Freemius webhook handlers. Runs in 15ms with zero external dependencies (in-memory WP function stubs in the bootstrap, no MySQL, no full WP test install).
+* NEW: composer.json + phpunit.xml.dist + tests/bootstrap.php that stubs the WordPress functions the commercial layer reads (get_option, update_option, add_action, do_action, sanitize_*, esc_*, current_time, admin_url, wp_nonce_url). One-liner to run: `composer install && composer test`.
+* NEW: tests/E2E.md , manual smoke-test checklist for the things PHPUnit cannot cover (rendered UI, real LLM calls, real Freemius checkout, dev mode toggle, cycle reset, uninstall hygiene). 8 sections, ~20 minutes on a clean install. Tied to a "regression triggers" list at the bottom so it stays alive across sprints.
+* NEW: .gitignore for vendor/ + .phpunit.cache so dev tooling does not leak into the shipped zip.
+* CHANGE: bumped Version + CITELEAP_VERSION + readme Stable tag to 2.8.0.
 
 = 2.7.0 =
 * NEW: locked-feature upgrade cards. Gated tabs (Calendar, Languages) now render a big "Upgrade to Pro" card showing the lowest plan that includes the feature, a one-paragraph explanation of what is being missed, the per-month price, and side-by-side "Upgrade" + "Compare plans" CTAs. Turns the plan gate into an in-product sales surface rather than a dead end.
