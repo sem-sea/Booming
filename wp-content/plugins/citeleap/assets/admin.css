@@ -71,3 +71,47 @@
 	text-align: center; border-radius: 50%; background: #0284c7; color: #fff;
 	font-weight: 700; margin-right: 0.5rem;
 }
+
+/* ---------- Accessibility ---------- */
+
+/* Visually hidden but available to screen readers (mirrors WP core's
+ * .screen-reader-text in case the page is rendered outside wp-admin). */
+.citeleap-sr-only,
+.screen-reader-text {
+	border: 0; clip: rect( 1px, 1px, 1px, 1px ); -webkit-clip-path: inset( 50% ); clip-path: inset( 50% );
+	height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px;
+	word-wrap: normal !important;
+}
+
+/* Visible focus ring on every interactive control inside the plugin
+ * admin , covers WP's default focus-style holes on custom buttons. */
+.wrap .citeleap-pool-thumb button.citeleap-pool-remove:focus-visible,
+.wrap .button:focus-visible,
+.wrap a.button:focus-visible,
+.wrap .nav-tab:focus-visible,
+.wrap select:focus-visible,
+.wrap input[type="text"]:focus-visible,
+.wrap input[type="number"]:focus-visible,
+.wrap input[type="datetime-local"]:focus-visible,
+.wrap input[type="password"]:focus-visible,
+.wrap textarea:focus-visible {
+	outline: 2px solid #0284c7 !important;
+	outline-offset: 2px !important;
+	box-shadow: 0 0 0 2px rgba( 2, 132, 199, 0.25 ) !important;
+}
+
+/* High-contrast forced-colors fallback so the locked-feature card
+ * border stays visible. */
+@media (forced-colors: active) {
+	.wrap [role="region"][aria-label*="Feature locked"] {
+		border-color: CanvasText !important;
+		background: Canvas !important;
+	}
+}
+
+/* Respect prefers-reduced-motion , kill the shimmer + spin animations
+ * for users who opt out. */
+@media (prefers-reduced-motion: reduce) {
+	.citeleap-spinner { animation: none; border-top-color: transparent; }
+	.citeleap-overlay-card ol li { transition: none; }
+}

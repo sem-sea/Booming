@@ -3,7 +3,7 @@
  * Plugin Name:       CiteLeap
  * Plugin URI:        https://boomingventure.com/citeleap
  * Description:       AI-powered blog content engine v2.0. Multi-LLM router (Claude / OpenAI / Gemini, BYOK) ideates, researches with real web citations, drafts long-form GEO/AEO posts that link to sources AND to your own existing posts, picks a Featured image from your Media Library pool, ships schema + Open Graph + IndexNow on publish, supports multilingual output with hreflang. Refresh existing posts. Pin publish dates. Pause / resume / retry per row. Works on any active theme.
- * Version:           2.8.0
+ * Version:           2.9.0
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            CiteLeap (by Booming Venture)
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const CITELEAP_VERSION         = '2.8.0';
+const CITELEAP_VERSION         = '2.9.0';
 const CITELEAP_DEFAULT_TZ      = 'Europe/Amsterdam';
 const CITELEAP_META_PENDING    = '_citeleap_pending_refresh';
 const CITELEAP_OPTION_API_KEYS = 'citeleap_api_keys';
@@ -54,6 +54,7 @@ define( 'CITELEAP_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CITELEAP_URL', plugin_dir_url( __FILE__ ) );
 
 require_once CITELEAP_DIR . 'includes/crypto.php';
+require_once CITELEAP_DIR . 'includes/caps.php';     // NEW v2.9
 require_once CITELEAP_DIR . 'includes/license.php';  // NEW v2.5
 require_once CITELEAP_DIR . 'includes/plan.php';     // NEW v2.5
 require_once CITELEAP_DIR . 'includes/credits.php';  // NEW v2.5
@@ -89,6 +90,7 @@ register_activation_hook( CITELEAP_FILE, function () {
 	if ( ! wp_next_scheduled( CITELEAP_CRON_HOURLY ) ) {
 		wp_schedule_event( time() + 60, 'hourly', CITELEAP_CRON_HOURLY );
 	}
+	CiteLeap_Caps::grant_on_activation();
 	register_uninstall_hook( CITELEAP_FILE, 'citeleap_on_uninstall' );
 	/* CET default: if the site has no timezone_string AND gmt_offset
 	 * is 0 (vanilla WP install on a fresh DB), promote to CET so
@@ -130,6 +132,7 @@ register_deactivation_hook( CITELEAP_FILE, function () {
 
 function citeleap_on_uninstall(): void {
 	if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) return;
+	CiteLeap_Caps::revoke_on_uninstall();
 	foreach ( [
 		CITELEAP_OPTION_API_KEYS, CITELEAP_OPTION_MODELS, CITELEAP_OPTION_PROMPTS,
 		CITELEAP_OPTION_SCHEDULE, CITELEAP_OPTION_QUEUE,    CITELEAP_OPTION_LOG,

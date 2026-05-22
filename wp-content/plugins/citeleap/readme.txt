@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.8.0
+Stable tag: 2.9.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,22 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 2.9.0 =
+* NEW: two-tier capability model so Editors can run CiteLeap without administrator access. includes/caps.php defines CiteLeap_Caps with the constant USE_CAP = 'citeleap_use' (granted to Editor + Administrator on plugin activation) and MANAGE_CAP = 'manage_options' (administrator-only). Editors can use the Dashboard, Planner, Calendar, and Log tabs and drive every content operation (queue, draft, schedule, refresh, pause/resume/retry, image-pool bulk operators). Administrators retain exclusive control over API keys, prompts, research, image pool config, SEO toggles, languages, settings, and license / plan / top-up purchases.
+* NEW: cap-aware navigation , the nav-tab strip on the main admin page hides Settings + Prompts + Research + Images + SEO + Languages + License from Editors. Hitting a manage-only tab URL falls back to the Dashboard rather than 403'ing, so a deep-linked Editor lands somewhere useful.
+* NEW: CiteLeap_Caps::guard_use() + guard_manage() helpers used in every admin-post handler in actions.php, planner.php, refresh.php, images.php (bulk operators), topups.php (simulator stays manage-tier so credits cannot be granted by an Editor), and settings.php (every save-* + test-connection handler is manage-tier).
+* NEW: caps are added on activation and revoked from every role on uninstall, so removing the plugin leaves no orphan capability behind.
+* NEW: accessibility pass on the admin UI (WCAG 2.1 AA targets):
+  - aria-current="page" on the active nav-tab, aria-label on the nav region itself.
+  - role="alert" + aria-live="assertive" on the credit-exhausted banner and error flashes; role="status" + aria-live="polite" on success flashes + warning + info banners. Screen readers announce credit + plan state changes the moment they happen.
+  - Screen-reader-only "Error:" / "Success:" / "Warning:" prefix on every flash message so meaning does not depend on color.
+  - aria-hidden="true" on the decorative lock emoji in the locked-feature card; the card itself gets role="region" + aria-label describing what is locked.
+  - .screen-reader-text + .citeleap-sr-only CSS class in assets/admin.css (mirrors WP core's), used by the new sr-only prefixes above.
+  - Visible focus ring on every interactive control inside .wrap (buttons, .nav-tab, <select>, every input type, textarea, the pool-remove (X) button). Replaces the inconsistent default focus styles, makes keyboard navigation traceable.
+  - @media (forced-colors: active) fallback so the locked-feature card border stays visible in Windows High Contrast Mode.
+  - @media (prefers-reduced-motion: reduce) , kills the shimmer + spinner animations for users who have opted out.
+* CHANGE: bumped Version + CITELEAP_VERSION + readme Stable tag to 2.9.0.
 
 = 2.8.0 =
 * NEW: PHPUnit test suite for the commercial layer. 41 tests across 4 test files (Plan, Credits, License, TopUps) covering capability gates per plan, credit ledger arithmetic (consume, reset, top-up consumption order, low/exhausted thresholds), license resolution with no SDK, top-up catalog ordering + Freemius webhook handlers. Runs in 15ms with zero external dependencies (in-memory WP function stubs in the bootstrap, no MySQL, no full WP test install).

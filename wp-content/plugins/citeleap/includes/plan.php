@@ -151,9 +151,9 @@ class CiteLeap_Plan {
 		$upgrade_url = class_exists( 'CiteLeap_License' ) ? CiteLeap_License::checkout_url( $lowest ) : admin_url( 'admin.php?page=citeleap&tab=license' );
 		$title       = $title ?: ucfirst( str_replace( '_', ' ', $feature ) );
 		?>
-		<div style="border:2px dashed #0284c7;border-radius:0.625rem;padding:1.5rem 1.75rem;background:linear-gradient(135deg,#f0f9ff 0%,#eff6ff 100%);margin:1rem 0;">
+		<div role="region" aria-label="<?php echo esc_attr( sprintf( __( 'Feature locked, upgrade to %s', 'citeleap' ), $def['label'] ) ); ?>" style="border:2px dashed #0284c7;border-radius:0.625rem;padding:1.5rem 1.75rem;background:linear-gradient(135deg,#f0f9ff 0%,#eff6ff 100%);margin:1rem 0;">
 			<div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;">
-				<div style="font-size:32px;line-height:1;">&#128274;</div>
+				<div style="font-size:32px;line-height:1;" aria-hidden="true">&#128274;</div>
 				<div style="flex:1;min-width:280px;">
 					<h3 style="margin:0 0 0.35rem;font-size:18px;color:#0f172a;"><?php echo esc_html( $title ); ?> <span style="font-size:11px;background:#0284c7;color:#fff;padding:2px 8px;border-radius:999px;letter-spacing:0.04em;text-transform:uppercase;margin-left:0.35rem;vertical-align:middle;"><?php echo esc_html( $def['label'] ); ?>+</span></h3>
 					<p style="margin:0 0 0.75rem;color:#475569;font-size:14px;max-width:640px;">

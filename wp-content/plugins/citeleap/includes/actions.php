@@ -197,7 +197,7 @@ $__bvi_actions = [
 ];
 foreach ( $__bvi_actions as $__act => $__cfg ) {
 	add_action( 'admin_post_' . $__act, function () use ( $__cfg ) {
-		if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+		CiteLeap_Caps::guard_use();
 		check_admin_referer( CITELEAP_NONCE );
 		$id  = sanitize_text_field( wp_unslash( (string) ( $_POST['id'] ?? '' ) ) );
 		$fn  = $__cfg[0];
@@ -209,7 +209,7 @@ foreach ( $__bvi_actions as $__act => $__cfg ) {
 
 /* Schedule a drafted row at operator-picked datetime. */
 add_action( 'admin_post_citeleap_schedule_drafted', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	check_admin_referer( CITELEAP_NONCE );
 	$id   = sanitize_text_field( wp_unslash( (string) ( $_POST['id']   ?? '' ) ) );
 	$when = sanitize_text_field( wp_unslash( (string) ( $_POST['when'] ?? '' ) ) );
@@ -220,7 +220,7 @@ add_action( 'admin_post_citeleap_schedule_drafted', function () {
 
 /* Reschedule a scheduled row to a different datetime. */
 add_action( 'admin_post_citeleap_reschedule', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	check_admin_referer( CITELEAP_NONCE );
 	$id   = sanitize_text_field( wp_unslash( (string) ( $_POST['id']   ?? '' ) ) );
 	$when = sanitize_text_field( wp_unslash( (string) ( $_POST['when'] ?? '' ) ) );

@@ -11,7 +11,7 @@ add_action( 'admin_menu', function () {
 	add_menu_page(
 		__( 'CiteLeap', 'citeleap' ),
 		__( 'CiteLeap', 'citeleap' ),
-		'manage_options',
+		CiteLeap_Caps::USE_CAP,
 		'citeleap',
 		'citeleap_render_admin',
 		'dashicons-edit-page',
@@ -30,27 +30,48 @@ add_action( 'admin_enqueue_scripts', function ( $hook ) {
 } );
 
 function citeleap_render_admin(): void {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	$tab = isset( $_GET['tab'] ) ? sanitize_key( (string) $_GET['tab'] ) : 'dashboard';
 	$tab = in_array( $tab, [ 'dashboard', 'settings', 'planner', 'calendar', 'prompts', 'images', 'seo', 'research', 'languages', 'license', 'log' ], true ) ? $tab : 'dashboard';
+	/* Editors can use planner / calendar / dashboard / log; everything
+	 * else is for administrators. */
+	$manage_only_tabs = [ 'settings', 'prompts', 'images', 'seo', 'research', 'languages', 'license' ];
+	if ( in_array( $tab, $manage_only_tabs, true ) && ! CiteLeap_Caps::can_manage() ) {
+		$tab = 'dashboard';
+	}
 	?>
 	<div class="wrap">
 		<h1><?php echo esc_html__( 'CiteLeap', 'citeleap' ); ?> <span style="font-size:0.6em;color:#64748b;font-weight:normal;">v<?php echo esc_html( CITELEAP_VERSION ); ?></span></h1>
 
 		<?php citeleap_render_flash(); ?>
 
-		<nav class="nav-tab-wrapper" style="margin-top:1rem;">
-			<a class="nav-tab <?php echo 'dashboard' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=dashboard' ) ); ?>"><?php echo esc_html__( 'Dashboard', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'planner' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=planner' ) ); ?>"><?php echo esc_html__( 'Planner', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'calendar' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=calendar' ) ); ?>"><?php echo esc_html__( 'Calendar', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'prompts' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=prompts' ) ); ?>"><?php echo esc_html__( 'Prompts', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'research' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=research' ) ); ?>"><?php echo esc_html__( 'Research', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'images' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=images' ) ); ?>"><?php echo esc_html__( 'Images', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'seo' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=seo' ) ); ?>"><?php echo esc_html__( 'SEO', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'languages' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=languages' ) ); ?>"><?php echo esc_html__( 'Languages', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'settings' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=settings' ) ); ?>"><?php echo esc_html__( 'Settings', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'license' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=license' ) ); ?>"><?php echo esc_html__( 'License & Credits', 'citeleap' ); ?></a>
-			<a class="nav-tab <?php echo 'log' === $tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=log' ) ); ?>"><?php echo esc_html__( 'Log', 'citeleap' ); ?></a>
+		<?php
+		$tabs = [
+			'dashboard' => [ 'label' => __( 'Dashboard', 'citeleap' ),         'manage_only' => false ],
+			'planner'   => [ 'label' => __( 'Planner', 'citeleap' ),           'manage_only' => false ],
+			'calendar'  => [ 'label' => __( 'Calendar', 'citeleap' ),          'manage_only' => false ],
+			'prompts'   => [ 'label' => __( 'Prompts', 'citeleap' ),           'manage_only' => true  ],
+			'research'  => [ 'label' => __( 'Research', 'citeleap' ),          'manage_only' => true  ],
+			'images'    => [ 'label' => __( 'Images', 'citeleap' ),            'manage_only' => true  ],
+			'seo'       => [ 'label' => __( 'SEO', 'citeleap' ),               'manage_only' => true  ],
+			'languages' => [ 'label' => __( 'Languages', 'citeleap' ),         'manage_only' => true  ],
+			'settings'  => [ 'label' => __( 'Settings', 'citeleap' ),          'manage_only' => true  ],
+			'license'   => [ 'label' => __( 'License & Credits', 'citeleap' ), 'manage_only' => true  ],
+			'log'       => [ 'label' => __( 'Log', 'citeleap' ),               'manage_only' => false ],
+		];
+		$can_manage = CiteLeap_Caps::can_manage();
+		?>
+		<nav class="nav-tab-wrapper" style="margin-top:1rem;" aria-label="<?php echo esc_attr__( 'CiteLeap sections', 'citeleap' ); ?>">
+			<?php foreach ( $tabs as $slug => $t ) :
+				if ( $t['manage_only'] && ! $can_manage ) continue;
+				$is_active = ( $slug === $tab );
+			?>
+				<a class="nav-tab <?php echo $is_active ? 'nav-tab-active' : ''; ?>"
+					href="<?php echo esc_url( admin_url( 'admin.php?page=citeleap&tab=' . $slug ) ); ?>"
+					<?php echo $is_active ? 'aria-current="page"' : ''; ?>>
+					<?php echo esc_html( $t['label'] ); ?>
+				</a>
+			<?php endforeach; ?>
 		</nav>
 
 		<div style="background:#fff;padding:1.25rem 1.5rem;border:1px solid #e2e8f0;border-top:0;">
@@ -138,8 +159,11 @@ function citeleap_render_flash(): void {
 		$text = $labels[ $msg ] ?? __( 'Action completed.', 'citeleap' );
 		if ( 'action-err' === $msg ) { $kind = 'error'; $text = __( 'Action failed. Check the log.', 'citeleap' ); }
 	}
-	$class = ( 'error' === $kind ) ? 'notice-error' : 'notice-success';
-	echo '<div class="notice ' . esc_attr( $class ) . ' is-dismissible" style="margin-top:1rem;"><p>' . esc_html( $text ) . '</p></div>';
+	$class     = ( 'error' === $kind ) ? 'notice-error' : 'notice-success';
+	$role      = ( 'error' === $kind ) ? 'alert' : 'status';
+	$aria_live = ( 'error' === $kind ) ? 'assertive' : 'polite';
+	$sr_prefix = ( 'error' === $kind ) ? __( 'Error: ', 'citeleap' ) : __( 'Success: ', 'citeleap' );
+	echo '<div class="notice ' . esc_attr( $class ) . ' is-dismissible" role="' . esc_attr( $role ) . '" aria-live="' . esc_attr( $aria_live ) . '" style="margin-top:1rem;"><p><span class="screen-reader-text">' . esc_html( $sr_prefix ) . '</span>' . esc_html( $text ) . '</p></div>';
 }
 
 function citeleap_render_settings(): void {
@@ -374,7 +398,7 @@ function citeleap_render_log(): void {
 
 /* admin-post handlers */
 add_action( 'admin_post_citeleap_save_settings', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_manage();
 	check_admin_referer( CITELEAP_NONCE );
 
 	/* Encrypt API keys at rest. An empty submitted value means "keep
@@ -464,7 +488,7 @@ add_action( 'admin_post_citeleap_save_settings', function () {
  * back to the operator. Logs the result. */
 foreach ( [ 'claude', 'openai', 'gemini' ] as $__p ) {
 	add_action( 'admin_post_citeleap_test_key_' . $__p, function () use ( $__p ) {
-		if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+		CiteLeap_Caps::guard_manage();
 		check_admin_referer( CITELEAP_NONCE );
 		$res = CiteLeap_LLM::chat( 'writing', 'You are a test responder.', 'Reply with the single word OK.', 16 );
 		$msg = $res['ok']
@@ -481,7 +505,7 @@ foreach ( [ 'claude', 'openai', 'gemini' ] as $__p ) {
 }
 
 add_action( 'admin_post_citeleap_save_prompts', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_manage();
 	check_admin_referer( CITELEAP_NONCE );
 
 	$prompts = [
@@ -875,7 +899,7 @@ function citeleap_render_license_tab(): void {
 /* ---- handlers ----------------------------------------------------------- */
 
 add_action( 'admin_post_citeleap_save_research', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_manage();
 	check_admin_referer( CITELEAP_NONCE );
 	CiteLeap_Research::save_settings( [
 		'enabled'       => $_POST['enabled']       ?? 0,
@@ -890,7 +914,7 @@ add_action( 'admin_post_citeleap_save_research', function () {
 } );
 
 add_action( 'admin_post_citeleap_save_images', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_manage();
 	check_admin_referer( CITELEAP_NONCE );
 	$raw  = isset( $_POST['pool_ids'] ) ? sanitize_text_field( wp_unslash( (string) $_POST['pool_ids'] ) ) : '';
 	$ids  = array_filter( array_map( 'intval', explode( ',', $raw ) ) );
@@ -905,7 +929,7 @@ add_action( 'admin_post_citeleap_save_images', function () {
 } );
 
 add_action( 'admin_post_citeleap_save_seo', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_manage();
 	check_admin_referer( CITELEAP_NONCE );
 	CiteLeap_SEO::save_settings( [
 		'enabled'          => $_POST['enabled']          ?? 0,
@@ -920,7 +944,7 @@ add_action( 'admin_post_citeleap_save_seo', function () {
 } );
 
 add_action( 'admin_post_citeleap_save_i18n', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_manage();
 	check_admin_referer( CITELEAP_NONCE );
 	CiteLeap_I18n::save_settings( [
 		'default_lang'    => $_POST['default_lang']    ?? 'en',

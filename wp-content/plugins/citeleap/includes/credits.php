@@ -176,7 +176,7 @@ class CiteLeap_Credits {
 		$plan_slug  = CiteLeap_Plan::current();
 
 		if ( defined( 'CITELEAP_DEV_MODE' ) && CITELEAP_DEV_MODE ) {
-			echo '<div class="notice notice-info" style="border-left:4px solid #16a34a;"><p><strong>' . esc_html__( 'CiteLeap , Developer mode.', 'citeleap' )
+			echo '<div class="notice notice-info" role="status" aria-live="polite" style="border-left:4px solid #16a34a;"><p><strong>' . esc_html__( 'CiteLeap , Developer mode.', 'citeleap' )
 				. '</strong> ' . esc_html__( 'Unlimited credits, all features enabled. Plan gates are bypassed.', 'citeleap' ) . '</p></div>';
 			return;
 		}
@@ -190,7 +190,7 @@ class CiteLeap_Credits {
 		if ( self::is_exhausted() ) {
 			$upgrade = esc_url( CiteLeap_License::checkout_url() );
 			$top     = esc_url( CiteLeap_License::top_up_url( 'growth' ) );
-			echo '<div class="notice notice-error"><p><strong>'
+			echo '<div class="notice notice-error" role="alert" aria-live="assertive"><p><span class="screen-reader-text">' . esc_html__( 'Error: ', 'citeleap' ) . '</span><strong>'
 				. esc_html__( 'CiteLeap , out of credits.', 'citeleap' ) . '</strong> '
 				. esc_html( sprintf( __( 'Your %s plan cycle is exhausted. Drafting and refreshing are blocked until you upgrade or top up.', 'citeleap' ), $plan_label ) )
 				. ' <a class="button button-primary" href="' . $upgrade . '" style="margin-left:0.5rem;">' . esc_html__( 'Upgrade plan', 'citeleap' ) . '</a>'
@@ -202,7 +202,7 @@ class CiteLeap_Credits {
 		if ( self::is_low() ) {
 			$upgrade = esc_url( CiteLeap_License::checkout_url() );
 			$top     = esc_url( CiteLeap_License::top_up_url( 'growth' ) );
-			echo '<div class="notice notice-warning"><p><strong>'
+			echo '<div class="notice notice-warning" role="status" aria-live="polite"><p><span class="screen-reader-text">' . esc_html__( 'Warning: ', 'citeleap' ) . '</span><strong>'
 				. esc_html__( 'CiteLeap , credits running low.', 'citeleap' ) . '</strong> '
 				. esc_html( sprintf( __( '%1$d of %2$d credits remaining this cycle on the %3$s plan.', 'citeleap' ), $remaining, $inc, $plan_label ) )
 				. ' <a class="button" href="' . $upgrade . '" style="margin-left:0.5rem;">' . esc_html__( 'Upgrade plan', 'citeleap' ) . '</a>'
@@ -213,7 +213,7 @@ class CiteLeap_Credits {
 
 		/* Healthy , quiet info pill. */
 		$inc_label = ( PHP_INT_MAX === $inc ) ? __( 'unlimited', 'citeleap' ) : (string) $inc;
-		echo '<div class="notice notice-info" style="border-left:4px solid #0284c7;"><p>'
+		echo '<div class="notice notice-info" role="status" aria-live="polite" style="border-left:4px solid #0284c7;"><p>'
 			. esc_html__( 'CiteLeap:', 'citeleap' ) . ' <strong>' . esc_html( $plan_label ) . '</strong> , '
 			. esc_html( sprintf( __( '%1$d of %2$s credits used this cycle.', 'citeleap' ), $used, $inc_label ) )
 			. ( $top_up > 0 ? ' ' . esc_html( sprintf( __( '%d top-up credits in reserve.', 'citeleap' ), $top_up ) ) : '' )

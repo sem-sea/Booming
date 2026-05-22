@@ -185,7 +185,7 @@ class CiteLeap_TopUps {
 	 * before connecting real billing.
 	 * ------------------------------------------------------------------- */
 	public static function handle_simulator(): void {
-		if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+		CiteLeap_Caps::guard_manage();
 		check_admin_referer( CITELEAP_NONCE );
 
 		$slug = isset( $_GET['pack'] ) ? sanitize_key( (string) $_GET['pack'] ) : '';

@@ -314,7 +314,7 @@ class CiteLeap_Images {
 	 * Bulk admin-post handlers.
 	 * -------------------------------------------------------------- */
 	public static function handle_bulk_assign(): void {
-		if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+		CiteLeap_Caps::guard_use();
 		check_admin_referer( CITELEAP_NONCE );
 		$n = self::assign_random_bulk( false );
 		wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'images', 'citeleap_msg' => 'assigned', 'n' => $n ], admin_url( 'admin.php' ) ) );
@@ -322,7 +322,7 @@ class CiteLeap_Images {
 	}
 
 	public static function handle_bulk_reroll(): void {
-		if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+		CiteLeap_Caps::guard_use();
 		check_admin_referer( CITELEAP_NONCE );
 		$n = self::assign_random_bulk( true );
 		wp_safe_redirect( add_query_arg( [ 'page' => 'citeleap', 'tab' => 'images', 'citeleap_msg' => 'rerolled', 'n' => $n ], admin_url( 'admin.php' ) ) );

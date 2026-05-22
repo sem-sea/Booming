@@ -383,7 +383,7 @@ class CiteLeap_Refresh {
 
 /* admin-post handlers for the refresh UI inside the Planner tab */
 add_action( 'admin_post_citeleap_enqueue_refresh', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	check_admin_referer( CITELEAP_NONCE );
 	$ids = isset( $_POST['post_ids'] ) ? array_map( 'intval', (array) wp_unslash( $_POST['post_ids'] ) ) : [];
 	$n   = CiteLeap_Refresh::enqueue_posts( $ids );
@@ -392,7 +392,7 @@ add_action( 'admin_post_citeleap_enqueue_refresh', function () {
 } );
 
 add_action( 'admin_post_citeleap_run_refresh', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	check_admin_referer( CITELEAP_NONCE );
 	$queue_id = sanitize_text_field( wp_unslash( (string) ( $_POST['queue_id'] ?? '' ) ) );
 	$res      = CiteLeap_Refresh::refresh_from_queue( $queue_id );
@@ -401,7 +401,7 @@ add_action( 'admin_post_citeleap_run_refresh', function () {
 } );
 
 add_action( 'admin_post_citeleap_save_refresh', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	check_admin_referer( CITELEAP_NONCE );
 	CiteLeap_Refresh::save_settings( [
 		'auto_mode'      => $_POST['refresh_auto_mode']      ?? 'off',
@@ -413,7 +413,7 @@ add_action( 'admin_post_citeleap_save_refresh', function () {
 } );
 
 add_action( 'admin_post_citeleap_bulk_refresh', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	check_admin_referer( CITELEAP_NONCE );
 	$raw = (string) wp_unslash( (string) ( $_POST['paste'] ?? '' ) );
 	$res = CiteLeap_Refresh::enqueue_by_paste( $raw );
@@ -423,7 +423,7 @@ add_action( 'admin_post_citeleap_bulk_refresh', function () {
 } );
 
 add_action( 'admin_post_citeleap_approve_refresh', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	check_admin_referer( CITELEAP_NONCE );
 	$qid = sanitize_text_field( wp_unslash( (string) ( $_POST['queue_id'] ?? '' ) ) );
 	$pid = (int) ( $_POST['post_id'] ?? 0 );
@@ -434,7 +434,7 @@ add_action( 'admin_post_citeleap_approve_refresh', function () {
 } );
 
 add_action( 'admin_post_citeleap_reject_refresh', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	check_admin_referer( CITELEAP_NONCE );
 	$qid = sanitize_text_field( wp_unslash( (string) ( $_POST['queue_id'] ?? '' ) ) );
 	$pid = (int) ( $_POST['post_id'] ?? 0 );
@@ -444,7 +444,7 @@ add_action( 'admin_post_citeleap_reject_refresh', function () {
 } );
 
 add_action( 'admin_post_citeleap_reset_stuck', function () {
-	if ( ! current_user_can( 'manage_options' ) ) wp_die( 'Forbidden', 403 );
+	CiteLeap_Caps::guard_use();
 	check_admin_referer( CITELEAP_NONCE );
 	$qid = sanitize_text_field( wp_unslash( (string) ( $_POST['queue_id'] ?? '' ) ) );
 	CiteLeap_Refresh::reset_stuck( $qid );
