@@ -4,7 +4,7 @@ Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.9.0
+Stable tag: 2.10.0
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -68,6 +68,16 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 2.10.0 =
+* NEW: GDPR + privacy compliance layer (includes/privacy.php). Single source of truth for what CiteLeap stores, what it sends to whom, and how the operator exercises Article 15 + 17 rights.
+* NEW: privacy-policy snippet auto-registered via wp_add_privacy_policy_content(). Site admin opens Tools , Privacy , the CiteLeap section is ready to paste into the published policy: what we collect (encrypted API keys, license, credit ledger, log), what gets sent to Claude / OpenAI / Gemini / Freemius with each policy link, "no telemetry", retention windows (log = 500 entries, token ledger = 12 months), and where to find DPA.
+* NEW: personal-data exporter registered via wp_privacy_personal_data_exporters. Operator running Tools , Export Personal Data against the administrator email gets a JSON payload of: plan label, credits used + top-up + lifetime, cycle start, last consumed at, monthly budget caps, full token usage ledger. Editors get nothing (operator-tier data is owned by the administrator).
+* NEW: personal-data eraser registered via wp_privacy_personal_data_erasers. Tools , Erase Personal Data wipes the credit ledger + encrypted API keys + activity log + token usage history. License + plan slug stay (those live with Freemius, not on the site).
+* NEW: first-run data-flow disclosure notice on the CiteLeap admin page. Shows what gets sent to Claude / OpenAI / Gemini with deep links to their privacy policies, the Freemius MoR disclosure when SDK is loaded, and the "no telemetry" guarantee. Dismissed via per-user meta (each operator on a multi-admin site sees + accepts independently). One-click DPA template + WP privacy-guide jump-off buttons.
+* NEW: Privacy + data handling block on the License & Credits tab. At-a-glance table: what we store, what gets sent, telemetry status (green check, none), pricing-table last-verified date, DPA + policy + GDPR-tools shortcuts.
+* NEW: CiteLeap_Pricing::LAST_VERIFIED_AT constant + ::last_verified_at() helper. Bump this when re-checking provider rates. Surfaced on the License tab so the operator can see the provenance of the per-million-tokens cost-of-goods calculations.
+* CHANGE: bumped Version + CITELEAP_VERSION + readme Stable tag to 2.10.0.
 
 = 2.9.0 =
 * NEW: two-tier capability model so Editors can run CiteLeap without administrator access. includes/caps.php defines CiteLeap_Caps with the constant USE_CAP = 'citeleap_use' (granted to Editor + Administrator on plugin activation) and MANAGE_CAP = 'manage_options' (administrator-only). Editors can use the Dashboard, Planner, Calendar, and Log tabs and drive every content operation (queue, draft, schedule, refresh, pause/resume/retry, image-pool bulk operators). Administrators retain exclusive control over API keys, prompts, research, image pool config, SEO toggles, languages, settings, and license / plan / top-up purchases.

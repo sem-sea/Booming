@@ -893,6 +893,29 @@ function citeleap_render_license_tab(): void {
 			<?php echo esc_html__( 'Drop the SDK at vendor/freemius/wordpress-sdk/start.php and set CITELEAP_FS_ID + CITELEAP_FS_PUBLIC_KEY in wp-config.php to activate real billing + checkout. The top-up grid above runs in simulator mode until then.', 'citeleap' ); ?>
 		</p></div>
 	<?php endif; ?>
+
+	<h3 style="margin-top:2rem;"><?php echo esc_html__( 'Privacy + data handling', 'citeleap' ); ?></h3>
+	<table class="form-table" style="max-width:780px;">
+		<tr><th style="width:280px;"><?php echo esc_html__( 'What CiteLeap stores on this site', 'citeleap' ); ?></th>
+			<td><?php echo esc_html__( 'API keys (AES-256-CBC encrypted), license + plan, credit ledger, activity log (last 500 entries), token usage history (last 12 months). No site-visitor data.', 'citeleap' ); ?></td></tr>
+		<tr><th><?php echo esc_html__( 'What gets sent to LLM providers', 'citeleap' ); ?></th>
+			<td><?php echo esc_html__( 'Per Draft / Refresh: topic + master prompt + voice-sample post bodies + custom instructions. Sent only to the provider you configured.', 'citeleap' ); ?></td></tr>
+		<tr><th><?php echo esc_html__( 'Telemetry', 'citeleap' ); ?></th>
+			<td><span style="color:#16a34a;">&#10003; <?php echo esc_html__( 'None. CiteLeap does not phone home.', 'citeleap' ); ?></span></td></tr>
+		<tr><th><?php echo esc_html__( 'Pricing table last verified', 'citeleap' ); ?></th>
+			<td><code><?php echo esc_html( CiteLeap_Pricing::last_verified_at() ); ?></code> <?php echo esc_html__( '(override per-model on the Settings tab if a provider changes their rate)', 'citeleap' ); ?></td></tr>
+		<tr><th><?php echo esc_html__( 'DPA + Privacy Policy', 'citeleap' ); ?></th>
+			<td>
+				<a class="button" href="<?php echo esc_url( CiteLeap_Privacy::DPA_URL ); ?>"><?php echo esc_html__( 'Download DPA template', 'citeleap' ); ?></a>
+				<a class="button" href="<?php echo esc_url( CiteLeap_Privacy::POLICY_URL ); ?>" style="margin-left:0.25rem;"><?php echo esc_html__( 'View Privacy Policy', 'citeleap' ); ?></a>
+				<a class="button" href="<?php echo esc_url( admin_url( 'tools.php?wp-privacy-policy-guide' ) ); ?>" style="margin-left:0.25rem;"><?php echo esc_html__( 'Paste into site Privacy Policy', 'citeleap' ); ?></a>
+			</td></tr>
+		<tr><th><?php echo esc_html__( 'GDPR rights (operator data)', 'citeleap' ); ?></th>
+			<td><?php echo wp_kses(
+				__( 'Use <a href="' . esc_url( admin_url( 'tools.php?page=export_personal_data' ) ) . '">Tools , Export Personal Data</a> or <a href="' . esc_url( admin_url( 'tools.php?page=remove_personal_data' ) ) . '">Tools , Erase Personal Data</a> against your administrator email to retrieve or delete the CiteLeap-side ledger + log + API keys.', 'citeleap' ),
+				[ 'a' => [ 'href' => [] ] ]
+			); ?></td></tr>
+	</table>
 	<?php
 }
 

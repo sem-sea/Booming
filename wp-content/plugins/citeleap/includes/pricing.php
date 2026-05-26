@@ -22,6 +22,14 @@ defined( 'ABSPATH' ) || exit;
 
 class CiteLeap_Pricing {
 
+	/** Last date the pricing table was sanity-checked against published
+	 *  provider rates. Bump this when re-verifying. ISO date. */
+	const LAST_VERIFIED_AT = '2026-05-26';
+
+	public static function last_verified_at(): string {
+		return self::LAST_VERIFIED_AT;
+	}
+
 	public static function table(): array {
 		$default = [
 			/* Anthropic , confirmed May 2026 */
