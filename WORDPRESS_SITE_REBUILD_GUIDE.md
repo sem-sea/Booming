@@ -1,5 +1,13 @@
 # WordPress Site Rebuild Guide
 
+> **2026 UPDATE , READ FIRST:** the authoritative current-policy
+> brief is `CUSTOM_THEME_RESEARCH_2026.md` in this same branch. It
+> supersedes everything in this guide where they conflict, in
+> particular: WCAG 2.2 AA (not 2.1) is the WordPress accessibility
+> target as of May 2026; WP 6.7+ is the minimum for full v3
+> `theme.json`; WP 6.8 ships Pattern Overrides stable; the ADA +
+> EAA legal deadlines apply.
+>
 > **Audience:** a future Claude Code session, a contractor, or a human
 > engineer who needs to rebuild a marketing-agency-style WordPress
 > site (block theme + content seed + custom blocks + SEO/GEO/AEO layer
@@ -19,7 +27,7 @@ Build a WordPress 6.6+ block theme + content seed for a marketing
 agency landing site. Editor must be able to swap copy / images / CTAs
 without touching code. Pages must rank on Google AND earn citations on
 ChatGPT / Perplexity / Google AI Overviews / Claude / Copilot via
-GEO/AEO May 2026 Bible compliance. Mobile-first. WCAG 2.1 AA. Multi-
+GEO/AEO May 2026 Bible compliance. Mobile-first. WCAG 2.2 AA. Multi-
 lingual ready. The same theme is portable to any marketing-agency
 brand by swapping `theme.json` + content seed.
 
@@ -422,7 +430,7 @@ are met.
 
 ---
 
-## 10. Accessibility (WCAG 2.1 AA)
+## 10. Accessibility (WCAG 2.2 AA)
 
 Same rules as the CiteLeap plugin admin (REBUILD.md section 1.5 + 1.6):
 

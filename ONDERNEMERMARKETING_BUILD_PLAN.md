@@ -1,9 +1,20 @@
 # OndernemerMarketing.nl , Build Plan
 
-> **Read `WORDPRESS_SITE_REBUILD_GUIDE.md` first.** This document
-> applies that abstract guide to the specific OndernemerMarketing.nl
-> brief , brand tokens, sitemap, page-by-page block specs, exact
-> pricing, sprint plan, and acceptance checklist.
+> **2026 UPDATE , READ FIRST:** the authoritative current-policy
+> brief is `CUSTOM_THEME_RESEARCH_2026.md` in this same branch.
+> Where this plan and the research brief conflict, the research
+> brief wins. Specifically: target WCAG 2.2 AA (not 2.1), require
+> WP 6.7+ for full `theme.json` v3, target PHP 8.1+, use Pattern
+> Overrides (WP 6.8 stable) for the synced header / footer /
+> hero / testimonial card, self-host woff2 fonts (no Google Fonts
+> CDN , GDPR + EAA), and clamp `accent` orange to non-text uses
+> only because it fails 4.5:1 on white.
+>
+> **Read `WORDPRESS_SITE_REBUILD_GUIDE.md` second** for the abstract
+> rebuild pattern. This document then applies that pattern to the
+> specific OndernemerMarketing.nl brief , brand tokens, sitemap,
+> page-by-page block specs, exact pricing, sprint plan, and
+> acceptance checklist.
 >
 > **Source of truth for design:** the six screenshots
 > `Ondernemermarketing-nl-...screen-*.png` at the repo root on the
