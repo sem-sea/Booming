@@ -1,0 +1,165 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/theme.json",
+    "version": 3,
+    "settings": {
+        "appearanceTools": true,
+        "useRootPaddingAwareAlignments": true,
+        "color": {
+            "palette": [
+                { "slug": "primary",      "color": "#1d6bd1", "name": "Primary" },
+                { "slug": "primary-dark", "color": "#155ab0", "name": "Primary Dark" },
+                { "slug": "accent",       "color": "#f17a3c", "name": "Accent" },
+                { "slug": "accent-dark",  "color": "#d8662a", "name": "Accent Dark" },
+                { "slug": "ink",          "color": "#0f172a", "name": "Ink" },
+                { "slug": "body",         "color": "#334155", "name": "Body" },
+                { "slug": "muted",        "color": "#64748b", "name": "Muted" },
+                { "slug": "soft",         "color": "#f0f9ff", "name": "Soft" },
+                { "slug": "soft-2",       "color": "#eff6ff", "name": "Soft Alt" },
+                { "slug": "white",        "color": "#ffffff", "name": "White" },
+                { "slug": "border",       "color": "#e2e8f0", "name": "Border" },
+                { "slug": "success",      "color": "#16a34a", "name": "Success" },
+                { "slug": "error",        "color": "#b91c1c", "name": "Error" }
+            ],
+            "custom": true,
+            "customGradient": true,
+            "link": true
+        },
+        "typography": {
+            "fontFamilies": [
+                {
+                    "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+                    "slug": "inter",
+                    "name": "Inter"
+                },
+                {
+                    "fontFamily": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', monospace",
+                    "slug": "mono",
+                    "name": "Monospace"
+                }
+            ],
+            "fontSizes": [
+                { "slug": "small",    "size": "0.875rem", "name": "Klein" },
+                { "slug": "medium",   "size": "1rem",     "name": "Normaal" },
+                { "slug": "large",    "size": "1.25rem",  "name": "Groot",
+                  "fluid": { "min": "1.125rem", "max": "1.375rem" } },
+                { "slug": "x-large",  "size": "2rem",     "name": "Extra groot",
+                  "fluid": { "min": "1.625rem", "max": "2.25rem" } },
+                { "slug": "xx-large", "size": "3rem",     "name": "Heel groot",
+                  "fluid": { "min": "2.25rem", "max": "3.5rem" } }
+            ],
+            "fluid": true,
+            "lineHeight": true,
+            "letterSpacing": true,
+            "textTransform": true,
+            "fontWeight": true,
+            "textDecoration": true
+        },
+        "spacing": {
+            "spacingScale": { "steps": 7 },
+            "customSpacingSize": true,
+            "padding": true,
+            "margin": true,
+            "blockGap": true,
+            "units": [ "px", "em", "rem", "vh", "vw", "%" ]
+        },
+        "layout": {
+            "contentSize": "720px",
+            "wideSize": "1200px"
+        },
+        "border": {
+            "radius": true,
+            "color": true,
+            "style": true,
+            "width": true
+        }
+    },
+    "styles": {
+        "color": {
+            "background": "var:preset|color|white",
+            "text": "var:preset|color|ink"
+        },
+        "typography": {
+            "fontFamily": "var:preset|font-family|inter",
+            "fontSize": "1rem",
+            "lineHeight": "1.65"
+        },
+        "spacing": {
+            "blockGap": "1rem",
+            "padding": { "top": "0", "right": "1rem", "bottom": "0", "left": "1rem" }
+        },
+        "elements": {
+            "h1": {
+                "typography": {
+                    "fontSize": "clamp(2rem, 5vw, 3.25rem)",
+                    "fontWeight": "700",
+                    "lineHeight": "1.15",
+                    "letterSpacing": "-0.01em"
+                },
+                "color": { "text": "var:preset|color|ink" }
+            },
+            "h2": {
+                "typography": {
+                    "fontSize": "clamp(1.5rem, 3vw, 2.25rem)",
+                    "fontWeight": "700",
+                    "lineHeight": "1.25",
+                    "letterSpacing": "-0.01em"
+                },
+                "color": { "text": "var:preset|color|ink" }
+            },
+            "h3": {
+                "typography": {
+                    "fontSize": "clamp(1.25rem, 2.2vw, 1.5rem)",
+                    "fontWeight": "600",
+                    "lineHeight": "1.35"
+                },
+                "color": { "text": "var:preset|color|ink" }
+            },
+            "h4": {
+                "typography": {
+                    "fontSize": "1.125rem",
+                    "fontWeight": "600",
+                    "lineHeight": "1.4"
+                }
+            },
+            "button": {
+                "color": {
+                    "background": "var:preset|color|primary",
+                    "text": "var:preset|color|white"
+                },
+                "border": { "radius": "0.5rem" },
+                "spacing": {
+                    "padding": {
+                        "top": "0.75rem",
+                        "right": "1.5rem",
+                        "bottom": "0.75rem",
+                        "left": "1.5rem"
+                    }
+                },
+                "typography": { "fontWeight": "600", "fontSize": "1rem" },
+                ":hover": {
+                    "color": { "background": "var:preset|color|primary-dark" }
+                },
+                ":focus": {
+                    "color": { "background": "var:preset|color|primary-dark" }
+                }
+            },
+            "link": {
+                "color": { "text": "var:preset|color|primary" },
+                ":hover": { "color": { "text": "var:preset|color|primary-dark" } }
+            }
+        }
+    },
+    "templateParts": [
+        { "name": "header", "title": "Header", "area": "header" },
+        { "name": "footer", "title": "Footer", "area": "footer" }
+    ],
+    "customTemplates": [
+        { "name": "page-no-title",  "title": "Landingspagina (zonder titel)",   "postTypes": [ "page" ] },
+        { "name": "page-diensten",  "title": "Pagina , Diensten",               "postTypes": [ "page" ] },
+        { "name": "page-pakketten", "title": "Pagina , Pakketten",              "postTypes": [ "page" ] },
+        { "name": "page-google-ads","title": "Pagina , Google Ads Uitbesteden", "postTypes": [ "page" ] },
+        { "name": "page-tools",     "title": "Pagina , Tools",                  "postTypes": [ "page" ] },
+        { "name": "page-over-ons",  "title": "Pagina , Over ons",               "postTypes": [ "page" ] },
+        { "name": "page-contact",   "title": "Pagina , Contact",                "postTypes": [ "page" ] }
+    ]
+}

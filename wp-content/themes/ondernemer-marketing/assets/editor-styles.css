@@ -1,0 +1,12 @@
+/* Editor canvas styles , mirror the front-end where meaningful so the
+ * editor preview matches what visitors see. */
+.editor-styles-wrapper .ondm-card {
+	border-radius: 0.75rem;
+}
+.editor-styles-wrapper .wp-block-columns:has(.ondm-card) > .wp-block-column {
+	display: flex;
+	flex-direction: column;
+}
+.editor-styles-wrapper .ondm-card {
+	height: 100%;
+}

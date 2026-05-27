@@ -1,0 +1,129 @@
+/* OndernemerMarketing , front-end overrides for things theme.json
+ * cannot express. Mobile-first. WCAG 2.2 AA. */
+
+/* ---------- Accessibility ---------- */
+
+/* Visually hidden but read by screen readers. */
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	-webkit-clip-path: inset(50%);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+/* Skip-link , first focusable, visible on focus (WCAG 2.4.1). */
+.skip-link {
+	background: #fff;
+	color: #0f172a;
+	padding: 0.75rem 1.25rem;
+	border: 2px solid #1d6bd1;
+	border-radius: 0.5rem;
+	font-weight: 600;
+	text-decoration: none;
+}
+.skip-link:focus {
+	position: fixed;
+	top: 1rem;
+	left: 1rem;
+	z-index: 99999;
+}
+
+/* Visible focus ring on every interactive control , WCAG 2.4.13. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible {
+	outline: 2px solid #1d6bd1 !important;
+	outline-offset: 2px !important;
+	box-shadow: 0 0 0 4px rgba(29, 107, 209, 0.15) !important;
+}
+
+/* Reduced motion , kill non-essential transitions/animations. */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* Forced-colors (Windows High Contrast) , keep critical borders visible. */
+@media (forced-colors: active) {
+	.ondm-card,
+	.wp-block-button__link {
+		border-color: CanvasText !important;
+	}
+}
+
+/* ---------- Card height equalising ---------- */
+/* When multiple .ondm-card live in adjacent columns, make them
+ * stretch to the tallest one's height + push the button to the bottom. */
+.wp-block-columns:has(.ondm-card) > .wp-block-column {
+	display: flex;
+	flex-direction: column;
+}
+.wp-block-columns:has(.ondm-card) > .wp-block-column > .ondm-card {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+}
+.ondm-card .wp-block-buttons {
+	margin-top: auto;
+}
+
+/* ---------- Footer link hover ---------- */
+footer.wp-block-group a {
+	transition: opacity 0.15s ease;
+}
+footer.wp-block-group a:hover {
+	opacity: 0.8;
+}
+
+/* ---------- Mobile nav z-index + body lock ---------- */
+.wp-block-navigation__responsive-container.is-menu-open {
+	z-index: 99998;
+}
+body:has(.wp-block-navigation__responsive-container.is-menu-open) {
+	overflow: hidden;
+}
+
+/* Hide mobile-menu close button on desktop. */
+@media (min-width: 1025px) {
+	.wp-block-navigation__responsive-container-close,
+	.wp-block-navigation__responsive-container-open {
+		display: none !important;
+	}
+}
+
+/* ---------- Mobile spacing tweaks ---------- */
+@media (max-width: 768px) {
+	.ondm-main .wp-block-group {
+		padding-left: 1rem !important;
+		padding-right: 1rem !important;
+	}
+	.wp-block-columns {
+		gap: 1rem !important;
+	}
+}
+
+/* ---------- Print ---------- */
+@media print {
+	header.wp-block-group,
+	footer.wp-block-group,
+	.wp-block-buttons,
+	.skip-link { display: none !important; }
+	body { color: #000; background: #fff; }
+}
