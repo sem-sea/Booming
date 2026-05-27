@@ -5,7 +5,7 @@
  * One-off credit-pack catalog + purchase flow. Top-up credits never
  * expire on the active license and are consumed AFTER the monthly
  * included credits. The catalog is defined here in one place so it
- * stays in lock-step with the pricing page on citeleap.boomingventure.com.
+ * stays in lock-step with the pricing page on citeleap.com.
  *
  * Freemius integration: when the SDK is loaded, top-ups are sold as
  * Freemius "lifetime" addons. The webhook listeners below grant

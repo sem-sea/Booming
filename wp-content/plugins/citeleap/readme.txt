@@ -1,14 +1,14 @@
-=== CiteLeap ===
+=== CiteLeap , AI Blog Writer & GEO/AEO Content Engine for WordPress (Claude, OpenAI, Gemini) ===
 Contributors: boomingventure
-Tags: ai, content, claude, openai, gemini, scheduled posts, geo, aeo
+Tags: ai blog writer, ai content, geo, aeo, generative engine optimization, answer engine optimization, claude, openai, gpt, gemini, multi-llm, multilingual, hreflang, schema, json-ld, indexnow, byok, auto-publish, scheduled posts, refresh content, content marketing, wordpress ai, ai seo, faq schema, citations, web research
 Requires at least: 6.6
 Tested up to: 6.8
 Requires PHP: 8.0
-Stable tag: 2.10.0
+Stable tag: 2.10.1
 License: GPL-2.0-or-later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-AI-powered blog content engine. Reasoning model ideates, writing model drafts, WP-Cron publishes on schedule. Bring your own keys (Claude, OpenAI, Gemini). Output is GEO/AEO compliant (May 2026 Bible).
+End-to-end AI blog publishing for WordPress. Multi-LLM router (Claude, OpenAI, Gemini, bring your own keys) ideates topics, researches with real online citations, drafts GEO + AEO compliant long-form posts that earn citations on ChatGPT / Perplexity / Google AI Overviews / Claude / Copilot, picks a Featured image, ships JSON-LD schema + Open Graph + IndexNow on publish, supports 7 languages with hreflang, schedules + auto-publishes, refreshes existing posts. May 2026 Bible defaults: question H2s, 40-60 word answer capsules, 3+ statistics with named sources in the first 30% of body, FAQ schema, voice-match. Editors can run it without administrator access.
 
 == Description ==
 
@@ -68,6 +68,17 @@ The default master prompt is English. Override it with your target language and 
 CiteLeap writes content shaped for FAQPage / HowTo / Article schema auto-detection. Pair with any standards-compliant SEO plugin (Yoast, Rank Math, our own SEO Boost) to inject the JSON-LD.
 
 == Changelog ==
+
+= 2.10.1 =
+* CHANGE: re-brand for the WP.org plugin directory + citeleap.com landing page.
+  - Plugin Name expanded to "CiteLeap , AI Blog Writer & GEO/AEO Content Engine for WordPress (Claude, OpenAI, Gemini)" so the plugin-directory listing surfaces every primary keyword (AI blog writer, GEO, AEO, Claude, OpenAI, Gemini, WordPress) on its own line.
+  - readme.txt title rewritten to the same string for the WP.org listing page H1.
+  - Tags list rewritten from 8 narrow tags to a 24-tag SEO/GEO/AEO bundle covering ai blog writer, generative engine optimization, answer engine optimization, multi-llm, multilingual, hreflang, schema, json-ld, indexnow, byok, auto-publish, refresh content, ai seo, faq schema, citations, web research, etc.
+  - Description first sentence rewritten to lead with the keyword phrase the operator searches for ("End-to-end AI blog publishing for WordPress"), pack the long-tail (GEO + AEO + JSON-LD + IndexNow + 7 languages + hreflang + Editors-can-run-it), and call out the 2026 Bible compliance default that differentiates from Jasper / Copy.ai / Surfer.
+  - Plugin URI flipped to https://citeleap.com (was boomingventure.com/citeleap).
+  - DPA + Privacy Policy URLs flipped to https://citeleap.com/dpa + /privacy (was the boomingventure subdomain). Surfaced on the License & Credits tab.
+  - Top-up pricing-page comment + privacy disclosure all now point at citeleap.com.
+* CHANGE: bumped Version + CITELEAP_VERSION + readme Stable tag to 2.10.1.
 
 = 2.10.0 =
 * NEW: GDPR + privacy compliance layer (includes/privacy.php). Single source of truth for what CiteLeap stores, what it sends to whom, and how the operator exercises Article 15 + 17 rights.

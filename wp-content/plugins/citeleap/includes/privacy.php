@@ -34,8 +34,8 @@ defined( 'ABSPATH' ) || exit;
 
 class CiteLeap_Privacy {
 
-	const DPA_URL = 'https://citeleap.boomingventure.com/dpa';
-	const POLICY_URL = 'https://citeleap.boomingventure.com/privacy';
+	const DPA_URL = 'https://citeleap.com/dpa';
+	const POLICY_URL = 'https://citeleap.com/privacy';
 	const DISCLOSURE_DISMISSED_META = 'citeleap_disclosure_dismissed';
 
 	public static function init(): void {

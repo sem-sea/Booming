@@ -1,9 +1,9 @@
 <?php
 /**
- * Plugin Name:       CiteLeap
- * Plugin URI:        https://boomingventure.com/citeleap
- * Description:       AI-powered blog content engine v2.0. Multi-LLM router (Claude / OpenAI / Gemini, BYOK) ideates, researches with real web citations, drafts long-form GEO/AEO posts that link to sources AND to your own existing posts, picks a Featured image from your Media Library pool, ships schema + Open Graph + IndexNow on publish, supports multilingual output with hreflang. Refresh existing posts. Pin publish dates. Pause / resume / retry per row. Works on any active theme.
- * Version:           2.10.0
+ * Plugin Name:       CiteLeap , AI Blog Writer & GEO/AEO Content Engine for WordPress (Claude, OpenAI, Gemini)
+ * Plugin URI:        https://citeleap.com
+ * Description:       End-to-end AI blog publishing for WordPress. Multi-LLM router (Claude / OpenAI / Gemini, bring your own keys) ideates topics, researches with real online citations, drafts GEO + AEO compliant long-form posts, picks a Featured image, ships JSON-LD schema + Open Graph + IndexNow on publish, supports 7 languages with hreflang, schedules + auto-publishes, refreshes existing posts. Works on any active theme. Editors can run it without administrator access. GEO/AEO May 2026 Bible defaults: question H2s, 40-60 word answer capsules, 3+ stats with named sources in the first 30% of body, FAQ schema, voice-match.
+ * Version:           2.10.1
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Author:            CiteLeap (by Booming Venture)
@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const CITELEAP_VERSION         = '2.10.0';
+const CITELEAP_VERSION         = '2.10.1';
 const CITELEAP_DEFAULT_TZ      = 'Europe/Amsterdam';
 const CITELEAP_META_PENDING    = '_citeleap_pending_refresh';
 const CITELEAP_OPTION_API_KEYS = 'citeleap_api_keys';
