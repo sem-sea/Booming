@@ -136,8 +136,530 @@ reading before designing the master prompt:
   prefers-reduced-motion.
 - WP's `.screen-reader-text` utility convention.
 
-**Output of Day 0:** a one-page "what I will build, in what order, on
-top of which APIs" doc. Show it to the operator before writing line 1.
+### 1.6 WordPress 2026 best-practices cheatsheet (the guru section)
+
+The current state of WordPress plugin development as of May 2026.
+Internalise this BEFORE writing line 1. Every rule in this section
+is enforced in the live CiteLeap codebase , re-applying them on
+rebuild keeps the plugin idiomatic, performant, secure, and
+forwards-compatible with WP 6.6+.
+
+#### 1.6.1 Plugin file structure & hook timing
+
+```php
+// citeleap.php , the bootstrap file. Order matters.
+
+// 1. Plugin header (parsed by WordPress at activation).
+// 2. ABSPATH guard:
+defined( 'ABSPATH' ) || exit;
+
+// 3. Constants. Use const for compile-time, define() only when value
+//    depends on a function call.
+const CITELEAP_VERSION = '2.10.1';
+define( 'CITELEAP_DIR', plugin_dir_path( __FILE__ ) );
+
+// 4. require_once each include. Order: dependencies first
+//    (crypto, caps, license, plan, credits) , then domain modules
+//    (llm, research, generator, refresh) , then UI (settings).
+
+// 5. Activation, deactivation, uninstall hooks REGISTERED AT TOP LEVEL,
+//    not inside an init callback. WordPress reads them at file-load.
+register_activation_hook( __FILE__, 'citeleap_on_activation' );
+register_deactivation_hook( __FILE__, 'citeleap_on_deactivation' );
+// uninstall.php is preferred over register_uninstall_hook() because
+// WordPress runs uninstall.php in a clean process; the hook captures
+// a closure to disk which can break if the plugin file moves.
+
+// 6. Action hooks LATEST possible. Most plugin code waits for 'init':
+add_action( 'init', function () {
+    load_plugin_textdomain( 'citeleap', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+} );
+```
+
+**Hook timing reference** (order they fire):
+
+```
+muplugins_loaded    , must-use plugins
+plugins_loaded      , all plugins available. EARLIEST safe to wire
+                      cross-plugin integrations.
+sanitize_comment_cookies
+setup_theme         , theme PHP loaded
+load_textdomain     , i18n ready
+after_setup_theme   , theme support flags. SAFE to add image_size etc.
+auth_cookie_*
+set_current_user
+init                , post types + taxonomies. MOST plugin init code.
+wp_loaded           , request fully loaded
+parse_request       , URL rewrite resolved
+parse_query
+pre_get_posts       , last chance to modify WP_Query before SQL
+the_posts
+template_redirect   , can redirect, exit, or queue assets
+wp_enqueue_scripts  , front-end assets
+admin_init          , admin-only init. Settings API registration here.
+admin_menu          , add_menu_page / add_submenu_page.
+admin_enqueue_scripts , admin assets. Filter on $hook to scope.
+admin_notices       , output notices.
+shutdown            , cleanup, log flush.
+```
+
+#### 1.6.2 Security: the non-negotiables
+
+Every admin-post handler MUST:
+
+```php
+add_action( 'admin_post_citeleap_save_foo', function () {
+    // 1. Capability check (NOT just is_admin()).
+    CiteLeap_Caps::guard_manage();              // or guard_use()
+
+    // 2. Nonce check. Use the action-specific nonce, NOT a global.
+    check_admin_referer( CITELEAP_NONCE );      // or check_ajax_referer()
+
+    // 3. Sanitise EVERY $_POST / $_GET input. Pick the right function:
+    $name   = sanitize_text_field( wp_unslash( $_POST['name'] ?? '' ) );
+    $email  = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) );
+    $slug   = sanitize_key( $_POST['slug'] ?? '' );
+    $url    = esc_url_raw( wp_unslash( $_POST['url'] ?? '' ) );
+    $html   = wp_kses_post( wp_unslash( $_POST['body'] ?? '' ) );
+    $int    = absint( $_POST['count'] ?? 0 );
+    $arr    = array_map( 'sanitize_text_field', (array) ( $_POST['items'] ?? [] ) );
+
+    // 4. Validate logically. Sanitise is not validate.
+    if ( ! is_email( $email ) ) wp_die( 'Bad email', 400 );
+
+    // 5. Process.
+
+    // 6. Redirect AWAY (PRG pattern). Never echo from a form-post.
+    wp_safe_redirect( admin_url( 'admin.php?page=citeleap&tab=settings&citeleap_msg=saved' ) );
+    exit;
+} );
+```
+
+Every output to the browser MUST escape:
+
+```php
+echo esc_html( $text );           // text inside HTML body
+echo esc_attr( $value );          // inside an HTML attribute
+echo esc_url( $url );             // href, src
+echo wp_kses_post( $rich_html );  // a post body (allows the usual tags)
+echo wp_json_encode( $data );     // JSON. NEVER json_encode without wp_
+echo esc_js( $for_inline_js );    // inside a <script> string literal
+```
+
+Translation-ready string with escape in one call:
+
+```php
+echo esc_html__( 'Save', 'citeleap' );
+echo esc_attr__( 'Click to save', 'citeleap' );
+esc_html_e( 'Save', 'citeleap' );   // shortcut that echoes
+```
+
+**Never** use `$_REQUEST`. Use `$_POST` or `$_GET` explicitly so the
+HTTP method is intentional.
+
+#### 1.6.3 Storage: wp_options vs custom tables vs post meta
+
+| Scale | Use |
+|---|---|
+| ≤100 small values, read often | `wp_options` with `autoload=yes` (default) |
+| Larger blobs, read rarely | `wp_options` with `autoload=no` (CiteLeap does this for ledger, log, queue, usage) |
+| Per-post data | post meta (`add_post_meta` / `update_post_meta` / `get_post_meta`) |
+| Per-user data | user meta (`update_user_meta`) |
+| Time-limited cache | transients (`set_transient` / `get_transient`) , uses object cache when available |
+| >1000 rows, queryable, indexed | custom table via `$wpdb`. Rare for plugins; needed for things like an event log at high volume |
+
+**`autoload=no` is mandatory** for any option larger than ~10KB or
+written more often than read , otherwise it ships in EVERY request's
+options bundle. CiteLeap uses `autoload=no` on:
+
+- `citeleap_credits` (written on every draft)
+- `citeleap_queue` (written on every action)
+- `citeleap_log` (written on every operation)
+- `citeleap_token_usage` (written on every LLM call)
+
+```php
+update_option( 'citeleap_log', $log, false );   // ← the false is autoload=no
+```
+
+#### 1.6.4 Object cache + transients
+
+```php
+// Transients = key+TTL cache. Uses object cache if active (Redis,
+// Memcached), falls back to options table.
+set_transient( 'citeleap_pricing_check', $data, HOUR_IN_SECONDS );
+$cached = get_transient( 'citeleap_pricing_check' );
+if ( false === $cached ) {
+    $cached = expensive_compute();
+    set_transient( 'citeleap_pricing_check', $cached, HOUR_IN_SECONDS );
+}
+
+// Object cache directly when you don't need persistence across
+// requests (one-request memoisation):
+$cache = wp_cache_get( $key, 'citeleap' );
+if ( false === $cache ) {
+    $cache = build();
+    wp_cache_set( $key, $cache, 'citeleap', 300 );
+}
+```
+
+CiteLeap uses transients for the scheduler lock (5-min expiry , the
+lock auto-releases if the cron worker crashes).
+
+#### 1.6.5 WP-Cron limitations + when to use Action Scheduler
+
+WP-Cron fires only when someone hits the site. Low-traffic sites
+get cron ticks late or never. Two ways out:
+
+1. **Real cron** , `define( 'DISABLE_WP_CRON', true );` in wp-config
+   + a system cron hitting `wp-cron.php` every 5 minutes.
+2. **Action Scheduler** (the Automattic library that powers WooCommerce
+   tasks) , persistent queue, retries, better observability. Switch
+   to it when:
+   - You schedule >50 events / hour.
+   - You need retry-with-backoff at the framework level.
+   - You need a UI to see the queue (WooCommerce ships one).
+
+CiteLeap currently uses WP-Cron because the scheduler tick is
+hourly and 1 LLM call is fine. Migrate to Action Scheduler if:
+
+- The cadence drops below 1 hour.
+- Bulk-refresh of 100+ posts at a time becomes a feature.
+
+Always wrap cron callbacks in a transient lock so a slow tick can't
+double-fire when the next tick starts before the previous finished.
+
+#### 1.6.6 REST API (when needed, not by default)
+
+```php
+add_action( 'rest_api_init', function () {
+    register_rest_route( 'citeleap/v1', '/credits', [
+        'methods'             => 'GET',
+        'callback'            => 'citeleap_rest_credits',
+        'permission_callback' => function () {
+            return current_user_can( CiteLeap_Caps::USE_CAP );
+        },
+        'args' => [
+            'tier' => [
+                'type'              => 'string',
+                'enum'              => [ 'free', 'solo', 'pro', 'agency', 'enterprise' ],
+                'sanitize_callback' => 'sanitize_key',
+            ],
+        ],
+    ] );
+} );
+```
+
+`permission_callback` is REQUIRED in WP 5.5+ , registering a route
+without it ships a warning. Use `__return_true` only when truly public.
+
+CiteLeap intentionally does NOT expose a REST API today , the admin
+is the only UI. If you add one in a future sprint, use the pattern
+above, schema everything, version your endpoints (`/v1/...`).
+
+#### 1.6.7 Block editor (Gutenberg) integration
+
+If you need to expose CiteLeap data inside the block editor (e.g.
+a "Suggested topics" sidebar):
+
+```php
+// Register a block.json-defined block:
+register_block_type( __DIR__ . '/blocks/topic-picker' );
+```
+
+`blocks/topic-picker/block.json`:
+
+```json
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "citeleap/topic-picker",
+    "title": "CiteLeap Topic Picker",
+    "category": "widgets",
+    "editorScript": "file:./index.js",
+    "render": "file:./render.php"
+}
+```
+
+PHP server-side render (no JS dependency at runtime):
+
+```php
+// blocks/topic-picker/render.php
+echo '<div class="cl-topic-picker">' . esc_html( $attributes['title'] ?? '' ) . '</div>';
+```
+
+CiteLeap does NOT currently ship a block , the planner UI is in
+wp-admin. If you add one, follow this pattern.
+
+#### 1.6.8 Full-Site Editing (FSE) + block themes compatibility
+
+In 2026, ~70% of new WordPress sites run block themes. Code must
+work on both classic (Astra, GeneratePress, OceanWP) and block
+(Twenty Twenty-Six, Frost) themes.
+
+- Read `theme.json` via `wp_get_global_settings()` for fonts, colors,
+  contentSize (CiteLeap does this in `layout.php`).
+- Read registered patterns via `WP_Block_Patterns_Registry`.
+- Front-end injection (hero, card) must work whether the theme
+  renders `core/post-featured-image` block OR calls the classic
+  `the_post_thumbnail()`. CiteLeap detects both via the
+  `render_block_core/post-featured-image` and `post_thumbnail_html`
+  hooks (see `images.php`).
+- Never assume `single.php` exists. Block themes use templates from
+  `theme.json` , there's no template file to override.
+
+#### 1.6.9 Internationalisation (i18n)
+
+```php
+// Text domain MUST match the plugin slug.
+load_plugin_textdomain( 'citeleap', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
+
+// Always:
+__( 'Save', 'citeleap' );                              // returns string
+_e( 'Save', 'citeleap' );                              // echoes
+esc_html__( 'Save', 'citeleap' );                      // escape + return
+esc_html_e( 'Save', 'citeleap' );                      // escape + echo
+esc_attr__( 'Click to save', 'citeleap' );             // escape attr + return
+_n( '1 credit', '%d credits', $n, 'citeleap' );        // pluralise
+_x( 'Save', 'verb', 'citeleap' );                      // context disambiguator
+sprintf( __( '%1$d of %2$d used', 'citeleap' ), $a, $b );  // numbered placeholders, NEVER %d %d
+```
+
+Generate the .pot with WP-CLI:
+```bash
+wp i18n make-pot . languages/citeleap.pot --domain=citeleap
+```
+
+#### 1.6.10 PHP 8.0+ features safely usable
+
+CiteLeap targets PHP 8.0+ (declared in plugin header). Allowed:
+
+- Typed return types: `function plan_slug(): string { ... }`
+- Nullable types: `?string`, `?int`
+- Union types: `string|int`
+- Match expression: `match ( $kind ) { 'a' => ..., default => ... };`
+- Named arguments: `chat( role: 'writing', system: $s, user: $u );`
+- Constructor property promotion (8.0)
+- Readonly properties (8.1) , use sparingly, breaks ORM-style code
+- Enums (8.1) , great for status fields, but harder to extend by
+  filters. CiteLeap uses string constants instead for filter-friendliness.
+- First-class callable syntax: `[ CiteLeap_Plan::class, 'has' ](...)` (8.1+)
+- `never` return type for `wp_die` wrappers (8.1+).
+
+Avoid: features that require PHP 8.2+ until the `Requires PHP:` header
+is bumped (currently 8.0 because that's WP's floor in May 2026).
+
+#### 1.6.11 HTTP requests , always wp_remote_*, never curl
+
+```php
+$res = wp_remote_post( 'https://api.anthropic.com/v1/messages', [
+    'timeout' => 60,
+    'headers' => [
+        'x-api-key'         => $key,
+        'anthropic-version' => '2023-06-01',
+        'content-type'      => 'application/json',
+    ],
+    'body' => wp_json_encode( $payload ),
+] );
+
+if ( is_wp_error( $res ) ) {
+    return [ 'ok' => false, 'error' => $res->get_error_message() ];
+}
+
+$code = (int) wp_remote_retrieve_response_code( $res );
+$body = (string) wp_remote_retrieve_body( $res );
+
+if ( $code >= 400 ) {
+    return [ 'ok' => false, 'error' => "HTTP $code: " . mb_substr( $body, 0, 500 ) ];
+}
+
+$data = json_decode( $body, true );
+```
+
+- Never use bare `curl_*` , some hosts block it, breaks
+  Site Health checks, no `is_wp_error` integration.
+- Always set `timeout` , default is 5s which kills LLM calls.
+- Always check `is_wp_error()` BEFORE reading the response.
+- Always validate `response_code` , 200 ≠ success for every API.
+
+#### 1.6.12 Asset enqueueing , conditional + versioned
+
+```php
+add_action( 'admin_enqueue_scripts', function ( $hook ) {
+    // Scope to plugin screens only. Match against $hook (current_screen).
+    if ( false === strpos( (string) $hook, 'citeleap' ) ) return;
+
+    $css_path = CITELEAP_DIR . 'assets/admin.css';
+    $css_url  = CITELEAP_URL . 'assets/admin.css';
+    $version  = file_exists( $css_path ) ? (string) filemtime( $css_path ) : CITELEAP_VERSION;
+
+    wp_enqueue_style( 'citeleap-admin', $css_url, [], $version );
+    wp_enqueue_script( 'citeleap-admin', CITELEAP_URL . 'assets/admin.js', [], $version, true );
+} );
+```
+
+- `filemtime()` for the version is the simplest cache-bust that
+  works in dev AND production.
+- Pass `true` as the 5th arg to `wp_enqueue_script` so the script
+  loads in the footer (faster admin render).
+- Never inline `<style>` or `<script>` directly in PHP output for
+  more than 5 lines. Enqueue.
+
+#### 1.6.13 Deprecated / banned WP APIs in 2026
+
+Do not use these. They still work, but they're trapped for retirement
+and signal "old code" to reviewers:
+
+| Deprecated | Use instead |
+|---|---|
+| `wp_specialchars()` | `esc_html()` |
+| `attribute_escape()` | `esc_attr()` |
+| `the_meta()` | direct `get_post_meta()` calls |
+| `like_escape()` | `$wpdb->esc_like()` |
+| `get_currentuserinfo()` | `wp_get_current_user()` |
+| `query_posts()` | `WP_Query` |
+| `screen_icon()` | none (removed) |
+| `add_object_page()` | `add_menu_page()` |
+| `add_utility_page()` | `add_menu_page()` |
+| direct `$wpdb->prepare` with `%s` already quoted | use placeholders, never quote them |
+| `wp_get_http()` | `wp_remote_get` |
+| `is_user_logged_in()` checked at file-load | check inside the hook callback |
+| `wp_handle_upload()` outside the admin scope | use `media_handle_sideload()` for URL ingestion |
+
+#### 1.6.14 Plugin update channel
+
+WP.org plugins update via the plugin directory automatically. Paid
+plugins (CiteLeap) MUST set:
+
+```
+Update URI: false
+```
+
+in the plugin header. Otherwise WP.org may serve a different plugin
+of the same slug to your customers (plugin-confusion attack).
+
+Then ship updates via:
+- **Freemius** (CiteLeap's choice) , handles the update server.
+- **Easy Digital Downloads + Software Licensing** , self-hosted.
+- **plugin-update-checker** (yahnis-elias) , library you bolt onto
+  Stripe-direct stacks.
+
+#### 1.6.15 Multisite compatibility
+
+If your plugin is sold for use on multisite:
+
+```php
+// Network-activated plugin: settings live network-wide.
+if ( is_multisite() && is_plugin_active_for_network( plugin_basename( __FILE__ ) ) ) {
+    // Use site_option instead of option.
+    get_site_option( 'citeleap_settings', [] );
+} else {
+    get_option( 'citeleap_settings', [] );
+}
+
+// Iterate sites:
+foreach ( get_sites( [ 'fields' => 'ids', 'number' => 0 ] ) as $site_id ) {
+    switch_to_blog( $site_id );
+    // do something on this site
+    restore_current_blog();
+}
+```
+
+CiteLeap is single-site today. Tracking issue: full multisite support
+requires (a) network-admin settings page, (b) per-site or network-wide
+license activation count (Freemius supports both), (c) shared vs per-
+site credit ledger.
+
+#### 1.6.16 Logging + WP_DEBUG
+
+```php
+// Conditional debug logging:
+if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
+    error_log( 'citeleap: ' . wp_json_encode( $data ) );
+}
+```
+
+CiteLeap also writes a structured log to `wp_options['citeleap_log']`
+(last 500 entries) so the operator sees it in the Log tab WITHOUT
+needing FTP / SSH access to `wp-content/debug.log`. Auto-redact API
+keys before storing.
+
+#### 1.6.17 WP.org submission rules (if you go that route)
+
+CiteLeap is a paid plugin, so it does NOT go to WP.org. But IF you
+want a free starter version on WP.org, the rules are:
+
+- 100% GPLv2-compatible code.
+- No phone-home / telemetry without explicit user consent screen.
+- No external services (LLM calls) without a settings screen that
+  discloses them + a way to disable. CiteLeap satisfies this because
+  the operator pastes the keys themselves , no LLM call until they do.
+- No closed-source / minified JS without unminified source in the zip.
+- No bundling of third-party libraries that are not GPL-compatible.
+- Plugin name in `readme.txt` title may NOT contain trademark abuse
+  ("AI for WordPress" is fine; "WooCommerce AI" is not unless you
+  own that mark).
+- Tags in `readme.txt` , max 12 indexed. Pack your highest-value
+  keywords up front. (CiteLeap intentionally ships 24 tags , WP.org
+  uses the first 12 for the directory search index, and the rest are
+  ignored but harmless. The full list ranks on Google because the
+  `readme.txt` is rendered as HTML on the WP.org listing page.)
+- Plugin slug = directory name = main file basename = text-domain.
+
+#### 1.6.18 Compatibility matrix
+
+CiteLeap must work on:
+
+- WordPress 6.6, 6.7, 6.8 (currently tested up to).
+- PHP 8.0, 8.1, 8.2, 8.3, 8.4.
+- Classic themes (Twenty Twenty-One and older) AND block themes
+  (Twenty Twenty-Four+).
+- Page builders (Elementor, Beaver Builder, Divi) , our front-end
+  CSS scopes to `body.single-post` so page-builder layouts on home /
+  archive pages are untouched.
+- Other SEO plugins (Yoast, Rank Math, AIOSEO, SEOPress, The SEO
+  Framework) , we stand down per-tag when detected.
+- Multilingual plugins (Polylang, WPML, TranslatePress) , we read
+  their active-language signal and emit hreflang accordingly.
+- Caching plugins (WP Rocket, W3 Total Cache, LiteSpeed Cache) ,
+  invalidate the post cache on publish via the `clean_post_cache`
+  action; we don't write our own cache layer.
+- Security plugins (Wordfence, Sucuri) , no behaviour the firewall
+  rules flag as suspicious (no eval, no base64-decoded PHP, no
+  obfuscated strings).
+
+#### 1.6.19 Performance budget
+
+Targets per page render in wp-admin:
+
+- Plugin's PHP execution: <50ms additional per page.
+- Plugin's CSS: <20KB minified.
+- Plugin's JS: <30KB minified, footer-loaded.
+- LLM call duration is its own thing , don't block page render
+  on it. Admin-post handlers redirect; the operator sees the
+  progression overlay while the LLM runs.
+
+Profile with Query Monitor or New Relic before claiming any of
+these targets are met.
+
+#### 1.6.20 The 10 commandments of WordPress plugin code
+
+1. Prefix EVERYTHING. Functions: `citeleap_`. Classes: `CiteLeap_`.
+   Options: `citeleap_`. Hooks: `citeleap_`. Constants: `CITELEAP_`.
+2. ABSPATH guard at the top of every PHP file.
+3. Escape on output, sanitise on input, validate on intent.
+4. Nonce + capability check on every admin-post + AJAX handler.
+5. `wp_remote_*` not curl. Always check `is_wp_error`.
+6. `wp_enqueue_*` not inline `<style>` / `<script>`.
+7. Translations: every user-facing string in `__()` family. Text
+   domain matches plugin slug.
+8. `autoload=no` on any option >10KB or write-heavy.
+9. WP-CLI commands for any operation a developer might script.
+10. `Update URI: false` on paid plugins. No exceptions.
+
+### 1.7 Output of Day 0
+
+A one-page "what I will build, in what order, on top of which APIs"
+doc. Show it to the operator before writing line 1.
 
 ---
 
@@ -818,7 +1340,9 @@ depend on earlier ones.
 
 ## 8. Quality gates (every release)
 
-A release is not shippable until ALL of these pass.
+A release is not shippable until ALL of these pass. Each gate
+references the relevant WordPress 2026 best-practice rule from
+section 1.6 above.
 
 ### 8.1 PHP
 
@@ -911,7 +1435,9 @@ Reverse trial: 14 days full Pro, card required at credit 5 used. Day
 
 ## 10. Common pitfalls & how to avoid them
 
-These were learned the expensive way. Don't relearn them.
+These were learned the expensive way. Don't relearn them. Most of
+these are direct consequences of the WordPress 2026 best-practice
+rules in section 1.6 , re-read it if any of these surprise you.
 
 1. **Don't double-render the Featured image.** Themes already render
    `core/post-featured-image`. CiteLeap must hook `render_block_core/
