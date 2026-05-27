@@ -1,0 +1,25 @@
+# Python build caches
+__pycache__/
+*.pyc
+*.pyo
+
+# PHP dev tooling , installed via composer install, never shipped
+vendor/
+composer.lock
+.phpunit.cache/
+.phpunit.result.cache
+
+# Node / front-end build caches
+node_modules/
+.next/
+dist/
+build/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp

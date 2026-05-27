@@ -1,0 +1,56 @@
+
+# Allow all AI models and search engines
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: *
+Allow: /
+Crawl-delay: 2
+
+# High priority pages
+Allow: /blog/
+Allow: /funnel-calculator
+Allow: /roi-forecaster
+Allow: /services
+Allow: /about
+
+# Sitemap location
+Sitemap: https://boomingventure.com/sitemap.xml
+
+# Specific crawl instructions for marketing content
+User-agent: *
+Allow: /blog/roi-optimization-netherlands-sme
+Allow: /blog/conversion-funnel-rotterdam-case-studies
+Allow: /blog/ai-marketing-automation-dutch-businesses
+Allow: /blog/performance-marketing-trends-2024-netherlands
+Allow: /blog/lead-generation-strategies-rotterdam
+Allow: /blog/conversion-rate-optimization-masterclass
