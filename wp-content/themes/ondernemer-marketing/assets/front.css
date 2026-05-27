@@ -84,6 +84,13 @@ summary:focus-visible,
 	margin-top: auto;
 }
 
+/* Hide the site title text when the logo image is present.
+ * Both render in the header; we want the logo to be the brand mark. */
+.wp-block-site-logo + .ondm-site-title-fallback,
+.wp-block-site-logo + .wp-block-site-title {
+	display: none;
+}
+
 /* ---------- Footer link hover ---------- */
 footer.wp-block-group a {
 	transition: opacity 0.15s ease;
@@ -118,6 +125,113 @@ body:has(.wp-block-navigation__responsive-container.is-menu-open) {
 		gap: 1rem !important;
 	}
 }
+
+/* ---------- Tool widgets (custom blocks) ---------- */
+.ondm-tool {
+	background: #fff;
+	border: 1px solid #e2e8f0;
+	border-radius: 0.75rem;
+	padding: 2rem;
+	margin: 1.5rem 0;
+	box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+.ondm-tool__inner { max-width: 720px; margin: 0 auto; }
+.ondm-tool__title {
+	font-size: clamp(1.5rem, 2.5vw, 2rem);
+	font-weight: 700;
+	margin: 0 0 0.5rem;
+	color: #0f172a;
+}
+.ondm-tool__lead { color: #475569; font-size: 1rem; margin: 0 0 1.5rem; }
+
+.ondm-tool__grid {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 220px, 1fr ) );
+	gap: 1rem;
+	margin: 0 0 1.5rem;
+}
+.ondm-tool__field { display: flex; flex-direction: column; gap: 0.35rem; }
+.ondm-tool__label { font-size: 0.875rem; font-weight: 600; color: #334155; }
+.ondm-tool__field input {
+	padding: 0.65rem 0.9rem;
+	border: 1px solid #cbd5e1;
+	border-radius: 0.5rem;
+	font: inherit;
+	font-size: 1rem;
+}
+.ondm-tool__field input:focus-visible {
+	outline: 2px solid #1d6bd1;
+	outline-offset: 2px;
+	border-color: #1d6bd1;
+}
+
+.ondm-tool__results {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 160px, 1fr ) );
+	gap: 0.75rem;
+	margin: 0 0 1.5rem;
+	background: #f0f9ff;
+	padding: 1.25rem;
+	border-radius: 0.5rem;
+}
+.ondm-tool__result { display: flex; flex-direction: column; gap: 0.25rem; }
+.ondm-tool__result-label { font-size: 0.8125rem; color: #64748b; font-weight: 500; }
+.ondm-tool__result-value { font-size: 1.5rem; font-weight: 700; color: #0f172a; }
+.ondm-tool__result--highlight .ondm-tool__result-value { color: #1d6bd1; font-size: 1.75rem; }
+
+.ondm-tool__whatif {
+	background: #fff7ed;
+	border-left: 4px solid #f17a3c;
+	padding: 1rem 1.25rem;
+	border-radius: 0.5rem;
+	margin: 0 0 1.5rem;
+}
+.ondm-tool__whatif-label { font-weight: 600; margin: 0; color: #9a3412; }
+.ondm-tool__whatif-value { margin: 0.25rem 0 0; color: #334155; font-size: 0.9375rem; }
+
+.ondm-tool__cta { text-align: center; }
+.ondm-tool__cta-btn {
+	display: inline-block;
+	background: #1d6bd1;
+	color: #fff;
+	padding: 0.85rem 1.75rem;
+	border-radius: 0.5rem;
+	font-weight: 600;
+	text-decoration: none;
+}
+.ondm-tool__cta-btn:hover { background: #155ab0; color: #fff; }
+
+/* Quickscan extras */
+.ondm-quickscan__form { display: flex; flex-direction: column; gap: 1.25rem; }
+.ondm-quickscan__question {
+	border: 1px solid #e2e8f0;
+	border-radius: 0.5rem;
+	padding: 1rem 1.25rem;
+}
+.ondm-quickscan__legend { font-weight: 600; padding: 0 0.5rem; color: #0f172a; }
+.ondm-quickscan__option {
+	display: flex; align-items: center; gap: 0.5rem;
+	padding: 0.5rem 0;
+	cursor: pointer;
+	font-size: 0.9375rem;
+}
+.ondm-quickscan__submit {
+	background: #1d6bd1; color: #fff; border: 0;
+	padding: 0.85rem 1.75rem; border-radius: 0.5rem;
+	font: inherit; font-weight: 600; cursor: pointer;
+	align-self: flex-start;
+}
+.ondm-quickscan__submit:hover { background: #155ab0; }
+.ondm-quickscan__result {
+	margin-top: 2rem;
+	background: #f0f9ff;
+	padding: 2rem;
+	border-radius: 0.75rem;
+	text-align: center;
+}
+.ondm-quickscan__result-title { color: #1d6bd1; margin: 0 0 0.5rem; }
+.ondm-quickscan__result-band { font-size: 1.25rem; font-weight: 600; color: #0f172a; margin: 0.5rem 0; }
+.ondm-quickscan__result-advice { color: #334155; line-height: 1.6; margin: 0 0 1.5rem; }
 
 /* ---------- Print ---------- */
 @media print {

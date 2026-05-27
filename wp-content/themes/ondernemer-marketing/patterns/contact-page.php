@@ -72,13 +72,11 @@ $msg = isset( $_GET['ondm_msg'] ) ? sanitize_key( wp_unslash( (string) $_GET['on
 			<!-- wp:paragraph {"style":{"typography":{"fontSize":"1rem","lineHeight":"1.8"},"spacing":{"margin":{"top":"1rem"}}}} -->
 			<p style="margin-top:1rem;font-size:1rem;line-height:1.8"><strong style="color:#f17a3c">E-mail</strong><br><a href="mailto:info@ondernemermarketing.nl">info@ondernemermarketing.nl</a><br><br><strong style="color:#f17a3c">Telefoon</strong><br><a href="tel:+31613013266">+31 6 1301 3266</a><br><br><strong style="color:#f17a3c">Adres</strong><br>Breedveldsingel 1<br>3055PG Rotterdam<br>Nederland</p>
 			<!-- /wp:paragraph -->
-			<!-- wp:group {"style":{"border":{"radius":"0.75rem"},"spacing":{"padding":"2rem"},"dimensions":{"aspectRatio":"4/3"}},"backgroundColor":"soft","layout":{"type":"constrained"}} -->
-			<div class="wp-block-group has-soft-background-color has-background" style="border-radius:0.75rem;padding:2rem;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;margin-top:1.5rem">
-				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"4rem"}}} -->
-				<p class="has-text-align-center" style="font-size:4rem">&#x1F4AC;</p>
-				<!-- /wp:paragraph -->
-			</div>
-			<!-- /wp:group -->
+			<!-- wp:image {"sizeSlug":"large","style":{"border":{"radius":"0.75rem"}}} -->
+			<figure class="wp-block-image size-large" style="border-radius:0.75rem;overflow:hidden;aspect-ratio:4/3;margin:1.5rem 0 0">
+				<img src="<?php echo esc_url( ONDM_Install::img( 'klaar-start-pack' ) ); ?>" alt="Klaar voor je intake" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;border-radius:0.75rem">
+			</figure>
+			<!-- /wp:image -->
 		</div>
 		<!-- /wp:column -->
 

@@ -25,9 +25,11 @@
 		<div class="wp-block-column">
 			<!-- wp:group {"style":{"border":{"radius":"0.75rem","color":"#e2e8f0","width":"1px"},"spacing":{"padding":"2rem"},"shadow":"0 2px 4px rgba(0,0,0,0.04)"},"backgroundColor":"white","layout":{"type":"flex","orientation":"vertical","verticalAlignment":"top"},"className":"ondm-card"} -->
 			<div class="wp-block-group ondm-card has-white-background-color has-background" style="border-color:#e2e8f0;border-width:1px;border-radius:0.75rem;padding:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.04);height:100%">
-				<!-- wp:paragraph {"style":{"typography":{"fontSize":"2rem"},"color":{"text":"#f17a3c"}}} -->
-				<p style="color:#f17a3c;font-size:2rem">&#x1F4F1;</p>
-				<!-- /wp:paragraph -->
+				<!-- wp:image -->
+				<figure class="wp-block-image" style="margin:-2rem -2rem 1rem;aspect-ratio:16/9;overflow:hidden">
+					<img src="<?php echo esc_url( ONDM_Install::img( 'pak-social-media' ) ); ?>" alt="Social Media Funnel Pack" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">
+				</figure>
+				<!-- /wp:image -->
 				<!-- wp:heading {"level":3,"style":{"typography":{"fontSize":"1.25rem","fontWeight":"700"}}} -->
 				<h3 class="wp-block-heading" style="font-size:1.25rem;font-weight:700">Social Media Funnel Pack</h3>
 				<!-- /wp:heading -->
@@ -53,9 +55,11 @@
 		<div class="wp-block-column">
 			<!-- wp:group {"style":{"border":{"radius":"0.75rem","color":"#e2e8f0","width":"1px"},"spacing":{"padding":"2rem"},"shadow":"0 2px 4px rgba(0,0,0,0.04)"},"backgroundColor":"white","layout":{"type":"flex","orientation":"vertical","verticalAlignment":"top"},"className":"ondm-card"} -->
 			<div class="wp-block-group ondm-card has-white-background-color has-background" style="border-color:#e2e8f0;border-width:1px;border-radius:0.75rem;padding:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.04);height:100%">
-				<!-- wp:paragraph {"style":{"typography":{"fontSize":"2rem"},"color":{"text":"#f17a3c"}}} -->
-				<p style="color:#f17a3c;font-size:2rem">&#x1F4E7;</p>
-				<!-- /wp:paragraph -->
+				<!-- wp:image -->
+				<figure class="wp-block-image" style="margin:-2rem -2rem 1rem;aspect-ratio:16/9;overflow:hidden">
+					<img src="<?php echo esc_url( ONDM_Install::img( 'pak-lead-magnet' ) ); ?>" alt="Lead Magnet Landingspagina" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">
+				</figure>
+				<!-- /wp:image -->
 				<!-- wp:heading {"level":3,"style":{"typography":{"fontSize":"1.25rem","fontWeight":"700"}}} -->
 				<h3 class="wp-block-heading" style="font-size:1.25rem;font-weight:700">Lead Magnet Landingspagina</h3>
 				<!-- /wp:heading -->
@@ -81,9 +85,11 @@
 		<div class="wp-block-column">
 			<!-- wp:group {"style":{"border":{"radius":"0.75rem","color":"#e2e8f0","width":"1px"},"spacing":{"padding":"2rem"},"shadow":"0 2px 4px rgba(0,0,0,0.04)"},"backgroundColor":"white","layout":{"type":"flex","orientation":"vertical","verticalAlignment":"top"},"className":"ondm-card"} -->
 			<div class="wp-block-group ondm-card has-white-background-color has-background" style="border-color:#e2e8f0;border-width:1px;border-radius:0.75rem;padding:2rem;box-shadow:0 2px 4px rgba(0,0,0,0.04);height:100%">
-				<!-- wp:paragraph {"style":{"typography":{"fontSize":"2rem"},"color":{"text":"#f17a3c"}}} -->
-				<p style="color:#f17a3c;font-size:2rem">&#x1F310;</p>
-				<!-- /wp:paragraph -->
+				<!-- wp:image -->
+				<figure class="wp-block-image" style="margin:-2rem -2rem 1rem;aspect-ratio:16/9;overflow:hidden">
+					<img src="<?php echo esc_url( ONDM_Install::img( 'pak-website-light' ) ); ?>" alt="Website Light" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">
+				</figure>
+				<!-- /wp:image -->
 				<!-- wp:heading {"level":3,"style":{"typography":{"fontSize":"1.25rem","fontWeight":"700"}}} -->
 				<h3 class="wp-block-heading" style="font-size:1.25rem;font-weight:700">Website Light</h3>
 				<!-- /wp:heading -->

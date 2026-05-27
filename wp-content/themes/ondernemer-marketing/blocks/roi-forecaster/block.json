@@ -1,0 +1,17 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "ondernemer-marketing/roi-forecaster",
+    "title": "ROI Forecaster",
+    "category": "widgets",
+    "icon": "chart-line",
+    "description": "Voorspel de ROI en payback van een ad-budget.",
+    "textdomain": "ondernemer-marketing",
+    "viewScript": "file:./view.js",
+    "render": "file:./render.php",
+    "supports": {
+        "html": false,
+        "align": [ "wide", "full" ],
+        "anchor": true
+    }
+}

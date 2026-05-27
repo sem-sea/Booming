@@ -27,12 +27,25 @@
 				<!-- wp:paragraph {"textColor":"ink","style":{"typography":{"fontSize":"1rem","lineHeight":"1.6","fontStyle":"italic"}}} -->
 				<p class="has-ink-color has-text-color" style="font-size:1rem;line-height:1.6;font-style:italic">"Dankzij OndernemerMarketing hebben we eindelijk een marketingstrategie die werkt. Geen praat, gewoon resultaat."</p>
 				<!-- /wp:paragraph -->
-				<!-- wp:paragraph {"style":{"typography":{"fontSize":"0.9375rem","fontWeight":"600"},"spacing":{"margin":{"top":"1rem","bottom":"0"}}}} -->
-				<p style="margin-top:1rem;margin-bottom:0;font-size:0.9375rem;font-weight:600">Sarah van der Berg</p>
-				<!-- /wp:paragraph -->
-				<!-- wp:paragraph {"textColor":"muted","style":{"typography":{"fontSize":"0.875rem"},"spacing":{"margin":{"top":"0"}}}} -->
-				<p class="has-muted-color has-text-color" style="margin-top:0;font-size:0.875rem">Founder, Atelier Nora</p>
-				<!-- /wp:paragraph -->
+				<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"},"style":{"spacing":{"margin":{"top":"1rem"},"blockGap":"0.75rem"}}} -->
+				<div class="wp-block-group" style="margin-top:1rem;display:flex;align-items:center;gap:0.75rem">
+					<!-- wp:image -->
+					<figure class="wp-block-image" style="margin:0;width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0">
+						<img src="<?php echo esc_url( ONDM_Install::img( 'testimonial-1' ) ); ?>" alt="Sarah van der Berg" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">
+					</figure>
+					<!-- /wp:image -->
+					<!-- wp:group {"layout":{"type":"constrained"}} -->
+					<div class="wp-block-group">
+						<!-- wp:paragraph {"style":{"typography":{"fontSize":"0.9375rem","fontWeight":"600"},"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
+						<p style="margin:0;font-size:0.9375rem;font-weight:600">Sarah van der Berg</p>
+						<!-- /wp:paragraph -->
+						<!-- wp:paragraph {"textColor":"muted","style":{"typography":{"fontSize":"0.875rem"},"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
+						<p class="has-muted-color has-text-color" style="margin:0;font-size:0.875rem">Founder, Atelier Nora</p>
+						<!-- /wp:paragraph -->
+					</div>
+					<!-- /wp:group -->
+				</div>
+				<!-- /wp:group -->
 			</div>
 			<!-- /wp:group -->
 		</div>
@@ -48,12 +61,25 @@
 				<!-- wp:paragraph {"textColor":"ink","style":{"typography":{"fontSize":"1rem","lineHeight":"1.6","fontStyle":"italic"}}} -->
 				<p class="has-ink-color has-text-color" style="font-size:1rem;line-height:1.6;font-style:italic">"Het was alsof we een marketingteam in dienst hadden, zonder de overhead. Aanrader voor elke ondernemer."</p>
 				<!-- /wp:paragraph -->
-				<!-- wp:paragraph {"style":{"typography":{"fontSize":"0.9375rem","fontWeight":"600"},"spacing":{"margin":{"top":"1rem","bottom":"0"}}}} -->
-				<p style="margin-top:1rem;margin-bottom:0;font-size:0.9375rem;font-weight:600">Lisa Hartmann</p>
-				<!-- /wp:paragraph -->
-				<!-- wp:paragraph {"textColor":"muted","style":{"typography":{"fontSize":"0.875rem"},"spacing":{"margin":{"top":"0"}}}} -->
-				<p class="has-muted-color has-text-color" style="margin-top:0;font-size:0.875rem">Eigenaar, Hartmann Coaching</p>
-				<!-- /wp:paragraph -->
+				<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"},"style":{"spacing":{"margin":{"top":"1rem"},"blockGap":"0.75rem"}}} -->
+				<div class="wp-block-group" style="margin-top:1rem;display:flex;align-items:center;gap:0.75rem">
+					<!-- wp:image -->
+					<figure class="wp-block-image" style="margin:0;width:48px;height:48px;border-radius:50%;overflow:hidden;flex-shrink:0">
+						<img src="<?php echo esc_url( ONDM_Install::img( 'testimonial-2' ) ); ?>" alt="Lisa Hartmann" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">
+					</figure>
+					<!-- /wp:image -->
+					<!-- wp:group {"layout":{"type":"constrained"}} -->
+					<div class="wp-block-group">
+						<!-- wp:paragraph {"style":{"typography":{"fontSize":"0.9375rem","fontWeight":"600"},"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
+						<p style="margin:0;font-size:0.9375rem;font-weight:600">Lisa Hartmann</p>
+						<!-- /wp:paragraph -->
+						<!-- wp:paragraph {"textColor":"muted","style":{"typography":{"fontSize":"0.875rem"},"spacing":{"margin":{"top":"0","bottom":"0"}}}} -->
+						<p class="has-muted-color has-text-color" style="margin:0;font-size:0.875rem">Eigenaar, Hartmann Coaching</p>
+						<!-- /wp:paragraph -->
+					</div>
+					<!-- /wp:group -->
+				</div>
+				<!-- /wp:group -->
 			</div>
 			<!-- /wp:group -->
 		</div>

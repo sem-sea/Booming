@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const ONDM_THEME_VERSION = '1.0.0';
+const ONDM_THEME_VERSION = '1.1.0';
 
 if ( ! defined( 'ONDM_THEME_DIR' ) ) {
 	define( 'ONDM_THEME_DIR', get_stylesheet_directory() );
@@ -65,6 +65,18 @@ add_action( 'init', function () {
 } );
 
 /* ---------------------------------------------------------------------
+ * init , register custom blocks (apiVersion 3) from blocks/.
+ * --------------------------------------------------------------------- */
+add_action( 'init', function () {
+	foreach ( [ 'funnel-calculator', 'roi-forecaster', 'marketing-quickscan' ] as $slug ) {
+		$dir = ONDM_THEME_DIR . '/blocks/' . $slug;
+		if ( file_exists( $dir . '/block.json' ) ) {
+			register_block_type( $dir );
+		}
+	}
+} );
+
+/* ---------------------------------------------------------------------
  * init , register block-pattern categories. Patterns themselves
  * auto-discover from /patterns/*.php.
  * --------------------------------------------------------------------- */
@@ -83,6 +95,12 @@ add_action( 'init', function () {
 		register_block_pattern_category( $slug, [ 'label' => $label ] );
 	}
 } );
+
+/* ---------------------------------------------------------------------
+ * Install hook , side-loads bundled images into the Media Library,
+ * sets the logo + site icon, populates the bundled-image map.
+ * --------------------------------------------------------------------- */
+require_once ONDM_THEME_DIR . '/inc/install.php';
 
 /* ---------------------------------------------------------------------
  * Contact form handler , admin-post.php. Sends a notification email

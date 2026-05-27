@@ -39,13 +39,11 @@
 
 		<!-- wp:column {"verticalAlignment":"center","width":"40%"} -->
 		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:40%">
-			<!-- wp:group {"style":{"border":{"radius":"1rem"},"dimensions":{"aspectRatio":"4/3"},"spacing":{"padding":"3rem"}},"backgroundColor":"white","layout":{"type":"constrained"}} -->
-			<div class="wp-block-group has-white-background-color has-background" style="border-radius:1rem;padding:3rem;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;text-align:center">
-				<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"5rem"}}} -->
-				<p class="has-text-align-center" style="font-size:5rem">&#x1F4C8;</p>
-				<!-- /wp:paragraph -->
-			</div>
-			<!-- /wp:group -->
+			<!-- wp:image {"sizeSlug":"large","style":{"border":{"radius":"1rem"}}} -->
+			<figure class="wp-block-image size-large" style="border-radius:1rem;overflow:hidden;aspect-ratio:4/3;margin:0">
+				<img src="<?php echo esc_url( ONDM_Install::img( 'cta-illustration' ) ); ?>" alt="Tevreden klant met laptop" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;border-radius:1rem">
+			</figure>
+			<!-- /wp:image -->
 		</div>
 		<!-- /wp:column -->
 

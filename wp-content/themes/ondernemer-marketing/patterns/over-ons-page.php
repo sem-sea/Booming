@@ -15,13 +15,11 @@
 	<!-- wp:paragraph {"align":"center","textColor":"primary","style":{"typography":{"fontSize":"1.125rem","fontWeight":"600"},"spacing":{"margin":{"top":"0.5rem","bottom":"2rem"}}}} -->
 	<p class="has-text-align-center has-primary-color has-text-color" style="margin-top:0.5rem;margin-bottom:2rem;font-size:1.125rem;font-weight:600">Wij zijn OndernemerMarketing.</p>
 	<!-- /wp:paragraph -->
-	<!-- wp:group {"style":{"border":{"radius":"1rem"},"dimensions":{"aspectRatio":"16/9"},"spacing":{"padding":"3rem"}},"backgroundColor":"soft","layout":{"type":"constrained"}} -->
-	<div class="wp-block-group has-soft-background-color has-background" style="border-radius:1rem;padding:3rem;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;text-align:center">
-		<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"5rem"}}} -->
-		<p class="has-text-align-center" style="font-size:5rem">&#x1F3E2;</p>
-		<!-- /wp:paragraph -->
-	</div>
-	<!-- /wp:group -->
+	<!-- wp:image {"sizeSlug":"large","style":{"border":{"radius":"1rem"}}} -->
+	<figure class="wp-block-image size-large" style="border-radius:1rem;overflow:hidden;aspect-ratio:16/9;margin:0">
+		<img src="<?php echo esc_url( ONDM_Install::img( 'over-ons-hero' ) ); ?>" alt="Team OndernemerMarketing op kantoor" loading="eager" fetchpriority="high" decoding="async" style="width:100%;height:100%;object-fit:cover;border-radius:1rem">
+	</figure>
+	<!-- /wp:image -->
 </div>
 <!-- /wp:group -->
 
@@ -64,9 +62,11 @@
 
 	<!-- wp:group {"style":{"border":{"radius":"0.75rem","color":"#e2e8f0","width":"1px"},"spacing":{"padding":"2rem"}},"backgroundColor":"white","layout":{"type":"constrained","contentSize":"500px"},"className":"ondm-card"} -->
 	<div class="wp-block-group ondm-card has-white-background-color has-background" style="border-color:#e2e8f0;border-width:1px;border-radius:0.75rem;padding:2rem">
-		<!-- wp:paragraph {"align":"center","style":{"typography":{"fontSize":"4rem"},"spacing":{"margin":{"top":"0","bottom":"0.5rem"}}}} -->
-		<p class="has-text-align-center" style="margin-top:0;margin-bottom:0.5rem;font-size:4rem">&#x1F468;&#x200D;&#x1F4BC;</p>
-		<!-- /wp:paragraph -->
+		<!-- wp:image {"sizeSlug":"medium","align":"center","style":{"border":{"radius":"50%"}}} -->
+		<figure class="wp-block-image aligncenter size-medium" style="margin:0 auto 0.5rem;border-radius:50%;overflow:hidden;width:140px;height:140px">
+			<img src="<?php echo esc_url( ONDM_Install::img( 'cta-illustration' ) ); ?>" alt="Ben Verschuur, Oprichter & Strategie" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover">
+		</figure>
+		<!-- /wp:image -->
 		<!-- wp:heading {"textAlign":"center","level":3,"style":{"typography":{"fontSize":"1.25rem","fontWeight":"700"}}} -->
 		<h3 class="wp-block-heading has-text-align-center" style="font-size:1.25rem;font-weight:700">Ben Verschuur</h3>
 		<!-- /wp:heading -->
