@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-const ONDM_THEME_VERSION = '1.1.0';
+const ONDM_THEME_VERSION = '1.2.0';
 
 if ( ! defined( 'ONDM_THEME_DIR' ) ) {
 	define( 'ONDM_THEME_DIR', get_stylesheet_directory() );
