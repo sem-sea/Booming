@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 
 const BV_INSTALL_FLAG    = 'bv_content_imported';
 /* Bump whenever import/content.json changes. */
-const BV_INSTALL_VERSION = '1.9.1';
+const BV_INSTALL_VERSION = '1.9.2';
 const BV_MEDIA_BATCH     = 6;
 
 add_action( 'after_switch_theme', 'bv_run_install', 20 );
@@ -108,6 +108,7 @@ function bv_run_install(): void {
 	bv_configure_homepage();
 	bv_configure_menus();
 	bv_configure_yoast();
+	bv_set_aside_stale_templates();
 	flush_rewrite_rules( true );
 	bv_flush_all_caches();
 }
@@ -126,6 +127,38 @@ function bv_acquire_lock( string $name, int $stale_after ): bool {
 
 function bv_acquire_install_lock(): bool {
 	return bv_acquire_lock( 'bv_install_lock', 600 );
+}
+
+/**
+ * Site Editor copies of this theme's templates override the theme files.
+ * Copies saved from an older version still carry the stock testimonials,
+ * unverified stats and the old blog query, so the fixed files never show.
+ * Move only those stale copies to the trash (restorable) and keep a list.
+ */
+function bv_set_aside_stale_templates(): array {
+	$markers = [ 'Smarter growth.', 'Sarah Johnson', 'Client Success Stories', '97%</h3>', 'Join 700+', '200+ successful projects', '"inherit":false' ];
+	$moved   = [];
+	$posts   = get_posts( [
+		'post_type'   => [ 'wp_template', 'wp_template_part' ],
+		'post_status' => [ 'publish', 'draft' ],
+		'numberposts' => -1,
+		'tax_query'   => [ [ 'taxonomy' => 'wp_theme', 'field' => 'name', 'terms' => get_stylesheet() ] ],
+	] );
+	foreach ( $posts as $tpl ) {
+		foreach ( $markers as $m ) {
+			/* The old Query Loop setting only matters on the blog index. */
+			if ( '"inherit":false' === $m && ! in_array( $tpl->post_name, [ 'home', 'index' ], true ) ) continue;
+			if ( false !== strpos( $tpl->post_content, $m ) ) {
+				wp_trash_post( $tpl->ID );
+				$moved[] = $tpl->post_type . ':' . $tpl->post_name;
+				break;
+			}
+		}
+	}
+	if ( $moved ) {
+		update_option( 'bv_set_aside_templates', array_merge( (array) get_option( 'bv_set_aside_templates', [] ), $moved ), false );
+	}
+	return $moved;
 }
 
 /**
@@ -508,6 +541,11 @@ add_action( 'admin_notices', static function () {
 			(int) $r['posts_created'], (int) $r['posts_updated'], (int) $r['pages_created'], (int) $r['pages_updated'], (int) $r['categories'],
 			empty( $state['done'] ) ? '<a class="button button-primary" href="' . esc_url( admin_url( 'tools.php?page=bv-import&autostart=1' ) ) . '">Finish image import</a>' : ''
 		);
+	}
+	$aside = (array) get_option( 'bv_set_aside_templates', [] );
+	if ( $aside && ! get_option( 'bv_set_aside_notice_seen' ) ) {
+		update_option( 'bv_set_aside_notice_seen', 1, false );
+		echo '<div class="notice notice-info"><p><strong>Booming Venture:</strong> outdated Site Editor copies moved to the trash so the updated theme files show: ' . esc_html( implode( ', ', $aside ) ) . '. Restore them from Posts &gt; Trash if needed.</p></div>';
 	}
 	if ( $err = get_transient( 'bv_install_error' ) ) {
 		delete_transient( 'bv_install_error' );

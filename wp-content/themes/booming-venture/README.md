@@ -10,6 +10,11 @@ touching code.
 
 ---
 
+## 1.9.2 (November 2026)
+
+- Site Editor copies of theme templates that still carry the old hero, stock testimonials, unverified stats or the old blog query are moved to the trash (restorable) so the updated theme files show. The list is kept in the `bv_set_aside_templates` option and shown once in wp-admin.
+- About page checklist: unverified claims (200+ projects, 3x results) replaced with facts.
+
 ## 1.9.1 (November 2026)
 
 - Content bundle and media fall back to a pinned copy on GitHub when the theme is deployed without `import/` (file-by-file deploys).

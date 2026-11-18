@@ -17,9 +17,9 @@
 			<!-- /wp:heading -->
 			<!-- wp:html -->
 			<ul class="bv-checklist">
-				<li>Proven track record with 200+ successful projects</li>
-				<li>AI-powered strategies that deliver 3× better results</li>
-				<li>Rotterdam-based team with global expertise</li>
+				<li>15+ years in performance marketing at Aegon, Knab, DPDK and Hallmark</li>
+				<li>Hundreds of professionals trained in AI adoption</li>
+				<li>Based in Rotterdam, working across the EU</li>
 				<li>Transparent communication and regular reporting</li>
 				<li>Custom solutions tailored to your industry</li>
 				<li>Ongoing support and optimization</li>
