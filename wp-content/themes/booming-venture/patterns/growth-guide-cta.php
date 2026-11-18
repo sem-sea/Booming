@@ -30,7 +30,7 @@ $img   = bv_image( 'growth-guide' );
 			<h2 class="wp-block-heading has-base-color has-text-color has-4-xl-font-size">Get Your Free Growth Strategy Guide</h2>
 			<!-- /wp:heading -->
 			<!-- wp:paragraph {"fontSize":"lg"} -->
-			<p class="has-lg-font-size">Discover the exact framework our clients use to achieve consistent 48%+ growth. This comprehensive guide includes actionable strategies, templates, and real case studies.</p>
+			<p class="has-lg-font-size">The UNIFY growth playbook in one PDF: the frameworks, templates and checklists we use in client work, ready to apply to your own funnel.</p>
 			<!-- /wp:paragraph -->
 
 			<!-- wp:html -->

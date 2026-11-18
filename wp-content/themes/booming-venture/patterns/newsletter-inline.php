@@ -10,7 +10,7 @@
 <!-- wp:group {"layout":{"type":"constrained"}} -->
 <div class="wp-block-group">
 	<!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600"}}} -->
-	<p class="has-sm-font-size" style="font-weight:600">Join 700+ Members getting growth insights</p>
+	<p class="has-sm-font-size" style="font-weight:600">Get new growth insights by email</p>
 	<!-- /wp:paragraph -->
 	<!-- wp:shortcode -->[contact-form-7 id="6c25a82" title="Newsletter"]<!-- /wp:shortcode -->
 </div>

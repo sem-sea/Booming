@@ -1,6 +1,6 @@
 <?php
 /**
- * Title: Hero, Smarter growth
+ * Title: Hero, B2B marketing and GEO
  * Slug: booming-venture/hero
  * Categories: booming-venture/home, booming-venture/sections
  * Keywords: hero, home, headline
@@ -17,17 +17,17 @@
 		<!-- wp:column {"verticalAlignment":"center","width":"55%"} -->
 		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:55%">
 			<!-- wp:heading {"level":1,"fontSize":"7xl","style":{"typography":{"letterSpacing":"-0.025em","lineHeight":"1.05"}}} -->
-			<h1 class="wp-block-heading has-7-xl-font-size" style="letter-spacing:-0.025em;line-height:1.05">Smarter growth.<br>Clear strategy.<br><span class="bv-gradient-text">Creative performance.</span></h1>
+			<h1 class="wp-block-heading has-7-xl-font-size" style="letter-spacing:-0.025em;line-height:1.05">AI-powered<br>B2B marketing<br><span class="bv-gradient-text">and GEO.</span></h1>
 			<!-- /wp:heading -->
 
 			<!-- wp:paragraph {"fontSize":"xl","textColor":"contrast-2","style":{"typography":{"lineHeight":"1.6"}}} -->
-			<p class="has-contrast-2-color has-text-color has-xl-font-size" style="line-height:1.6">We implement AI-powered marketing that delivers results. <strong>Performance. Personality. Powered by AI.</strong></p>
+			<p class="has-contrast-2-color has-text-color has-xl-font-size" style="line-height:1.6">Booming Venture, based in Rotterdam, helps B2B SaaS and scale-up teams win pipeline from Google, LinkedIn and AI answer engines like ChatGPT and Perplexity. Strategy, execution and measurement in one team. <strong>Performance. Personality. Powered by AI.</strong></p>
 			<!-- /wp:paragraph -->
 
 			<!-- wp:group {"className":"bv-hero-form","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|40","bottom":"var:preset|spacing|30","left":"var:preset|spacing|40"}},"border":{"radius":"1rem","width":"1px","color":"var:preset|color|booming-100"},"shadow":"var:preset|shadow|lg"},"backgroundColor":"base","layout":{"type":"constrained"}} -->
 			<div class="wp-block-group bv-hero-form has-border-color has-base-background-color has-background" style="border-color:var(--wp--preset--color--booming-100);border-width:1px;border-radius:1rem;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--lg)">
 				<!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Get Our Free Growth Strategy Guide</h3><!-- /wp:heading -->
-				<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Learn the exact strategies our clients use to achieve 48%+ growth.</p><!-- /wp:paragraph -->
+				<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">The frameworks, templates and checklists we use in client work.</p><!-- /wp:paragraph -->
 				<!-- wp:shortcode -->[contact-form-7 id="e46231e" title="Growth Guide"]<!-- /wp:shortcode -->
 				<!-- wp:list {"className":"bv-check-list"} -->
 				<ul class="wp-block-list bv-check-list">
@@ -65,8 +65,8 @@
 					<div class="wp-block-column">
 						<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.5rem"},"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30"}}}} -->
 						<div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.5rem;padding:var(--wp--preset--spacing--30)">
-							<!-- wp:heading {"level":3,"fontSize":"2xl","textColor":"booming-700"} --><h3 class="wp-block-heading has-booming-700-color has-text-color has-2-xl-font-size">97%</h3><!-- /wp:heading -->
-							<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Client satisfaction</p><!-- /wp:paragraph -->
+							<!-- wp:heading {"level":3,"fontSize":"2xl","textColor":"booming-700"} --><h3 class="wp-block-heading has-booming-700-color has-text-color has-2-xl-font-size">15+ years</h3><!-- /wp:heading -->
+							<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">In performance and growth marketing</p><!-- /wp:paragraph -->
 						</div>
 						<!-- /wp:group -->
 					</div>
@@ -75,8 +75,8 @@
 					<div class="wp-block-column">
 						<!-- wp:group {"backgroundColor":"venture-50","style":{"border":{"radius":"0.5rem"},"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30"}}}} -->
 						<div class="wp-block-group has-venture-50-background-color has-background" style="border-radius:0.5rem;padding:var(--wp--preset--spacing--30)">
-							<!-- wp:heading {"level":3,"fontSize":"2xl","textColor":"venture-700"} --><h3 class="wp-block-heading has-venture-700-color has-text-color has-2-xl-font-size">+48%</h3><!-- /wp:heading -->
-							<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Average growth</p><!-- /wp:paragraph -->
+							<!-- wp:heading {"level":3,"fontSize":"2xl","textColor":"venture-700"} --><h3 class="wp-block-heading has-venture-700-color has-text-color has-2-xl-font-size">130+</h3><!-- /wp:heading -->
+							<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">In-depth articles on AI, GEO and B2B growth</p><!-- /wp:paragraph -->
 						</div>
 						<!-- /wp:group -->
 					</div>
@@ -89,8 +89,8 @@
 					<div class="wp-block-column">
 						<!-- wp:group {"backgroundColor":"venture-50","style":{"border":{"radius":"0.5rem"},"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30"}}}} -->
 						<div class="wp-block-group has-venture-50-background-color has-background" style="border-radius:0.5rem;padding:var(--wp--preset--spacing--30)">
-							<!-- wp:heading {"level":3,"fontSize":"2xl","textColor":"venture-700"} --><h3 class="wp-block-heading has-venture-700-color has-text-color has-2-xl-font-size">15+</h3><!-- /wp:heading -->
-							<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Businesses helped</p><!-- /wp:paragraph -->
+							<!-- wp:heading {"level":3,"fontSize":"2xl","textColor":"venture-700"} --><h3 class="wp-block-heading has-venture-700-color has-text-color has-2-xl-font-size">Hundreds</h3><!-- /wp:heading -->
+							<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Professionals trained in AI adoption</p><!-- /wp:paragraph -->
 						</div>
 						<!-- /wp:group -->
 					</div>
@@ -99,8 +99,8 @@
 					<div class="wp-block-column">
 						<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.5rem"},"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30"}}}} -->
 						<div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.5rem;padding:var(--wp--preset--spacing--30)">
-							<!-- wp:heading {"level":3,"fontSize":"xl","textColor":"booming-700"} --><h3 class="wp-block-heading has-booming-700-color has-text-color has-xl-font-size">Support</h3><!-- /wp:heading -->
-							<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">When it is needed</p><!-- /wp:paragraph -->
+							<!-- wp:heading {"level":3,"fontSize":"xl","textColor":"booming-700"} --><h3 class="wp-block-heading has-booming-700-color has-text-color has-xl-font-size">EU AI Act</h3><!-- /wp:heading -->
+							<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">Governance built into every AI rollout</p><!-- /wp:paragraph -->
 						</div>
 						<!-- /wp:group -->
 					</div>

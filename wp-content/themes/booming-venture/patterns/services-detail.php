@@ -64,7 +64,7 @@ $img4  = bv_image( 'service-4' );
 				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;"><?php echo bv_icon( "brain", 18 ); ?>&nbsp;&nbsp;AI-Powered Solutions</div>
 				<h3>AI-Powered Solutions</h3>
 				<p class="bv-price">From €4,000/month</p>
-				<p style="color:var(--wp--preset--color--muted);margin:0 0 1rem;">Leverage cutting-edge artificial intelligence to optimize your business operations and decision-making.</p>
+				<p style="color:var(--wp--preset--color--muted);margin:0 0 1rem;">Put AI to work in your marketing operations and decision-making.</p>
 				<ul class="bv-check-list">
 					<li>Predictive analytics implementation</li>
 					<li>Automated workflow optimization</li>

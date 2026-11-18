@@ -1,0 +1,134 @@
+ai-marketing             What is AI marketing? (And why it is not just hype)
+d2c-growth               7 biggest growth mistakes premium brands make
+marketing-strategy       Why traditional marketing strategies fail in 2026
+ai-marketing             How AI automation strengthens (not replaces) your marketing team
+marketing-strategy       The future of content: AI as your creative assistant
+marketing-strategy       Integrating branding with performance marketing for sustainable growth
+b2b-marketing            AI marketing for B2B: opportunities, risks, and real results
+marketing-strategy       Low-hanging growth: what you can improve tomorrow using AI
+marketing-analytics      ROI optimization for Netherlands SME: a data-driven approach
+conversion-optimization  Marketing funnel: how it works in 2026
+conversion-optimization  The hidden costs of inefficient marketing funnels
+email-marketing          Customer retention AI strategies for 2026
+email-marketing          5 marketing automation mistakes that are losing you customers
+marketing-analytics      Social media ROI measurement: beyond vanity metrics
+email-marketing          Advanced email marketing personalization (beyond ‘Hi [Name]’)
+email-marketing          Advanced email marketing personalization beyond ‘Hi [Name]’
+marketing-strategy       Content marketing distribution strategies that actually work
+marketing-strategy       Making data-driven creative decisions without killing creativity
+marketing-strategy       Mobile-first marketing strategies for 2026
+conversion-optimization  Why traditional funnels are dying
+conversion-optimization  AI vs. human: who writes better landing pages?
+ai-marketing             How AI content will outperform human creators by 2026
+lead-generation          How to scale lead gen without scaling your team
+ai-marketing             3 things your competitors already do with AI (and you don’t)
+email-marketing          The future of marketing automation (with real use cases)
+marketing-strategy       Building an omnichannel growth engine in 60 days
+b2b-marketing            B2B marketing UX makeover with AI
+paid-advertising         Influencer marketing in 2026: authenticity over reach
+conversion-optimization  The psychology behind high-converting landing pages
+marketing-strategy       Why video marketing dominates 2026 (and how to get started)
+conversion-optimization  Complete CRO audit checklist: find hidden conversion killers
+lead-generation          Lead magnet strategies that convert 40 percent plus of visitors
+paid-advertising         Google Ads optimization: from wasteful spending to profitable ROI
+conversion-optimization  Pricing psychology for premium brands: charge what you are worth
+marketing-analytics      CLV optimization: turn one-time buyers into lifetime customers
+marketing-strategy       Local SEO for Netherlands businesses: dominate your market
+conversion-optimization  Sales funnel psychology: what makes people buy (and what doesn’t)
+marketing-strategy       Brand positioning that creates unbeatable competitive advantage
+marketing-strategy       Growth hacking for B2B SaaS: from startup to scale-up
+marketing-analytics      Marketing attribution modeling: know what is really driving sales
+paid-advertising         Facebook Ads and iOS privacy: how to win post-IDFA
+paid-advertising         LinkedIn Ads for B2B lead generation
+marketing-strategy       SEO + content marketing integration that compounds
+conversion-optimization  E-commerce CRO: rescue your abandoned carts
+email-marketing          Lifecycle Email Automation for SaaS Onboarding: 14 Sequences Mapped to Activation Events
+b2b-marketing            Net Revenue Retention: The SaaS Metric Most Marketing Teams Don’t Influence
+email-marketing          Email and SMS Retention for Premium D2C: Flows That Don’t Cheapen the Brand
+marketing-analytics      CLV Modelling for Premium D2C: A Cohort-Based Approach That Survives an iOS Update
+marketing-strategy       Brand Building for Performance Marketers: When (and How) to Allocate 20% of Spend to Brand
+b2b-marketing            Founder Thought Leadership That Generates SaaS Pipeline: A Posting System
+conversion-optimization  Pricing Page Optimization for B2B SaaS: 12 Patterns That Beat the Standard 3-Tier Layout
+paid-advertising         Killing Ad Fatigue: A 2026 Refresh Cadence for Meta, TikTok, and YouTube
+paid-advertising         AI Creative Production for D2C: How to Generate 100 Ad Variants a Week Without Looking Like AI Slop
+conversion-optimization  The Premium D2C PDP: A Conversion Audit of 20 Brands in Skincare, Fashion, and Home
+ai-search                Why G2, TrustRadius, Reddit, and Wikipedia Matter More Than Your Blog for LLM Citations
+ai-search                How to Audit Your Brand Visibility in ChatGPT, Perplexity, Claude, and Google AI Overviews Without Paying for Profound
+ai-search                The 7 Content Formats LLMs Cite Most in B2B SaaS
+ai-search                Generative Engine Optimization vs Answer Engine Optimization vs SEO: A Working Definition for 2026
+ai-search                Schema Markup for Premium Ecommerce in the AI Search Era: What Still Matters
+ai-search                How to Get Your D2C Brand Mentioned by ChatGPT When Buyers Ask ‘What’s the Best [Category]’
+marketing-analytics      Multi-Touch Attribution for B2B SaaS Is Mostly Theatre, Here’s What to Use Instead
+b2b-marketing            Pipeline Forecasting With AI: A Method That Works When Your Sales Cycle Is 90+ Days
+marketing-analytics      CAC Payback and the Numbers That Matter for B2B SaaS Boards in 2026
+marketing-analytics      Last-Click Is Dead. What Actually Replaces It in 2026 for D2C
+marketing-analytics      Incrementality Testing on Meta and Google: A Step-by-Step Geo-Holdout Playbook
+marketing-analytics      Marketing Mix Modeling for D2C Brands Under 20M EUR: When It Pays Off and When It Doesn’t
+ai-search                The Reddit B2B Playbook: How to Be Useful and Get Cited by LLMs
+b2b-marketing            ABM in 2026: How to Run Account-Based Marketing With a Team of Three
+b2b-marketing            Product-Led Content: How SaaS Companies Generate Demand Without Outbound
+paid-advertising         LinkedIn Ads for B2B SaaS: A 2026 Playbook with CPM, CTR, and Conversion Benchmarks
+b2b-marketing            Dark Social and the Dark Funnel: How B2B SaaS Buyers Actually Discover You in 2026
+b2b-marketing            The 2026 B2B SaaS Demand Gen Stack: What Generates Pipeline and What’s Theatre
+d2c-growth               Wholesale and Retail as a Performance Channel: When Premium D2C Should Open Distribution
+d2c-growth               The Founder-Led Content Playbook for Premium D2C Brands
+d2c-growth               Going Beyond Meta: Channel Allocation for Premium D2C in 2026
+d2c-growth               The Real Cost of Scaling a Premium D2C Brand from 1M to 10M EUR (Breakdown by Channel)
+paid-advertising         Meta Ads for Premium D2C in 2026: Why Creative Has Replaced Targeting
+d2c-growth               What ‘Premium’ Actually Means in D2C Marketing (And How Pricing, Creative, and Channels Have to Change)
+ai-marketing             AI Agents in Marketing: What They Can Run Autonomously in 2026 (And What Still Needs a Human)
+ai-marketing             Prompt Libraries for Performance Marketers: 40 Tested Prompts for Ads, Email, and CRO
+ai-marketing             Where AI Replaces a Marketing Hire (And Where It Doesn’t) for SaaS Teams Under 50
+b2b-marketing            The Real ROI of AI in B2B Paid Media: A 90-Day Test Framework
+paid-advertising         Advantage+ vs Performance Max vs Pinterest Performance+: An Honest 2026 Comparison
+ai-marketing             How AI Is Actually Used Inside a 2026 Performance Marketing Stack
+ai-marketing             How to structure a marketing team around AI agents in 2026
+ai-search                ChatGPT vs Perplexity vs Google AI: where B2B buyers search
+ai-search                Google AI Overviews killed my CTR: what to do next
+ai-search                What is AEO? Answer Engine Optimization explained for SaaS
+email-marketing          HubSpot vs Customer.io vs Klaviyo: 2026 lifecycle stack pick
+lead-generation          AI SDR vs Human SDR: Real Pipeline Numbers for 2026
+marketing-analytics      How to calculate true CAC when dark social hides pipeline
+b2b-marketing            Why cold outbound is dead and what replaces it in B2B 2026
+b2b-marketing            Why most B2B webinars fail to generate pipeline in 2026
+paid-advertising         Why your LinkedIn CPL doubled in 2026 and how to fix it
+email-marketing          The 7-email welcome sequence that beats generic drip flows
+ai-marketing             How to build a RAG-powered content engine that ranks
+conversion-optimization  Free trial vs freemium vs reverse trial: PLG decision guide
+lead-generation          Clay vs Apollo vs Smartlead: outbound stack for 2026
+d2c-growth               What is agentic commerce and how it changes D2C
+paid-advertising         Influencer Whitelisting vs Spark Ads vs UGC: 2026 Guide
+ai-marketing             Why most AI marketing agencies will die by 2027
+b2b-marketing            B2B buyer journey in 2026: 11 touches, 4 are AI chats
+ai-search                How AI buyers shortlist SaaS vendors: the new funnel
+b2b-marketing            RevOps vs Growth Team: Who Owns Pipeline in 2026
+conversion-optimization  What is a zero-click funnel and how do you build one
+lead-generation          Clay vs Apollo vs Smartlead: the B2B data stack compared
+ai-search                GEO vs SEO vs AEO: What B2B Marketers Should Fund
+ai-search                How to get cited by ChatGPT for B2B SaaS queries in 2026
+lead-generation          Clay vs Instantly vs Lemlist: cold outbound stack 2026
+ai-search                How to get your SaaS cited by ChatGPT: 2026 playbook
+ai-search                What is a generative engine optimization audit?
+paid-advertising         LinkedIn Ads vs Reddit Ads for B2B SaaS pipeline 2026
+ai-marketing             How to build an AI marketing team org chart in 2026
+ai-search                How D2C brands rank in Google Shopping AI in 2026
+marketing-analytics      Why most marketing dashboards lie about ROI in 2026
+conversion-optimization  Free trial vs freemium pricing for SaaS in 2026
+d2c-growth               TikTok Shop vs Meta Shops vs Shopify: Premium D2C 2026
+marketing-strategy       Notion vs Coda vs Airtable for marketing ops in 2026
+email-marketing          Klaviyo vs Sendlane vs Omnisend for premium D2C in 2026
+marketing-analytics      What is a marketing mix model and when D2C needs one
+d2c-growth               TikTok Shop vs Amazon vs Shopify for premium D2C in 2026
+conversion-optimization  Why most B2B SaaS demo pages convert under 2 percent
+paid-advertising         LinkedIn Thought Leader Ads: real CPL data from 2025
+ai-search                How to get cited in Google AI Mode, not just Overviews
+ai-search                How D2C brands rank in ChatGPT Shopping and Perplexity Shop
+ai-marketing             AI SEO agents vs human SEO teams: 2026 cost breakdown
+marketing-analytics      B2B SaaS payback period: what good looks like in 2026
+paid-advertising         Perplexity Ads vs LinkedIn Ads for B2B pipeline in 2026
+b2b-marketing            Why most B2B SaaS case studies fail to generate pipeline
+b2b-marketing            MEDDIC vs Command of the Message for AI-era sales
+ai-search                How to measure brand lift from LLM mentions without attribution
+ai-search                Claude vs ChatGPT vs Gemini for B2B buyer research 2026
+paid-advertising         Reddit Ads vs LinkedIn Ads for SaaS under $50M ARR
+lead-generation          AI SDR tools compared: 11x vs Artisan vs Regie in 2026

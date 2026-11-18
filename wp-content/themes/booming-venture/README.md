@@ -10,6 +10,25 @@ touching code.
 
 ---
 
+## 1.9.0: update over the live site (November 2026)
+
+Built from a Screaming Frog crawl (511 URLs) and a REST export of boomingventure.com.
+Same theme, same design, same URLs. Upload it over the active theme
+(Appearance > Themes > Add New > Upload, then "Replace current with uploaded").
+The upgrade runs once on the next wp-admin page you open.
+
+- `import/content.json`: all 134 posts (live content, block markup), 14 pages, 10 categories, SEO meta. Regenerate with `tools/rebuild/build_content.py`.
+- `import/media/`: every upload the content uses, same `/wp-content/uploads/2026/05/` paths as live. Copied into the Media Library in batches (Tools > Booming Venture import, WP-Cron fallback, or `wp bv import`).
+- Existing posts are never overwritten. Only their category, missing SEO meta and old `/blog/slug/` links change, and their "last updated" date stays.
+- Site title "Booming Venture -" becomes "Booming Venture" (no dangling dash in search titles).
+- Front end in English (`lang="en-GB"`), admin stays in Dutch. Filter `bv_frontend_locale` to change.
+- Permalinks stay `/%postname%/`. 301s for `/blog/{slug}/`, `?query-1-page=N`, `?cst` and the 16 merged categories.
+- Blog index uses the main query: `/blog/page/2/` instead of `?query-1-page=2`.
+- Meta descriptions for every post and page (`_bv_meta_description` + `_yoast_wpseo_metadesc`, existing values kept).
+- Yoast: English title templates, company name, LinkedIn `sameAs`, richer Organization schema.
+- Stock testimonials and unverified stats removed; homepage links to the latest articles.
+- Atomic install lock, so parallel requests after activation cannot create duplicate posts.
+
 ## ✨ What's inside
 
 | Folder                    | What it is |

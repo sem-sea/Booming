@@ -44,7 +44,7 @@
 			<h2 class="wp-block-heading has-5-xl-font-size">Why Choose <span class="bv-gradient-text">Booming Venture</span></h2>
 			<!-- /wp:heading -->
 			<!-- wp:paragraph {"fontSize":"xl","textColor":"contrast-2"} -->
-			<p class="has-contrast-2-color has-text-color has-xl-font-size">We combine strategic thinking with cutting-edge technology to help businesses achieve exceptional growth in today's competitive marketplace.</p>
+			<p class="has-contrast-2-color has-text-color has-xl-font-size">Strategy and execution in one team, with AI built into the way we plan, produce and measure.</p>
 			<!-- /wp:paragraph -->
 
 			<!-- wp:columns -->
@@ -54,7 +54,7 @@
 					<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.625rem"},"spacing":{"padding":{"top":"var:preset|spacing|40","right":"var:preset|spacing|40","bottom":"var:preset|spacing|40","left":"var:preset|spacing|40"}}}} -->
 					<div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.625rem;padding:var(--wp--preset--spacing--40)">
 						<!-- wp:heading {"level":3,"fontSize":"xl","textColor":"booming-700"} --><h3 class="wp-block-heading has-booming-700-color has-text-color has-xl-font-size">Expertise</h3><!-- /wp:heading -->
-						<!-- wp:paragraph {"textColor":"muted"} --><p class="has-muted-color has-text-color">Decades of combined experience in business growth, marketing, and AI implementation from the heart of the Netherlands.</p><!-- /wp:paragraph -->
+						<!-- wp:paragraph {"textColor":"muted"} --><p class="has-muted-color has-text-color">15+ years of hands-on experience in performance marketing, growth and AI implementation, based in Rotterdam.</p><!-- /wp:paragraph -->
 					</div>
 					<!-- /wp:group -->
 				</div>

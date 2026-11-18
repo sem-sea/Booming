@@ -16,7 +16,7 @@
 		<h2 class="wp-block-heading has-text-align-center has-5-xl-font-size">Our Services</h2>
 		<!-- /wp:heading -->
 		<!-- wp:paragraph {"align":"center","fontSize":"xl","textColor":"muted"} -->
-		<p class="has-text-align-center has-muted-color has-text-color has-xl-font-size">Comprehensive solutions designed to help your business thrive in today's competitive landscape.</p>
+		<p class="has-text-align-center has-muted-color has-text-color has-xl-font-size">Four ways we help B2B and premium brands grow, from strategy to execution.</p>
 		<!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
@@ -78,7 +78,7 @@
 				<div class="wp-block-group bv-service-icon has-brand-soft-gradient-background has-background" style="border-radius:0.625rem;padding:0.625rem;color:var(--wp--preset--color--booming-700)"><?php echo bv_icon( "brain", 28 ); ?></div>
 				<!-- /wp:group -->
 				<!-- wp:heading {"level":3,"fontSize":"xl"} --><h3 class="wp-block-heading has-xl-font-size">AI-Powered Solutions</h3><!-- /wp:heading -->
-				<!-- wp:paragraph {"textColor":"muted"} --><p class="has-muted-color has-text-color">Leverage cutting-edge AI technology to optimize your business operations.</p><!-- /wp:paragraph -->
+				<!-- wp:paragraph {"textColor":"muted"} --><p class="has-muted-color has-text-color">Put AI to work in your marketing operations, from analytics to automated workflows.</p><!-- /wp:paragraph -->
 				<!-- wp:list {"className":"bv-check-list"} -->
 				<ul class="wp-block-list bv-check-list">
 					<!-- wp:list-item --><li>Predictive analytics implementation</li><!-- /wp:list-item -->

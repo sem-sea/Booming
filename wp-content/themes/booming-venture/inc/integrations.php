@@ -287,7 +287,7 @@ add_action( 'admin_init', function () {
 /* Default brand image map, UUIDs / URLs the user uploaded to Strato.
  * Override per-slug in Settings -> Booming Venture -> Brand images. */
 function bv_media_defaults(): array {
-	$base = 'https://boomingventure.com/wp-content/uploads/2026/05/';
+	$base = home_url( '/wp-content/uploads/2026/05/' );
 	return [
 		// Strategic Consulting , consultants with tablet, cyan wall.
 		'service-1'    => $base . '4e357139-5a7e-4336-8796-94013f33dc3d.png',

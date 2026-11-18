@@ -216,8 +216,9 @@ add_action( 'after_switch_theme', function () {
 add_filter( 'the_content', function ( $content ) {
 	if ( ! is_singular( 'post' ) || ! in_the_loop() || ! is_main_query() ) return $content;
 	$mod = get_the_modified_date( 'F Y' );
-	$author = get_the_author_meta( 'display_name' );
-	$banner = '<p class="bv-post-meta-line" style="font-size:0.875rem;color:var(--wp--preset--color--muted);margin:0 0 1.5rem;padding:0.625rem 0.875rem;background:var(--wp--preset--color--base-50);border-left:3px solid var(--wp--preset--color--booming-500);border-radius:0.375rem;">Last updated: <strong>' . esc_html( $mod ) . '</strong> · By ' . esc_html( $author ) . '</p>';
+	/* Named author for E-E-A-T; the WP user is often a team account. */
+	$author = (string) apply_filters( 'bv_byline_name', 'Ben Verschuur' );
+	$banner = '<p class="bv-post-meta-line" style="font-size:0.875rem;color:var(--wp--preset--color--muted);margin:0 0 1.5rem;padding:0.625rem 0.875rem;background:var(--wp--preset--color--base-50);border-left:3px solid var(--wp--preset--color--booming-500);border-radius:0.375rem;">Last updated: <strong>' . esc_html( $mod ) . '</strong> · By <a href="' . esc_url( home_url( '/about/' ) ) . '">' . esc_html( $author ) . '</a></p>';
 	return $banner . $content;
 }, 5 );
 
