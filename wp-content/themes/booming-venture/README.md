@@ -10,6 +10,13 @@ touching code.
 
 ---
 
+## 1.9.1 (November 2026)
+
+- Content bundle and media fall back to a pinned copy on GitHub when the theme is deployed without `import/` (file-by-file deploys).
+- The upgrade also runs on the first authenticated admin REST request, not only on a wp-admin page view.
+- 404 slug redirect can no longer redirect to itself; it flushes stale rewrite rules instead.
+- Bundle entries without a body never create empty posts.
+
 ## 1.9.0: update over the live site (November 2026)
 
 Built from a Screaming Frog crawl (511 URLs) and a REST export of boomingventure.com.

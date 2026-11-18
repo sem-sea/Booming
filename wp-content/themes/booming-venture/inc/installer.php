@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 
 const BV_INSTALL_FLAG    = 'bv_content_imported';
 /* Bump whenever import/content.json changes. */
-const BV_INSTALL_VERSION = '1.9.0';
+const BV_INSTALL_VERSION = '1.9.1';
 const BV_MEDIA_BATCH     = 6;
 
 add_action( 'after_switch_theme', 'bv_run_install', 20 );
@@ -38,12 +38,36 @@ add_action( 'admin_init', static function () {
 	bv_run_install();
 } );
 
-/** Load and cache the content bundle. */
+/* Same for an authenticated administrator using the REST API (remote
+ * management tools, the block editor). */
+add_filter( 'rest_pre_dispatch', static function ( $result ) {
+	/* Runs after REST authentication, so application passwords count. */
+	if ( get_option( BV_INSTALL_FLAG ) !== BV_INSTALL_VERSION && current_user_can( 'manage_options' ) ) {
+		bv_run_install();
+	}
+	return $result;
+} );
+
+/* Pinned, immutable copy of import/ (git commit on sem-sea/booming). Used
+ * when the theme files were deployed without the import folder, for
+ * example through a file-by-file theme editor. */
+const BV_REMOTE_IMPORT = 'https://raw.githubusercontent.com/sem-sea/booming/d3f160c3027f7e4945a5dcba36ef4fce9aab6145/wp-content/themes/booming-venture/import/';
+
+/** Load and cache the content bundle: theme folder first, then a cached or fresh remote copy. */
 function bv_content_bundle(): ?array {
 	static $bundle = null;
 	if ( null !== $bundle ) return $bundle;
 	$path = BV_THEME_DIR . '/import/content.json';
-	if ( ! is_readable( $path ) ) return null;
+	if ( ! is_readable( $path ) ) {
+		$upload = wp_upload_dir( null, false );
+		$path   = trailingslashit( $upload['basedir'] ) . 'bv-import/content.json';
+		if ( ! is_readable( $path ) ) {
+			$res = wp_remote_get( BV_REMOTE_IMPORT . 'content.json', [ 'timeout' => 60 ] );
+			if ( is_wp_error( $res ) || 200 !== (int) wp_remote_retrieve_response_code( $res ) ) return null;
+			wp_mkdir_p( dirname( $path ) );
+			file_put_contents( $path, wp_remote_retrieve_body( $res ) );
+		}
+	}
 	$data = json_decode( (string) file_get_contents( $path ), true );
 	$bundle = is_array( $data ) ? $data : null;
 	return $bundle;
@@ -200,6 +224,8 @@ function bv_import_content() {
 				clean_post_cache( $post_id );
 			}
 			$counts['posts_updated']++;
+		} elseif ( '' === trim( (string) ( $post['content'] ?? '' ) ) ) {
+			continue;
 		} else {
 			$post_id = wp_insert_post( wp_slash( [
 				'post_title'     => $post['title'],
@@ -337,7 +363,13 @@ function bv_import_media_batch( int $limit = BV_MEDIA_BATCH ): array {
 
 		if ( ! file_exists( $dest ) ) {
 			wp_mkdir_p( dirname( $dest ) );
-			if ( ! @copy( $src, $dest ) ) {
+			$ok = file_exists( $src ) && @copy( $src, $dest );
+			if ( ! $ok ) {
+				$res = wp_remote_get( BV_REMOTE_IMPORT . 'media/' . str_replace( '%2F', '/', rawurlencode( $rel ) ), [ 'timeout' => 60, 'stream' => true, 'filename' => $dest ] );
+				$ok  = ! is_wp_error( $res ) && 200 === (int) wp_remote_retrieve_response_code( $res ) && filesize( $dest ) > 0;
+				if ( ! $ok ) @unlink( $dest );
+			}
+			if ( ! $ok ) {
 				$errors[] = $rel;
 				continue;
 			}

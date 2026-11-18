@@ -138,12 +138,23 @@ add_action( 'template_redirect', static function () {
 		}
 	}
 
-	/* Single-segment 404 that matches a published slug of another type. */
+	/* Single-segment 404 that matches a published slug of another type.
+	 * Never redirect to the URL that was requested (stale rewrite rules
+	 * would otherwise loop); flush the rules instead so the next request
+	 * resolves. */
 	if ( is_404() && $path && ! str_contains( $path, '/' ) ) {
 		foreach ( [ 'post', 'page' ] as $pt ) {
 			$p = get_page_by_path( sanitize_title( $path ), OBJECT, $pt );
 			if ( $p && 'publish' === $p->post_status ) {
-				wp_safe_redirect( get_permalink( $p ), 301 );
+				$dest = get_permalink( $p );
+				if ( untrailingslashit( (string) wp_parse_url( $dest, PHP_URL_PATH ) ) === '/' . $path ) {
+					if ( ! get_transient( 'bv_rules_flushed' ) ) {
+						set_transient( 'bv_rules_flushed', 1, 300 );
+						flush_rewrite_rules( false );
+					}
+					return;
+				}
+				wp_safe_redirect( $dest, 301 );
 				exit;
 			}
 		}
