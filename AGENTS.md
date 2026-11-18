@@ -34,7 +34,7 @@ GEO/AEO rules (Bible May 2026). Every blog post under `posts/` in `build-blog-co
 
 ## Never
 
-- Block `OAI-SearchBot`, `Claude-SearchBot`, or `PerplexityBot` in `robots.txt` (the three-tier split in `inc/geo.php` already gets this right)
+- Block `OAI-SearchBot`, `Claude-SearchBot`, `PerplexityBot` or the AI model crawlers (`GPTBot`, `ClaudeBot`, `Google-Extended`) in `robots.txt`. Since 1.10.0 `inc/geo.php` allows them all for brand visibility in AI answers; only heavy crawlers without visibility value are blocked
 - Delete `inc/geo.php` (it ships robots.txt, llms.txt, IndexNow, extended schema, the "Last updated" banner)
 - Hand-author JSON-LD; `inc/seo.php` generates it
 - Use marketing-cliché filler intros
@@ -54,6 +54,9 @@ python3 -c "import json; [json.load(open(f)) for f in ['wp-content/themes/boomin
 
 # Regenerate all blog post bodies from build-blog-content.py
 python3 build-blog-content.py
+
+# Minify theme CSS and JS (run before every release)
+tools/build-min.sh
 
 # Rebuild the installable zip
 rm -f wp-content/themes/booming-venture.zip

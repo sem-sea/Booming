@@ -99,6 +99,37 @@ add_filter( 'wpseo_schema_organization', static function ( $data ) {
 	return $data;
 } );
 
+/* Yoast author piece: the WordPress user is a team account, the real
+ * author is the founder. Same person as the byline and Organization
+ * founder, so search engines and AI see one consistent entity. */
+function bv_author_person( $data ) {
+	if ( ! is_array( $data ) ) return $data;
+	$types = (array) ( $data['@type'] ?? [] );
+	if ( ! in_array( 'Person', $types, true ) ) return $data;
+	if ( isset( $data['@id'] ) && str_contains( (string) $data['@id'], '#/schema/person/' ) ) {
+		$data['name']     = 'Ben Verschuur';
+		$data['url']      = home_url( '/about/' );
+		$data['jobTitle'] = 'Founder';
+		$data['worksFor'] = [ '@id' => home_url( '/#organization' ) ];
+		$data['sameAs']   = [ 'https://www.linkedin.com/in/benverschuur' ];
+		unset( $data['description'] );
+		if ( isset( $data['image']['caption'] ) ) $data['image']['caption'] = 'Ben Verschuur';
+	}
+	return $data;
+}
+add_filter( 'wpseo_schema_person', 'bv_author_person', 20 );
+add_filter( 'wpseo_schema_author', 'bv_author_person', 20 );
+
+/* "Written by" in Slack/LinkedIn previews. */
+add_filter( 'wpseo_enhanced_slack_data', static function ( $data ) {
+	if ( is_array( $data ) ) {
+		foreach ( $data as $label => $value ) {
+			if ( false !== stripos( (string) $label, 'written' ) || false !== stripos( (string) $label, 'geschreven' ) ) $data[ $label ] = 'Ben Verschuur';
+		}
+	}
+	return $data;
+} );
+
 /* ------------------------------------------------------------------
  * 3. Redirects. Run before WordPress decides on a 404.
  * ------------------------------------------------------------------ */
@@ -107,6 +138,15 @@ add_action( 'template_redirect', static function () {
 	$path  = trim( (string) wp_parse_url( $uri, PHP_URL_PATH ), '/' );
 	$query = (string) wp_parse_url( $uri, PHP_URL_QUERY );
 	parse_str( $query, $q );
+
+	/* Articles merged into a stronger one on the same topic (1.10.0). */
+	if ( $path && ! str_contains( $path, '/' ) ) {
+		$merged = (array) get_option( 'bv_post_redirects', [] );
+		if ( isset( $merged[ $path ] ) ) {
+			wp_safe_redirect( home_url( '/' . $merged[ $path ] . '/' ), 301 );
+			exit;
+		}
+	}
 
 	/* Old Query Loop pagination on the blog: ?query-1-page=N and ?cst. */
 	if ( isset( $q['query-1-page'] ) || array_key_exists( 'cst', $q ) ) {

@@ -11,79 +11,77 @@
 defined( 'ABSPATH' ) || exit;
 
 /* ============================================================
- * 1. Three-tier robots.txt (Bible §1)
- * Block training crawlers, allow search-index crawlers, allow
- * user-initiated fetchers. Most specific rules win, so block
- * lines go before any User-agent: * wildcard.
+ * 1. robots.txt for maximum visibility in AI answers (Nov 2026)
+ * Model crawlers are now ALLOWED: a brand that sells AI visibility
+ * wants to be in the models' knowledge, and Google states that pages
+ * which disallow Google-Extended are not used for grounding in
+ * Gemini Apps and Vertex AI. AI search bots and user-initiated
+ * fetchers stay allowed. Only heavy crawlers with no visibility
+ * value for an EU B2B brand are blocked, to spare the host's
+ * rate limits. Filter `bv_robots_blocked_bots` to change that list.
  * ============================================================ */
 
 add_filter( 'robots_txt', function ( $output, $public ) {
 	if ( ! $public ) return $output;
 
-	$lines = [];
-	$lines[] = '# robots.txt, GEO/AEO three-tier configuration (Bible May 2026)';
-	$lines[] = '';
-	$lines[] = '# --- TIER 1: Training crawlers (BLOCKED) ---';
-	foreach ( [
-		'GPTBot',                // OpenAI training
-		'ClaudeBot',             // Anthropic training
-		'anthropic-ai',          // older Anthropic
-		'Google-Extended',       // Gemini training opt-out
-		'CCBot',                 // Common Crawl
-		'Meta-ExternalAgent',    // Meta training
-		'Bytespider',            // ByteDance training
-		'Amazonbot',             // Amazon training
-		'cohere-ai',             // Cohere
-		'Diffbot',
-		'FacebookBot',
-		'omgilibot',
-		'PetalBot',
-	] as $bot ) {
-		$lines[] = "User-agent: {$bot}";
-		$lines[] = 'Disallow: /';
-		$lines[] = '';
+	$tiers = [
+		'AI model crawlers (ALLOWED, brand visibility in LLMs)' => [
+			'GPTBot',                // OpenAI models
+			'ClaudeBot',             // Anthropic models
+			'Google-Extended',       // Gemini Apps + Vertex AI grounding
+			'Applebot-Extended',     // Apple Intelligence
+			'Meta-ExternalAgent',    // Meta AI
+			'Amazonbot',             // Alexa, Rufus
+			'CCBot',                 // Common Crawl, used by many models
+			'cohere-ai',
+		],
+		'AI search crawlers (ALLOWED)' => [
+			'OAI-SearchBot',         // ChatGPT search
+			'Claude-SearchBot',      // Claude search
+			'PerplexityBot',         // Perplexity index
+			'YouBot',
+			'DuckAssistBot',
+		],
+		'User-initiated fetchers (ALLOWED)' => [
+			'ChatGPT-User',
+			'Claude-User',
+			'Perplexity-User',
+			'CopilotUser',
+			'MistralAI-User',        // Le Chat
+		],
+		'Traditional search (ALLOWED)' => [ 'Googlebot', 'Bingbot', 'DuckDuckBot', 'Slurp' ],
+	];
+	$blocked = (array) apply_filters( 'bv_robots_blocked_bots', [ 'Bytespider', 'Diffbot', 'omgilibot', 'PetalBot' ] );
+
+	$lines   = [ '# robots.txt, Booming Venture (AI visibility configuration, November 2026)', '' ];
+	foreach ( $tiers as $label => $bots ) {
+		$lines[] = '# --- ' . $label . ' ---';
+		foreach ( $bots as $bot ) {
+			$lines[] = "User-agent: {$bot}";
+			$lines[] = 'Allow: /';
+			$lines[] = '';
+		}
 	}
-	$lines[] = '# --- TIER 2: Search-index crawlers (ALLOWED) ---';
-	foreach ( [
-		'OAI-SearchBot',         // ChatGPT Search
-		'Claude-SearchBot',      // Claude search index
-		'PerplexityBot',         // Perplexity index
-		'Applebot-Extended',     // Apple Intelligence search
-		'YouBot',                // You.com
-		'DuckAssistBot',
-	] as $bot ) {
-		$lines[] = "User-agent: {$bot}";
-		$lines[] = 'Allow: /';
-		$lines[] = '';
-	}
-	$lines[] = '# --- TIER 3: User-initiated fetchers (ALLOWED) ---';
-	foreach ( [
-		'ChatGPT-User',          // user click in ChatGPT
-		'Claude-User',           // user click in Claude
-		'Perplexity-User',       // user click in Perplexity
-		'CopilotUser',           // Microsoft Copilot user fetch
-	] as $bot ) {
-		$lines[] = "User-agent: {$bot}";
-		$lines[] = 'Allow: /';
-		$lines[] = '';
-	}
-	$lines[] = '# --- Traditional search ---';
-	foreach ( [ 'Googlebot', 'Bingbot', 'DuckDuckBot', 'Slurp' ] as $bot ) {
-		$lines[] = "User-agent: {$bot}";
-		$lines[] = 'Allow: /';
-		$lines[] = '';
+	if ( $blocked ) {
+		$lines[] = '# --- Heavy crawlers without visibility value (BLOCKED) ---';
+		foreach ( $blocked as $bot ) {
+			$lines[] = 'User-agent: ' . $bot;
+			$lines[] = 'Disallow: /';
+			$lines[] = '';
+		}
 	}
 
-	$rules = implode( "\n", $lines );
+	/* With Yoast active its own block adds the right sitemap; drop the
+	 * core wp-sitemap.xml line, which only redirects. */
+	if ( defined( 'WPSEO_VERSION' ) ) {
+		$output = preg_replace( '/^Sitemap:\s*\S*wp-sitemap\.xml\s*$/mi', '', (string) $output );
+	}
 
-	/* Inject before WordPress' default `User-agent: *` block, sitemap line preserved. */
-	$output = $rules . "\n" . trim( $output ) . "\n";
+	$output = implode( "\n", $lines ) . "\n" . trim( (string) $output ) . "\n";
 
-	/* Force sitemap line (WP appends it but make sure it's there). */
-	if ( false === stripos( $output, 'Sitemap:' ) ) {
+	if ( false === stripos( $output, 'Sitemap:' ) && ! defined( 'WPSEO_VERSION' ) ) {
 		$output .= "\nSitemap: " . home_url( '/wp-sitemap.xml' ) . "\n";
 	}
-
 	return $output;
 }, 10, 2 );
 
@@ -104,6 +102,27 @@ add_filter( 'query_vars', function ( $vars ) {
 	return $vars;
 } );
 
+/* Serve /llms.txt and /llms-full.txt as they are, without the trailing
+ * slash redirect WordPress adds for this permalink structure. */
+add_filter( 'redirect_canonical', function ( $redirect ) {
+	$path = (string) wp_parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH );
+	if ( preg_match( '#/(llms(-full)?|[a-f0-9]{32})\.txt$#', $path ) ) return false;
+	return $redirect;
+} );
+
+/* Plain text for llms.txt: no tags, no HTML entities, one line. */
+function bv_llms_text( $text ): string {
+	$text = html_entity_decode( wp_strip_all_tags( (string) $text ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+	return trim( preg_replace( '/\s+/u', ' ', str_replace( "\xc2\xa0", ' ', $text ) ) );
+}
+
+function bv_llms_desc( WP_Post $p, int $words = 28 ): string {
+	$d = (string) get_post_meta( $p->ID, '_bv_meta_description', true );
+	if ( '' === $d ) $d = (string) get_post_meta( $p->ID, '_yoast_wpseo_metadesc', true );
+	if ( '' === $d ) $d = wp_trim_words( wp_strip_all_tags( $p->post_content ), $words, '...' );
+	return bv_llms_text( $d );
+}
+
 add_action( 'template_redirect', function () {
 	$mode = get_query_var( 'bv_llms' );
 	if ( ! $mode ) return;
@@ -116,8 +135,9 @@ add_action( 'template_redirect', function () {
 	$site_name = get_bloginfo( 'name' );
 	$tagline = get_bloginfo( 'description' );
 
-	echo "# {$site_name}\n\n";
-	echo "> {$tagline}. AI marketing and growth consulting from Rotterdam, the Netherlands. Important: pricing on /services/ and any /lp/ pages overrides anything cached; check dateModified before quoting numbers.\n\n";
+	echo '# ' . bv_llms_text( $site_name ) . "\n\n";
+	$tagline = rtrim( (string) $tagline, ". " );
+	echo "> {$tagline}. AI-powered B2B marketing and GEO (generative engine optimization) from Rotterdam, the Netherlands. Founded by Ben Verschuur. Important: pricing on /services/ overrides anything cached; check dateModified before quoting numbers.\n\n";
 
 	/* Core pages */
 	echo "## Core\n\n";
@@ -132,9 +152,7 @@ add_action( 'template_redirect', function () {
 	foreach ( $core as [ $slug, $desc ] ) {
 		$p = get_page_by_path( $slug );
 		if ( $p ) {
-			$url = get_permalink( $p );
-			$excerpt = wp_trim_words( wp_strip_all_tags( $p->post_content ), 28, '…' );
-			echo "- [{$p->post_title}]({$url}): {$desc}. {$excerpt}\n";
+			echo '- [' . bv_llms_text( $p->post_title ) . '](' . get_permalink( $p ) . '): ' . $desc . '. ' . bv_llms_desc( $p ) . "\n";
 		}
 	}
 
@@ -148,7 +166,7 @@ add_action( 'template_redirect', function () {
 	foreach ( $leads as [ $slug, $desc ] ) {
 		$p = get_page_by_path( $slug );
 		if ( $p ) {
-			echo "- [{$p->post_title}](" . get_permalink( $p ) . "): {$desc}\n";
+			echo '- [' . bv_llms_text( $p->post_title ) . '](' . get_permalink( $p ) . "): {$desc}\n";
 		}
 	}
 
@@ -156,7 +174,20 @@ add_action( 'template_redirect', function () {
 	echo "\n## Blog\n\n";
 	$blog = get_page_by_path( 'blog' );
 	if ( $blog ) {
-		echo "- [Blog index](" . get_permalink( $blog ) . "): 43 long-form articles on AI marketing, growth, CRO, B2B SaaS, Dutch SME ROI, and funnel optimization.\n";
+		$count = (int) wp_count_posts( 'post' )->publish;
+		echo "- [Blog index](" . get_permalink( $blog ) . "): {$count} long-form articles on AI search and GEO, B2B marketing, paid advertising, conversion optimization and marketing analytics.\n";
+	}
+
+	/* Every article, grouped by category, with its meta description. */
+	if ( 'basic' === $mode ) {
+		foreach ( get_categories( [ 'hide_empty' => true, 'orderby' => 'count', 'order' => 'DESC' ] ) as $cat ) {
+			$items = get_posts( [ 'numberposts' => -1, 'post_status' => 'publish', 'category' => $cat->term_id, 'orderby' => 'modified', 'order' => 'DESC' ] );
+			if ( ! $items ) continue;
+			echo "\n## " . bv_llms_text( $cat->name ) . "\n\n";
+			foreach ( $items as $item ) {
+				echo '- [' . bv_llms_text( get_the_title( $item ) ) . '](' . get_permalink( $item ) . '): ' . bv_llms_desc( $item, 25 ) . "\n";
+			}
+		}
 	}
 
 	if ( 'full' === $mode ) {
@@ -164,9 +195,8 @@ add_action( 'template_redirect', function () {
 		$posts = get_posts( [ 'numberposts' => 50, 'post_status' => 'publish' ] );
 		foreach ( $posts as $post ) {
 			$cats = wp_list_pluck( get_the_category( $post->ID ), 'name' );
-			$excerpt = $post->post_excerpt ?: wp_trim_words( wp_strip_all_tags( $post->post_content ), 30, '…' );
 			$mod = get_the_modified_date( 'Y-m-d', $post );
-			echo "- [{$post->post_title}](" . get_permalink( $post ) . "): {$excerpt} (Last updated: {$mod}; category: " . implode( ', ', $cats ) . ")\n";
+			echo '- [' . bv_llms_text( $post->post_title ) . '](' . get_permalink( $post ) . '): ' . bv_llms_desc( $post, 30 ) . " (Last updated: {$mod}; category: " . bv_llms_text( implode( ', ', $cats ) ) . ")\n";
 		}
 	}
 
@@ -174,7 +204,7 @@ add_action( 'template_redirect', function () {
 	echo "\n## Optional\n\n";
 	foreach ( [ 'privacy-policy', 'terms-of-service', 'disclaimer' ] as $slug ) {
 		$p = get_page_by_path( $slug );
-		if ( $p ) echo "- [{$p->post_title}](" . get_permalink( $p ) . ")\n";
+		if ( $p ) echo '- [' . bv_llms_text( $p->post_title ) . '](' . get_permalink( $p ) . ")\n";
 	}
 
 	echo "\n## Company\n\n";
@@ -190,10 +220,10 @@ add_action( 'template_redirect', function () {
 		$posts = get_posts( [ 'numberposts' => 20, 'post_status' => 'publish' ] );
 		foreach ( $posts as $post ) {
 			echo "\n---\n\n";
-			echo "# {$post->post_title}\n\n";
+			echo '# ' . bv_llms_text( $post->post_title ) . "\n\n";
 			echo "Source: " . get_permalink( $post ) . "\nPublished: " . get_the_date( 'Y-m-d', $post ) . "\nLast updated: " . get_the_modified_date( 'Y-m-d', $post ) . "\n\n";
 			/* Convert blocks to plain markdown-ish text. */
-			$content = wp_strip_all_tags( apply_filters( 'the_content', $post->post_content ) );
+			$content = html_entity_decode( wp_strip_all_tags( apply_filters( 'the_content', $post->post_content ) ), ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 			$content = preg_replace( "/\n{3,}/", "\n\n", $content );
 			echo trim( $content ) . "\n";
 		}

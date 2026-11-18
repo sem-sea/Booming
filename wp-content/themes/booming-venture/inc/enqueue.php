@@ -7,20 +7,23 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/* Minified copy of a theme asset when the release ships one
+ * (tools/build-min.sh). Theme assets ignore SCRIPT_DEBUG on purpose. */
+function bv_asset_rel( string $rel ): string {
+	$min = preg_replace( '/\.(css|js)$/', '.min.$1', $rel );
+	return ( $min && file_exists( BV_THEME_DIR . '/' . $min ) ) ? $min : $rel;
+}
+
 /* Front-end. */
 add_action( 'wp_enqueue_scripts', function () {
-	wp_enqueue_style(
-		'booming-venture',
-		BV_THEME_URI . '/assets/css/theme.css',
-		[],
-		bv_asset_ver( 'assets/css/theme.css' )
-	);
-
+	$css = bv_asset_rel( 'assets/css/theme.css' );
+	$js  = bv_asset_rel( 'assets/js/theme.js' );
+	wp_enqueue_style( 'booming-venture', BV_THEME_URI . '/' . $css, [], bv_asset_ver( $css ) );
 	wp_enqueue_script(
 		'booming-venture',
-		BV_THEME_URI . '/assets/js/theme.js',
+		BV_THEME_URI . '/' . $js,
 		[],
-		bv_asset_ver( 'assets/js/theme.js' ),
+		bv_asset_ver( $js ),
 		[ 'strategy' => 'defer', 'in_footer' => true ]
 	);
 }, 20 );
@@ -38,8 +41,7 @@ add_action( 'enqueue_block_editor_assets', function () {
 /* Preload critical webfonts to reduce LCP. */
 add_action( 'wp_head', function () {
 	$fonts = [
-		'/assets/fonts/Inter-Regular.woff2',
-		'/assets/fonts/Inter-SemiBold.woff2',
+		'/assets/fonts/Inter-Variable.woff2',
 		'/assets/fonts/SpaceGrotesk-Variable.woff2',
 	];
 	foreach ( $fonts as $font ) {
@@ -76,46 +78,66 @@ add_action( 'wp_body_open', function () {
 	<?php
 } );
 
-/* DataSpeak chat, footer, async, after consent if cookie present. */
+/* DataSpeak chat.
+ * Desktop: loads after the first real interaction, so it never competes
+ * with the first paint. Mobile: one small chat button that loads the
+ * widget on tap, so no greeting pop-up covers content or form fields. */
 add_action( 'wp_footer', function () {
 	$interface_id = get_option( 'bv_dataspeak_id', '6863892dbcf4fea86a49e9f8' );
 	if ( ! $interface_id ) return;
 	?>
 <script>
 window.dataspeakChatConfiguration = { interfaceId: <?php echo wp_json_encode( $interface_id ); ?> };
-(function(){
-  var loadDataSpeak = function () {
-    if (window.__bvDataSpeakLoaded) return;
-    window.__bvDataSpeakLoaded = true;
+(function () {
+  var loaded = false;
+  function hideBrand() {
+    var iv = setInterval(function () {
+      var a = document.querySelector('a[href="https://www.dataspeak.nl"]');
+      if (a) { a.style.display = 'none'; clearInterval(iv); }
+    }, 500);
+    setTimeout(function () { clearInterval(iv); }, 10000);
+  }
+  function load(done) {
+    if (loaded) return;
+    loaded = true;
     var s = document.createElement('script');
     s.src = 'https://chat.dataspeak.nl/v1/client.js';
     s.async = true;
-    s.onload = function () {
-      var iv = setInterval(function () {
-        var a = document.querySelector('a[href="https://www.dataspeak.nl"]');
-        if (a) { a.style.display = 'none'; clearInterval(iv); }
-      }, 500);
-      setTimeout(function () { clearInterval(iv); }, 10000);
-    };
+    s.onload = function () { hideBrand(); if (done) done(); };
     document.head.appendChild(s);
-  };
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(loadDataSpeak, { timeout: 4000 });
-  } else {
-    setTimeout(loadDataSpeak, 2500);
   }
+  if (window.matchMedia('(max-width: 767px)').matches) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'bv-chat-launch';
+    b.setAttribute('aria-label', 'Open chat');
+    b.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>';
+    b.addEventListener('click', function () {
+      b.classList.add('is-loading');
+      load(function () { setTimeout(function () { b.remove(); }, 1500); });
+    });
+    document.body.appendChild(b);
+    return;
+  }
+  var events = ['pointermove', 'pointerdown', 'scroll', 'keydown', 'touchstart'];
+  function go() {
+    events.forEach(function (e) { window.removeEventListener(e, go); });
+    setTimeout(function () {
+      if ('requestIdleCallback' in window) { requestIdleCallback(function () { load(); }, { timeout: 3000 }); }
+      else { load(); }
+    }, 1500);
+  }
+  events.forEach(function (e) { window.addEventListener(e, go, { passive: true }); });
 })();
 </script>
 	<?php
 }, 30 );
 
-/* DNS-prefetch / preconnect for known third parties. */
+/* Preconnect only to what the first view needs. The chat widget and
+ * Brevo load later, so a preconnect for them would be wasted. */
 add_filter( 'wp_resource_hints', function ( $hints, $relation ) {
 	if ( 'preconnect' === $relation ) {
-		$hints[] = [ 'href' => 'https://chat.dataspeak.nl', 'crossorigin' ];
 		$hints[] = [ 'href' => 'https://www.googletagmanager.com' ];
-		$hints[] = [ 'href' => 'https://api.brevo.com' ];
-		$hints[] = [ 'href' => 'https://images.unsplash.com' ];
 	}
 	return $hints;
 }, 10, 2 );

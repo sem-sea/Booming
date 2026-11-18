@@ -82,7 +82,7 @@ $img   = bv_image( 'growth-guide' );
 					<label class="bv-form-fallback__label" for="bv-ff-gg">Email address</label>
 					<div class="bv-form-fallback__row">
 						<input type="email" id="bv-ff-gg" name="email" required placeholder="you@company.com" autocomplete="email" inputmode="email">
-						<button type="submit" class="bv-form-fallback__btn">Send</button>
+						<button type="submit" class="bv-form-fallback__btn">Send me the guide</button>
 					</div>
 				</form>
 				<!-- /wp:html -->

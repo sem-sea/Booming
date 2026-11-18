@@ -12,7 +12,7 @@
 	<h2 class="wp-block-heading has-text-align-center has-5-xl-font-size">About <span class="bv-gradient-text">Booming Venture</span></h2>
 	<!-- /wp:heading -->
 	<!-- wp:paragraph {"align":"center","fontSize":"xl","textColor":"muted"} -->
-	<p class="has-text-align-center has-muted-color has-text-color has-xl-font-size">We&#8217;re a Rotterdam-based AI marketing agency that combines strategic thinking with cutting-edge AI technology to help businesses achieve exceptional growth in today&#8217;s competitive marketplace.</p>
+	<p class="has-text-align-center has-muted-color has-text-color has-xl-font-size">Booming Venture is an AI marketing consultancy in Rotterdam for B2B and premium brands. We set the strategy, run the channels and put AI to work inside your marketing team.</p>
 	<!-- /wp:paragraph -->
 
 	<!-- wp:spacer {"height":"32px"} --><div style="height:32px" aria-hidden="true" class="wp-block-spacer"></div><!-- /wp:spacer -->
@@ -22,9 +22,9 @@
 		<!-- wp:heading {"level":3,"fontSize":"3xl"} -->
 		<h3 class="wp-block-heading has-3-xl-font-size">Our Story</h3>
 		<!-- /wp:heading -->
-		<!-- wp:paragraph --><p>Founded in Rotterdam, Booming Venture emerged from a simple belief: every business deserves access to world-class marketing strategies and AI-powered solutions, no matter their size or industry. They deserve bold, data-driven strategies that scale fast. At Booming Venture, we help brands do exactly that: boom.</p><!-- /wp:paragraph -->
-		<!-- wp:paragraph --><p>Our team of experts combines decades of experience in business growth, marketing optimization, and AI implementation to deliver measurable results for our clients across the Netherlands and beyond.</p><!-- /wp:paragraph -->
-		<!-- wp:paragraph --><p>We don&#8217;t just provide AI services, we act as your strategic partner, working alongside your team to unlock the full growth potential of your business.</p><!-- /wp:paragraph -->
+		<!-- wp:paragraph --><p>Ben Verschuur founded Booming Venture in Rotterdam after more than 15 years in performance and growth marketing at Aegon, Knab, DPDK and Hallmark. The idea is simple: senior strategy and working AI should not be reserved for companies with a large in-house team.</p><!-- /wp:paragraph -->
+		<!-- wp:paragraph --><p>The work covers four areas: growth strategy, performance marketing, AI implementation and visibility in AI search (GEO). Recent work includes AI adoption training for hundreds of employees at an insurer and AI agents for legal teams.</p><!-- /wp:paragraph -->
+		<!-- wp:paragraph --><p>We work as part of your team: one senior point of contact, clear reporting, and AI only where it saves time or money you can measure.</p><!-- /wp:paragraph -->
 	</div>
 	<!-- /wp:group -->
 </section>

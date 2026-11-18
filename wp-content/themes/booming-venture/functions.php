@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BV_THEME_VERSION', '1.9.2' );
+define( 'BV_THEME_VERSION', '1.10.0' );
 define( 'BV_THEME_DIR', get_template_directory() );
 define( 'BV_THEME_URI', get_template_directory_uri() );
 
@@ -25,6 +25,7 @@ function bv_asset_ver( string $relative ): string {
 require_once BV_THEME_DIR . '/inc/icons.php';
 require_once BV_THEME_DIR . '/inc/setup.php';
 require_once BV_THEME_DIR . '/inc/enqueue.php';
+require_once BV_THEME_DIR . '/inc/performance.php';
 require_once BV_THEME_DIR . '/inc/cpt.php';
 require_once BV_THEME_DIR . '/inc/blocks.php';
 require_once BV_THEME_DIR . '/inc/patterns.php';

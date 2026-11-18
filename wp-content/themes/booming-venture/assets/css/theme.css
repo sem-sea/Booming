@@ -958,7 +958,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	font-weight: 500;
 	line-height: 1.25;
 	border-radius: var(--bv-radius);
-	background: var(--wp--preset--color--booming-600);
+	background: var(--wp--preset--color--booming-700);
 	color: #fff;
 	border: 1px solid transparent;
 	box-shadow: var(--bv-shadow);
@@ -967,7 +967,7 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	text-decoration: none;
 }
 .wp-block-button .wp-block-button__link.wp-element-button:hover {
-	background: var(--wp--preset--color--booming-700);
+	background: var(--wp--preset--color--booming-800);
 	transform: translateY(-1px);
 	box-shadow: var(--bv-shadow-md);
 }
@@ -1494,7 +1494,7 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 /* Slightly darker border on real CF7 inputs so they stay readable
  * when sitting inside a white card. */
 .wpcf7-form-control:where([type="text"], [type="email"], [type="tel"], [type="url"], [type="number"], textarea) {
-	border-color: #cbd5e1 !important;
+	border-color: #8391a7 !important;
 }
 
 /* =================================================================
@@ -1937,3 +1937,216 @@ section.wp-block-group > .wp-block-group .wp-block-paragraph.has-text-align-cent
 	box-shadow: 0 8px 20px -8px rgba(2, 132, 199, 0.55);
 }
 
+
+/* =================================================================
+ * 1.10.0 FORMS AND FLOATING UI
+ * One field style for every form on the site (Contact Form 7, the
+ * mailto fallback, the calculators). Loaded last on purpose.
+ * ================================================================= */
+
+/* Padding and borders count inside the width, so a 100% wide field
+ * never runs out of its card (the mobile overflow bug). */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* CF7 6.x wraps hidden inputs in a fieldset; never show it. */
+.wpcf7 fieldset.hidden-fields-container { display: none; }
+.wpcf7-form p:empty { display: none; }
+.wpcf7-form br { display: none; }
+
+/* Labels */
+.wpcf7 .wpcf7-form label,
+.bv-form-fallback .bv-form-fallback__label {
+	display: block;
+	margin: 0;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--wp--preset--color--contrast);
+}
+.wpcf7 .wpcf7-form label .wpcf7-form-control-wrap { margin-top: 0.375rem; }
+
+/* No floating asterisk at the far right of the field. */
+.wpcf7 .wpcf7-form-control-wrap::before { content: none !important; }
+
+/* Fields */
+.wpcf7 .wpcf7-form .wpcf7-form-control:is(.wpcf7-text, .wpcf7-email, .wpcf7-tel, .wpcf7-url, .wpcf7-number, .wpcf7-date, .wpcf7-select, .wpcf7-quiz),
+.wpcf7 .wpcf7-form :is(input[type="text"], input[type="email"], input[type="tel"], input[type="url"], input[type="number"], input[type="date"], select),
+.bv-form-fallback input[type="email"] {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	height: 52px;
+	min-height: 52px;
+	margin: 0;
+	padding: 0 1rem;
+	font-size: max(1rem, 16px);
+	font-weight: 500;
+	line-height: 1.5;
+	color: var(--wp--preset--color--contrast);
+	background-color: #fff;
+	border: 1.5px solid #8391a7;
+	border-radius: 0.625rem;
+	box-shadow: none;
+	-webkit-appearance: none;
+	appearance: none;
+}
+.wpcf7 .wpcf7-form .wpcf7-form-control.wpcf7-select,
+.wpcf7 .wpcf7-form select { padding-right: 2.5rem; }
+.wpcf7 .wpcf7-form .wpcf7-form-control.wpcf7-textarea,
+.wpcf7 .wpcf7-form textarea {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	height: 9rem;
+	min-height: 7.5rem;
+	padding: 0.75rem 1rem;
+	font-size: max(1rem, 16px);
+	line-height: 1.5;
+	color: var(--wp--preset--color--contrast);
+	background-color: #fff;
+	border: 1.5px solid #8391a7;
+	border-radius: 0.625rem;
+	resize: vertical;
+}
+.wpcf7 .wpcf7-form :is(input, select, textarea)::placeholder,
+.bv-form-fallback input::placeholder { color: #64748b; opacity: 1; }
+.wpcf7 .wpcf7-form :is(input, select, textarea):hover { border-color: #64748b; }
+.wpcf7 .wpcf7-form :is(input, select, textarea):focus,
+.bv-form-fallback input[type="email"]:focus {
+	outline: none;
+	border-color: var(--wp--preset--color--booming-600);
+	box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.25);
+}
+.wpcf7 .wpcf7-form .wpcf7-not-valid {
+	border-color: #dc2626 !important;
+	box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+/* Submit row: button plus CF7 spinner on one line. */
+.wpcf7 .wpcf7-form p:has(.wpcf7-submit) {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem;
+}
+.wpcf7 .wpcf7-form .wpcf7-submit,
+.wpcf7 .wpcf7-form :is(input[type="submit"], button[type="submit"]),
+.bv-form-fallback .bv-form-fallback__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 52px;
+	margin: 0;
+	padding: 0.875rem 1.5rem;
+	font-size: 1rem;
+	font-weight: 600;
+	line-height: 1.2;
+	color: #fff;
+	background: var(--wp--preset--gradient--brand);
+	border: 0;
+	border-radius: 0.625rem;
+	cursor: pointer;
+	-webkit-appearance: none;
+	appearance: none;
+	box-shadow: 0 8px 20px -8px rgba(2, 132, 199, 0.55);
+}
+.wpcf7 .wpcf7-form .wpcf7-submit:hover { transform: translateY(-1px); }
+.wpcf7 .wpcf7-form .wpcf7-submit:focus-visible { outline: 3px solid var(--wp--preset--color--booming-700); outline-offset: 2px; }
+.wpcf7 .wpcf7-form .wpcf7-spinner { position: absolute; margin: 0; }
+.wpcf7 .wpcf7-form p:has(.wpcf7-submit) { position: relative; }
+.wpcf7 .wpcf7-form p:has(.wpcf7-submit) .wpcf7-spinner { right: 1rem; top: 50%; margin-top: -10px; border-color: rgba(255,255,255,0.35); border-top-color: #fff; }
+
+@media (min-width: 640px) {
+	.wpcf7 .wpcf7-form .wpcf7-submit { width: auto; min-width: 12rem; }
+}
+/* In cards, heroes and inline rows the button always spans the card. */
+.bv-leadmagnet-card .wpcf7 .wpcf7-form .wpcf7-submit,
+.bv-hero-form .wpcf7 .wpcf7-form .wpcf7-submit,
+.bv-hero-form-card .wpcf7 .wpcf7-form .wpcf7-submit { width: 100%; }
+
+/* Forms placed straight on a brand gradient: light fields and a white
+ * button. Inside a white card the normal brand button stays. */
+.has-brand-gradient-background .wpcf7 .wpcf7-form .wpcf7-submit,
+.has-brand-dark-gradient-background .wpcf7 .wpcf7-form .wpcf7-submit {
+	background: #fff;
+	color: var(--wp--preset--color--booming-700);
+}
+.has-brand-gradient-background .has-base-background-color .wpcf7 .wpcf7-form .wpcf7-submit,
+.has-brand-gradient-background .bv-leadmagnet-card .wpcf7 .wpcf7-form .wpcf7-submit,
+.has-brand-dark-gradient-background .has-base-background-color .wpcf7 .wpcf7-form .wpcf7-submit,
+.has-brand-gradient-background .bv-hero-form .wpcf7 .wpcf7-form .wpcf7-submit {
+	background: var(--wp--preset--gradient--brand);
+	color: #fff;
+}
+.has-brand-gradient-background .wpcf7 .wpcf7-form label,
+.has-brand-dark-gradient-background .wpcf7 .wpcf7-form label { color: inherit; }
+.has-brand-gradient-background .has-base-background-color .wpcf7 .wpcf7-form label,
+.has-brand-gradient-background .bv-leadmagnet-card .wpcf7 .wpcf7-form label,
+.has-brand-dark-gradient-background .has-base-background-color .wpcf7 .wpcf7-form label { color: var(--wp--preset--color--contrast); }
+
+/* Inline newsletter row: email and button side by side from 480px. */
+.bv-form-inline .wpcf7 .wpcf7-form { display: grid; grid-template-columns: 1fr; gap: 0.625rem; }
+.bv-form-inline .wpcf7 .wpcf7-form .wpcf7-response-output { grid-column: 1 / -1; }
+@media (min-width: 480px) {
+	.bv-form-inline .wpcf7 .wpcf7-form { grid-template-columns: minmax(0, 1fr) auto; align-items: end; }
+	.bv-form-inline .wpcf7 .wpcf7-form .wpcf7-submit { width: auto; }
+}
+
+/* Fallback (mailto) form: field and button stack on phones. */
+.bv-form-fallback .bv-form-fallback__row { flex-direction: column; gap: 0.625rem; }
+@media (min-width: 480px) {
+	.bv-form-fallback .bv-form-fallback__row { flex-direction: row; }
+	.bv-form-fallback .bv-form-fallback__btn { width: auto; }
+}
+
+/* Messages */
+.wpcf7 .wpcf7-form .wpcf7-not-valid-tip { margin-top: 0.375rem; font-size: 0.875rem; color: #b91c1c; }
+.wpcf7 .wpcf7-form .wpcf7-response-output { margin: 0; }
+
+/* Floating UI. Phones and tablets: only the chat button, and it hides
+ * while someone types in a form. Desktop: the two tool buttons sit
+ * above the chat widget. */
+@media (max-width: 1023px) { .bv-fabs { display: none !important; } }
+.bv-chat-launch {
+	position: fixed;
+	right: max(1rem, env(safe-area-inset-right));
+	bottom: max(1rem, env(safe-area-inset-bottom));
+	z-index: 45;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	min-width: 48px;
+	min-height: 48px;
+	padding: 0;
+	color: #fff;
+	background: var(--wp--preset--gradient--brand);
+	border: 0;
+	border-radius: 50%;
+	box-shadow: 0 8px 20px -6px rgba(2, 132, 199, 0.5);
+	cursor: pointer;
+}
+.bv-chat-launch.is-loading { opacity: 0.6; }
+.bv-chat-launch svg { display: block; }
+body:has(:is(input, textarea, select):focus) :is(.bv-chat-launch, .bv-fabs) { opacity: 0; pointer-events: none; }
+@media print { .bv-chat-launch { display: none; } }
+
+/* Comparison tables in "vs" articles (1.10.0). Scroll sideways on phones. */
+.wp-block-table.bv-compare { margin: 2rem 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.wp-block-table.bv-compare table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 0.9375rem; line-height: 1.5; }
+.wp-block-table.bv-compare th,
+.wp-block-table.bv-compare td { padding: 0.75rem 0.875rem; border: 1px solid #e2e8f0; text-align: left; vertical-align: top; }
+.wp-block-table.bv-compare thead th { background: var(--wp--preset--color--booming-50); color: var(--wp--preset--color--contrast); font-weight: 700; }
+.wp-block-table.bv-compare tbody td:first-child { background: #f8fafc; color: var(--wp--preset--color--contrast); width: 26%; }
+.wp-block-table.bv-compare figcaption { margin-top: 0.5rem; font-size: 0.8125rem; color: var(--wp--preset--color--muted); text-align: left; }
+
+/* Header on small phones: the CTA button pushed past the screen edge
+ * at 390px and below. Hide it there; the menu carries a Contact link. */
+@media (max-width: 440px) { .bv-header__cta { display: none !important; } }
+@media (min-width: 600px) { .bv-nav .bv-nav-mobile-only { display: none !important; } }
+@media (max-width: 599px) { .bv-nav:not(:has(.is-menu-open)) .bv-nav-mobile-only { display: none; } }
+.wp-block-table.bv-compare thead { border-bottom: 2px solid #cbd5e1; }
+@media (max-width: 600px) { .wp-block-table.bv-compare table { min-width: 480px; font-size: 0.875rem; } }
+@media (max-width: 599px) { .bv-header .bv-nav { margin-left: auto; justify-content: flex-end; } }

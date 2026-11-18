@@ -26,7 +26,7 @@
 
 			<!-- wp:group {"className":"bv-hero-form","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","right":"var:preset|spacing|40","bottom":"var:preset|spacing|30","left":"var:preset|spacing|40"}},"border":{"radius":"1rem","width":"1px","color":"var:preset|color|booming-100"},"shadow":"var:preset|shadow|lg"},"backgroundColor":"base","layout":{"type":"constrained"}} -->
 			<div class="wp-block-group bv-hero-form has-border-color has-base-background-color has-background" style="border-color:var(--wp--preset--color--booming-100);border-width:1px;border-radius:1rem;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--40);box-shadow:var(--wp--preset--shadow--lg)">
-				<!-- wp:heading {"level":3,"fontSize":"lg"} --><h3 class="wp-block-heading has-lg-font-size">Get Our Free Growth Strategy Guide</h3><!-- /wp:heading -->
+				<!-- wp:heading {"fontSize":"lg"} --><h2 class="wp-block-heading has-lg-font-size">Get Our Free Growth Strategy Guide</h2><!-- /wp:heading -->
 				<!-- wp:paragraph {"fontSize":"sm","textColor":"muted"} --><p class="has-muted-color has-text-color has-sm-font-size">The frameworks, templates and checklists we use in client work.</p><!-- /wp:paragraph -->
 				<!-- wp:shortcode -->[contact-form-7 id="e46231e" title="Growth Guide"]<!-- /wp:shortcode -->
 				<!-- wp:list {"className":"bv-check-list"} -->

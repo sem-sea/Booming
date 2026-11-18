@@ -217,7 +217,8 @@ add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
 	$out .= '<label class="bv-form-fallback__label" for="bv-ff-' . esc_attr( $slug ) . '">Your work email</label>';
 	$out .= '<div class="bv-form-fallback__row">';
 	$out .= '<input type="email" id="bv-ff-' . esc_attr( $slug ) . '" name="email" required placeholder="you@company.com" autocomplete="email" inputmode="email">';
-	$out .= '<button type="submit" class="bv-form-fallback__btn">Send</button>';
+	$btn_map = [ 'growth-guide' => 'Send me the guide', 'newsletter' => 'Subscribe', 'newsletter-inline' => 'Subscribe', 'contact' => 'Send message' ];
+	$out .= '<button type="submit" class="bv-form-fallback__btn">' . esc_html( $btn_map[ $slug ] ?? 'Send' ) . '</button>';
 	$out .= '</div>';
 	$out .= '<p class="bv-form-fallback__note">Opens your email app pre-filled. Or write to <a href="mailto:info@boomingventure.com">info@boomingventure.com</a> directly.</p>';
 	$out .= '</form>';
@@ -234,6 +235,67 @@ add_filter( 'pre_do_shortcode_tag', function ( $output, $tag, $attr ) {
  * patterns for the form, leaving an unstyled form that did not submit.
  * Letting CF7 load on every page is a small perf cost and reliably correct. */
 add_filter( 'wpcf7_autop_or_not', '__return_false' );
+
+/* Shortcode blocks inside patterns of a block template are rendered
+ * after WordPress ran do_shortcode on the template, so they printed as
+ * plain text ("[contact-form-7 ...]") on the homepage. Run them here. */
+add_filter( 'render_block_core/shortcode', static function ( $content ) {
+	return ( is_string( $content ) && false !== strpos( $content, '[' ) ) ? do_shortcode( $content ) : $content;
+} );
+
+/* Better fields on every CF7 form, without touching the stored forms:
+ * browser autofill hints, a sample address as placeholder, the right
+ * mobile keyboard, and a submit label that says what happens. */
+add_filter( 'wpcf7_form_elements', static function ( $html ) {
+	$add = static function ( string $tag, string $attr, string $value ): string {
+		if ( false !== stripos( $tag, ' ' . $attr . '=' ) ) return $tag;
+		return preg_replace( '/^<input\b/i', '<input ' . $attr . '="' . esc_attr( $value ) . '"', $tag );
+	};
+	$html = preg_replace_callback( '/<input\b[^>]*>/i', static function ( $m ) use ( $add ) {
+		$tag = $m[0];
+		if ( preg_match( '/type="email"/i', $tag ) ) {
+			$tag = $add( $tag, 'autocomplete', 'email' );
+			$tag = $add( $tag, 'inputmode', 'email' );
+			$tag = $add( $tag, 'placeholder', 'you@company.com' );
+			$tag = $add( $tag, 'enterkeyhint', 'send' );
+		} elseif ( preg_match( '/type="tel"/i', $tag ) ) {
+			$tag = $add( $tag, 'autocomplete', 'tel' );
+			$tag = $add( $tag, 'inputmode', 'tel' );
+		} elseif ( preg_match( '/type="text"/i', $tag ) && preg_match( '/name="([^"]*)"/i', $tag, $n ) ) {
+			$name = strtolower( $n[1] );
+			if ( str_contains( $name, 'company' ) || str_contains( $name, 'organi' ) || str_contains( $name, 'bedrijf' ) ) {
+				$tag = $add( $tag, 'autocomplete', 'organization' );
+			} elseif ( str_contains( $name, 'name' ) || str_contains( $name, 'naam' ) ) {
+				$tag = $add( $tag, 'autocomplete', 'name' );
+			}
+		}
+		return $tag;
+	}, $html );
+
+	/* Submit label per form. Only replaces the generic defaults. */
+	$title = '';
+	if ( class_exists( 'WPCF7_ContactForm' ) ) {
+		$form  = WPCF7_ContactForm::get_current();
+		$title = $form ? strtolower( (string) $form->title() ) : '';
+	}
+	$label = '';
+	if ( str_contains( $title, 'growth' ) || str_contains( $title, 'guide' ) ) $label = 'Send me the guide';
+	elseif ( str_contains( $title, 'newsletter' ) ) $label = 'Subscribe';
+	elseif ( str_contains( $title, 'contact' ) ) $label = 'Send message';
+	if ( $label ) {
+		$html = preg_replace(
+			'/(<input\b[^>]*type="submit"[^>]*value=")(Send|Submit|Verzenden|Versturen)(")/i',
+			'${1}' . esc_attr( $label ) . '${3}',
+			$html
+		);
+		$html = preg_replace(
+			'/(<button\b[^>]*type="submit"[^>]*>)\s*(Send|Submit|Verzenden|Versturen)\s*(<\/button>)/i',
+			'${1}' . esc_html( $label ) . '${3}',
+			$html
+		);
+	}
+	return $html;
+}, 20 );
 
 /* Settings page: map CF7 slugs → IDs. */
 add_action( 'admin_menu', function () {

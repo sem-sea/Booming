@@ -41,7 +41,8 @@
 		target.focus({ preventScroll: true });
 	});
 
-	/* Inject floating action buttons (ROI / Calculator / Contact)
+	/* Inject floating action buttons (ROI / Calculator), desktop only.
+	 * Chat is handled by the DataSpeak loader in inc/enqueue.php.
 	 * Site-wide. Uses Lucide-style inline SVG icons matching the rest
 	 * of the theme. Hover reveals a label pill on the left.
 	 * Skip on legal / single-post pages to keep them less distracting. */
@@ -54,6 +55,9 @@
 			|| body.classList.contains('page-id-111') // terms
 			|| body.classList.contains('page-id-112');// disclaimer
 		if (skip) return;
+		/* Phones and tablets: no floating buttons. They covered form
+		 * fields and content; the tools stay in the menu. */
+		if (!window.matchMedia('(min-width: 1024px)').matches) return;
 
 		var ICON = {
 			'trending-up':    '<svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
@@ -63,8 +67,7 @@
 
 		var items = [
 			{ href: '/roi-forecaster/',    icon: 'trending-up',    label: 'ROI Forecaster',   cls: 'bv-fab--accent'  },
-			{ href: '/funnel-calculator/', icon: 'calculator',     label: 'Funnel Calculator', cls: ''               },
-			{ href: '/#contact',           icon: 'message-circle', label: 'Talk to us',       cls: 'bv-fab--pulse'   }
+			{ href: '/funnel-calculator/', icon: 'calculator',     label: 'Funnel Calculator', cls: ''               }
 		];
 
 		var wrap = document.createElement('div');

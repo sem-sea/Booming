@@ -10,6 +10,21 @@ touching code.
 
 ---
 
+## 1.10.0 (November 2026)
+
+From the SEO and GEO audit of 18 November 2026.
+
+- Forms: one field style on every form. Fields no longer run outside their card on phones, 52 px fields and buttons, a visible button inside white cards, no floating asterisk, accessible border contrast, autofill hints and clear button labels ("Send me the guide", "Subscribe", "Send message").
+- Contact form on the homepage rendered as plain text "[contact-form-7 ...]": shortcode blocks inside patterns now run.
+- Phones: no floating tool buttons; one chat button loads DataSpeak on tap, so no pop-up covers content. Desktop: chat loads after the first interaction. Header button hidden below 440 px (it ran off screen), Contact added to the mobile menu.
+- Fonts: Inter and Space Grotesk ship with the theme (they were missing and gave 404s).
+- Speed: WordPress core assets load minified even with SCRIPT_DEBUG on, minified theme CSS and JS (tools/build-min.sh), more inline block CSS, lazy images on the homepage, browser cache rules in .htaccess (mod_expires) that remove themselves if the site does not answer cleanly.
+- robots.txt: AI model crawlers (GPTBot, ClaudeBot, Google-Extended and others) are now allowed for brand visibility in AI answers; only heavy crawlers without value stay blocked. The redirecting wp-sitemap.xml line is gone.
+- llms.txt: the static Yoast file is switched off; the theme version lists all articles by category, with clean text. llms-full.txt is served without a slash redirect.
+- Schema: the Yoast author is Ben Verschuur (founder), matching the byline and Organization.
+- Content: five duplicate articles merged into the stronger one (draft plus 301), comparison tables in the 20 "vs" articles (figures from the articles themselves), About copy without clichés.
+- Accessibility: darker brand gradient and link color for 4.5:1 contrast, muted text darkened, heading order fixed in hero, footer and post lists.
+
 ## 1.9.2 (November 2026)
 
 - Site Editor copies of theme templates that still carry the old hero, stock testimonials, unverified stats or the old blog query are moved to the trash (restorable) so the updated theme files show. The list is kept in the `bv_set_aside_templates` option and shown once in wp-admin.
