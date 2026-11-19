@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 
 const BV_INSTALL_FLAG    = 'bv_content_imported';
 /* Bump whenever import/content.json changes. */
-const BV_INSTALL_VERSION = '1.10.0';
+const BV_INSTALL_VERSION = '1.10.1';
 const BV_MEDIA_BATCH     = 6;
 
 add_action( 'after_switch_theme', 'bv_run_install', 20 );
@@ -112,6 +112,9 @@ function bv_run_install(): void {
 	bv_consolidate_duplicates();
 	bv_add_comparison_tables();
 	bv_disable_yoast_llms_txt();
+	if ( ! get_option( 'bv_script_debug_status' ) || 0 === strpos( (string) get_option( 'bv_script_debug_status' ), 'reverted' ) ) {
+		update_option( 'bv_script_debug_status', bv_switch_off_script_debug(), false );
+	}
 	if ( get_option( 'bv_htaccess_cache_version' ) !== BV_INSTALL_VERSION && function_exists( 'bv_apply_htaccess_cache' ) ) {
 		update_option( 'bv_htaccess_cache_status', bv_apply_htaccess_cache(), false );
 		update_option( 'bv_htaccess_cache_version', BV_INSTALL_VERSION, false );
@@ -846,4 +849,39 @@ function bv_add_comparison_tables(): int {
 	}
 	kses_init_filters();
 	return $added;
+}
+
+/**
+ * SCRIPT_DEBUG was on in wp-config.php, so WordPress served its large
+ * debug scripts. Switch the single define to false, then check that the
+ * site still answers; any doubt puts the original file back.
+ */
+function bv_switch_off_script_debug(): string {
+	if ( ! defined( 'SCRIPT_DEBUG' ) || ! SCRIPT_DEBUG ) return 'already off';
+	$file = ABSPATH . 'wp-config.php';
+	if ( ! file_exists( $file ) && file_exists( dirname( ABSPATH ) . '/wp-config.php' ) ) $file = dirname( ABSPATH ) . '/wp-config.php';
+	if ( ! file_exists( $file ) || ! is_writable( $file ) ) return 'skipped: wp-config.php not writable';
+
+	$orig = (string) file_get_contents( $file );
+	$new  = preg_replace( '/define\(\s*([\'"])SCRIPT_DEBUG\1\s*,\s*(true|1)\s*\)/i', "define( 'SCRIPT_DEBUG', false )", $orig, -1, $count );
+	if ( 1 !== $count || ! is_string( $new ) || '' === $new ) return 'skipped: ' . (int) $count . ' matching defines';
+
+	$perms = fileperms( $file ) & 0777;
+	$tmp   = $file . '.bv-tmp';
+	if ( false === file_put_contents( $tmp, $new, LOCK_EX ) ) return 'skipped: temp write failed';
+	@chmod( $tmp, $perms );
+	if ( ! @rename( $tmp, $file ) ) {
+		@unlink( $tmp );
+		return 'skipped: rename failed';
+	}
+	if ( function_exists( 'opcache_invalidate' ) ) @opcache_invalidate( $file, true );
+
+	$res  = wp_remote_get( home_url( '/?bvcheck=' . time() ), [ 'timeout' => 20, 'sslverify' => false, 'redirection' => 2 ] );
+	$code = is_wp_error( $res ) ? 0 : (int) wp_remote_retrieve_response_code( $res );
+	if ( $code < 200 || $code >= 500 ) {
+		file_put_contents( $file, $orig, LOCK_EX );
+		if ( function_exists( 'opcache_invalidate' ) ) @opcache_invalidate( $file, true );
+		return 'reverted: home answered ' . $code;
+	}
+	return 'switched off';
 }

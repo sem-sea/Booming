@@ -10,6 +10,10 @@ touching code.
 
 ---
 
+## 1.10.1 (November 2026)
+
+- SCRIPT_DEBUG is switched off once in wp-config.php (single define only, the site is checked right after and the original file is put back on any doubt). Status in the `bv_script_debug_status` option.
+
 ## 1.10.0 (November 2026)
 
 From the SEO and GEO audit of 18 November 2026.
