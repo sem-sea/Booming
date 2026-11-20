@@ -1,0 +1,100 @@
+<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} -->
+<p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>AI referral traffic is small but converts: in <a href="https://www.orbitmedia.com/blog/conversion-rates-ai-search/" target="_blank" rel="noopener">Orbit Media's study of 97 B2B sites</a>, AI sources sent about 0.5% of visits, yet those visitors were about three times as likely to become leads. Set up a dedicated AI channel in GA4 so you can see it.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+<!-- wp:paragraph -->
+<p>The share differs by study, but it is small everywhere. Orbit Media found about 0.5% of 29 million sessions came from AI sources between July 2025 and June 2026 (<a href="https://www.orbitmedia.com/blog/conversion-rates-ai-search/" target="_blank" rel="noopener">Orbit Media</a>). Leadfeeder measured AI at 1.8% of combined AI and organic search visits in 2026 (<a href="https://www.leadfeeder.com/resources/studies/ai-referrals-in-b2b/" target="_blank" rel="noopener">Leadfeeder</a>).</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>It is growing. Demandbase recorded a 303% increase in ChatGPT referrals to B2B sites between June 2025 and June 2026 (<a href="https://ppc.land/chatgpt-referrals-to-b2b-sites-gain-303-in-a-year-demandbase-finds/" target="_blank" rel="noopener">PPC Land on Demandbase data</a>).</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>And it is concentrated: ChatGPT accounted for about 82% of AI-referred sessions in the Orbit data and 81% of AI referral visits in the Leadfeeder data.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is AI referral traffic?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">AI referral traffic is visits that arrive by clicking a link in an AI assistant's answer, such as ChatGPT, Gemini, Perplexity, Claude or Copilot.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Not all AI influence shows up this way. Orbit Media notes that Google AI Mode and AI Overviews are recorded as organic search, and some AI app visits arrive as direct traffic.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How do you set up AI tracking in GA4?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">Setting up AI tracking in GA4 means creating a custom channel group that captures AI assistant referrers, then reporting leads by that channel.</p>
+<!-- /wp:paragraph -->
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Create a custom channel group</strong> in GA4 admin, under data display.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Add an "AI assistants" channel</strong> above Referral, matching sources such as chatgpt.com, gemini.google.com, perplexity.ai, claude.ai and copilot.microsoft.com.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Save and apply it</strong> to your acquisition reports.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Mark your lead events as key events</strong>, such as form submissions and demo requests.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Compare conversion rate by channel</strong> monthly.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Add a self-reported source field</strong> to forms, with AI assistants as options, to catch visits GA4 cannot attribute.</li>
+<!-- /wp:list-item -->
+</ol>
+<!-- /wp:list -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How should you read the numbers?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">Reading AI traffic data means weighing conversion against fit: AI visitors convert well, but fewer match your ideal customer profile than organic visitors.</p>
+<!-- /wp:paragraph -->
+<!-- wp:table {"className":"bv-compare"} -->
+<figure class="wp-block-table bv-compare"><table><thead><tr><th>Measure</th><th>AI referrals</th><th>Comparison</th><th>Source</th></tr></thead><tbody><tr><td><strong>Share of traffic</strong></td><td>About 0.5%</td><td>All sessions</td><td>Orbit Media</td></tr><tr><td><strong>Lead conversion</strong></td><td>About 3x more likely</td><td>Other organic sources</td><td>Orbit Media</td></tr><tr><td><strong>Visiting companies that fit the ICP</strong></td><td>15.8%</td><td>Organic search: 20.4%</td><td>Leadfeeder</td></tr><tr><td><strong>Visits per company</strong></td><td>2.68</td><td>Organic search: 3.78</td><td>Leadfeeder</td></tr></tbody></table><figcaption class="wp-element-caption">AI traffic: high intent, smaller and less targeted.</figcaption></figure>
+<!-- /wp:table -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Frequently asked questions</h2>
+<!-- /wp:heading -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Why does GA4 show so little AI traffic?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Many AI answers send no click, AI Mode counts as organic search, and some app visits arrive as direct. Treat GA4 numbers as a floor.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Which AI assistant sends the most B2B traffic?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>ChatGPT, with about 81% to 82% of AI referral visits in both the Leadfeeder and Orbit Media studies.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Is AI traffic better quality than organic?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>It converts more often, according to Orbit Media, but Leadfeeder found a lower share of visitors who match the ideal customer profile.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Should we report AI traffic to the board?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Report it next to AI visibility metrics and self-reported sources. Traffic alone undercounts AI's influence.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">How often should we review it?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Monthly. Volumes are small, so look at three-month trends before drawing conclusions.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph -->
+<p>Want AI traffic and leads in one report? <a href="/boardroom-quickscan/">Request a free 15-minute Boardroom Quickscan</a>. See our <a href="/services/">services</a>, or try the <a href="/funnel-calculator/">funnel calculator</a>.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->

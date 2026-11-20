@@ -1,0 +1,100 @@
+<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} -->
+<p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Structured data helps machines understand your pages: Google says it uses structured data to understand page content (<a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data?hl=en" target="_blank" rel="noopener">Google Search Central</a>), and Microsoft has said schema markup helps its LLMs, including Copilot (<a href="https://searchengineland.com/microsoft-bing-copilot-use-schema-for-its-llms-453455" target="_blank" rel="noopener">Search Engine Land, 2025</a>). B2B sites need a small, accurate set, in the initial HTML.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+<!-- wp:paragraph -->
+<p>Google recommends JSON-LD for structured data where your site allows it. Its documentation also lists results from sites that added markup: Rotten Tomatoes measured a 25% higher click-through rate on 100,000 pages with structured data, and Nestlé an 82% higher click-through rate for pages with rich results (<a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data?hl=en" target="_blank" rel="noopener">Google Search Central</a>).</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Microsoft's Fabrice Canel confirmed at SMX Munich in 2025 that schema markup helps Microsoft's LLMs understand content (<a href="https://searchengineland.com/microsoft-bing-copilot-use-schema-for-its-llms-453455" target="_blank" rel="noopener">Search Engine Land</a>).</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Where you add it matters. In <a href="https://vercel.com/blog/the-rise-of-the-ai-crawler" target="_blank" rel="noopener">Vercel's analysis</a>, none of the major AI crawlers rendered JavaScript, so markup injected by scripts may never be seen.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is schema markup?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">Schema markup is structured data, usually in JSON-LD, that labels what a page is about: an organization, article, person, product or service.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>It does not change what visitors see. It tells crawlers, in a standard vocabulary from Schema.org, which facts on the page mean what.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Which schema types does a B2B website need?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">The core schema set for a B2B website is Organization, Article or BlogPosting, Person, Product or Service, and BreadcrumbList for navigation.</p>
+<!-- /wp:paragraph -->
+<!-- wp:table {"className":"bv-compare"} -->
+<figure class="wp-block-table bv-compare"><table><thead><tr><th>Schema type</th><th>Where to use it</th><th>What it tells machines</th></tr></thead><tbody><tr><td><strong>Organization</strong></td><td>Homepage, about page</td><td>Company name, logo, URL, contact, social profiles</td></tr><tr><td><strong>Article or BlogPosting</strong></td><td>Blog posts and guides</td><td>Headline, author, publish and update dates</td></tr><tr><td><strong>Person</strong></td><td>Author and team pages</td><td>Who wrote it and their role</td></tr><tr><td><strong>Product or SoftwareApplication</strong></td><td>Product pages</td><td>Product name, category, offers</td></tr><tr><td><strong>Service</strong></td><td>Service pages</td><td>What you offer and where</td></tr><tr><td><strong>BreadcrumbList</strong></td><td>All pages</td><td>Where the page sits in the site</td></tr></tbody></table><figcaption class="wp-element-caption">A practical starter set for B2B sites.</figcaption></figure>
+<!-- /wp:table -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How do you add schema without breaking things?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">Adding schema safely means generating it from real page content, placing it in server-rendered HTML, and validating it before and after release.</p>
+<!-- /wp:paragraph -->
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Start with Organization</strong> on the homepage, with consistent name, logo and profiles.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Add Article and Person</strong> to posts, with real authors and accurate dates.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Generate markup server-side</strong>, from your CMS or theme, not with tag managers.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Mark up only what is visible</strong> on the page.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Validate</strong> with the Schema Markup Validator and Google's Rich Results Test.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Re-check after every redesign</strong> or plugin change.</li>
+<!-- /wp:list-item -->
+</ol>
+<!-- /wp:list -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Frequently asked questions</h2>
+<!-- /wp:heading -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Does schema guarantee AI citations?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>No. It helps machines understand pages; being cited still depends on content, access and authority.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Which format should we use?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>JSON-LD, which Google recommends where your setup allows it.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Can a plugin handle schema?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Yes, SEO plugins such as Yoast generate core types. Check the output and avoid two plugins writing conflicting markup.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Should we add FAQ markup?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Mark up real questions and answers that are visible on the page. Do not add markup for content that is not there.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Does Google Tag Manager work for schema?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Markup injected by JavaScript may be missed by AI crawlers that do not render scripts. Server-side is safer.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph -->
+<p>Want to know whether your schema is helping or hurting? <a href="/boardroom-quickscan/">Request a free 15-minute Boardroom Quickscan</a>. See our <a href="/services/">services</a>, or read the <a href="/ai-crawler-checklist-b2b-website/">AI crawler checklist</a>.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
