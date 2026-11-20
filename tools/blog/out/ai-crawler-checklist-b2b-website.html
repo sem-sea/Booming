@@ -1,0 +1,136 @@
+<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph {"fontSize":"sm","style":{"typography":{"fontWeight":"600","textTransform":"uppercase","letterSpacing":"0.08em"}}} -->
+<p class="has-sm-font-size" style="font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Key takeaways</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>None of the major AI crawlers rendered JavaScript in <a href="https://vercel.com/blog/the-rise-of-the-ai-crawler" target="_blank" rel="noopener">Vercel's 2024 analysis</a>. If your site needs JavaScript to show its text, AI search may see an empty page. These 12 checks show in about 30 minutes whether ChatGPT, Claude and Perplexity can read you.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
+<!-- wp:paragraph -->
+<p>We learned this on our own site. Booming Venture's website started as a React single-page app built in Lovable. It looked fine in a browser and showed almost nothing to bots that do not run JavaScript. In 2026 we rebuilt it as a server-rendered WordPress site.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>The traffic is real. Vercel counted 569 million GPTBot fetches and 370 million Claude fetches across its network in one month, about 20% of Googlebot's 4.5 billion (<a href="https://vercel.com/blog/the-rise-of-the-ai-crawler" target="_blank" rel="noopener">Vercel</a>). And buyers use the answers: <a href="https://www.forrester.com/blogs/b2b_buyers_make_zero_click_buying_number_one/" target="_blank" rel="noopener">Forrester</a> reports that 94% of business buyers use AI in their buying process.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What is an AI crawler?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">An AI crawler is a bot from an AI company, such as GPTBot or PerplexityBot, that fetches pages for model training or AI search answers.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>There are three kinds, and they matter differently. Training crawlers collect pages for future models. Search crawlers build the index that AI search answers from. User-triggered fetchers open a page when someone asks about it. Blocking the wrong one can remove you from AI answers without anyone noticing.</p>
+<!-- /wp:paragraph -->
+<!-- wp:table {"className":"bv-compare"} -->
+<figure class="wp-block-table bv-compare"><table><thead><tr><th>Crawler</th><th>Company</th><th>What it does</th><th>If you block it</th></tr></thead><tbody><tr><td><strong>GPTBot</strong></td><td>OpenAI</td><td>Collects content for training models</td><td>Your pages stay out of training; ChatGPT search is not affected</td></tr><tr><td><strong>OAI-SearchBot</strong></td><td>OpenAI</td><td>Builds the index for ChatGPT search</td><td>You do not appear in ChatGPT search answers</td></tr><tr><td><strong>ChatGPT-User</strong></td><td>OpenAI</td><td>Opens pages a user asks about</td><td>Not an automatic crawler, so it does not decide search inclusion</td></tr><tr><td><strong>ClaudeBot</strong></td><td>Anthropic</td><td>Collects content for training</td><td>Your future pages stay out of training data</td></tr><tr><td><strong>Claude-SearchBot</strong></td><td>Anthropic</td><td>Indexes pages for Claude search answers</td><td>Anthropic says this may reduce your visibility in Claude search</td></tr><tr><td><strong>PerplexityBot</strong></td><td>Perplexity</td><td>Surfaces and links sites in Perplexity search</td><td>You drop out of Perplexity results; it is not used for model training</td></tr><tr><td><strong>Google-Extended</strong></td><td>Google</td><td>Controls use in Gemini Apps and Vertex AI</td><td>No grounding with Google Search on Vertex AI; Google Search ranking is unaffected</td></tr></tbody></table><figcaption class="wp-element-caption">Sources: <a href="https://developers.openai.com/api/docs/bots" target="_blank" rel="noopener">OpenAI</a>, <a href="https://support.claude.com/en/articles/8896518" target="_blank" rel="noopener">Anthropic</a>, <a href="https://docs.perplexity.ai/docs/resources/perplexity-crawlers.md" target="_blank" rel="noopener">Perplexity</a>, <a href="https://developers.google.com/search/docs/crawling-indexing/google-common-crawlers" target="_blank" rel="noopener">Google</a>.</figcaption></figure>
+<!-- /wp:table -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Why do some websites look empty to AI crawlers?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">An empty page for AI crawlers means text that appears only after JavaScript runs, or a request blocked by robots.txt or a firewall.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Single-page apps built with React, Vue or tools like Lovable often send a nearly empty HTML shell and fill it with JavaScript. Google renders JavaScript, so these sites can still rank. AI crawlers that skip rendering only see the shell.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Firewalls are the second cause. <a href="https://www.cloudflare.com/press-releases/2025/cloudflare-just-changed-how-ai-crawlers-scrape-the-internet-at-large/" target="_blank" rel="noopener">Cloudflare</a>, which says it handles traffic for 20% of the web, announced in July 2025 that it blocks AI crawlers by default and leaves the choice to site owners. Many teams never made that choice on purpose.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>The third cause is quieter. Aggressive rate limiting at your host can answer bots with 503 errors. We saw exactly that during our own audits, when fast crawling from one IP address triggered 503 responses at the hosting level.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">How do you check if ChatGPT can read your site?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">Checking AI readability means testing four layers in order: rendered HTML, crawler access, page structure and trust signals, as in the 12 steps below.</p>
+<!-- /wp:paragraph -->
+<!-- wp:list {"ordered":true} -->
+<ol class="wp-block-list"><!-- wp:list-item -->
+<li><strong>Read the raw HTML.</strong> Open view-source in your browser, or fetch the page with curl, and search for a sentence from your main content. If it is not in the source, many AI crawlers will not see it.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Reload with JavaScript turned off.</strong> Your headline, body text and navigation should still appear.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Allow the search crawlers.</strong> OAI-SearchBot, Claude-SearchBot and PerplexityBot should be allowed in robots.txt if you want to appear in ChatGPT, Claude and Perplexity search.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Decide on training crawlers on purpose.</strong> Blocking GPTBot or ClaudeBot keeps your pages out of future training data. Google says pages that disallow Google-Extended are not used for grounding with Google Search on Vertex AI.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Check your firewall and CDN.</strong> Look for AI crawler and bot settings in Cloudflare, Wordfence or your host's panel, and confirm the crawlers you want get through.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Test status codes.</strong> Request a few pages with an AI crawler user agent and confirm a 200 response, not 403 or 503.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Lead every page with the answer.</strong> Use one H1, question-shaped H2s and a two-sentence answer directly under each. Assistants quote passages, not whole pages. Our guide on <a href="/how-to-get-cited-in-google-ai-mode/">getting cited in Google AI Mode</a> shows the structure in detail.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Keep key facts in text.</strong> Prices, specifications and proof points inside images or PDFs are easy to miss. Put them in HTML text or tables.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Add structured data.</strong> Organization, Article and Person markup in JSON-LD tells crawlers who you are and who wrote the page.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Keep sitemaps current.</strong> Submit an XML sitemap with accurate lastmod dates in Bing Webmaster Tools. Bing is the index behind Microsoft Copilot.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Watch server speed under load.</strong> Slow responses and timeouts look like missing pages to a crawler with a limited budget.</li>
+<!-- /wp:list-item -->
+<!-- wp:list-item -->
+<li><strong>Show who is behind the content.</strong> A named author with credentials and an About page with company facts give assistants and readers a reason to trust the page.</li>
+<!-- /wp:list-item -->
+</ol>
+<!-- /wp:list -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">What did we learn from rebuilding our own site?</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph {"className":"bv-capsule","style":{"typography":{"fontWeight":"500"}},"fontSize":"lg"} -->
+<p class="bv-capsule has-lg-font-size" style="font-weight:500">Our main lesson is that rendering comes first: content, schema and prompt work only pay off after AI crawlers can read the HTML itself.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>After the rebuild, our own crawl of the new site showed the full text in the HTML source, with headings, meta descriptions and JSON-LD structured data in place. Before, bots that skip JavaScript saw little more than an empty shell.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Two things surprised us. Host-level rate limiting answered our audit crawler with 503 errors, which bots would get as well. And our robots.txt still blocked AI training crawlers that we later decided to allow for brand visibility. Check both, even if your site looks fine in a browser.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Frequently asked questions</h2>
+<!-- /wp:heading -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Do AI crawlers run JavaScript?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>In Vercel's December 2024 analysis, none of the major AI crawlers rendered JavaScript. Googlebot does, which is why a JavaScript site can rank in Google and still be hard to read for ChatGPT or Claude.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Does blocking GPTBot remove us from ChatGPT search?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>No. OpenAI says a site can allow OAI-SearchBot to appear in search results while disallowing GPTBot. Inclusion in ChatGPT search depends on OAI-SearchBot.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Should a B2B company allow training crawlers?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>It is a business choice. Allowing them puts your public pages into future model knowledge, which can help brand recall in answers. Blocking them protects content you consider proprietary. Search crawlers should stay allowed either way.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">Does Perplexity respect robots.txt?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>Perplexity says PerplexityBot is not used to crawl content for AI foundation models, and that Perplexity-User generally ignores robots.txt because a person requested the page.</p>
+<!-- /wp:paragraph -->
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading">How often should we run this check?</h3>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>After every redesign, CMS migration or firewall change, and at least once a quarter.</p>
+<!-- /wp:paragraph -->
+<!-- wp:group {"backgroundColor":"booming-50","style":{"border":{"radius":"0.75rem"},"spacing":{"padding":{"top":"1.25rem","right":"1.25rem","bottom":"1.25rem","left":"1.25rem"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group has-booming-50-background-color has-background" style="border-radius:0.75rem;padding:1.25rem"><!-- wp:paragraph -->
+<p>Not sure what AI crawlers see on your site? <a href="/boardroom-quickscan/">Request a free 15-minute Boardroom Quickscan</a> and we look at rendering, robots.txt and firewall settings with you. See our <a href="/services/">services</a>, or read <a href="/how-to-choose-a-geo-agency/">how to choose a GEO agency</a>.</p>
+<!-- /wp:paragraph --></div>
+<!-- /wp:group -->
