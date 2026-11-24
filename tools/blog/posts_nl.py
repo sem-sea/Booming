@@ -287,6 +287,196 @@ POSTS["geo-bureau-kiezen-10-vragen"] = dict(
 )
 
 
+# ------------------------------------------------------------------ best-of lists
+POSTS["best-of-lijsten-ai-assistenten"] = dict(
+    en="get-on-best-of-lists-ai-assistants-cite",
+    title="Zo komt je bedrijf op de best-of-lijsten die AI-assistenten citeren",
+    excerpt="Best-of-lijsten waren 43,8% van de paginatypes die ChatGPT citeerde in een onderzoek van Ahrefs. Zo verdien je als B2B-bedrijf een plek op die lijsten.",
+    kw="best-of-lijsten AI",
+    blocks=[
+        tldr("In een " + a("onderzoek van Ahrefs naar 750 prompts in ChatGPT", "ahrefs_lists") + " waren lijsten van het type \"beste X\" 43,8% van de geciteerde paginatypes. Een plek op onafhankelijke lijsten die vaak worden bijgewerkt, is een van de snelste manieren om genoemd te worden als kopers AI om een shortlist vragen."),
+        p("Vraagt een koper ChatGPT naar de beste tools of bureaus in een categorie, dan leunt het antwoord vaak op bestaande ranglijsten. Ahrefs zag dat 79,1% van 1.100 geciteerde lijstartikelen in 2025 was bijgewerkt, en 26% in de twee maanden voor het onderzoek (" + a("Ahrefs", "ahrefs_lists") + "). Actuele lijsten winnen."),
+        p("Autoriteit telt minder dan je zou denken: 35% van de geciteerde lijsten stond op domeinen met weinig autoriteit. Maar lijsten zijn geen zekerheid. " + a("Seer Interactive", "seer_listicles") + " mat tussen december 2025 en januari 2026 een daling van het aantal geciteerde lijstartikelen in ChatGPT van 160.000 naar 111.000 URL's, ongeveer 30%."),
+        p("Lijsten zijn dus één kanaal van meerdere. Kopers gebruiken ze hoe dan ook: volgens " + a("Forrester", "forrester") + " gebruikt 94% van de zakelijke kopers AI tijdens het aankoopproces."),
+        h2("Wat is een best-of-lijst in AI-zoekmachines?"),
+        cap("Een best-of-lijst is een vergelijkingspagina met een rangorde, zoals \"beste CRM-tools\", die assistenten lezen en samenvatten als kopers om opties vragen."),
+        p("Lijsten zijn er in verschillende vormen, en je hebt er niet overal evenveel invloed op."),
+        table(
+            ["Soort lijst", "Wie bepaalt het", "Moeite om erop te komen", "Let op"],
+            [
+                ["Overzicht in vakmedia", "Redacteur", "Gemiddeld: pitch met feiten en een toepassing", "Hooguit één keer per jaar bijgewerkt"],
+                ["Categoriepagina op een reviewplatform (G2, Capterra)", "Platform, gerangschikt op reviews", "Doorlopend: een vaste stroom reviews", "Betaalde plaatsingen naast de organische ranglijst"],
+                ["Lijst van een analist of adviseur", "Analist", "Hoog: briefings en referenties", "Vaak achter een betaalmuur"],
+                ["Overzicht van partners of integraties", "Partner", "Laag: vul je vermelding volledig in", "Klein publiek"],
+                ["Je eigen vergelijkingspagina", "Jij", "Laag om te schrijven, hoog om eerlijk te houden", "Lezers en assistenten geven er mogelijk minder gewicht aan"],
+            ],
+            "Lijsten naar hoeveel invloed je erop hebt.",
+        ),
+        h2("Waarom leunen AI-assistenten op deze lijsten?"),
+        cap("Leunen op lijsten betekent dat assistenten een shortlist overnemen die iemand al maakte: een ranglijst beantwoordt \"welke?\" sneller dan tien losse sites van leveranciers."),
+        p("Op een vraag naar een shortlist bestaat niet één juist antwoord. Daarom zoeken assistenten pagina's die opties al vergelijken. Weet je welke lijsten ze bij jouw prompts citeren, dan weet je waar je moet staan."),
+        h2("Hoe kom je op de lijsten die ertoe doen?"),
+        cap("Op lijsten komen betekent de pagina's vinden die assistenten voor je categorie citeren en de auteurs een reden en feiten geven."),
+        ol([
+            "<strong>Stel je shortlistvragen</strong> in ChatGPT, Perplexity, Gemini en Copilot en noteer elke lijst die ze citeren. Doe dat in het Nederlands en in het Engels als je in beide talen verkoopt.",
+            "<strong>Orden de lijsten</strong> op hoe vaak ze verschijnen, hoe actueel ze zijn en hoe goed ze bij je segment passen.",
+            "<strong>Kijk wat elke lijst nodig heeft</strong>: prijzen, een toepassing, screenshots, bewijs van klanten. De meeste auteurs zeggen waarop ze vergelijken.",
+            "<strong>Maak een factsheet van één pagina</strong> met precies die feiten, zodat het de auteur tien minuten kost om je op te nemen.",
+            "<strong>Pitch met een reden</strong>: een segment dat de lijst mist, een nieuwe functie of een klantresultaat dat de auteur kan citeren.",
+            "<strong>Bouw onafhankelijke reviews op</strong>, zodat categoriepagina's die op reviews rangschikken ook zonder pitch bewegen.",
+            "<strong>Volg op als lijsten worden bijgewerkt.</strong> Veel auteurs werken jaarlijks bij. Zorg dat je daarvoor in hun inbox zit.",
+        ]),
+        h2("Moet je je eigen best-of-lijst publiceren?"),
+        cap("Een eigen lijst is een vergelijking op je eigen site waarin je jezelf rangschikt. Die kan geciteerd worden als hij eerlijk, onderbouwd en actueel is."),
+        p("Veel bedrijven doen het. Van 250 Google-resultatenpagina's voor \"beste X-software\" die Ahrefs bekeek, toonden er 169 (67,6%) een lijst waarin de uitgever zichzelf op één zette. Een lijst van de leverancier zelf stond ook in 34% van de softwareantwoorden van ChatGPT die de uitgever aanraadden."),
+        p("Publiceer je er een, houd het dan eerlijk: echte criteria, concurrenten eerlijk beschreven, een datum en bronnen. Een lijst die leest als advertentie helpt niemand, en kopers merken dat."),
+    ] + faq([
+        ("Kunnen we betalen om op lijsten te komen?", "Sommige lijsten verkopen plaatsingen of verdienen affiliatevergoedingen. Een gesponsorde plaatsing die duidelijk wordt gemeld, is toegestaan, maar links kopen die rankingwaarde doorgeven, gaat in tegen het spambeleid van Google. Verdiende plaatsingen op onafhankelijke lijsten zijn de veiligere weg."),
+        ("Op hoeveel lijsten moeten we mikken?", "Begin met de vijf tot tien lijsten die het vaakst in je promptresultaten verschijnen. Voeg er meer toe als er nieuwe in je maandelijkse metingen opduiken."),
+        ("Verliezen lijstartikelen hun waarde in AI-zoekmachines?", "Seer mat in één maand een daling van 30% in citaties van lijstartikelen in ChatGPT. Zie lijsten als één kanaal naast reviews, vermeldingen in media en je eigen pagina's met antwoorden."),
+        ("Tellen Nederlandstalige lijsten mee?", "Ja, voor Nederlandse kopers. Bij Nederlandstalige vragen kwam 62,2% van de citaties in ChatGPT uit Nederlandstalige bronnen (" + a("Temso, 2026", "temso_lang") + "). Volg je Nederlandse prompts daarom apart."),
+        ("Hoe weten we of een plaatsing op een lijst heeft gewerkt?", "Stel elke maand dezelfde prompts en volg of je genoemd wordt en welke bronnen worden geciteerd. Tools als Otterly.ai of Peec AI doen dat automatisch."),
+    ]) + [
+        cta("Wil je weten welke lijsten AI-assistenten in jouw categorie citeren? " + QS + " en we brengen ze samen in kaart. Bekijk ook onze " + DIENSTEN + ", of lees " + a("hoe je een GEO-bureau kiest", "/nl/blog/geo-bureau-kiezen-10-vragen/") + "."),
+    ],
+)
+
+# ------------------------------------------------------------------ comparison pages
+SRC["ondernemersplein_reclame"] = "https://ondernemersplein.overheid.nl/regels-voor-reclame"
+
+POSTS["vergelijkingspaginas-ai-assistenten"] = dict(
+    en="comparison-pages-ai-assistants-cite",
+    title="Zo schrijf je vergelijkingspagina's die AI-assistenten citeren",
+    excerpt="Vergelijkingen naast elkaar horen bij de vaakst geciteerde formats in AI-antwoorden. Zo schrijf je pagina's die kopers en AI-assistenten vertrouwen.",
+    kw="vergelijkingspagina's",
+    blocks=[
+        tldr("In een " + a("onderzoek van Meltwater en LinkedIn", "meltwater_linkedin") + " naar 9,5 miljoen AI-citaties hoorden vergelijkingen naast elkaar (50%) en best-of-lijsten (54%) bij de vaakst geciteerde formats op LinkedIn. Eerlijke, onderbouwde vergelijkingspagina's helpen kopers die drie of minder producten op hun shortlist zetten."),
+        p("Kopers beslissen snel. In het onderzoek van TrustRadius uit 2026 onder 1.862 kopers van technologie zette 83% drie of minder producten op de shortlist (" + a("TrustRadius", "trustradius_2026") + "). Het vergelijken gebeurt vóór het eerste salesgesprek."),
+        p("AI-assistenten doen nu veel van dat vergelijkwerk. In een " + a("onderzoek van Ahrefs naar 750 prompts in ChatGPT", "ahrefs_lists") + " waren lijsten van het type \"beste X\" 43,8% van de geciteerde paginatypes. En in het onderzoek van Meltwater hoorden vergelijkingen naast elkaar met 50% bij de vaakst geciteerde formats op LinkedIn (" + a("Meltwater", "meltwater_linkedin") + ")."),
+        p("Publiceer je de vergelijking niet zelf, dan doet een ander het. Met zijn feiten over jou."),
+        h2("Wat is een vergelijkingspagina?"),
+        cap("Een vergelijkingspagina is een pagina die je product op dezelfde criteria naast alternatieven zet, met een titel als \"X vs Y\" of \"alternatieven voor X\"."),
+        p("Goed gedaan is het een hulpmiddel bij de aankoop: de criteria waar kopers om geven, eerlijke antwoorden per optie en een duidelijke uitspraak over voor wie elke optie geschikt is."),
+        h2("Waarom citeren AI-assistenten vergelijkingspagina's?"),
+        cap("Een vergelijking citeren betekent dat de assistent gestructureerde antwoorden hergebruikt: criteria, een tabel en een oordeel beantwoorden \"wat is beter voor mij?\" op één plek."),
+        p("Een tabel met dezelfde rijen voor elke optie is makkelijk te citeren en samen te vatten. Dat format gebruiken assistenten als een koper om een aanbeveling vraagt."),
+        h2("Hoe schrijf je een vergelijkingspagina die geciteerd wordt?"),
+        cap("Een citeerbare vergelijking schrijven betekent echte criteria van kopers kiezen, de tabel voor elke optie eerlijk invullen en duidelijk zeggen wie wat moet kiezen."),
+        ol([
+            "<strong>Kies de vergelijkingen die kopers echt maken.</strong> Kijk naar salesgesprekken, verloren deals en je prompttracker.",
+            "<strong>Gebruik de criteria van de koper</strong>: prijsmodel, integraties, implementatietijd, support, compliance.",
+            "<strong>Maak één tabel</strong> met dezelfde rijen voor elke optie, als HTML-tekst.",
+            "<strong>Onderbouw feiten over concurrenten</strong> met hun eigen prijs- en documentatiepagina's, met een datum.",
+            "<strong>Geef per segment een oordeel</strong>: \"Kies X als je ... nodig hebt\", ook voor situaties waarin de concurrent beter past.",
+            "<strong>Controleer elk kwartaal</strong>, want prijzen en functies veranderen.",
+        ]),
+        table(
+            ["Onderdeel", "Zwakke vergelijkingspagina", "Sterke vergelijkingspagina"],
+            [
+                ["Criteria", "Gekozen zodat jij wint", "Gekozen door kopers"],
+                ["Feiten over concurrenten", "Zonder bron, verouderd", "Gelinkt naar hun pagina's, met datum"],
+                ["Oordeel", "\"Wij zijn beter\"", "Voor wie elke optie geschikt is"],
+                ["Vorm", "Afbeeldingen en sliders", "HTML-tabel en tekst"],
+            ],
+            "Wat een pagina die kopers vertrouwen onderscheidt van een advertentie.",
+        ),
+    ] + faq([
+        ("Is het riskant om concurrenten te noemen?", "Vergelijkende reclame mag in Nederland onder voorwaarden: ze mag niet misleiden, de producten moeten hetzelfde doel hebben en je moet objectief vergelijken op controleerbare eigenschappen (" + a("Ondernemersplein", "ondernemersplein_reclame") + "). Link naar hun openbare pagina's, zet een datum bij je feiten en vermijd claims die je niet kunt bewijzen."),
+        ("Hoeveel vergelijkingspagina's moeten we publiceren?", "Begin met de drie tot vijf vergelijkingen die je kopers het vaakst maken. Kwaliteit telt meer dan aantal."),
+        ("Moeten we toegeven waar een concurrent beter is?", "Ja. Kopers zien eenzijdige pagina's direct, en een eerlijk oordeel maakt de rest van de pagina geloofwaardig."),
+        ("Waar horen vergelijkingspagina's te staan?", "Op je eigen site, met links vanaf product- en prijspagina's, zodat kopers en crawlers ze vinden."),
+        ("Werken vergelijkingspagina's ook voor diensten?", "Ja. Vergelijk samenwerkingsvormen, zoals bureau, eigen team of freelancer, op kosten, snelheid en controle."),
+    ]) + [
+        cta("Wil je een vergelijkingspagina die kopers vertrouwen? " + QS + " en we kiezen de vergelijkingen die ertoe doen. Bekijk ook onze " + DIENSTEN + ", of lees " + a("hoe je op de lijsten komt die AI-assistenten citeren", "/nl/blog/best-of-lijsten-ai-assistenten/") + "."),
+    ],
+)
+
+# ------------------------------------------------------------------ wrong AI answers
+POSTS["foute-ai-antwoorden-over-je-bedrijf"] = dict(
+    en="fix-wrong-ai-answers-about-your-company",
+    title="Als AI je bedrijf verkeerd beschrijft: een correctieplan voor B2B-merken",
+    excerpt="AI-zoektools gaven in een test op meer dan 60% van de vragen een fout antwoord. Zo vind en herstel je foute AI-antwoorden over je bedrijf.",
+    kw="foute AI-antwoorden",
+    blocks=[
+        tldr("AI-assistenten maken vaak fouten: in een " + a("test van het Tow Center", "cjr_tow") + " gaven acht AI-zoektools op meer dan 60% van de vragen een fout antwoord, en een " + a("onderzoek van de EBU en de BBC", "ebu_study") + " vond grote problemen in 45% van de antwoorden. Controleer elke maand wat assistenten over je bedrijf zeggen en verbeter de bronnen waarop ze leunen."),
+        p("Foute antwoorden zijn geen zeldzame uitzondering. Het Tow Center for Digital Journalism stelde begin 2025 1.600 vragen aan acht AI-zoektools. Samen beantwoordden ze meer dan 60% verkeerd (" + a("Columbia Journalism Review", "cjr_tow") + ")."),
+        p("Een groter onderzoek van 22 publieke omroepen beoordeelde meer dan 3.000 antwoorden van ChatGPT, Copilot, Gemini en Perplexity in 14 talen. 45% had minstens één groot probleem, en 31% had ernstige problemen met bronnen (" + a("EBU", "ebu_study") + ")."),
+        p("Marketingleiders reageren. " + a("Gartner", "gartner_cmo") + " zag in november 2026 dat 42% van de CMO's onjuiste informatie over hun merk in AI-antwoorden volgt en laat corrigeren."),
+        h2("Wat telt als een fout AI-antwoord over je bedrijf?"),
+        cap("Een fout AI-antwoord is elke uitspraak over je bedrijf die feiten verkeerd weergeeft waarop kopers beslissen: prijzen, functies, certificeringen, klanten, vestigingen of eigendom."),
+        p("De bekende fouten in B2B: verouderde prijzen, een gestopt product dat als actueel wordt gepresenteerd, ontbrekende certificeringen, een functie van een concurrent die aan jou wordt toegeschreven of het verkeerde land van je hoofdkantoor."),
+        h2("Waarom beschrijven AI-assistenten bedrijven verkeerd?"),
+        cap("Een AI-fout over een bedrijf betekent meestal dat de assistent op verouderde, magere of tegenstrijdige bronnen leunde, of een gat vulde waar geen bron was."),
+        p("Verbergt je prijspagina de prijzen, dan wordt een reviewsite uit 2023 de bron. Staan je certificeringen in een pdf, dan vindt de assistent ze misschien niet. Elk gat is een uitnodiging om te gokken."),
+        h2("Hoe herstel je foute AI-antwoorden?"),
+        cap("Foute AI-antwoorden herstellen betekent de bronnen verbeteren, niet de assistent: publiceer de juiste feiten duidelijk, werk verouderde pagina's van anderen bij en controleer maandelijks."),
+        ol([
+            "<strong>Doe elke maand een feitencheck.</strong> Stel ChatGPT, Copilot, Gemini en Perplexity tien vragen die kopers over je stellen, in het Nederlands en in het Engels als je in beide talen verkoopt.",
+            "<strong>Leg elke fout vast</strong> met de assistent, de foute uitspraak en de geciteerde bron.",
+            "<strong>Publiceer het juiste feit</strong> op je eigen site als gewone HTML-tekst: een prijspagina, een pagina over beveiliging en certificeringen, een over-ons-pagina met KvK-nummer en adres.",
+            "<strong>Verbeter bronnen van anderen</strong>: werk reviewprofielen, bedrijvengidsen, partnerpagina's en verouderde artikelen bij waar dat kan.",
+            "<strong>Gebruik de feedbackknoppen</strong> in elke assistent om het foute antwoord te melden.",
+            "<strong>Controleer na vier weken opnieuw</strong> en volg het aantal fouten in de tijd.",
+        ]),
+    ] + faq([
+        ("Kunnen we OpenAI of Google vragen een antwoord te corrigeren?", "Je kunt antwoorden melden via de feedbackopties in elk product. De blijvende oplossing is het verbeteren van de bronnen waarop assistenten leunen."),
+        ("Welke feiten tellen het zwaarst?", "De feiten die deals laten mislukken: prijsmodel, certificeringen, integraties, klantsegmenten en of een product nog bestaat."),
+        ("Hoe vaak moeten we controleren?", "Maandelijks voor de kernfeiten, en na elke lancering, prijswijziging of naamswijziging."),
+        ("Merken kopers foute AI-antwoorden op?", "Veel wel. TrustRadius zag dat 94% van de kopers die AI gebruiken de antwoorden minstens af en toe controleert."),
+        ("Wie is hiervoor verantwoordelijk?", "Meestal marketing, met input van product en sales. Sales hoort de foute claims vaak als eerste."),
+    ]) + [
+        cta("Wil je weten wat AI-assistenten over je bedrijf zeggen? " + QS + " en we controleren de feiten samen. Bekijk ook onze " + DIENSTEN + ", of lees " + a("merkvermeldingen of backlinks", "/nl/blog/merkvermeldingen-vs-backlinks-ai-zichtbaarheid/") + "."),
+    ],
+)
+
+# ------------------------------------------------------------------ freshness
+POSTS["actuele-content-ai-zoekmachines-b2b"] = dict(
+    en="content-freshness-ai-search-b2b",
+    title="Actuele content en AI-zoekmachines: hoe vaak B2B-teams pagina's moeten bijwerken",
+    excerpt="AI-assistenten citeren content die 25,7% actueler is dan de organische resultaten van Google. Welke B2B-pagina's je bijwerkt, hoe vaak en wat echt telt.",
+    kw="actuele content AI",
+    blocks=[
+        tldr("AI-assistenten citeren nieuwere content dan Google rankt: in een " + a("onderzoek van Ahrefs naar 17 miljoen citaties", "ahrefs_fresh") + " waren geciteerde pagina's 25,7% actueler dan de organische resultaten. Werk je belangrijkste commerciële pagina's elk kwartaal echt bij, niet alleen met een nieuwe datum."),
+        p("Actualiteit komt in grote onderzoeken naar citaties steeds terug. Ahrefs vergeleek 17 miljoen citaties uit ChatGPT, Perplexity, Gemini, Copilot en Google AI Overviews met de organische resultaten van Google. Content die AI citeerde, was gemiddeld 25,7% actueler (" + a("Ahrefs, 2025", "ahrefs_fresh") + ")."),
+        p("Bij lijsten zie je hetzelfde. Van 1.100 lijstartikelen die ChatGPT citeerde, was 79,1% in 2025 bijgewerkt, en 26% in de twee maanden voor het onderzoek (" + a("Ahrefs", "ahrefs_lists") + ")."),
+        p("Ook bij journalistiek: 57% van de citaties van journalistieke artikelen met een bekende datum was in de laatste 12 maanden gepubliceerd. Citaties pieken in de eerste maand na publicatie (" + a("Muck Rack, mei 2026", "muckrack_may26") + ")."),
+        h2("Wat is actuele content in AI-zoekmachines?"),
+        cap("Actuele content verwijst naar hoe recent een pagina is gepubliceerd of inhoudelijk bijgewerkt. AI-assistenten lijken dat mee te wegen bij het kiezen van bronnen."),
+        p("Niet elke assistent doet het op dezelfde manier. Ahrefs zag dat ChatGPT de sterkste voorkeur had voor nieuwere content, terwijl Google AI Overviews als enige systeem iets oudere content citeerde dan de organische resultaten van Google."),
+        h2("Welke B2B-pagina's werk je als eerste bij?"),
+        cap("Je eerste prioriteit zijn de pagina's waarop kopers beslissen: prijzen, vergelijkingen, productpagina's, pagina's over integraties en je meest bezochte gidsen."),
+        table(
+            ["Soort pagina", "Hoe vaak bijwerken", "Hoe een echte update eruitziet"],
+            [
+                ["Prijzen", "Bij elke wijziging, elk kwartaal controleren", "Actuele prijzen, limieten per abonnement, datum"],
+                ["Vergelijkingspagina's", "Elk kwartaal", "Feiten over concurrenten opnieuw gecontroleerd, nieuwe criteria"],
+                ["Product- en integratiepagina's", "Bij elke release", "Nieuwe functies, screenshots, ondersteunde tools"],
+                ["Belangrijkste gidsen en artikelen met cijfers", "Elke 6 maanden", "Nieuwe data, verouderde claims verwijderd"],
+                ["Cases", "Elk jaar", "Bijgewerkte resultaten, klant nog actief"],
+            ],
+            "Een praktisch ritme voor B2B-sites.",
+        ),
+        h2("Wat telt als een echte update?"),
+        cap("Een echte update betekent dat de inhoud is veranderd: nieuwe data, verbeterde feiten, nieuwe onderdelen of verwijderde verouderde stukken, niet alleen een andere datum."),
+        ol([
+            "<strong>Vervang verouderde cijfers</strong> door de nieuwste data en link naar de bron.",
+            "<strong>Voeg toe wat er veranderd is</strong>: nieuwe functies, prijzen, wet- en regelgeving of marktdata.",
+            "<strong>Verwijder wat niet meer klopt</strong>, ook producten die niet meer bestaan.",
+            "<strong>Toon de datum van de update</strong> zichtbaar op de pagina.",
+            "<strong>Laat zoekmachines het weten</strong> via je sitemap en IndexNow, dat Bing ondersteunt.",
+        ]),
+    ] + faq([
+        ("Helpt het om alleen de datum aan te passen?", "Dat is geen echte update en het misleidt lezers. Verander de inhoud en pas daarna de datum aan."),
+        ("Geven alle AI-assistenten de voorkeur aan actuele content?", "In de data van Ahrefs doen de meeste dat. ChatGPT had de sterkste voorkeur. Google AI Overviews gaf geen voorkeur aan nieuwere content."),
+        ("Moeten we oude blogs bijwerken of nieuwe schrijven?", "Werk artikelen bij die kopers nog helpen. Voeg magere artikelen samen of verwijder ze. Nieuwe artikelen zijn zinvol voor nieuwe vragen."),
+        ("Hoeveel pagina's kan een klein team actueel houden?", "Richt je op 10 tot 20 commerciële pagina's. Die elk kwartaal controleren werkt beter dan één keer per jaar alles doorlopen."),
+        ("Telt actualiteit ook bij tijdloze onderwerpen?", "Minder, maar ook daar was geciteerde content in het onderzoek van Ahrefs gemiddeld actueler. Controleer de feiten minstens één keer per jaar."),
+    ]) + [
+        cta("Twijfel je welke pagina's je eerst moet bijwerken? " + QS + " en we bepalen samen de volgorde. Bekijk ook onze " + DIENSTEN + ", of lees " + a("hoe ChatGPT search bronnen kiest", "/nl/blog/hoe-chatgpt-search-bronnen-kiest-b2b/") + "."),
+    ],
+)
+
+
 # ------------------------------------------------------------------ checks
 BANNED_NL = [
     "naadloos", "naadloze", "baanbrekend", "revolutionair", "ontgrendel", "duik in", "duiken in",
