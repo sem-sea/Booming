@@ -557,6 +557,16 @@
       "name": "footer",
       "title": "Footer",
       "area": "footer"
+    },
+    {
+      "name": "header-nl",
+      "title": "Header (NL)",
+      "area": "header"
+    },
+    {
+      "name": "footer-nl",
+      "title": "Footer (NL)",
+      "area": "footer"
     }
   ],
   "customTemplates": [
@@ -591,6 +601,48 @@
     {
       "name": "page-head-of-growth",
       "title": "Head of Growth",
+      "postTypes": [
+        "page"
+      ]
+    },
+    {
+      "name": "page-home-nl",
+      "title": "Home (NL)",
+      "postTypes": [
+        "page"
+      ]
+    },
+    {
+      "name": "page-blog-nl",
+      "title": "Blog (NL)",
+      "postTypes": [
+        "page"
+      ]
+    },
+    {
+      "name": "page-boardroom-quickscan-nl",
+      "title": "Boardroom Quickscan (NL)",
+      "postTypes": [
+        "page"
+      ]
+    },
+    {
+      "name": "page-head-of-growth-nl",
+      "title": "Head of Growth (NL)",
+      "postTypes": [
+        "page"
+      ]
+    },
+    {
+      "name": "page-funnel-calculator-nl",
+      "title": "Funnel Leak Calculator (NL)",
+      "postTypes": [
+        "page"
+      ]
+    },
+    {
+      "name": "page-roi-forecaster-nl",
+      "title": "ROI Forecaster (NL)",
       "postTypes": [
         "page"
       ]

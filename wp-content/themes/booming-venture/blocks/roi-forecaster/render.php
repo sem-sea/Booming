@@ -19,6 +19,10 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-block-roi-forecaster',
 	data-horizon="<?php echo esc_attr( (string) $horizon ); ?>"
 	data-pdf-export="<?php echo esc_attr( $pdf ); ?>">
 	<noscript>
+		<?php if ( function_exists( 'bv_lang' ) && 'nl' === bv_lang() ) : ?>
+		<p>De ROI Forecaster heeft JavaScript nodig. <a href="mailto:info@boomingventure.com">Mail ons</a> voor een handmatige prognose.</p>
+		<?php else : ?>
 		<p>The ROI Forecaster needs JavaScript. <a href="mailto:info@boomingventure.com">Email us</a> for a manual projection.</p>
+		<?php endif; ?>
 	</noscript>
 </div>

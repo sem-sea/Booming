@@ -5,9 +5,36 @@
 (function () {
 	'use strict';
 
-	const fmt = (n, ccy) => new Intl.NumberFormat('en-US', { style: 'currency', currency: ccy || 'EUR', maximumFractionDigits: 0 }).format(Math.round(n));
+	/* Dutch UI on Dutch pages (<html lang="nl-NL">), English everywhere else. */
+	const NL  = /^nl/i.test(document.documentElement.lang || '');
+	const LOC = NL ? 'nl-NL' : 'en-US';
+	const T = {
+		'Cumulative revenue forecast': 'Prognose van de cumulatieve omzet',
+		'Your business': 'Jouw bedrijf',
+		'Conservative estimates only. We model a linear ramp.': 'Gebruik voorzichtige schattingen. We rekenen met een lineaire opbouw.',
+		'Monthly qualified traffic': 'Gekwalificeerd verkeer per maand',
+		'Current conversion rate (%)': 'Huidige conversieratio (%)',
+		'Target uplift from optimisation (%)': 'Beoogde groei door optimalisatie (%)',
+		'Average order value': 'Gemiddelde orderwaarde',
+		'LTV multiplier (× AOV)': 'LTV-factor (× orderwaarde)',
+		'Monthly programme budget': 'Programmabudget per maand',
+		'Ramp period (months)': 'Opbouwperiode (maanden)',
+		'Incremental revenue vs. doing nothing': 'Extra omzet ten opzichte van niets doen',
+		'ROI multiple': 'ROI-factor',
+		'Month': 'Maand',
+		'Customers': 'Klanten',
+		'Revenue': 'Omzet',
+		'Cumulative': 'Cumulatief',
+		'ROI': 'ROI',
+		'Book a 30-min strategy call →': 'Plan een strategiegesprek van 30 minuten →',
+		'Save as PDF': 'Opslaan als pdf',
+		'No break-even inside this horizon, extend the budget or uplift assumption.': 'Geen break-even binnen deze periode. Verleng de periode of pas het budget of de groeiaanname aan.',
+	};
+	const t = (s) => (NL && T[s]) || s;
+
+	const fmt = (n, ccy) => new Intl.NumberFormat(LOC, { style: 'currency', currency: ccy || 'EUR', maximumFractionDigits: 0 }).format(Math.round(n));
 	const fmtPct = (n) => `${(n * 100).toFixed(0)}%`;
-	const fmtX = (n) => `${n.toFixed(2)}×`;
+	const fmtX = (n) => NL ? `${n.toFixed(2).replace('.', ',')}×` : `${n.toFixed(2)}×`;
 	const clamp = (n, lo, hi) => { n = +n || 0; return Math.min(hi, Math.max(lo, n)); };
 
 	/**
@@ -97,7 +124,7 @@
 			return `<text x="${x}" y="${h - 8}" text-anchor="middle" font-size="7" fill="#94a3b8">M${s.month}</text>`;
 		}).join('');
 
-		return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Cumulative revenue forecast">
+		return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${t('Cumulative revenue forecast')}">
 			${yAxis}
 			<path d="${area}" fill="url(#bvg-roi)" opacity="0.35"/>
 			<path d="${path}" fill="none" stroke="url(#bvg-roi-stroke)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
@@ -124,27 +151,27 @@
 		<div class="bv-roi">
 			<div class="bv-roi__grid">
 				<aside class="bv-roi__inputs">
-					<h3>Your business</h3>
-					<p class="bv-roi__hint">Conservative estimates only. We model a linear ramp.</p>
-					<label>Monthly qualified traffic
+					<h3>${t('Your business')}</h3>
+					<p class="bv-roi__hint">${t('Conservative estimates only. We model a linear ramp.')}</p>
+					<label>${t('Monthly qualified traffic')}
 						<input type="number" min="0" step="100" name="traffic" value="8000" inputmode="numeric">
 					</label>
-					<label>Current conversion rate (%)
+					<label>${t('Current conversion rate (%)')}
 						<input type="number" min="0" max="100" step="0.1" name="baseConv" value="1.5">
 					</label>
-					<label>Target uplift from optimisation (%)
+					<label>${t('Target uplift from optimisation (%)')}
 						<input type="number" min="0" max="200" step="5" name="uplift" value="35">
 					</label>
-					<label>Average order value (${ccy})
+					<label>${t('Average order value')} (${ccy})
 						<input type="number" min="0" step="50" name="aov" value="850">
 					</label>
-					<label>LTV multiplier (× AOV)
+					<label>${t('LTV multiplier (× AOV)')}
 						<input type="number" min="1" max="10" step="0.1" name="ltvX" value="2.4">
 					</label>
-					<label>Monthly programme budget (${ccy})
+					<label>${t('Monthly programme budget')} (${ccy})
 						<input type="number" min="0" step="100" name="budget" value="4500">
 					</label>
-					<label>Ramp period (months)
+					<label>${t('Ramp period (months)')}
 						<input type="number" min="1" max="12" step="1" name="ramp" value="3">
 					</label>
 					<input type="hidden" name="months" value="${horizon}">
@@ -153,16 +180,16 @@
 				<section class="bv-roi__results" aria-live="polite">
 					<div class="bv-roi__headline">
 						<div>
-							<div class="bv-roi__metric-label">Cumulative revenue at month ${horizon}</div>
+							<div class="bv-roi__metric-label">${NL ? `Cumulatieve omzet in maand ${horizon}` : `Cumulative revenue at month ${horizon}`}</div>
 							<div class="bv-roi__metric bv-roi__metric--strong" data-out="cumRevenue">, </div>
 							<div class="bv-roi__metric-sub" data-out="cumRevSub"></div>
 						</div>
 						<div>
-							<div class="bv-roi__metric-label">Incremental revenue vs. doing nothing</div>
+							<div class="bv-roi__metric-label">${t('Incremental revenue vs. doing nothing')}</div>
 							<div class="bv-roi__metric" data-out="incremental">, </div>
 						</div>
 						<div class="bv-roi__roi">
-							<div class="bv-roi__metric-label">ROI multiple</div>
+							<div class="bv-roi__metric-label">${t('ROI multiple')}</div>
 							<div class="bv-roi__metric bv-roi__metric--roi" data-out="roi">, </div>
 							<div class="bv-roi__metric-sub" data-out="breakeven"></div>
 						</div>
@@ -171,13 +198,13 @@
 					<div class="bv-roi__chart" data-out="chart"></div>
 
 					<table class="bv-roi__table">
-						<thead><tr><th>Month</th><th>Customers</th><th>Revenue</th><th>Cumulative</th><th>ROI</th></tr></thead>
+						<thead><tr><th>${t('Month')}</th><th>${t('Customers')}</th><th>${t('Revenue')}</th><th>${t('Cumulative')}</th><th>${t('ROI')}</th></tr></thead>
 						<tbody data-out="rows"></tbody>
 					</table>
 
 					<div class="bv-roi__cta">
-						<a class="bv-roi__btn" href="/#contact">Book a 30-min strategy call →</a>
-						${showPdf ? '<button type="button" class="bv-roi__btn bv-roi__btn--ghost" data-action="print">Save as PDF</button>' : ''}
+						<a class="bv-roi__btn" href="${NL ? '/nl/#contact' : '/#contact'}">${t('Book a 30-min strategy call →')}</a>
+						${showPdf ? '<button type="button" class="bv-roi__btn bv-roi__btn--ghost" data-action="print">' + t('Save as PDF') + '</button>' : ''}
 					</div>
 				</section>
 			</div>
@@ -193,16 +220,16 @@
 			const last = r.last;
 
 			out('cumRevenue').textContent  = fmt(last.cumulativeRevenue, ccy);
-			out('cumRevSub').textContent   = `Baseline if you do nothing: ${fmt(r.baselineTotal, ccy)}`;
+			out('cumRevSub').textContent   = NL ? `Basislijn als je niets doet: ${fmt(r.baselineTotal, ccy)}` : `Baseline if you do nothing: ${fmt(r.baselineTotal, ccy)}`;
 			out('incremental').textContent = fmt(r.incremental, ccy);
 			out('roi').textContent         = fmtX(r.roiMultiple);
-			out('breakeven').textContent   = r.breakevenMonth ? `Break-even at month ${r.breakevenMonth}` : 'No break-even inside this horizon, extend the budget or uplift assumption.';
+			out('breakeven').textContent   = r.breakevenMonth ? (NL ? `Break-even in maand ${r.breakevenMonth}` : `Break-even at month ${r.breakevenMonth}`) : t('No break-even inside this horizon, extend the budget or uplift assumption.');
 			out('chart').innerHTML         = svgChart(r.series, ccy);
 
 			const rowStep = Math.max(1, Math.floor(r.series.length / 8));
 			out('rows').innerHTML = r.series
 				.filter((s, i) => i % rowStep === 0 || i === r.series.length - 1)
-				.map(s => `<tr><td>M${s.month}</td><td>${Math.round(s.customers).toLocaleString('en-US')}</td><td>${fmt(s.revenue, ccy)}</td><td>${fmt(s.cumulativeRevenue, ccy)}</td><td>${fmtX(s.roi)}</td></tr>`)
+				.map(s => `<tr><td>M${s.month}</td><td>${Math.round(s.customers).toLocaleString(LOC)}</td><td>${fmt(s.revenue, ccy)}</td><td>${fmt(s.cumulativeRevenue, ccy)}</td><td>${fmtX(s.roi)}</td></tr>`)
 				.join('');
 		};
 

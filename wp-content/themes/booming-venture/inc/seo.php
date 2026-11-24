@@ -283,6 +283,31 @@ add_action( 'wp_head', function () {
 	printf( "<meta name=\"twitter:image\" content=\"%s\">\n", esc_url( $img ) );
 }, 6 );
 
+/* FAQPage next to Yoast (1.11.0). Yoast builds the graph and the theme's
+ * own graph stands down, so the FAQ piece is added to Yoast's graph from
+ * the same "Frequently asked questions" / "Veelgestelde vragen" section. */
+add_filter( 'wpseo_schema_graph', function ( $graph ) {
+	if ( ! is_singular( 'post' ) || ! is_array( $graph ) ) return $graph;
+	$post  = get_post();
+	$items = $post ? bv_extract_faq_from_content( (string) $post->post_content ) : [];
+	if ( count( $items ) < 2 ) return $graph;
+	$url     = get_permalink( $post );
+	$graph[] = [
+		'@type'      => 'FAQPage',
+		'@id'        => $url . '#faq',
+		'isPartOf'   => [ '@id' => $url ],
+		'inLanguage' => get_bloginfo( 'language' ),
+		'mainEntity' => array_map( static function ( $qa ) {
+			return [
+				'@type'          => 'Question',
+				'name'           => $qa[0],
+				'acceptedAnswer' => [ '@type' => 'Answer', 'text' => $qa[1] ],
+			];
+		}, $items ),
+	];
+	return $graph;
+} );
+
 /* Canonical for paged archives / search. */
 add_action( 'wp_head', 'rel_canonical' );
 
@@ -302,7 +327,7 @@ add_filter( 'wp_sitemaps_max_urls', fn () => 1000 );
  * @return array<int,array{0:string,1:string}>
  */
 function bv_extract_faq_from_content( string $html ): array {
-	if ( ! preg_match( '/<h2[^>]*>\s*Frequently asked questions\s*<\/h2>(.*?)(?=<h2|\Z)/is', $html, $m ) ) {
+	if ( ! preg_match( '/<h2[^>]*>\s*(?:Frequently asked questions|Veelgestelde vragen)\s*<\/h2>(.*?)(?=<h2|\Z)/is', $html, $m ) ) {
 		return [];
 	}
 	$section = $m[1];

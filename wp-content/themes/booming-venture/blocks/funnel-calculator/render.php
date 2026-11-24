@@ -22,6 +22,10 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-block-funnel-calculato
 	data-default-stage="<?php echo esc_attr( $stage ); ?>"
 	data-pdf-export="<?php echo esc_attr( $pdf ); ?>">
 	<noscript>
+		<?php if ( function_exists( 'bv_lang' ) && 'nl' === bv_lang() ) : ?>
+		<p>De Funnel Leak Calculator is interactief en heeft JavaScript nodig. Zet het aan of <a href="mailto:info@boomingventure.com">mail ons</a> voor een handmatige analyse.</p>
+		<?php else : ?>
 		<p>The Funnel Leak Calculator is interactive and needs JavaScript. Please enable it, or <a href="mailto:info@boomingventure.com">email us</a> for a manual analysis.</p>
+		<?php endif; ?>
 	</noscript>
 </div>

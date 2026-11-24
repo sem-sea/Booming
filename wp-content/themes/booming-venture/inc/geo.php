@@ -248,7 +248,12 @@ add_filter( 'the_content', function ( $content ) {
 	$mod = get_the_modified_date( 'F Y' );
 	/* Named author for E-E-A-T; the WP user is often a team account. */
 	$author = (string) apply_filters( 'bv_byline_name', 'Ben Verschuur' );
-	$banner = '<p class="bv-post-meta-line" style="font-size:0.875rem;color:var(--wp--preset--color--muted);margin:0 0 1.5rem;padding:0.625rem 0.875rem;background:var(--wp--preset--color--base-50);border-left:3px solid var(--wp--preset--color--booming-500);border-radius:0.375rem;">Last updated: <strong>' . esc_html( $mod ) . '</strong> · By <a href="' . esc_url( home_url( '/about/' ) ) . '">' . esc_html( $author ) . '</a></p>';
+	/* Dutch posts get the Dutch line and the Dutch about page (1.11.0). */
+	$is_nl  = function_exists( 'bv_post_lang' ) && 'nl' === bv_post_lang();
+	$label  = $is_nl ? 'Laatst bijgewerkt:' : 'Last updated:';
+	$by     = $is_nl ? 'Door' : 'By';
+	$about  = home_url( $is_nl ? '/nl/over-ons/' : '/about/' );
+	$banner = '<p class="bv-post-meta-line" style="font-size:0.875rem;color:var(--wp--preset--color--muted);margin:0 0 1.5rem;padding:0.625rem 0.875rem;background:var(--wp--preset--color--base-50);border-left:3px solid var(--wp--preset--color--booming-500);border-radius:0.375rem;">' . $label . ' <strong>' . esc_html( $mod ) . '</strong> · ' . $by . ' <a href="' . esc_url( $about ) . '">' . esc_html( $author ) . '</a></p>';
 	return $banner . $content;
 }, 5 );
 
