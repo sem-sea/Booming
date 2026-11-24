@@ -105,3 +105,9 @@ NL = {
         'Vragen over deze disclaimer? Mail naar <a href="mailto:info@boomingventure.com">info@boomingventure.com</a>.',
     ],
 }
+
+# Privacy and cookie policy: long, kept in their own module.
+from nl_legal import PRIVACY as _PRIVACY, COOKIES as _COOKIES  # noqa: E402
+
+NL["privacy-policy"] = _PRIVACY
+NL["cookie-policy"] = _COOKIES
