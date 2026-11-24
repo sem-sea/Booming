@@ -477,6 +477,226 @@ POSTS["actuele-content-ai-zoekmachines-b2b"] = dict(
 )
 
 
+# ------------------------------------------------------------------ press releases
+POSTS["persberichten-ai-citaties"] = dict(
+    en="do-press-releases-get-cited-by-ai",
+    title="Worden persberichten geciteerd door AI? Wat de cijfers laten zien",
+    excerpt="Persberichten waren 1,1% van de AI-citaties in de data van Muck Rack uit mei 2026, verdiende media 84%. Wat dat betekent voor B2B-pr-teams.",
+    kw="persberichten AI",
+    blocks=[
+        tldr("Zelden: persberichten waren 1,1% van de AI-citaties in de " + a("analyse van Muck Rack uit mei 2026", "muckrack_may26") + " van meer dan 25 miljoen links, tegen 84% voor verdiende media. Een persbericht helpt als het tot publicaties leidt, niet als losse bron."),
+        p("Muck Rack analyseerde meer dan 25 miljoen links die ChatGPT, Claude en Gemini citeerden, verdeeld over 17 sectoren. Verdiende media, waaronder journalistiek, wetenschappelijke bronnen, overheidsbronnen en bronnen van derden, waren goed voor 84% van de citaties. Journalistiek alleen was ongeveer 27% (" + a("Muck Rack, mei 2026", "muckrack_may26") + ")."),
+        p("Het aandeel van persberichten schommelde. Het steeg van ongeveer 1,2% in juli 2025 naar 6% in december 2025 en zakte daarna terug naar 1,1% in mei 2026 (" + a("Muck Rack", "muckrack_may26") + "). Persberichten via persbureaus gingen in de tweede helft van 2025 van 0,2% naar 1% van de citaties (" + a("persbericht van GlobeNewswire over data van Muck Rack", "muckrack_dec25") + ")."),
+        p("Een persbericht is dus een zwakke bron en een sterke aanleiding. Wat telt, is de aandacht die het oplevert."),
+        h2("Welke rol speelt een persbericht in AI-zoekmachines?"),
+        cap("Een persbericht is in AI-zoekmachines vooral een aanleiding: het wordt zelf zelden geciteerd, maar de artikelen in vakmedia die erop volgen vaak wel."),
+        p("Muck Rack zag dat persberichten ongeveer 3,5 keer vaker verschijnen in antwoorden over trends in een sector dan in antwoorden over de beste aanbieders. Ze helpen het meest als jouw nieuws de trend is."),
+        h2("Welke bronnen citeren AI-assistenten in plaats daarvan?"),
+        cap("Het favoriete brontype is verdiende media: journalistiek, wetenschap en overheid, encyclopedieën, sociale platforms en content van andere bedrijven, samen 84% van de citaties."),
+        table(
+            ["Brontype", "Aandeel of bevinding", "Bron"],
+            [
+                ["Verdiende media totaal", "84% van de citaties", "Muck Rack, mei 2026"],
+                ["Journalistiek", "Ongeveer 27% van de citaties", "Muck Rack, mei 2026"],
+                ["Persberichten", "1,1% van de citaties", "Muck Rack, mei 2026"],
+                ["Betaalde content en advertorials", "0,3% van de citaties", "Muck Rack, mei 2026"],
+                ["Technologiejournalistiek", "24,2% van de citaties over technologie; vakbladen wegen zwaarder dan algemeen nieuws", "Muck Rack, mei 2026"],
+            ],
+            "Waar AI-citaties vandaan komen.",
+        ),
+        h2("Hoe passen B2B-pr-teams zich aan?"),
+        cap("Pr aanpassen voor AI betekent publiciteit meten in de media die assistenten citeren, vakmedia benaderen met data en persberichten zien als één middel van meerdere."),
+        ol([
+            "<strong>Zoek de media die assistenten citeren</strong> voor je categorie door de vragen van je kopers te stellen. Doe dat ook in het Nederlands, dan zie je welke Nederlandse vakmedia meetellen.",
+            "<strong>Benader die media met data</strong>: een benchmark, een enquête of een klantresultaat.",
+            "<strong>Houd persberichten feitelijk en gedateerd</strong>, zodat ze overeind blijven als ze worden geciteerd.",
+            "<strong>Zet het volledige verhaal op je eigen site</strong>, in HTML en met de cijfers.",
+            "<strong>Volg vermeldingen in AI-antwoorden</strong> na elke aankondiging, niet alleen knipsels in de pers.",
+        ]),
+    ] + faq([
+        ("Moeten we stoppen met persberichten?", "Nee. Gebruik ze voor echt nieuws en als basis voor pitches. Verwacht geen AI-citaties van het persbericht zelf."),
+        ("Helpen persbureaus voor AI-zichtbaarheid?", "Persberichten via persbureaus waren eind 2025 ongeveer 1% van de citaties. De artikelen die erop volgen, zijn veel meer waard."),
+        ("Welke media tellen voor B2B-technologie?", "Muck Rack zag dat vakbladen in antwoorden over technologie zwaarder wegen dan algemeen nieuws. Kijk welke titels assistenten bij jouw prompts citeren."),
+        ("Hoe snel pikken AI-assistenten nieuws op?", "Muck Rack zag dat citaties van journalistiek pieken in de eerste maand na publicatie."),
+        ("Is betaalde plaatsing de moeite waard?", "Betaalde content en advertorials waren 0,3% van de citaties. Verdiende publiciteit is de betere investering."),
+    ]) + [
+        cta("Wil je pr die ook je AI-zichtbaarheid helpt? " + QS + " en we brengen in kaart welke media assistenten in jouw categorie citeren. Bekijk ook onze " + DIENSTEN + "."),
+    ],
+)
+
+# ------------------------------------------------------------------ earned media
+POSTS["verdiende-media-ai-zichtbaarheid-b2b"] = dict(
+    en="earned-media-ai-visibility-b2b",
+    title="Verdiende media voor AI-zichtbaarheid: waar B2B-merken genoemd moeten worden",
+    excerpt="Verdiende media waren 84% van de AI-citaties in een onderzoek naar 25 miljoen links. Waar B2B-merken vermeldingen verdienen en hoe je daarvoor pitcht.",
+    kw="verdiende media AI-zichtbaarheid",
+    blocks=[
+        tldr("84% van de AI-citaties komt uit verdiende media (" + a("Muck Rack, mei 2026", "muckrack_may26") + "), en vermeldingen in nieuwsartikelen hangen met 0,67 samen met AI-zichtbaarheid (" + a("Ahrefs, 2026", "ahrefs_mention_types") + "). Verdien vermeldingen in de vakmedia, community's en lijsten die assistenten al citeren voor je categorie."),
+        p("Eigen content is een klein deel van wat AI-assistenten citeren. De analyse van Muck Rack van meer dan 25 miljoen links liet zien dat verdiende media 84% van de citaties uitmaakten, en eigen en betaalde content samen ongeveer 16% (" + a("Muck Rack", "muckrack_may26") + ")."),
+        p("Vermeldingen gaan samen met zichtbaarheid. In een onderzoek van Ahrefs naar 10.000 merken en 260 miljoen AI-prompts hingen vermeldingen in Reddit-draden met ranglijsten met 0,75 samen met vermeldingen in AI, vermeldingen op webpagina's met 0,70 en vermeldingen in nieuwsartikelen met 0,67 (" + a("Ahrefs", "ahrefs_mention_types") + ")."),
+        p("En de journalisten die ertoe doen, staan misschien niet op je lijst. Muck Rack vond gemiddeld maar 2% overlap tussen de journalisten die merken benaderden en de journalisten die AI citeerde (" + a("persbericht van GlobeNewswire over data van Muck Rack", "muckrack_dec25") + ")."),
+        p("Voor de Nederlandse markt telt ook de taal van die bronnen. Bij Nederlandstalige vragen kwam 66,4% van de citaties in Copilot uit Nederlandstalige bronnen (" + a("Temso, 2026", "temso_lang") + "). Nederlandse vakmedia horen dus op je lijst, naast internationale titels."),
+        h2("Wat zijn verdiende media in AI-zoekmachines?"),
+        cap("Verdiende media zijn vermeldingen van je merk waarvoor je niet betaalde en die je niet publiceerde: artikelen, reviews, forumdraden, lijsten en content van andere bedrijven."),
+        p("De definitie is bewust breed. Muck Rack telt journalistiek, wetenschappelijke bronnen, overheidsbronnen, encyclopedieën, sociale media en bedrijfsbronnen van derden mee."),
+        h2("Waar moeten B2B-merken vermeldingen verdienen?"),
+        cap("De beste plek voor een vermelding is een bron die assistenten al citeren bij vragen van je kopers. Stel die vragen en noteer de bronnen."),
+        table(
+            ["Kanaal", "Samenhang met vermeldingen in AI (Ahrefs, 2026)", "Hoe B2B-merken het verdienen"],
+            [
+                ["Reddit-draden met ranglijsten", "0,75", "Echte antwoorden in relevante subreddits, nooit reclame"],
+                ["Vermeldingen op webpagina's", "0,70", "Partnerpagina's, lijsten, gastbijdragen"],
+                ["Nieuwsartikelen", "0,67", "Pitches met data aan vakmedia"],
+                ["YouTube", "0,64", "Presentaties, demo's, interviews"],
+            ],
+            "Samenhang, geen bewijs van oorzaak.",
+        ),
+        h2("Hoe pitch je voor vermeldingen die AI citeert?"),
+        cap("Pitchen voor AI-citaties betekent je richten op de media en auteurs die assistenten al citeren, met data of kennis die ze nergens anders krijgen."),
+        ol([
+            "<strong>Maak je doellijst op basis van AI-antwoorden</strong>, niet alleen vanuit een mediadatabase.",
+            "<strong>Begin met data</strong>: een benchmark, een enquête, geanonimiseerde resultaten.",
+            "<strong>Bied een expert aan</strong> met een duidelijke mening en tijd om te reageren.",
+            "<strong>Maak feiten makkelijk te controleren</strong> met een bronpagina op je site.",
+            "<strong>Volg lijsten en overzichtsartikelen op</strong> voordat ze worden bijgewerkt.",
+            "<strong>Volg elke maand je vermeldingen in AI</strong> om te zien welke plaatsingen het verschil maakten.",
+        ]),
+    ] + faq([
+        ("Telt een kleine vermelding mee?", "Ahrefs zag dat vermeldingen gewogen naar verkeer ongeveer even sterk samenhingen als het ruwe aantal vermeldingen. Een vermelding op een kleinere, relevante site telt dus nog steeds."),
+        ("Zijn verdiende media belangrijker dan onze eigen site?", "Allebei tellen. Je site levert de feiten. Verdiende media laten assistenten zien dat anderen je vertrouwen."),
+        ("Hoeveel vermeldingen hebben we nodig?", "Ahrefs zag dat de opbrengst afneemt: tien keer meer vermeldingen op webpagina's ging samen met ongeveer 3,7 keer meer vermeldingen in AI."),
+        ("Moeten B2B-merken op Reddit actief zijn?", "Waar kopers over je categorie praten wel, als echte deelnemer. Reclame wordt verwijderd en schaadt het vertrouwen."),
+        ("Kan een bureau dit voor ons doen?", "Ja, zolang het echte verhalen en data pitcht. Massale outreach levert zelden publiciteit op."),
+    ]) + [
+        cta("Wil je weten waar je concurrenten genoemd worden en jij niet? " + QS + ". Bekijk ook onze " + DIENSTEN + ", of lees " + a("worden persberichten geciteerd door AI?", "/nl/blog/persberichten-ai-citaties/") + "."),
+    ],
+)
+
+
+# ------------------------------------------------------------------ EU AI Act
+POSTS["ai-verordening-b2b-marketingteams"] = dict(
+    en="eu-ai-act-b2b-marketing-teams",
+    title="De AI-verordening voor B2B-marketingteams: wat geldt sinds 2 augustus 2026",
+    excerpt="Sinds 2 augustus 2026 gelden de transparantieregels van de AI-verordening. Wat dat betekent voor chatbots, AI-beelden, deepfakes en AI-teksten in B2B-marketing.",
+    kw="AI-verordening marketing",
+    blocks=[
+        tldr("Artikel 50 van de Europese AI-verordening (AI Act) geldt sinds 2 augustus 2026. Voor marketingteams betekent dat: chatbots die zeggen dat ze AI zijn, gelabelde deepfakes, leveranciers die AI-output markeren (2 december 2026 voor tools die al op de markt waren) en menselijke redactionele controle. Boetes lopen op tot € 15 miljoen of 3% van de omzet."),
+        p("Marketing is in de meeste bedrijven een van de grootste gebruikers van AI. Het eerste deel van de AI-verordening dat het dagelijkse marketingwerk raakt, geldt nu. Artikel 50, de transparantieregel, is van toepassing sinds 2 augustus 2026 (" + a("Europese Commissie", "ec_faq_art50") + ")."),
+        p("De Digital Omnibus van juli 2026, Verordening (EU) 2026/1744 (" + a("White &amp; Case", "whitecase_omnibus") + "), schoof de regels voor systemen met een hoog risico uit bijlage III op naar 2 december 2027 (" + a("Orrick", "orrick_omnibus") + "). Artikel 50 schoof niet op. Wie deze verplichtingen overtreedt, riskeert een boete tot € 15 miljoen of 3% van de wereldwijde jaaromzet, afhankelijk van wat hoger is (" + a("Goodwin", "goodwin_art50") + ")."),
+        h2("Wat is artikel 50 van de AI-verordening?"),
+        cap("Artikel 50 is de transparantieregel van de AI-verordening: mensen moeten weten wanneer ze met een AI-systeem te maken hebben of bepaalde AI-content zien."),
+        p("Het artikel bevat vier plichten, verdeeld over aanbieders (die het AI-systeem bouwen of verkopen) en gebruiksverantwoordelijken (de bedrijven die het inzetten). De volledige tekst staat bij de " + a("AI Act Service Desk", "ai_act_art50") + "."),
+        ol([
+            "<strong>Interactie.</strong> Aanbieders moeten systemen die met mensen praten, zoals chatbots, zo ontwerpen dat gebruikers weten dat ze met AI te maken hebben, tenzij dat duidelijk is.",
+            "<strong>Markering.</strong> Aanbieders van systemen die audio, beeld, video of tekst maken, moeten de output machineleesbaar en detecteerbaar markeren. Tools die alleen helpen bij bewerken, zijn uitgezonderd.",
+            "<strong>Emotieherkenning.</strong> Gebruiksverantwoordelijken van emotieherkenning of biometrische categorisering moeten de mensen informeren die eraan worden blootgesteld.",
+            "<strong>Deepfakes en tekst over zaken van algemeen belang.</strong> Gebruiksverantwoordelijken moeten deepfakes melden. Dat geldt ook voor AI-tekst die het publiek informeert over zaken van algemeen belang, tenzij een mens die tekst heeft nagekeken onder redactionele verantwoordelijkheid.",
+            "<strong>Timing.</strong> Alle vier gelden vanaf 2 augustus 2026, met één overgangsperiode voor markering door bestaande tools.",
+        ]),
+        h2("Wat veranderde de Digital Omnibus?"),
+        cap("De Digital Omnibus is de wijziging van juli 2026 die de meeste regels voor AI met een hoog risico uitstelde, maar artikel 50 liet staan."),
+        ul([
+            "Ze trad in werking op 27 juli 2026.",
+            "Systemen met een hoog risico uit bijlage III, zoals tools voor werving en onderwijs, vallen er nu vanaf 2 december 2027 onder. Systemen uit bijlage I in gereguleerde producten volgen op 2 augustus 2028.",
+            "Generatieve tools die al vóór 2 augustus 2026 op de markt waren, hebben tot 2 december 2026 om hun output te markeren.",
+            "De plicht tot AI-geletterdheid in artikel 4 is afgezwakt: organisaties moeten maatregelen nemen die AI-geletterdheid ondersteunen, maar hoeven niet elke medewerker te certificeren (" + a("Lewis Silkin", "lewis_silkin") + ").",
+        ]),
+        h2("Welke marketingactiviteiten leiden tot verplichtingen?"),
+        cap("Een verplichting onder artikel 50 is er bij vier soorten gebruik: websitechatbots, deepfakes van echte mensen, ongecontroleerde AI-tekst over algemeen belang en generatieve tools."),
+        table(
+            ["Gebruik in marketing", "Wat de regel vraagt", "Wie verantwoordelijk is", "Geldt vanaf"],
+            [
+                ["Chatbot op je website of in berichten", "Mensen moeten weten dat ze met AI praten, tenzij dat duidelijk is", "Aanbieder, vaak je leverancier; controleer je eigen instelling", "2 augustus 2026"],
+                ["AI-beelden, -video, -audio of -tekst", "Output machineleesbaar en detecteerbaar gemarkeerd", "Aanbieder van de generatieve tool", "2 augustus 2026; 2 december 2026 voor tools die al op de markt waren"],
+                ["Deepfake van een echte persoon, plek of gebeurtenis", "Melden dat het met AI is gemaakt of bewerkt", "Gebruiksverantwoordelijke: je eigen bedrijf", "2 augustus 2026"],
+                ["AI-tekst over zaken van algemeen belang", "Melden dat AI de tekst maakte, tenzij er menselijke controle en redactionele verantwoordelijkheid is", "Gebruiksverantwoordelijke: je eigen bedrijf", "2 augustus 2026"],
+                ["Emotieherkenning in advertentie- of UX-tests", "De betrokken mensen informeren", "Gebruiksverantwoordelijke: je eigen bedrijf", "2 augustus 2026"],
+            ],
+            "Samenvatting van artikel 50 voor marketing. Algemene informatie, geen juridisch advies.",
+        ),
+        h2("Moet je AI-blogs volgens de AI-verordening labelen?"),
+        cap("Een AI-melding bij een blog is alleen verplicht als de tekst het publiek informeert over zaken van algemeen belang en niemand hem redactioneel heeft nagekeken."),
+        p("De FAQ van de Europese Commissie omschrijft zaken van algemeen belang als consumentenveiligheid en economische, financiële, politieke, wetenschappelijke of culturele ontwikkelingen die onderwerp van publiek debat kunnen zijn (" + a("Europese Commissie", "ec_faq_art50") + "). Een gewone B2B-handleiding of productpagina is meestal niet zo'n tekst. Marktcommentaar en onderzoeksresultaten kunnen dat wel zijn."),
+        p("De uitzondering heeft twee voorwaarden: de tekst is door een mens nagekeken of redactioneel gecontroleerd, en een persoon of bedrijf draagt de redactionele verantwoordelijkheid voor de publicatie. Benoem in de praktijk een redacteur en houd een kort logboek van controles bij. Google verwacht dezelfde discipline voor zoekresultaten: alle AI-content hoort door een mens op feiten te worden gecontroleerd en nagelezen (" + a("Google Search Central", "google_genai") + ")."),
+        h2("Hoe bereidt een marketingteam zich voor?"),
+        cap("Een marketingteam voorbereiden betekent elke AI-tool en elk gebruik in kaart brengen, de markering door leveranciers controleren, meldingen toevoegen waar nodig en een redacteur aanwijzen."),
+        ol([
+            "Maak een lijst van elke AI-tool die het team gebruikt, ook AI-functies in software waarvoor je al betaalt.",
+            "Geef aan welk gebruik klanten of het publiek bereikt: chatbots, beelden, video, stem en gepubliceerde tekst.",
+            "Vraag elke leverancier van een generatieve tool hoe die output markeert en of hij de deadline van 2 december 2026 haalt.",
+            "Zet een duidelijke zin als \"Je chat met een AI-assistent\" bij chatbots als de leverancier die niet toont.",
+            "Maak een regel voor deepfakes: geen nagemaakte echte mensen, plekken of gebeurtenissen zonder melding.",
+            "Laat AI-tekst voor het publiek via een vaste redacteur lopen en houd een eenvoudig logboek bij.",
+            "Leg de AI-training die je het team geeft vast als bewijs van maatregelen voor AI-geletterdheid onder artikel 4.",
+        ]),
+    ] + faq([
+        ("Geldt artikel 50 ook voor bedrijven buiten de EU?", "Ja, als hun AI-output in de EU wordt gebruikt. De AI-verordening geldt voor aanbieders en gebruiksverantwoordelijken in derde landen als de output van het AI-systeem in de Unie wordt gebruikt."),
+        ("Moeten we elke AI-afbeelding labelen?", "In de meeste gevallen niet met een zichtbaar label. De aanbieder van de generatieve tool moet de output machineleesbaar markeren. Je eigen bedrijf moet deepfakes melden: content die lijkt op echte mensen, plekken of gebeurtenissen en ten onrechte echt kan lijken."),
+        ("Wat zijn de boetes voor overtreding van artikel 50?", "Tot € 15 miljoen of 3% van de wereldwijde jaaromzet, afhankelijk van wat hoger is. Voor mkb-bedrijven en start-ups geldt het laagste van de twee."),
+        ("Wanneer gelden de regels voor hoog risico?", "Vanaf 2 december 2027 voor systemen uit bijlage III, zoals tools voor werving en onderwijs, en vanaf 2 augustus 2028 voor systemen uit bijlage I in gereguleerde producten. Gewone marketingtools staan niet op deze lijsten."),
+        ("Is training in AI-geletterdheid verplicht?", "Artikel 4 vraagt aanbieders en gebruiksverantwoordelijken om maatregelen te nemen die AI-geletterdheid ondersteunen. Sinds de Omnibus hoef je niet elke medewerker te certificeren. Trainingen en bewustwordingssessies vastleggen is de praktische aanpak."),
+        ("Valt AI-advertentietekst onder artikel 50?", "Advertentietekst is zelden tekst die het publiek informeert over zaken van algemeen belang, dus die meldplicht geldt meestal niet. Deepfakes in advertenties moet je altijd melden."),
+    ]) + [
+        p("Dit artikel is algemene informatie, geen juridisch advies. Laat je eigen verplichtingen controleren door een jurist."),
+        cta("Booming Venture helpt B2B-marketingteams AI in te zetten voor content, zoeken en campagnes, met werkwijzen die binnen deze regels passen. Voor compliance en training in AI-geletterdheid adviseert onze zusterpraktijk " + a("VerantwoordAI", "https://verantwoordai.nl/") + " grote organisaties en de publieke sector. " + QS + ", of bekijk onze " + DIENSTEN + "."),
+    ],
+)
+
+# ------------------------------------------------------------------ AI content and Google
+POSTS["ai-content-google-spambeleid"] = dict(
+    en="ai-written-content-google-spam-policies",
+    title="AI-content en Google: wat het spambeleid echt toestaat",
+    excerpt="Google verbiedt AI-content niet, maar straft massa zonder toegevoegde waarde. Wat het spambeleid en de spamupdate van juni 2026 betekenen voor B2B.",
+    kw="AI-content Google",
+    blocks=[
+        tldr(a("Het spambeleid van Google", "google_spam") + " noemt het inzetten van generatieve AI om veel pagina's te maken zonder toegevoegde waarde misbruik van geschaalde content (scaled content abuse). Content gemaakt met hulp van AI mag. Volume zonder eigen waarde is het risico. De spamupdate van juni 2026 werd in twee dagen wereldwijd uitgerold (" + a("Search Engine Roundtable", "ser_spam_june") + ")."),
+        p("Veel B2B-marketingteams laten AI nu concepten schrijven, en veel teams publiceren meer dan ooit. De lijn van Google staat in de eigen documentatie: het gaat erom of pagina's mensen helpen, niet hoe ze zijn gemaakt. De richtlijnen voor content met generatieve AI vragen site-eigenaren om de juistheid te controleren en waarde toe te voegen (" + a("Google Search Central", "google_genai") + ")."),
+        p("De menselijke kwaliteitsbeoordelaars van Google volgen dezelfde logica. Sinds de update van hun richtlijnen in januari 2025 krijgen pagina's die met weinig tot geen moeite, originaliteit of toegevoegde waarde zijn gemaakt de laagste beoordeling. Geautomatiseerde tools gebruiken om met weinig moeite veel pagina's te maken, wordt daarbij als voorbeeld genoemd (" + a("Search Engine Roundtable", "ser_raters") + ")."),
+        p("De handhaving komt in golven. De spamupdate van juni 2026 begon op 24 juni en was op 26 juni klaar. Hij gold voor alle talen, dus ook voor Nederlandstalige sites, en Google zei dat herstel vele maanden kan duren (" + a("Search Engine Roundtable", "ser_spam_june") + ")."),
+        h2("Straft Google content die met AI is gemaakt?"),
+        cap("Het standpunt van Google is dat AI niet het probleem is: massaal gemaakte content om te ranken, zonder toegevoegde waarde, overtreedt het spambeleid."),
+        p("Een artikel met een AI-concept dat een expert heeft gecontroleerd, aangevuld met echte voorbeelden en actueel gehouden, wordt beoordeeld op dezelfde kwaliteitssignalen als elk ander artikel. Honderd AI-pagina's die herhalen wat al rankt, zijn waar het beleid op mikt."),
+        h2("Wat is misbruik van geschaalde content?"),
+        cap("Misbruik van geschaalde content is Googles term voor massaal pagina's maken om rankings te beïnvloeden, met AI, scraping of mensen, zonder gebruikers te helpen."),
+        table(
+            ["Signaal", "Lager risico", "Hoger risico"],
+            [
+                ["Publicatietempo", "Wat je experts kunnen nakijken", "Tientallen artikelen per week van een klein team"],
+                ["Onderwerpen", "Vragen die je kopers stellen en die je kent", "Elk onderwerp met zoekvolume"],
+                ["Feiten", "Elk getal heeft een bron", "Cijfers zonder bron of verzonnen cijfers"],
+                ["Ervaring", "Je eigen voorbeelden, data en meningen", "Herschreven samenvattingen van wat al bovenaan staat"],
+                ["Auteurschap", "Auteur met naam en relevante achtergrond", "Geen auteur, of alleen de merknaam"],
+                ["Onderhoud", "Pagina's bijgewerkt of verwijderd als ze verouderd zijn", "Eén keer gepubliceerd, daarna nooit meer aangeraakt"],
+            ],
+            "Patronen die de kans vergroten of verkleinen dat content als geschaald wordt gezien.",
+        ),
+        h2("Hoe beoordelen beoordelaars pagina's die met AI zijn gemaakt?"),
+        cap("Het oordeel van beoordelaars betekent dat mensen pagina's scoren op moeite, originaliteit en toegevoegde waarde. Gekopieerde of automatische pagina's met weinig daarvan scoren het laagst."),
+        p("Scores van beoordelaars veranderen de rankings niet direct. Google gebruikt ze om te testen of zijn rankingsystemen werken. Maar ze laten zien wat Google die systemen wil laten belonen. De richtlijnen zeggen ook dat generatieve AI kan helpen bij werk van hoge kwaliteit. De tool zelf bepaalt de score niet."),
+        h2("Hoe gebruikt een B2B-team AI veilig voor content?"),
+        cap("AI veilig gebruiken betekent dat een mens eigenaar is van elke pagina: AI maakt het concept, een expert controleert, vult aan en beslist."),
+        ol([
+            "<strong>Begin bij een vraag van een koper</strong>, niet bij een lijst met zoekwoorden.",
+            "<strong>Schrijf de briefing vanuit eigen ervaring</strong>: een project, een getal, een mening die alleen jouw team heeft.",
+            "<strong>Laat AI het concept en het vooronderzoek doen</strong>: structuur, definities en bronnen.",
+            "<strong>Laat een expert redigeren</strong> en voorbeelden, data en oordeel toevoegen.",
+            "<strong>Controleer elk getal</strong> bij de oorspronkelijke bron en link ernaar.",
+            "<strong>Publiceer onder een auteur met naam</strong> en relevante ervaring.",
+            "<strong>Kies een tempo dat je kunt nakijken</strong>, en werk artikelen bij of verwijder ze als ze niemand meer helpen.",
+        ]),
+        p("Publiceer je in de EU, dan dekt diezelfde redactionele controle je ook onder de AI-verordening. Ons artikel over " + a("de AI-verordening voor marketingteams", "/nl/blog/ai-verordening-b2b-marketingteams/") + " legt uit wanneer AI-tekst een label nodig heeft."),
+    ] + faq([
+        ("Moeten we AI-blogs labelen?", "Niet voor het spambeleid van Google. Onder de AI-verordening is een label alleen nodig voor AI-tekst over zaken van algemeen belang die geen mens onder redactionele verantwoordelijkheid heeft nagekeken."),
+        ("Hoeveel artikelen per week is veilig?", "Google noemt geen aantal. Publiceer wat je experts goed kunnen nakijken. Kwaliteit en passende onderwerpen tellen, niet volume."),
+        ("Kan een site herstellen na een spamupdate?", "Ja, maar volgens Google kan dat vele maanden duren. Verbeter of verwijder pagina's met weinig waarde en blijf nuttige content publiceren."),
+        ("Moeten we oude AI-artikelen verwijderen?", "Bekijk ze eerst. Verbeter artikelen die je kopers helpen, voeg magere artikelen samen en verwijder of noindex wat niets toevoegt."),
+        ("Gelden de richtlijnen van Google ook voor AI-antwoorden?", "AI Overviews en AI Mode putten uit de index van Google. Pagina's die in de rankings dalen, verliezen daar dus ook zichtbaarheid."),
+    ]) + [
+        cta("Gebruik je AI voor content en wil je dat het overeind blijft in Google en AI-zoekmachines? " + QS + " en we bekijken je werkwijze. Bekijk ook onze " + DIENSTEN + "."),
+    ],
+)
+
+
 # ------------------------------------------------------------------ checks
 BANNED_NL = [
     "naadloos", "naadloze", "baanbrekend", "revolutionair", "ontgrendel", "duik in", "duiken in",
