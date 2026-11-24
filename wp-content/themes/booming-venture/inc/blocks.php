@@ -13,7 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'init', function () {
-	$blocks = [ 'funnel-calculator', 'roi-forecaster' ];
+	$blocks = [ 'funnel-calculator', 'roi-forecaster', 'geo-index' ];
 	foreach ( $blocks as $block ) {
 		$path = BV_THEME_DIR . '/blocks/' . $block;
 		if ( file_exists( $path . '/block.json' ) ) {
