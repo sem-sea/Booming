@@ -358,7 +358,7 @@ POSTS["30-day-ai-visibility-sprint"] = dict(
     ] + faq([
         ("How much does a 30-day sprint cost?", "It depends on markets, languages and how much implementation you want us to do. We quote a fixed price after a short intake. Our retainer pricing is on the services page."),
         ("Do we need developers for the sprint?", "Usually a few hours for technical fixes. We brief your developer, or implement directly when your site runs on WordPress."),
-        ("Which tools do you use for tracking?", "We run the prompts on a schedule in an AI visibility tracker such as Otterly.ai or Peec AI. Google Search Console and Bing Webmaster Tools cover the search side."),
+        ("Which tools are used for tracking?", "A prompt tracker that runs the prompts on a schedule across the main AI assistants. Google Search Console and Bing Webmaster Tools cover the search side."),
         ("Can we run a sprint ourselves?", "Yes, with the plan above. The hard parts are choosing prompts that match real buyer questions and earning mentions on other sites."),
         ("What happens after the sprint?", "You keep the prompt set, the data and the dashboard. Many teams continue with monthly tracking and a retainer for content and authority work; others take it in-house."),
     ]) + [

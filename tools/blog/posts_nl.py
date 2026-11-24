@@ -209,7 +209,7 @@ POSTS["ai-zichtbaarheid-tools-vergeleken"] = dict(
         ]),
     ] + faq([
         ("Hebben we wel een betaalde tool nodig?", "Voor een eerste blik werkt het om 20 vragen van kopers met de hand te stellen. Voor maandelijkse rapportages over meerdere assistenten en concurrenten bespaart een tool dagen werk."),
-        ("Welke tool gebruikt Booming Venture?", "We draaien promptsets in Otterly.ai of Peec AI, afhankelijk van de assistenten en het volume van de klant, plus Bing Webmaster Tools en Google Search Console."),
+        ("Met welke tool begin je het best?", "Met een tool die de assistenten en talen van je kopers dekt en ruwe antwoorden laat exporteren. Test een maand op je eigen prompts en voeg Bing Webmaster Tools en Google Search Console toe, want die zijn gratis."),
         ("Zijn de resultaten betrouwbaar?", "AI-antwoorden verschillen per keer. Goede tools stellen prompts herhaaldelijk en rapporteren trends. Zie een los resultaat als een steekproef."),
         ("Hoeveel moet een middelgroot B2B-bedrijf aan tools uitgeven?", "Instapabonnementen beginnen rond 95 tot 99 dollar per maand. Het " + a("overzicht van Nutshell uit 2026", "nutshell_cost") + " noemt 50 tot meer dan 1.000 dollar per maand voor het volgen van AI-zichtbaarheid, afhankelijk van de schaal."),
         ("Kunnen deze tools je zichtbaarheid verbeteren?", "Nee. Ze meten. Verbetering komt van betere pagina's, toegang voor crawlers en vermeldingen op andere sites."),

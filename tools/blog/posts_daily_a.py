@@ -136,7 +136,7 @@ POSTS["ai-visibility-tools-compared-peec-otterly-profound"] = dict(
         ]),
     ] + faq([
         ("Do we need a paid tool at all?", "For a first look, running 20 buyer prompts by hand works. For monthly reporting across several assistants and competitors, a tool saves days of work."),
-        ("Which tool does Booming Venture use?", "We run prompt sets in Otterly.ai or Peec AI, depending on the client's engines and volume, plus Bing Webmaster Tools and Google Search Console."),
+        ("Which tool should we start with?", "One that covers your buyers' assistants and languages and lets you export raw answers. Trial it for a month on your own prompts, and add Bing Webmaster Tools and Google Search Console, which are free."),
         ("Are the results reliable?", "AI answers vary between runs. Good tools run prompts repeatedly and report trends; treat any single result as a sample."),
         ("How much should a mid-size B2B company spend on tools?", "Entry plans start around $95 to $99 a month. " + a("Nutshell's 2026 overview", "nutshell_cost") + " puts AI visibility tracking at $50 to over $1,000 a month depending on scale."),
         ("Can these tools improve visibility?", "No. They measure. Improvement comes from fixing pages, crawler access and mentions on other sites."),
