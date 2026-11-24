@@ -22,6 +22,22 @@ add_action( 'init', function () {
 	}
 } );
 
+/*
+ * Cache busting for block files: the style version follows the newest
+ * view.css / view.js, so browsers never keep an old copy after an update.
+ */
+add_filter( 'block_type_metadata', function ( $metadata ) {
+	if ( empty( $metadata['name'] ) || 0 !== strpos( $metadata['name'], 'booming-venture/' ) || empty( $metadata['file'] ) ) {
+		return $metadata;
+	}
+	$dir   = dirname( $metadata['file'] );
+	$mtime = max( (int) @filemtime( $dir . '/view.css' ), (int) @filemtime( $dir . '/view.js' ) );
+	if ( $mtime ) {
+		$metadata['version'] = ( $metadata['version'] ?? '1' ) . '.' . $mtime;
+	}
+	return $metadata;
+} );
+
 /* Block category so authors find them quickly. */
 add_filter( 'block_categories_all', function ( $categories ) {
 	array_unshift( $categories, [

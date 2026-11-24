@@ -18,6 +18,8 @@
 		var missing = root.querySelector('.bv-gi__missing');
 		var count = root.querySelector('.bv-gi__count');
 		var reset = root.querySelector('.bv-gi__reset');
+		var more = root.querySelector('.bv-gi__more');
+		var active = root.querySelector('.bv-gi__active');
 		var current = root.getAttribute('data-default-list');
 
 		function activeList() {
@@ -46,16 +48,40 @@
 			sector.value = seen[keep] ? keep : '';
 		}
 
-		function apply() {
+		var PAGE = 25;
+		var limit = PAGE;
+
+		function apply(keep) {
+			if (keep !== true) limit = PAGE;
 			var term = (q.value || '').trim().toLowerCase();
 			var sec = sector.value;
 			var need = [];
 			chips.forEach(function (c) {
 				if (c.getAttribute('aria-pressed') === 'true') need.push(c.getAttribute('data-check').toLowerCase());
 			});
+			if (active) {
+				active.textContent = need.length;
+				active.hidden = !need.length;
+			}
 			var want = missing.checked ? '0' : '1';
 			var all = rows();
-			var shown = 0;
+			var tbody = all.length ? all[0].parentNode : null;
+			var key = sort.value;
+			all.sort(function (a, b) {
+				if (key === 'name') return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+				if (key === 'change') {
+					var ca = a.getAttribute('data-change'), cb = b.getAttribute('data-change');
+					ca = ca === '' ? -999 : +ca;
+					cb = cb === '' ? -999 : +cb;
+					if (cb !== ca) return cb - ca;
+				}
+				var attr = key === 'ai' || key === 'ready' ? 'data-' + key : 'data-score';
+				var va = a.getAttribute(attr), vb = b.getAttribute(attr);
+				va = va === '' ? -1 : +va;
+				vb = vb === '' ? -1 : +vb;
+				return (vb - va) || a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+			});
+			var match = 0;
 			all.forEach(function (tr) {
 				var ok = true;
 				if (term && tr.getAttribute('data-name').indexOf(term) === -1) ok = false;
@@ -63,28 +89,18 @@
 				for (var i = 0; ok && i < need.length; i++) {
 					if (tr.getAttribute('data-c-' + need[i]) !== want) ok = false;
 				}
-				tr.hidden = !ok;
-				if (ok) shown++;
+				if (ok) match++;
+				/* Long lists show 25 at a time; the full list stays in the HTML for crawlers. */
+				tr.hidden = !ok || match > limit;
+				if (tbody) tbody.appendChild(tr);
 			});
-			var tbody = all.length ? all[0].parentNode : null;
-			if (tbody) {
-				var key = sort.value;
-				all.sort(function (a, b) {
-					if (key === 'name') return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
-					if (key === 'change') {
-						var ca = a.getAttribute('data-change'), cb = b.getAttribute('data-change');
-						ca = ca === '' ? -999 : +ca;
-						cb = cb === '' ? -999 : +cb;
-						if (cb !== ca) return cb - ca;
-					}
-					var attr = key === 'ai' || key === 'ready' ? 'data-' + key : 'data-score';
-					var va = a.getAttribute(attr), vb = b.getAttribute(attr);
-					va = va === '' ? -1 : +va;
-					vb = vb === '' ? -1 : +vb;
-					return (vb - va) || a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
-				}).forEach(function (tr) { tbody.appendChild(tr); });
+			var next = activeList() && activeList().querySelector('.bv-gi__next');
+			if (next) {
+				var rest = match - limit;
+				next.hidden = rest <= 0;
+				if (rest > 0 && T.more) next.textContent = T.more.replace('%s', Math.min(rest, PAGE));
 			}
-			if (count && T.count) count.textContent = T.count.replace('%1$s', shown).replace('%2$s', all.length);
+			if (count && T.count) count.textContent = T.count.replace('%1$s', match).replace('%2$s', all.length);
 		}
 
 		function select(list) {
@@ -97,6 +113,8 @@
 
 		if (filters && rows().length) {
 			filters.hidden = false;
+			/* Wide screens show all filters; phones start with them folded away. */
+			if (more && root.clientWidth >= 720) more.open = true;
 			tabs.forEach(function (t) { t.addEventListener('click', function () { select(t.getAttribute('data-list')); }); });
 			q.addEventListener('input', apply);
 			sector.addEventListener('change', apply);
@@ -106,6 +124,12 @@
 				c.addEventListener('click', function () {
 					c.setAttribute('aria-pressed', c.getAttribute('aria-pressed') === 'true' ? 'false' : 'true');
 					apply();
+				});
+			});
+			root.querySelectorAll('.bv-gi__next').forEach(function (b) {
+				b.addEventListener('click', function () {
+					limit += PAGE;
+					apply(true);
 				});
 			});
 			reset.addEventListener('click', function () {

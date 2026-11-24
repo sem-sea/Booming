@@ -1,1 +1,1 @@
-<?php return [ 'dependencies' => [], 'version' => '1.0.0' ];
+<?php return [ 'dependencies' => [], 'version' => (string) filemtime( __DIR__ . '/view.js' ) ];

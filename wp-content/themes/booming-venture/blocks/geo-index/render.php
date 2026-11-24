@@ -34,11 +34,11 @@ foreach ( (array) ( $ai_run['engines'] ?? [] ) as $e ) {
 
 /* Crawler access: filter chips, and one "x/5" column in the table. */
 $bots = [
-	'bot_OAI-SearchBot'    => [ $t( 'Toegang ChatGPT', 'Access ChatGPT' ), $t( 'ChatGPT search mag de site lezen (OAI-SearchBot)', 'ChatGPT search may read the site (OAI-SearchBot)' ) ],
-	'bot_Claude-SearchBot' => [ $t( 'Toegang Claude', 'Access Claude' ), $t( 'Claude mag de site lezen (Claude-SearchBot)', 'Claude may read the site (Claude-SearchBot)' ) ],
-	'bot_PerplexityBot'    => [ $t( 'Toegang Perplexity', 'Access Perplexity' ), $t( 'Perplexity mag de site lezen (PerplexityBot)', 'Perplexity may read the site (PerplexityBot)' ) ],
-	'bot_Google-Extended'  => [ $t( 'Toegang Gemini', 'Access Gemini' ), $t( 'Gemini mag de content gebruiken (Google-Extended)', 'Gemini may use the content (Google-Extended)' ) ],
-	'bot_Bingbot'          => [ $t( 'Toegang Copilot', 'Access Copilot' ), $t( 'Bing en Copilot mogen de site lezen (Bingbot)', 'Bing and Copilot may read the site (Bingbot)' ) ],
+	'bot_OAI-SearchBot'    => [ 'ChatGPT', $t( 'ChatGPT search mag de site lezen (OAI-SearchBot)', 'ChatGPT search may read the site (OAI-SearchBot)' ) ],
+	'bot_Claude-SearchBot' => [ 'Claude', $t( 'Claude mag de site lezen (Claude-SearchBot)', 'Claude may read the site (Claude-SearchBot)' ) ],
+	'bot_PerplexityBot'    => [ 'Perplexity', $t( 'Perplexity mag de site lezen (PerplexityBot)', 'Perplexity may read the site (PerplexityBot)' ) ],
+	'bot_Google-Extended'  => [ 'Gemini', $t( 'Gemini mag de content gebruiken (Google-Extended)', 'Gemini may use the content (Google-Extended)' ) ],
+	'bot_Bingbot'          => [ 'Copilot', $t( 'Bing en Copilot mogen de site lezen (Bingbot)', 'Bing and Copilot may read the site (Bingbot)' ) ],
 ];
 
 /* Website checks shown as columns. */
@@ -50,15 +50,20 @@ $cols = [
 	'lang'                 => [ $t( 'Taal', 'Lang' ), $t( 'Nederlandse versie (lijst Nederland) of meerdere talen (internationaal)', 'Dutch version (Dutch list) or several languages (international list)' ) ],
 ];
 
-$cell = static function ( $v ) {
-	if ( true === $v ) {
-		return '<td class="bv-gi__y">&#10003;</td>';
-	}
-	if ( false === $v ) {
-		return '<td class="bv-gi__n">&#10005;</td>';
-	}
-	return '<td class="bv-gi__u">-</td>';
+/* One check cell. On small screens it shows as a pill: icon plus data-label. */
+$cell = static function ( $v, string $label, string $extra = '' ) {
+	$cls = true === $v ? 'bv-gi__y' : ( false === $v ? 'bv-gi__n' : 'bv-gi__u' );
+	$ico = true === $v ? '&#10003;' : ( false === $v ? '&#10005;' : '-' );
+	return '<td class="bv-gi__pill ' . $cls . $extra . '" data-label="' . esc_attr( $label ) . '">' . $ico . '</td>';
 };
+
+/* Labels for the small-screen cards (the table header covers wide screens). */
+$ml = [
+	'chg'   => $t( 'Week', 'Week' ),
+	'ai'    => $t( 'AI-score', 'AI score' ),
+	'ready' => $t( 'Website', 'Website' ),
+	'crawl' => $t( 'Crawlers', 'Crawlers' ),
+];
 
 $stats = static function ( array $rows ) {
 	$n = count( $rows );
@@ -80,6 +85,10 @@ $lists = [
 	'nl'   => $t( 'Top 100 Nederland', 'Top 100 Netherlands' ),
 	'intl' => $t( 'Top 100 internationaal', 'Top 100 international' ),
 ];
+$tabs  = [
+	'nl'   => $t( 'Nederland', 'Netherlands' ),
+	'intl' => $t( 'Internationaal', 'International' ),
+];
 
 $i18n = [
 	'search'   => $t( 'Zoek een bedrijf', 'Search a company' ),
@@ -92,6 +101,7 @@ $i18n = [
 	'missing'  => $t( 'Toon bedrijven die dit missen', 'Show companies that miss this' ),
 	'count'    => $t( '%1$s van %2$s bedrijven', '%1$s of %2$s companies' ),
 	'reset'    => $t( 'Wis filters', 'Clear filters' ),
+	'more'     => $t( 'Toon %s meer', 'Show %s more' ),
 	'checking' => $t( 'Bezig met meten. Dit duurt 10 tot 30 seconden.', 'Measuring. This takes 10 to 30 seconds.' ),
 	'invalid'  => $t( 'Vul een geldig domein in, zoals voorbeeld.nl.', 'Enter a valid domain, such as example.com.' ),
 	'limit'    => $t( 'Je hebt het maximum van 5 checks per uur bereikt. Probeer het later opnieuw.', 'You reached the limit of 5 checks per hour. Please try again later.' ),
@@ -129,37 +139,59 @@ $i18n = [
 	],
 ];
 
-$wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id ] );
+$caps    = ( $ai_cols ? "--bv-gi-cap-ai:'" . $t( 'Genoemd door', 'Named by' ) . "';" : '' ) . "--bv-gi-cap-web:'" . $t( 'Website', 'Website' ) . "'";
+$wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'style' => $caps ] );
 ?>
 <div <?php echo $wrapper; ?> data-bv-block="geo-index" data-default-list="<?php echo esc_attr( $default ); ?>" data-api="<?php echo esc_url( rest_url( 'bv/v1/geo-check' ) ); ?>" data-lang="<?php echo $nl ? 'nl' : 'en'; ?>">
 	<script type="application/json" class="bv-gi__i18n"><?php echo wp_json_encode( $i18n ); ?></script>
 
 	<div class="bv-gi__tabs" role="tablist" aria-label="<?php echo esc_attr( $t( 'Kies een lijst', 'Choose a list' ) ); ?>">
-		<?php foreach ( $lists as $key => $label ) : ?>
+		<?php foreach ( $tabs as $key => $label ) : ?>
 			<button type="button" role="tab" class="bv-gi__tab" data-list="<?php echo esc_attr( $key ); ?>" aria-selected="<?php echo $key === $default ? 'true' : 'false'; ?>" aria-controls="<?php echo esc_attr( $id . '-' . $key ); ?>"><?php echo esc_html( $label ); ?></button>
 		<?php endforeach; ?>
 	</div>
 
 	<div class="bv-gi__filters" hidden>
 		<input type="search" class="bv-gi__q" placeholder="<?php echo esc_attr( $i18n['search'] ); ?>" aria-label="<?php echo esc_attr( $i18n['search'] ); ?>">
-		<select class="bv-gi__sector" aria-label="<?php echo esc_attr( $t( 'Sector', 'Sector' ) ); ?>"><option value=""><?php echo esc_html( $i18n['allSect'] ); ?></option></select>
-		<select class="bv-gi__sort" aria-label="<?php echo esc_attr( $i18n['sort'] ); ?>">
-			<option value="score"><?php echo esc_html( $i18n['sort'] . ': ' . $i18n['byScore'] ); ?></option>
-			<?php if ( $ai_cols ) : ?><option value="ai"><?php echo esc_html( $i18n['sort'] . ': ' . $t( 'AI-score', 'AI score' ) ); ?></option><?php endif; ?>
-			<option value="ready"><?php echo esc_html( $i18n['sort'] . ': ' . $t( 'Websitescore', 'Website score' ) ); ?></option>
-			<option value="change"><?php echo esc_html( $i18n['sort'] . ': ' . $i18n['byChange'] ); ?></option>
-			<option value="name"><?php echo esc_html( $i18n['sort'] . ': ' . $i18n['byName'] ); ?></option>
-		</select>
-		<div class="bv-gi__chips" role="group" aria-label="<?php echo esc_attr( $t( 'Filter op check', 'Filter by check' ) ); ?>">
-			<?php foreach ( $ai_cols as $key => [ $short, $full ] ) : ?>
-				<button type="button" class="bv-gi__chip bv-gi__chip--ai" data-check="<?php echo esc_attr( $key ); ?>" aria-pressed="false" title="<?php echo esc_attr( $full ); ?>"><?php echo esc_html( $t( 'Genoemd door ', 'Named by ' ) . $short ); ?></button>
-			<?php endforeach; ?>
-			<?php foreach ( $bots + $cols as $key => [ $short, $full ] ) : ?>
-				<button type="button" class="bv-gi__chip" data-check="<?php echo esc_attr( $key ); ?>" aria-pressed="false" title="<?php echo esc_attr( $full ); ?>"><?php echo esc_html( $short ); ?></button>
+		<label class="bv-gi__field"><span><?php echo esc_html( $t( 'Sector', 'Sector' ) ); ?></span>
+			<select class="bv-gi__sector"><option value=""><?php echo esc_html( $i18n['allSect'] ); ?></option></select>
+		</label>
+		<label class="bv-gi__field"><span><?php echo esc_html( $i18n['sort'] ); ?></span>
+			<select class="bv-gi__sort">
+				<option value="score"><?php echo esc_html( $i18n['byScore'] ); ?></option>
+				<?php if ( $ai_cols ) : ?><option value="ai"><?php echo esc_html( $t( 'AI-score', 'AI score' ) ); ?></option><?php endif; ?>
+				<option value="ready"><?php echo esc_html( $t( 'Websitescore', 'Website score' ) ); ?></option>
+				<option value="change"><?php echo esc_html( $t( 'Stijgers', 'Risers' ) ); ?></option>
+				<option value="name"><?php echo esc_html( $i18n['byName'] ); ?></option>
+			</select>
+		</label>
+		<details class="bv-gi__more">
+			<summary><span><?php echo esc_html( $t( 'Filters', 'Filters' ) ); ?></span><span class="bv-gi__active" hidden></span></summary>
+		<div class="bv-gi__chips">
+			<?php
+			$groups = [
+				[ $t( 'Genoemd door', 'Named by' ), $ai_cols, ' bv-gi__chip--ai' ],
+				[ $t( 'Crawler mag lezen', 'Crawler allowed' ), $bots, '' ],
+				[ $t( 'Website', 'Website' ), $cols, '' ],
+			];
+			foreach ( $groups as $g => [ $glabel, $gchips, $gcls ] ) :
+				if ( ! $gchips ) {
+					continue;
+				}
+				?>
+				<div class="bv-gi__cg" role="group" aria-labelledby="<?php echo esc_attr( $id . '-g' . $g ); ?>">
+					<span class="bv-gi__cgl" id="<?php echo esc_attr( $id . '-g' . $g ); ?>"><?php echo esc_html( $glabel ); ?></span>
+					<?php foreach ( $gchips as $key => [ $short, $full ] ) : ?>
+						<button type="button" class="bv-gi__chip<?php echo esc_attr( $gcls ); ?>" data-check="<?php echo esc_attr( $key ); ?>" aria-pressed="false" title="<?php echo esc_attr( $full ); ?>"><?php echo esc_html( $short ); ?></button>
+					<?php endforeach; ?>
+				</div>
 			<?php endforeach; ?>
 		</div>
-		<label class="bv-gi__mode"><input type="checkbox" class="bv-gi__missing"> <?php echo esc_html( $i18n['missing'] ); ?></label>
-		<button type="button" class="bv-gi__reset"><?php echo esc_html( $i18n['reset'] ); ?></button>
+		<div class="bv-gi__opts">
+			<label class="bv-gi__mode"><input type="checkbox" class="bv-gi__missing"> <?php echo esc_html( $i18n['missing'] ); ?></label>
+			<button type="button" class="bv-gi__reset"><?php echo esc_html( $i18n['reset'] ); ?></button>
+		</div>
+		</details>
 		<p class="bv-gi__count" aria-live="polite"></p>
 	</div>
 
@@ -217,26 +249,27 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id ] );
 							$chg = null === $r['change'] ? '' : (string) $r['change'];
 							?>
 							<tr data-name="<?php echo esc_attr( strtolower( $r['name'] . ' ' . $r['domain'] ) ); ?>" data-sector="<?php echo esc_attr( $sector ); ?>" data-score="<?php echo (int) $r['score']; ?>" data-change="<?php echo esc_attr( $chg ); ?>" data-ai="<?php echo null === $r['ai'] ? '' : (int) $r['ai']; ?>" data-ready="<?php echo (int) $r['ready']; ?>"<?php echo $attrs; ?>>
-								<td class="bv-gi__rank"><?php echo (int) $r['rank']; ?></td>
+								<td class="bv-gi__rank<?php echo $r['rank'] <= 3 ? ' bv-gi__rank--top' : ''; ?>"><?php echo (int) $r['rank']; ?></td>
 								<td class="bv-gi__co"><strong><?php echo esc_html( $r['name'] ); ?></strong><span><?php echo esc_html( $r['domain'] ); ?> &middot; <?php echo esc_html( $sector ); ?></span></td>
 								<td class="bv-gi__score"><span class="bv-gi__bar" style="--s:<?php echo (int) $r['score']; ?>"><?php echo (int) $r['score']; ?></span></td>
-								<td class="bv-gi__chg"><?php
+								<td class="bv-gi__chg" data-label="<?php echo esc_attr( $ml['chg'] ); ?>"><?php
 									if ( '' === $chg || '0' === $chg ) {
 										echo '<span class="bv-gi__flat">' . ( '' === $chg ? esc_html( $t( 'nieuw', 'new' ) ) : '0' ) . '</span>';
 									} else {
 										echo '<span class="' . ( $r['change'] > 0 ? 'bv-gi__up">+' : 'bv-gi__down">' ) . (int) $r['change'] . '</span>';
 									}
 								?></td>
-								<?php if ( $ai_cols ) : ?><td class="bv-gi__num"><?php echo null === $r['ai'] ? '-' : (int) $r['ai']; ?></td><?php endif; ?>
-								<td class="bv-gi__num"><?php echo (int) $r['ready']; ?></td>
-								<?php foreach ( array_keys( $ai_cols ) as $k ) { echo $cell( $vals[ $k ] ); } // phpcs:ignore ?>
-								<td class="<?php echo 5 === $open ? 'bv-gi__y' : ( 0 === $open ? 'bv-gi__n' : 'bv-gi__p' ); ?>"><?php echo (int) $open; ?>/5</td>
-								<?php foreach ( array_keys( $cols ) as $k ) { echo $cell( $r['checks'][ $k ] ?? null ); } // phpcs:ignore ?>
+								<?php if ( $ai_cols ) : ?><td class="bv-gi__num" data-label="<?php echo esc_attr( $ml['ai'] ); ?>"><?php echo null === $r['ai'] ? '-' : (int) $r['ai']; ?></td><?php endif; ?>
+								<td class="bv-gi__num" data-label="<?php echo esc_attr( $ml['ready'] ); ?>"><?php echo (int) $r['ready']; ?></td>
+								<?php foreach ( $ai_cols as $k => $c ) { echo $cell( $vals[ $k ], $c[0], ' bv-gi__ai' ); } // phpcs:ignore ?>
+								<td class="bv-gi__crawl <?php echo 5 === $open ? 'bv-gi__y' : ( 0 === $open ? 'bv-gi__n' : 'bv-gi__p' ); ?>" data-label="<?php echo esc_attr( $ml['crawl'] ); ?>"><?php echo (int) $open; ?>/5</td>
+								<?php foreach ( $cols as $k => $c ) { echo $cell( $r['checks'][ $k ] ?? null, $c[0] ); } // phpcs:ignore ?>
 							</tr>
 						<?php endforeach; ?>
 						</tbody>
 					</table>
 				</div>
+				<button type="button" class="bv-gi__next" hidden></button>
 			<?php endif; ?>
 		</section>
 	<?php endforeach; ?>
