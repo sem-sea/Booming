@@ -46,15 +46,17 @@ def faq(title, pairs):
 
 EN = [
     hero('B2B GEO Index: <span class="bv-gradient-text">who is ready for AI search?</span>',
-         "200 B2B companies, measured every Monday on seven checks that decide whether ChatGPT, Claude, Perplexity, Gemini and Copilot can find, read and recognize them."),
+         "200 B2B companies, measured every Monday: how often ChatGPT, Claude, Gemini and Perplexity name them, and whether their websites are ready for AI search."),
     p("Buyers now meet vendors in AI answers first. " + a("Forrester", "forrester") + " reports that 94% of business buyers use AI in their buying process. Whether a company shows up depends partly on things it controls on its own website."),
     p("Some of those things are easy to check and often missing. In " + a("Vercel's analysis", "vercel") + ", none of the major AI crawlers rendered JavaScript, so text that only appears after scripts run stays invisible to them. And " + a("OpenAI", "openai_bots") + " says sites that block OAI-SearchBot will not appear in ChatGPT search answers."),
     p("Language matters as well. For Dutch-language questions, 81.2% of the sources in Google AI Overviews were Dutch-language pages (" + a("Temso, 2026", "temso_lang") + "). That is why the Dutch list checks for a Dutch version."),
     h2("What is the B2B GEO Index?"),
-    cap("The B2B GEO Index is a weekly ranking of 200 B2B companies by how ready their websites are for AI search, measured with seven checks."),
+    cap("The B2B GEO Index is a weekly ranking of 200 B2B companies by how often AI assistants name them and how ready their websites are."),
     block("intl"),
     h2("How is the score calculated?"),
-    cap("The GEO score is a number from 0 to 100 that adds up seven measured checks, from AI crawler access to entity data and freshness."),
+    cap("The GEO score is a number from 0 to 100: half comes from how often AI assistants name the company, half from seven website checks."),
+    p("<strong>AI score.</strong> Every Monday the site asks one buyer question per category to ChatGPT, Claude, Gemini and Perplexity, through their official APIs with web search switched on. Dutch companies get the question in Dutch, international companies in English. The AI score is the share of answers that name the company (80%) or cite its website (20%)."),
+    p("<strong>Website score.</strong> Seven checks on the company's own website, with these points:"),
     table(
         ["Check", "Points", "What we measure", "Why it matters"],
         [
@@ -74,7 +76,8 @@ EN = [
 ] + faq("Frequently asked questions", [
     ("How often is the index updated?", "Every Monday. The site measures all 200 companies again and shows the change against the previous week."),
     ("Can I check my own company?", "Yes. Enter your domain in the check above the methodology. You get the same score as the companies in the index."),
-    ("Does a high score mean AI assistants mention the company?", "Not by itself. The score shows whether AI systems can find, read and recognize the company. Mentions also depend on coverage on other sites, reviews and lists."),
+    ("Which questions do you ask the AI assistants?", "One question per category, such as: What is the best CRM software for B2B companies? Name a few providers and say briefly why. The wording alternates each week, so no score depends on one phrasing."),
+    ("Do the answers match what a user sees in ChatGPT?", "Every category gets the same question in the same way every week, so companies are compared fairly. Individual users can see other answers, depending on their location, account and model."),
     ("Why does blocking GPTBot cost fewer points than blocking OAI-SearchBot?", "OAI-SearchBot decides whether a site can appear in ChatGPT search. GPTBot collects training data, and OpenAI treats the two settings separately."),
     ("Can a company pay for a higher place?", "No. Scores come only from the measurements."),
     ("Why is Wikipedia part of the score?", "Muck Rack found Wikipedia to be ChatGPT's most cited domain. A Wikidata item and a Wikipedia article help AI systems recognize a company as an entity."),
@@ -84,15 +87,17 @@ EN = [
 
 NL = [
     hero('B2B GEO Index: <span class="bv-gradient-text">wie is klaar voor AI-zoekmachines?</span>',
-         "200 B2B-bedrijven, elke maandag gemeten op zeven checks die bepalen of ChatGPT, Claude, Perplexity, Gemini en Copilot ze kunnen vinden, lezen en herkennen."),
+         "200 B2B-bedrijven, elke maandag gemeten: hoe vaak ChatGPT, Claude, Gemini en Perplexity ze noemen en of hun websites klaar zijn voor AI-zoekmachines."),
     p("Kopers zien leveranciers nu eerst in AI-antwoorden. Volgens " + a("Forrester", "forrester") + " gebruikt 94% van de zakelijke kopers AI tijdens het aankoopproces. Of een bedrijf in die antwoorden verschijnt, hangt deels af van dingen die het op zijn eigen website regelt."),
     p("Een deel daarvan is makkelijk te controleren en ontbreekt vaak. In de " + a("analyse van Vercel", "vercel") + " renderde geen van de grote AI-crawlers JavaScript. Tekst die pas na een script verschijnt, zien ze dus niet. En volgens " + a("OpenAI", "openai_bots") + " verschijnen sites die OAI-SearchBot blokkeren niet in de antwoorden van ChatGPT search."),
     p("Ook de taal telt. Bij Nederlandstalige vragen kwam 81,2% van de bronnen in Google AI Overviews uit Nederlandstalige pagina's (" + a("Temso, 2026", "temso_lang") + "). Daarom kijkt de Nederlandse lijst of er een Nederlandse versie is."),
     h2("Wat is de B2B GEO Index?"),
-    cap("De B2B GEO Index is een wekelijkse ranglijst van 200 B2B-bedrijven op hoe klaar hun websites zijn voor AI-zoekmachines, gemeten met zeven checks."),
+    cap("De B2B GEO Index is een wekelijkse ranglijst van 200 B2B-bedrijven op hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn."),
     block("nl"),
     h2("Hoe wordt de score berekend?"),
-    cap("De GEO-score is een getal van 0 tot 100 dat zeven gemeten checks optelt, van toegang voor AI-crawlers tot entiteitsdata en actualiteit."),
+    cap("De GEO-score is een getal van 0 tot 100: de helft komt uit hoe vaak AI-assistenten het bedrijf noemen, de helft uit zeven websitechecks."),
+    p("<strong>AI-score.</strong> Elke maandag stelt de site per categorie één koopvraag aan ChatGPT, Claude, Gemini en Perplexity, via hun officiële API's met zoeken op internet aan. Nederlandse bedrijven krijgen de vraag in het Nederlands, internationale bedrijven in het Engels. De AI-score is het aandeel antwoorden dat het bedrijf noemt (80%) of naar de website verwijst (20%)."),
+    p("<strong>Websitescore.</strong> Zeven checks op de eigen website van het bedrijf, met deze punten:"),
     table(
         ["Check", "Punten", "Wat we meten", "Waarom het telt"],
         [
@@ -112,7 +117,8 @@ NL = [
 ] + faq("Veelgestelde vragen", [
     ("Hoe vaak wordt de index bijgewerkt?", "Elke maandag. De site meet alle 200 bedrijven opnieuw en toont het verschil met de week ervoor."),
     ("Kan ik mijn eigen bedrijf checken?", "Ja. Vul je domein in bij de check boven de uitleg van de methode. Je krijgt dezelfde score als de bedrijven in de index."),
-    ("Betekent een hoge score dat AI-assistenten het bedrijf noemen?", "Niet vanzelf. De score laat zien of AI-systemen het bedrijf kunnen vinden, lezen en herkennen. Vermeldingen hangen ook af van publiciteit op andere sites, reviews en lijsten."),
+    ("Welke vragen stellen jullie aan de AI-assistenten?", "Eén vraag per categorie, zoals: Wat is de beste boekhoudsoftware voor het mkb in Nederland? Noem een paar aanbieders en zeg kort waarom. De formulering wisselt per week, zodat geen score van één formulering afhangt."),
+    ("Komen de antwoorden overeen met wat een gebruiker in ChatGPT ziet?", "Elke categorie krijgt elke week dezelfde vraag op dezelfde manier, dus bedrijven worden eerlijk vergeleken. Een individuele gebruiker kan andere antwoorden zien, afhankelijk van locatie, account en model."),
     ("Waarom kost het blokkeren van GPTBot minder punten dan het blokkeren van OAI-SearchBot?", "OAI-SearchBot bepaalt of een site in ChatGPT search kan verschijnen. GPTBot verzamelt trainingsdata, en OpenAI behandelt die twee instellingen apart."),
     ("Kan een bedrijf betalen voor een hogere plek?", "Nee. Scores komen alleen uit de metingen."),
     ("Waarom telt Wikipedia mee in de score?", "Muck Rack zag dat Wikipedia het meest geciteerde domein in ChatGPT is. Een Wikidata-item en een Wikipedia-artikel helpen AI-systemen een bedrijf als entiteit te herkennen."),
@@ -121,8 +127,8 @@ NL = [
 ]
 
 SEO = {
-    "en": ("B2B GEO Index: 200 companies ranked for AI search", "Weekly ranking of 200 B2B companies on seven measured checks for ChatGPT, Claude, Perplexity, Gemini and Copilot. Check your own domain for free."),
-    "nl": ("B2B GEO Index: 200 bedrijven gerangschikt op AI-zoekmachines", "Wekelijkse ranglijst van 200 B2B-bedrijven op zeven gemeten checks voor ChatGPT, Claude, Perplexity, Gemini en Copilot. Check gratis je eigen domein."),
+    "en": ("B2B GEO Index: 200 companies ranked for AI search", "Weekly ranking of 200 B2B companies: how often ChatGPT, Claude, Gemini and Perplexity name them, plus seven website checks. Check your own domain."),
+    "nl": ("B2B GEO Index: 200 bedrijven gerangschikt op AI-zoekmachines", "Wekelijkse ranglijst van 200 B2B-bedrijven: hoe vaak ChatGPT, Claude, Gemini en Perplexity ze noemen, plus zeven websitechecks. Check je eigen domein."),
 }
 
 

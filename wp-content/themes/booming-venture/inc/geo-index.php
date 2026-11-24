@@ -403,7 +403,8 @@ add_action( 'bv_gi_weekly', static function () {
 	$prev    = [];
 	foreach ( $results as $list => $rows ) {
 		foreach ( (array) $rows as $domain => $r ) {
-			$prev[ $list ][ $domain ] = $r['score'] ?? null;
+			$ai = function_exists( 'bv_gi_ai_score' ) ? bv_gi_ai_score( $list, $domain ) : null;
+			$prev[ $list ][ $domain ] = isset( $r['score'] ) ? bv_gi_combined( (int) $r['score'], $ai ) : null;
 		}
 	}
 	update_option( 'bv_gi_prev', $prev, false );
@@ -476,6 +477,11 @@ add_action( 'rest_api_init', static function () {
 	] );
 } );
 
+/** Total score: website score alone, or half website and half AI score when AI data exists. */
+function bv_gi_combined( int $ready, ?array $ai ): int {
+	return $ai ? (int) round( ( $ready + (int) $ai['score'] ) / 2 ) : $ready;
+}
+
 /** Rows for one list, ranked, with the weekly change. */
 function bv_gi_ranked( string $list ): array {
 	$results = (array) ( get_option( 'bv_gi_results', [] )[ $list ] ?? [] );
@@ -486,10 +492,15 @@ function bv_gi_ranked( string $list ): array {
 		if ( ! $r ) {
 			continue;
 		}
-		$p = $prev[ $c['domain'] ] ?? null;
+		$p     = $prev[ $c['domain'] ] ?? null;
+		$ai    = function_exists( 'bv_gi_ai_score' ) ? bv_gi_ai_score( $list, $c['domain'] ) : null;
+		$total = bv_gi_combined( (int) $r['score'], $ai );
 		$rows[] = $c + [
-			'score'  => (int) $r['score'],
-			'change' => null === $p ? null : (int) $r['score'] - (int) $p,
+			'score'  => $total,
+			'ready'  => (int) $r['score'],
+			'ai'     => $ai ? $ai['score'] : null,
+			'ai_eng' => $ai ? $ai['eng'] : [],
+			'change' => null === $p ? null : $total - (int) $p,
 			'checks' => (array) $r['checks'],
 			'status' => $r['status'] ?? 'ok',
 		];

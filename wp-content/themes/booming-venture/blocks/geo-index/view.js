@@ -77,8 +77,11 @@
 						cb = cb === '' ? -999 : +cb;
 						if (cb !== ca) return cb - ca;
 					}
-					return (+b.getAttribute('data-score')) - (+a.getAttribute('data-score')) ||
-						a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+					var attr = key === 'ai' || key === 'ready' ? 'data-' + key : 'data-score';
+					var va = a.getAttribute(attr), vb = b.getAttribute(attr);
+					va = va === '' ? -1 : +va;
+					vb = vb === '' ? -1 : +vb;
+					return (vb - va) || a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
 				}).forEach(function (tr) { tbody.appendChild(tr); });
 			}
 			if (count && T.count) count.textContent = T.count.replace('%1$s', shown).replace('%2$s', all.length);

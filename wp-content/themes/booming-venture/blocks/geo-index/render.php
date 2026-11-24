@@ -24,13 +24,25 @@ $when    = ! empty( $meta['completed'] ) ? $meta['completed'] : 0;
 $date    = $when ? wp_date( 'j F Y', $when ) : '';
 $id      = wp_unique_id( 'bv-gi-' );
 
-/* Columns: key in checks, short label, full label for the legend and tooltips. */
+/* AI assistants measured in the last AI run (inc/geo-index-ai.php). */
+$ai_run  = (array) get_option( 'bv_gi_ai_results', [] );
+$ai_cols = [];
+foreach ( (array) ( $ai_run['engines'] ?? [] ) as $e ) {
+	$label = function_exists( 'bv_gi_ai_engines' ) ? ( bv_gi_ai_engines()[ $e ]['label'] ?? $e ) : $e;
+	$ai_cols[ 'ai_' . $e ] = [ $label, sprintf( $t( 'Genoemd door %s bij de vraag over de eigen categorie', 'Named by %s for the question about its own category' ), $label ) ];
+}
+
+/* Crawler access: filter chips, and one "x/5" column in the table. */
+$bots = [
+	'bot_OAI-SearchBot'    => [ $t( 'Toegang ChatGPT', 'Access ChatGPT' ), $t( 'ChatGPT search mag de site lezen (OAI-SearchBot)', 'ChatGPT search may read the site (OAI-SearchBot)' ) ],
+	'bot_Claude-SearchBot' => [ $t( 'Toegang Claude', 'Access Claude' ), $t( 'Claude mag de site lezen (Claude-SearchBot)', 'Claude may read the site (Claude-SearchBot)' ) ],
+	'bot_PerplexityBot'    => [ $t( 'Toegang Perplexity', 'Access Perplexity' ), $t( 'Perplexity mag de site lezen (PerplexityBot)', 'Perplexity may read the site (PerplexityBot)' ) ],
+	'bot_Google-Extended'  => [ $t( 'Toegang Gemini', 'Access Gemini' ), $t( 'Gemini mag de content gebruiken (Google-Extended)', 'Gemini may use the content (Google-Extended)' ) ],
+	'bot_Bingbot'          => [ $t( 'Toegang Copilot', 'Access Copilot' ), $t( 'Bing en Copilot mogen de site lezen (Bingbot)', 'Bing and Copilot may read the site (Bingbot)' ) ],
+];
+
+/* Website checks shown as columns. */
 $cols = [
-	'bot_OAI-SearchBot'    => [ 'ChatGPT', $t( 'ChatGPT search mag de site lezen (OAI-SearchBot)', 'ChatGPT search may read the site (OAI-SearchBot)' ) ],
-	'bot_Claude-SearchBot' => [ 'Claude', $t( 'Claude mag de site lezen (Claude-SearchBot)', 'Claude may read the site (Claude-SearchBot)' ) ],
-	'bot_PerplexityBot'    => [ 'Perplexity', $t( 'Perplexity mag de site lezen (PerplexityBot)', 'Perplexity may read the site (PerplexityBot)' ) ],
-	'bot_Google-Extended'  => [ 'Gemini', $t( 'Gemini mag de content gebruiken (Google-Extended)', 'Gemini may use the content (Google-Extended)' ) ],
-	'bot_Bingbot'          => [ 'Copilot', $t( 'Bing en Copilot mogen de site lezen (Bingbot)', 'Bing and Copilot may read the site (Bingbot)' ) ],
 	'html'                 => [ 'HTML', $t( 'Tekst leesbaar zonder JavaScript', 'Text readable without JavaScript' ) ],
 	'schema_org'           => [ 'Schema', $t( 'Organization-schema op de homepage', 'Organization schema on the homepage' ) ],
 	'wikipedia'            => [ 'Wikipedia', $t( 'Wikipedia-artikel over het bedrijf', 'Wikipedia article about the company' ) ],
@@ -60,6 +72,7 @@ $stats = static function ( array $rows ) {
 		'chatgpt'   => $pct( 'bot_OAI-SearchBot' ),
 		'html'      => $pct( 'html' ),
 		'wikipedia' => $pct( 'wikipedia' ),
+		'ai'        => count( array_filter( $rows, static fn( $r ) => null !== $r['ai'] ) ) ? (int) round( 100 * count( array_filter( $rows, static fn( $r ) => (int) $r['ai'] > 0 ) ) / $n ) : null,
 	];
 };
 
@@ -83,12 +96,12 @@ $i18n = [
 	'invalid'  => $t( 'Vul een geldig domein in, zoals voorbeeld.nl.', 'Enter a valid domain, such as example.com.' ),
 	'limit'    => $t( 'Je hebt het maximum van 5 checks per uur bereikt. Probeer het later opnieuw.', 'You reached the limit of 5 checks per hour. Please try again later.' ),
 	'error'    => $t( 'Meten lukte niet. Controleer het domein en probeer het opnieuw.', 'The check failed. Check the domain and try again.' ),
-	'scoreFor' => $t( 'GEO-score van %s', 'GEO score for %s' ),
+	'scoreFor' => $t( 'Websitescore van %s', 'Website score for %s' ),
 	'outOf'    => $t( 'van 100', 'out of 100' ),
 	'pass'     => $t( 'In orde', 'In place' ),
 	'fail'     => $t( 'Ontbreekt', 'Missing' ),
 	'unknown'  => $t( 'Niet te meten', 'Could not measure' ),
-	'labels'   => array_map( static fn( $c ) => $c[1], $cols ) + [
+	'labels'   => array_map( static fn( $c ) => $c[1], $bots + $cols ) + [
 		'bot_GPTBot'       => $t( 'GPTBot (training van OpenAI) mag de site lezen', 'GPTBot (OpenAI training) may read the site' ),
 		'bot_ChatGPT-User' => $t( 'ChatGPT mag pagina\'s openen op verzoek van gebruikers (ChatGPT-User)', 'ChatGPT may open pages for users (ChatGPT-User)' ),
 		'bot_ClaudeBot'    => $t( 'ClaudeBot (training van Anthropic) mag de site lezen', 'ClaudeBot (Anthropic training) may read the site' ),
@@ -132,11 +145,16 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id ] );
 		<select class="bv-gi__sector" aria-label="<?php echo esc_attr( $t( 'Sector', 'Sector' ) ); ?>"><option value=""><?php echo esc_html( $i18n['allSect'] ); ?></option></select>
 		<select class="bv-gi__sort" aria-label="<?php echo esc_attr( $i18n['sort'] ); ?>">
 			<option value="score"><?php echo esc_html( $i18n['sort'] . ': ' . $i18n['byScore'] ); ?></option>
+			<?php if ( $ai_cols ) : ?><option value="ai"><?php echo esc_html( $i18n['sort'] . ': ' . $t( 'AI-score', 'AI score' ) ); ?></option><?php endif; ?>
+			<option value="ready"><?php echo esc_html( $i18n['sort'] . ': ' . $t( 'Websitescore', 'Website score' ) ); ?></option>
 			<option value="change"><?php echo esc_html( $i18n['sort'] . ': ' . $i18n['byChange'] ); ?></option>
 			<option value="name"><?php echo esc_html( $i18n['sort'] . ': ' . $i18n['byName'] ); ?></option>
 		</select>
 		<div class="bv-gi__chips" role="group" aria-label="<?php echo esc_attr( $t( 'Filter op check', 'Filter by check' ) ); ?>">
-			<?php foreach ( $cols as $key => [ $short, $full ] ) : ?>
+			<?php foreach ( $ai_cols as $key => [ $short, $full ] ) : ?>
+				<button type="button" class="bv-gi__chip bv-gi__chip--ai" data-check="<?php echo esc_attr( $key ); ?>" aria-pressed="false" title="<?php echo esc_attr( $full ); ?>"><?php echo esc_html( $t( 'Genoemd door ', 'Named by ' ) . $short ); ?></button>
+			<?php endforeach; ?>
+			<?php foreach ( $bots + $cols as $key => [ $short, $full ] ) : ?>
 				<button type="button" class="bv-gi__chip" data-check="<?php echo esc_attr( $key ); ?>" aria-pressed="false" title="<?php echo esc_attr( $full ); ?>"><?php echo esc_html( $short ); ?></button>
 			<?php endforeach; ?>
 		</div>
@@ -157,6 +175,7 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id ] );
 				<div class="bv-gi__stats">
 					<div><strong><?php echo (int) $s['n']; ?></strong><span><?php echo esc_html( $t( 'bedrijven gemeten', 'companies measured' ) ); ?></span></div>
 					<div><strong><?php echo (int) $s['avg']; ?></strong><span><?php echo esc_html( $t( 'gemiddelde score van 100', 'average score out of 100' ) ); ?></span></div>
+					<?php if ( null !== $s['ai'] ) : ?><div><strong><?php echo (int) $s['ai']; ?>%</strong><span><?php echo esc_html( $t( 'genoemd door AI-assistenten', 'named by AI assistants' ) ); ?></span></div><?php endif; ?>
 					<div><strong><?php echo (int) $s['chatgpt']; ?>%</strong><span><?php echo esc_html( $t( 'laat ChatGPT search toe', 'allow ChatGPT search' ) ); ?></span></div>
 					<div><strong><?php echo (int) $s['html']; ?>%</strong><span><?php echo esc_html( $t( 'leesbaar zonder JavaScript', 'readable without JavaScript' ) ); ?></span></div>
 					<div><strong><?php echo (int) $s['wikipedia']; ?>%</strong><span><?php echo esc_html( $t( 'heeft een Wikipedia-artikel', 'have a Wikipedia article' ) ); ?></span></div>
@@ -165,10 +184,19 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id ] );
 					<table class="bv-gi__table">
 						<caption class="screen-reader-text"><?php echo esc_html( 'B2B GEO Index: ' . $label ); ?></caption>
 						<thead><tr>
-							<th scope="col">#</th>
-							<th scope="col"><?php echo esc_html( $t( 'Bedrijf', 'Company' ) ); ?></th>
-							<th scope="col"><?php echo esc_html( $t( 'Score', 'Score' ) ); ?></th>
-							<th scope="col" title="<?php echo esc_attr( $i18n['byChange'] ); ?>"><?php echo esc_html( $t( 'Week', 'Week' ) ); ?></th>
+							<th scope="col" rowspan="2">#</th>
+							<th scope="col" rowspan="2"><?php echo esc_html( $t( 'Bedrijf', 'Company' ) ); ?></th>
+							<th scope="col" rowspan="2"><?php echo esc_html( $t( 'Score', 'Score' ) ); ?></th>
+							<th scope="col" rowspan="2" title="<?php echo esc_attr( $i18n['byChange'] ); ?>"><?php echo esc_html( $t( 'Week', 'Week' ) ); ?></th>
+							<?php if ( $ai_cols ) : ?><th scope="col" rowspan="2" title="<?php echo esc_attr( $t( 'Hoe vaak AI-assistenten het bedrijf noemen (0 tot 100)', 'How often AI assistants name the company (0 to 100)' ) ); ?>">AI</th><?php endif; ?>
+							<th scope="col" rowspan="2" title="<?php echo esc_attr( $t( 'Score van de websitemeting (0 tot 100)', 'Score of the website measurement (0 to 100)' ) ); ?>"><?php echo esc_html( $t( 'Website', 'Website' ) ); ?></th>
+							<?php if ( $ai_cols ) : ?><th scope="colgroup" colspan="<?php echo count( $ai_cols ); ?>" class="bv-gi__grp"><?php echo esc_html( $t( 'Genoemd door', 'Named by' ) ); ?></th><?php endif; ?>
+							<th scope="colgroup" colspan="<?php echo 1 + count( $cols ); ?>" class="bv-gi__grp"><?php echo esc_html( $t( 'Website', 'Website' ) ); ?></th>
+						</tr><tr>
+							<?php foreach ( $ai_cols as [ $short, $full ] ) : ?>
+								<th scope="col" title="<?php echo esc_attr( $full ); ?>"><?php echo esc_html( $short ); ?></th>
+							<?php endforeach; ?>
+							<th scope="col" title="<?php echo esc_attr( $t( 'Aantal van 5 AI-crawlers dat de site mag lezen', 'Number of 5 AI crawlers allowed to read the site' ) ); ?>"><?php echo esc_html( $t( 'Crawlers', 'Crawlers' ) ); ?></th>
 							<?php foreach ( $cols as [ $short, $full ] ) : ?>
 								<th scope="col" title="<?php echo esc_attr( $full ); ?>"><abbr title="<?php echo esc_attr( $full ); ?>"><?php echo esc_html( $short ); ?></abbr></th>
 							<?php endforeach; ?>
@@ -177,13 +205,18 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id ] );
 						<?php foreach ( $rows as $r ) :
 							$sector = $sectors[ $r['sector'] ][ $nl ? 0 : 1 ] ?? $r['sector'];
 							$attrs  = '';
-							foreach ( array_keys( $cols ) as $k ) {
-								$v      = $r['checks'][ $k ] ?? null;
+							$vals   = $r['checks'];
+							foreach ( array_keys( $ai_cols ) as $k ) {
+								$vals[ $k ] = null === $r['ai'] ? null : ! empty( $r['ai_eng'][ substr( $k, 3 ) ] );
+							}
+							foreach ( array_keys( $ai_cols + $bots + $cols ) as $k ) {
+								$v      = $vals[ $k ] ?? null;
 								$attrs .= ' data-c-' . esc_attr( strtolower( $k ) ) . '="' . ( true === $v ? '1' : ( false === $v ? '0' : '' ) ) . '"';
 							}
+							$open = count( array_filter( array_keys( $bots ), static fn( $k ) => true === ( $r['checks'][ $k ] ?? null ) ) );
 							$chg = null === $r['change'] ? '' : (string) $r['change'];
 							?>
-							<tr data-name="<?php echo esc_attr( strtolower( $r['name'] . ' ' . $r['domain'] ) ); ?>" data-sector="<?php echo esc_attr( $sector ); ?>" data-score="<?php echo (int) $r['score']; ?>" data-change="<?php echo esc_attr( $chg ); ?>"<?php echo $attrs; ?>>
+							<tr data-name="<?php echo esc_attr( strtolower( $r['name'] . ' ' . $r['domain'] ) ); ?>" data-sector="<?php echo esc_attr( $sector ); ?>" data-score="<?php echo (int) $r['score']; ?>" data-change="<?php echo esc_attr( $chg ); ?>" data-ai="<?php echo null === $r['ai'] ? '' : (int) $r['ai']; ?>" data-ready="<?php echo (int) $r['ready']; ?>"<?php echo $attrs; ?>>
 								<td class="bv-gi__rank"><?php echo (int) $r['rank']; ?></td>
 								<td class="bv-gi__co"><strong><?php echo esc_html( $r['name'] ); ?></strong><span><?php echo esc_html( $r['domain'] ); ?> &middot; <?php echo esc_html( $sector ); ?></span></td>
 								<td class="bv-gi__score"><span class="bv-gi__bar" style="--s:<?php echo (int) $r['score']; ?>"><?php echo (int) $r['score']; ?></span></td>
@@ -194,6 +227,10 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id ] );
 										echo '<span class="' . ( $r['change'] > 0 ? 'bv-gi__up">+' : 'bv-gi__down">' ) . (int) $r['change'] . '</span>';
 									}
 								?></td>
+								<?php if ( $ai_cols ) : ?><td class="bv-gi__num"><?php echo null === $r['ai'] ? '-' : (int) $r['ai']; ?></td><?php endif; ?>
+								<td class="bv-gi__num"><?php echo (int) $r['ready']; ?></td>
+								<?php foreach ( array_keys( $ai_cols ) as $k ) { echo $cell( $vals[ $k ] ); } // phpcs:ignore ?>
+								<td class="<?php echo 5 === $open ? 'bv-gi__y' : ( 0 === $open ? 'bv-gi__n' : 'bv-gi__p' ); ?>"><?php echo (int) $open; ?>/5</td>
 								<?php foreach ( array_keys( $cols ) as $k ) { echo $cell( $r['checks'][ $k ] ?? null ); } // phpcs:ignore ?>
 							</tr>
 						<?php endforeach; ?>
@@ -211,6 +248,9 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id ] );
 	?></p>
 
 	<div class="bv-gi__legend">
+		<span><strong><?php echo esc_html( $t( 'Score', 'Score' ) ); ?></strong> <?php echo esc_html( $ai_cols ? $t( 'helft AI-score, helft websitescore', 'half AI score, half website score' ) : $t( 'websitescore', 'website score' ) ); ?></span>
+		<?php if ( $ai_cols ) : ?><span><strong>AI</strong> <?php echo esc_html( $t( 'hoe vaak AI-assistenten het bedrijf noemen bij de vraag over zijn categorie', 'how often AI assistants name the company for the question about its category' ) ); ?></span><?php endif; ?>
+		<span><strong>Crawlers</strong> <?php echo esc_html( $t( 'aantal van 5 AI-crawlers dat de site mag lezen', 'number of 5 AI crawlers allowed to read the site' ) ); ?></span>
 		<span><strong>&#10003;</strong> <?php echo esc_html( $t( 'in orde', 'in place' ) ); ?>, <strong>&#10005;</strong> <?php echo esc_html( $t( 'ontbreekt', 'missing' ) ); ?>, <strong>-</strong> <?php echo esc_html( $t( 'niet te meten', 'could not measure' ) ); ?></span>
 		<?php foreach ( $cols as [ $short, $full ] ) : ?>
 			<span><strong><?php echo esc_html( $short ); ?></strong> <?php echo esc_html( $full ); ?></span>
@@ -219,7 +259,7 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id ] );
 
 	<div class="bv-gi__check" id="<?php echo esc_attr( $id ); ?>-check">
 		<h3><?php echo esc_html( $t( 'Check je eigen bedrijf', 'Check your own company' ) ); ?></h3>
-		<p><?php echo esc_html( $t( 'Vul je domein in en zie in 30 seconden je GEO-score, gemeten op dezelfde manier als de bedrijven in de index.', 'Enter your domain and see your GEO score in 30 seconds, measured the same way as the companies in the index.' ) ); ?></p>
+		<p><?php echo esc_html( $t( 'Vul je domein in en zie in 30 seconden de websitescore van je bedrijf, gemeten op dezelfde manier als de bedrijven in de index.', 'Enter your domain and see your website score in 30 seconds, measured the same way as the companies in the index.' ) ); ?></p>
 		<form class="bv-gi__form" novalidate>
 			<label class="screen-reader-text" for="<?php echo esc_attr( $id ); ?>-domain"><?php echo esc_html( $t( 'Domein', 'Domain' ) ); ?></label>
 			<input type="text" id="<?php echo esc_attr( $id ); ?>-domain" name="domain" inputmode="url" autocomplete="url" placeholder="<?php echo esc_attr( $t( 'jouwbedrijf.nl', 'yourcompany.com' ) ); ?>" required>

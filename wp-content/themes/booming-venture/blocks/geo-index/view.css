@@ -25,9 +25,9 @@
 .bv-gi__stats span { font-size: 0.8125rem; color: var(--wp--preset--color--muted, #64748b); }
 
 .bv-gi__scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--wp--preset--color--border, #e2e8f0); border-radius: 1rem; }
-.bv-gi__table { width: 100%; min-width: 980px; border-collapse: collapse; font-size: 0.875rem; line-height: 1.4; background: #fff; }
+.bv-gi__table { width: 100%; min-width: 1080px; border-collapse: collapse; font-size: 0.875rem; line-height: 1.4; background: #fff; }
 .bv-gi__table th, .bv-gi__table td { padding: 0.625rem 0.5rem; border-bottom: 1px solid #e2e8f0; text-align: center; vertical-align: middle; }
-.bv-gi__table thead th { background: var(--wp--preset--color--booming-50, #f0f9ff); font-weight: 700; position: sticky; top: 0; font-size: 0.8125rem; }
+.bv-gi__table thead th { background: var(--wp--preset--color--booming-50, #f0f9ff); font-weight: 700; font-size: 0.8125rem; }
 .bv-gi__table abbr { text-decoration: none; cursor: help; }
 .bv-gi__table th:nth-child(2), .bv-gi__table td.bv-gi__co { text-align: left; }
 .bv-gi__co strong { display: block; }
@@ -37,6 +37,10 @@
 .bv-gi__y { color: #047857; font-weight: 700; }
 .bv-gi__n { color: #b91c1c; font-weight: 700; }
 .bv-gi__u { color: #94a3b8; }
+.bv-gi__p { color: #b45309; font-weight: 700; }
+.bv-gi__num { font-weight: 600; }
+.bv-gi__grp { border-bottom: 1px solid #cbd5e1; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--wp--preset--color--muted, #64748b); }
+.bv-gi__chip--ai { border-color: #14b8a6; }
 .bv-gi__up { color: #047857; font-weight: 700; }
 .bv-gi__down { color: #b91c1c; font-weight: 700; }
 .bv-gi__flat { color: var(--wp--preset--color--muted, #64748b); font-size: 0.75rem; }
