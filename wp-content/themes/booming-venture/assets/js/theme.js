@@ -42,7 +42,6 @@
 	});
 
 	/* Inject floating action buttons (ROI / Calculator), desktop only.
-	 * Chat is handled by the DataSpeak loader in inc/enqueue.php.
 	 * Site-wide. Uses Lucide-style inline SVG icons matching the rest
 	 * of the theme. Hover reveals a label pill on the left.
 	 * Skip on legal / single-post pages to keep them less distracting. */

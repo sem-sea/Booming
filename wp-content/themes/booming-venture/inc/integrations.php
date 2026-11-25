@@ -332,7 +332,6 @@ add_action( 'admin_init', function () {
 		'default'           => [ 2, 3, 4 ],
 	] );
 	register_setting( 'bv_settings', 'bv_gtm_id', [ 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ] );
-	register_setting( 'bv_settings', 'bv_dataspeak_id', [ 'type' => 'string', 'sanitize_callback' => 'sanitize_text_field' ] );
 	register_setting( 'bv_settings', 'bv_media_map', [
 		'type'              => 'array',
 		'sanitize_callback' => function ( $value ) {
@@ -432,7 +431,6 @@ function bv_settings_page(): void {
 			<h2>Tracking IDs</h2>
 			<table class="form-table">
 				<tr><th><label for="bv-gtm">Google Tag Manager ID</label></th><td><input type="text" id="bv-gtm" name="bv_gtm_id" value="<?php echo esc_attr( (string) get_option( 'bv_gtm_id', 'GTM-K9532WK5' ) ); ?>" class="regular-text"></td></tr>
-				<tr><th><label for="bv-ds">DataSpeak interface ID</label></th><td><input type="text" id="bv-ds" name="bv_dataspeak_id" value="<?php echo esc_attr( (string) get_option( 'bv_dataspeak_id', '6863892dbcf4fea86a49e9f8' ) ); ?>" class="regular-text"></td></tr>
 			</table>
 
 			<h2>Brevo</h2>

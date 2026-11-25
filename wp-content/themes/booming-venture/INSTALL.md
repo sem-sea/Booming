@@ -276,7 +276,6 @@ Either through wp-admin (recommended) or via WP-CLI:
 
 ```bash
 wp option update bv_gtm_id        'GTM-XXXXXXXX'
-wp option update bv_dataspeak_id  '6863892dbcf4fea86a49e9f8'
 ```
 
 The defaults are already wired to the Lovable site's IDs ,  change them
@@ -328,8 +327,6 @@ Run through this sanity check:
 # Use a real Brevo API key (per environment) via wp-config
 define( 'BV_BREVO_API_KEY', 'xkeysib-XXXX' );
 
-# Optional: skip the chatbot on staging
-add_filter( 'option_bv_dataspeak_id', '__return_empty_string' );
 ```
 
 If you migrate from the old Lovable site, the WP URLs match the Lovable
@@ -346,6 +343,5 @@ add it to a redirects file (Rank Math has a Redirections module).
 | `[contact-form-7 id="contact"]` shows literal text | Install + activate Contact Form 7. |
 | Form shows the red "not mapped" warning | Go to *Settings → Booming Venture* and paste the CF7 hash ID for each slug. |
 | Form spinner shows the default brown gif | Hard refresh; the theme replaces it with a brand spinner via CSS. |
-| DataSpeak chat doesn't appear | Check `bv_dataspeak_id` option and that the page isn't blocked by an ad-blocker. |
 | Patterns not appearing | Bump theme version in `style.css` and visit `Appearance → Editor` once. |
 | Front page shows blog instead of Home | `Settings → Reading → Front page displays → A static page → Home`. |

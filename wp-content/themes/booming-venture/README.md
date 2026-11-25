@@ -68,7 +68,7 @@ The upgrade runs once on the next wp-admin page you open.
 | `theme.json`              | Design tokens ,  brand palette (`booming-*`, `venture-*`), gradients, fluid typography, spacing scale, shadow presets. |
 | `functions.php`           | Bootstraps `inc/*`. No business logic. |
 | `inc/setup.php`           | Theme supports, image sizes, nav menus, head cleanup. |
-| `inc/enqueue.php`         | Fonts, theme CSS/JS, GTM, DataSpeak chat (idle-loaded), preconnect hints. |
+| `inc/enqueue.php`         | Fonts, theme CSS/JS, GTM, preconnect hints. |
 | `inc/cpt.php`             | Custom post types: `service`, `landing_page`, `case_study` + post meta. |
 | `inc/blocks.php`          | Registers the custom Gutenberg blocks. |
 | `inc/patterns.php`        | Pattern categories. |
@@ -102,8 +102,7 @@ intact.
 4. **Performance.**
    - Fonts: `font-display: swap`, preloaded.
    - Critical CSS via `theme.json` (no extra request).
-   - DataSpeak chat → `requestIdleCallback` after 4s, never blocks LCP.
-   - `wp_resource_hints` preconnects to Brevo / GTM / Unsplash / DataSpeak.
+   - `wp_resource_hints` preconnects to GTM.
    - JS is deferred, in footer.
    - Custom blocks are server-rendered; React mounts only where used.
 5. **Accessibility (WCAG 2.2 AA).** Visible focus rings, semantic landmarks
@@ -169,7 +168,6 @@ Then set **Settings → Reading → Front page** to the imported `Home` page.
 | Funnel Calculator (jsPDF)    | Custom block `booming-venture/funnel-calculator`           |
 | ROI Forecaster (recharts)    | Custom block `booming-venture/roi-forecaster`              |
 | Brevo `addContactToBrevo`    | Contact Form 7 + Brevo plugin (or CF7 to Any API) |
-| DataSpeak chat               | Idle-loaded in `inc/enqueue.php`, interface ID `6863892dbcf4fea86a49e9f8` |
 | Google Tag Manager           | Auto-injected in `inc/enqueue.php`, ID `GTM-K9532WK5`      |
 | react-router-dom             | Native WordPress routing                                   |
 | Lottie preloader             | Removed ,  improved perf budget                             |
@@ -182,7 +180,7 @@ Then set **Settings → Reading → Front page** to the imported `Home` page.
 - **Brand colours**: `theme.json → settings.color.palette`. Everything cascades.
 - **Logo**: `Appearance → Editor → Header → Site Logo`, or `wp option update`.
 - **Menus**: `Appearance → Menus` ,  five locations registered (primary, footer, legal, tools).
-- **GTM / DataSpeak IDs**: set as options `bv_gtm_id`, `bv_dataspeak_id` or
+- **GTM ID**: set as option `bv_gtm_id` or
   drop into wp-config:
   ```php
   define( 'BV_BREVO_API_KEY', 'xkeysib-...' );

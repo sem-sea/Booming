@@ -26,7 +26,7 @@ add_filter( 'xmlrpc_methods', function ( $methods ) {
 } );
 
 /* Send sensible security headers on the front end. CSP intentionally omitted , 
- * configure per environment because of GTM / DataSpeak / Brevo / Unsplash. */
+ * configure per environment because of GTM / Brevo / Unsplash. */
 add_action( 'send_headers', function () {
 	if ( is_admin() ) return;
 	header( 'X-Content-Type-Options: nosniff' );

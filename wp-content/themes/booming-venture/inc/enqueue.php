@@ -1,6 +1,6 @@
 <?php
 /**
- * Asset enqueue, fonts, theme CSS/JS, GTM, DataSpeak.
+ * Asset enqueue, fonts, theme CSS/JS, GTM.
  *
  * @package BoomingVenture
  */
@@ -78,63 +78,8 @@ add_action( 'wp_body_open', function () {
 	<?php
 } );
 
-/* DataSpeak chat.
- * Desktop: loads after the first real interaction, so it never competes
- * with the first paint. Mobile: one small chat button that loads the
- * widget on tap, so no greeting pop-up covers content or form fields. */
-add_action( 'wp_footer', function () {
-	$interface_id = get_option( 'bv_dataspeak_id', '6863892dbcf4fea86a49e9f8' );
-	if ( ! $interface_id ) return;
-	?>
-<script>
-window.dataspeakChatConfiguration = { interfaceId: <?php echo wp_json_encode( $interface_id ); ?> };
-(function () {
-  var loaded = false;
-  function hideBrand() {
-    var iv = setInterval(function () {
-      var a = document.querySelector('a[href="https://www.dataspeak.nl"]');
-      if (a) { a.style.display = 'none'; clearInterval(iv); }
-    }, 500);
-    setTimeout(function () { clearInterval(iv); }, 10000);
-  }
-  function load(done) {
-    if (loaded) return;
-    loaded = true;
-    var s = document.createElement('script');
-    s.src = 'https://chat.dataspeak.nl/v1/client.js';
-    s.async = true;
-    s.onload = function () { hideBrand(); if (done) done(); };
-    document.head.appendChild(s);
-  }
-  if (window.matchMedia('(max-width: 767px)').matches) {
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'bv-chat-launch';
-    b.setAttribute('aria-label', 'Open chat');
-    b.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>';
-    b.addEventListener('click', function () {
-      b.classList.add('is-loading');
-      load(function () { setTimeout(function () { b.remove(); }, 1500); });
-    });
-    document.body.appendChild(b);
-    return;
-  }
-  var events = ['pointermove', 'pointerdown', 'scroll', 'keydown', 'touchstart'];
-  function go() {
-    events.forEach(function (e) { window.removeEventListener(e, go); });
-    setTimeout(function () {
-      if ('requestIdleCallback' in window) { requestIdleCallback(function () { load(); }, { timeout: 3000 }); }
-      else { load(); }
-    }, 1500);
-  }
-  events.forEach(function (e) { window.addEventListener(e, go, { passive: true }); });
-})();
-</script>
-	<?php
-}, 30 );
-
-/* Preconnect only to what the first view needs. The chat widget and
- * Brevo load later, so a preconnect for them would be wasted. */
+/* Preconnect only to what the first view needs. Brevo loads later, so a
+ * preconnect for it would be wasted. */
 add_filter( 'wp_resource_hints', function ( $hints, $relation ) {
 	if ( 'preconnect' === $relation ) {
 		$hints[] = [ 'href' => 'https://www.googletagmanager.com' ];

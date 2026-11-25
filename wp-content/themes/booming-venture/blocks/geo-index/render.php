@@ -157,7 +157,7 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 	$last = array_pop( $eng );
 	$engs = $eng ? implode( ', ', $eng ) . $t( ' en ', ' and ' ) . $last : (string) $last;
 	$how  = [
-		[ $t( '200 vaste bedrijven.', '200 fixed companies.' ), $t( '100 Nederlandse B2B-bedrijven en 100 internationale B2B-softwarebedrijven. Niemand kan betalen voor een plek of een hogere score.', '100 Dutch B2B companies and 100 international B2B software companies. Nobody can pay for a place or a higher score.' ) ],
+		[ $t( '200 vaste bedrijven.', '200 fixed companies.' ), $t( '100 Nederlandse en 100 internationale B2B-bedrijven: vijf per sector, in dezelfde 20 sectoren uit de SBI- en NACE-indeling. Niemand kan betalen voor een plek of een hogere score.', '100 Dutch and 100 international B2B companies: five per sector, in the same 20 sectors from the SBI and NACE classification. Nobody can pay for a place or a higher score.' ) ],
 	];
 	if ( $ai_cols ) {
 		$how[] = [ $t( 'AI-score.', 'AI score.' ), sprintf( $t( 'Elke maand stelt de site per categorie een koopvraag aan %s, met zoeken op internet aan. We tellen hoe vaak ze het bedrijf noemen (80%%) en de website als bron geven (20%%).', 'Every month the site asks %s one buyer question per category, with web search on. We count how often they name the company (80%%) and cite its website (20%%).' ), $engs ) ];

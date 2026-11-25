@@ -407,6 +407,34 @@ add_action( 'bv_gi_daily', static function () {
 	}
 } );
 
+/*
+ * A new company list (the "version" in companies.json) starts one fresh
+ * measurement right after the theme update, so the new companies get scores
+ * without waiting for the next month. Results of companies that left the
+ * list are dropped. This run writes no monthly report: the report of the
+ * next first-Monday run does (or the button in Settings > GEO Index).
+ */
+add_action( 'init', static function () {
+	$version = (string) ( bv_gi_companies()['version'] ?? '' );
+	if ( '' === $version || get_option( 'bv_gi_list_version' ) === $version ) {
+		return;
+	}
+	update_option( 'bv_gi_list_version', $version, false );
+	$keep = [];
+	foreach ( [ 'nl', 'intl' ] as $list ) {
+		foreach ( (array) ( bv_gi_companies()[ $list ] ?? [] ) as $c ) {
+			$keep[ $list ][ $c['domain'] ] = true;
+		}
+	}
+	$results = (array) get_option( 'bv_gi_results', [] );
+	foreach ( $results as $list => $rows ) {
+		$results[ $list ] = array_intersect_key( (array) $rows, $keep[ $list ] ?? [] );
+	}
+	update_option( 'bv_gi_results', $results, false );
+	update_option( 'bv_gi_report_since', time() + MINUTE_IN_SECONDS, false );
+	do_action( 'bv_gi_run' );
+}, 20 );
+
 /* Kept for anyone who still calls the old hook. */
 add_action( 'bv_gi_weekly', static fn() => do_action( 'bv_gi_run' ) );
 

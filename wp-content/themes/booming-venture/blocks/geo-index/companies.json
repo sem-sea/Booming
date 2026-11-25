@@ -1,205 +1,1643 @@
-{"version":"2026-11-24",
-"sectors":{"saas":["Software en SaaS","Software and SaaS"],"fintech":["Fintech en betalingen","Fintech and payments"],"it":["IT, cloud en security","IT, cloud and security"],"hightech":["Hightech en industrie","High tech and industry"],"services":["Zakelijke dienstverlening","Business services"],"martech":["Marketing, sales en e-commerce","Marketing, sales and e-commerce"],"hr":["HR en leren","HR and learning"],"logistics":["Logistiek en supply chain","Logistics and supply chain"],"crm":["CRM en sales","CRM and sales"],"work":["Samenwerking en projecten","Collaboration and work management"],"cx":["Klantenservice","Customer service"],"data":["Data en AI","Data and AI"],"security":["Security","Security"],"finance":["Finance en HR","Finance and HR"],"dev":["Developer tools en cloud","Developer tools and cloud"],"content":["Commerce en content","Commerce and content"],"automation":["Automatisering en productiviteit","Automation and productivity"]},
-"nl":[
-{"name":"Exact","domain":"exact.com","sector":"saas","cat":"boekhoudsoftware voor het mkb","strict":1,"alias":["Exact Online","Exact"]},
-{"name":"AFAS Software","domain":"afas.nl","sector":"saas","cat":"ERP- en HR-software voor middelgrote bedrijven"},
-{"name":"TOPdesk","domain":"topdesk.com","sector":"saas","cat":"servicemanagementsoftware (ITSM)"},
-{"name":"Mendix","domain":"mendix.com","sector":"saas","cat":"low-codeplatform voor bedrijfsapplicaties"},
-{"name":"Unit4","domain":"unit4.com","sector":"saas","cat":"ERP-software voor dienstverlenende organisaties"},
-{"name":"Ultimo","domain":"ultimo.com","sector":"saas","cat":"onderhoudsmanagementsoftware (EAM)"},
-{"name":"Planon","domain":"planonsoftware.com","sector":"saas","cat":"software voor facilitair en vastgoedmanagement (IWMS)"},
-{"name":"Simplicate","domain":"simplicate.nl","sector":"saas","cat":"software voor projectadministratie en urenregistratie"},
-{"name":"Gripp","domain":"gripp.com","sector":"saas","cat":"software voor projectadministratie en urenregistratie"},
-{"name":"Moneybird","domain":"moneybird.nl","sector":"saas","cat":"boekhoudsoftware voor zzp'ers en kleine bedrijven"},
-{"name":"e-Boekhouden.nl","domain":"e-boekhouden.nl","sector":"saas","cat":"boekhoudsoftware voor zzp'ers en kleine bedrijven","alias":["e-Boekhouden","e-Boekhouden.nl"]},
-{"name":"WeFact","domain":"wefact.com","sector":"saas","cat":"facturatiesoftware voor kleine bedrijven"},
-{"name":"Framer","domain":"framer.com","sector":"saas","cat":"tool om websites te ontwerpen en te bouwen zonder code","strict":1},
-{"name":"WeTransfer","domain":"wetransfer.com","sector":"saas","cat":"dienst om grote bestanden te versturen"},
-{"name":"Klippa","domain":"klippa.com","sector":"saas","cat":"software voor documentherkenning en bonnetjesverwerking"},
-{"name":"Zivver","domain":"zivver.com","sector":"saas","cat":"software voor veilig e-mailen"},
-{"name":"Topicus","domain":"topicus.nl","sector":"saas","cat":"software voor scholen en onderwijsinstellingen"},
-{"name":"Five Degrees","domain":"fivedegrees.com","sector":"saas","cat":"core-bankingsoftware voor banken"},
-{"name":"ORTEC","domain":"ortec.com","sector":"saas","cat":"software voor route- en planningsoptimalisatie"},
-{"name":"Speakap","domain":"speakap.com","sector":"saas","cat":"app voor interne communicatie met medewerkers"},
-{"name":"Adyen","domain":"adyen.com","sector":"fintech","cat":"betaalprovider voor webwinkels en bedrijven"},
-{"name":"Mollie","domain":"mollie.com","sector":"fintech","cat":"betaalprovider voor webwinkels en bedrijven"},
-{"name":"Backbase","domain":"backbase.com","sector":"fintech","cat":"digitaal bankplatform voor banken"},
-{"name":"Ohpen","domain":"ohpen.com","sector":"fintech","cat":"core-bankingsoftware voor banken"},
-{"name":"MultiSafepay","domain":"multisafepay.com","sector":"fintech","cat":"betaalprovider voor webwinkels en bedrijven"},
-{"name":"Pay.nl","domain":"pay.nl","sector":"fintech","cat":"betaalprovider voor webwinkels en bedrijven","alias":["Pay.nl","PAY."]},
-{"name":"Buckaroo","domain":"buckaroo.nl","sector":"fintech","cat":"betaalprovider voor webwinkels en bedrijven"},
-{"name":"CCV","domain":"ccv.eu","sector":"fintech","cat":"pinautomaten en betaalterminals voor bedrijven"},
-{"name":"Floryn","domain":"floryn.com","sector":"fintech","cat":"zakelijke financiering voor het mkb"},
-{"name":"Fourthline","domain":"fourthline.com","sector":"fintech","cat":"KYC- en identiteitsverificatie voor financiële instellingen"},
-{"name":"Silverflow","domain":"silverflow.com","sector":"fintech","cat":"platform voor kaartverwerking (card processing)"},
-{"name":"Finom","domain":"finom.co","sector":"fintech","cat":"zakelijke bankrekening voor ondernemers"},
-{"name":"Nebius","domain":"nebius.com","sector":"it","cat":"GPU-cloud voor AI"},
-{"name":"Leaseweb","domain":"leaseweb.com","sector":"it","cat":"dedicated servers en cloudhosting"},
-{"name":"TransIP","domain":"transip.nl","sector":"it","cat":"webhosting en domeinnamen"},
-{"name":"Hostnet","domain":"hostnet.nl","sector":"it","cat":"webhosting en domeinnamen"},
-{"name":"Schuberg Philis","domain":"schubergphilis.com","sector":"it","cat":"managed services voor bedrijfskritische IT","alias":["Schuberg Philis"]},
-{"name":"Xebia","domain":"xebia.com","sector":"it","cat":"IT-consultancy voor cloud, data en AI"},
-{"name":"Info Support","domain":"infosupport.com","sector":"it","cat":"IT-dienstverlener voor maatwerksoftware","alias":["Info Support"]},
-{"name":"Centric","domain":"centric.eu","sector":"it","cat":"IT-dienstverlener voor maatwerksoftware","strict":1},
-{"name":"Conclusion","domain":"conclusion.nl","sector":"it","cat":"IT-dienstverlener voor maatwerksoftware","strict":1},
-{"name":"Eurofiber","domain":"eurofiber.com","sector":"it","cat":"zakelijk glasvezelnetwerk"},
-{"name":"Secura","domain":"secura.com","sector":"it","cat":"cybersecuritybedrijf voor organisaties","strict":1},
-{"name":"Eye Security","domain":"eye.security","sector":"it","cat":"cybersecuritybedrijf voor organisaties","alias":["Eye Security"]},
-{"name":"Northwave","domain":"northwave-cybersecurity.com","sector":"it","cat":"cybersecuritybedrijf voor organisaties","alias":["Northwave"]},
-{"name":"Fox-IT","domain":"fox-it.com","sector":"it","cat":"cybersecuritybedrijf voor organisaties","alias":["Fox-IT","Fox IT"]},
-{"name":"ASML","domain":"asml.com","sector":"hightech","cat":"lithografiemachines voor chipfabrikanten"},
-{"name":"NXP Semiconductors","domain":"nxp.com","sector":"hightech","cat":"halfgeleiderfabrikant voor auto's en industrie","alias":["NXP"]},
-{"name":"ASM International","domain":"asm.com","sector":"hightech","cat":"apparatuur voor halfgeleiderproductie (depositie)","alias":["ASM International","ASMI"]},
-{"name":"Besi","domain":"besi.com","sector":"hightech","cat":"apparatuur voor chipassemblage en packaging","alias":["Besi","BE Semiconductor"]},
-{"name":"Philips","domain":"philips.com","sector":"hightech","cat":"medische apparatuur voor ziekenhuizen","alias":["Philips"]},
-{"name":"Signify","domain":"signify.com","sector":"hightech","cat":"professionele verlichting en lichtsystemen","strict":1},
-{"name":"TomTom","domain":"tomtom.com","sector":"hightech","cat":"kaartdata en navigatiesoftware voor bedrijven","alias":["TomTom"]},
-{"name":"Nedap","domain":"nedap.com","sector":"hightech","cat":"toegangscontrolesystemen voor bedrijven","strict":1},
-{"name":"Alfen","domain":"alfen.com","sector":"hightech","cat":"laadpalen en energieopslag"},
-{"name":"Aalberts","domain":"aalberts.com","sector":"hightech","cat":"leidingsystemen en installatietechniek"},
-{"name":"IMCD","domain":"imcdgroup.com","sector":"hightech","cat":"distributeur van specialistische chemicaliën","alias":["IMCD"]},
-{"name":"dsm-firmenich","domain":"dsm-firmenich.com","sector":"hightech","cat":"ingrediënten voor voeding en gezondheid","alias":["dsm-firmenich","DSM-Firmenich","DSM"]},
-{"name":"AkzoNobel","domain":"akzonobel.com","sector":"hightech","cat":"verf en coatings voor industrie"},
-{"name":"Fugro","domain":"fugro.com","sector":"hightech","cat":"geodata en bodemonderzoek"},
-{"name":"VDL Groep","domain":"vdlgroep.com","sector":"hightech","cat":"contractproductie voor de hightechindustrie","alias":["VDL"]},
-{"name":"Prodrive Technologies","domain":"prodrive-technologies.com","sector":"hightech","cat":"ontwikkeling en productie van elektronica","alias":["Prodrive Technologies","Prodrive"]},
-{"name":"Damen Shipyards","domain":"damen.com","sector":"hightech","cat":"scheepsbouw","alias":["Damen Shipyards","Damen"]},
-{"name":"Lely","domain":"lely.com","sector":"hightech","cat":"melkrobots","strict":1},
-{"name":"Priva","domain":"priva.com","sector":"hightech","cat":"klimaatbeheersing voor kassen en gebouwen","strict":1},
-{"name":"Sioux Technologies","domain":"sioux.eu","sector":"hightech","cat":"hightech softwareontwikkeling en engineering","alias":["Sioux Technologies","Sioux"]},
-{"name":"Randstad","domain":"randstad.com","sector":"services","cat":"uitzendbureau"},
-{"name":"Brunel","domain":"brunel.net","sector":"services","cat":"detacheringsbureau voor specialisten"},
-{"name":"Arcadis","domain":"arcadis.com","sector":"services","cat":"ingenieursbureau"},
-{"name":"Witteveen+Bos","domain":"witteveenbos.com","sector":"services","cat":"ingenieursbureau","alias":["Witteveen+Bos","Witteveen + Bos"]},
-{"name":"Wolters Kluwer","domain":"wolterskluwer.com","sector":"services","cat":"software en informatie voor fiscalisten en juristen","alias":["Wolters Kluwer"]},
-{"name":"Berenschot","domain":"berenschot.nl","sector":"services","cat":"organisatieadviesbureau"},
-{"name":"Twynstra Gudde","domain":"twynstragudde.nl","sector":"services","cat":"organisatieadviesbureau","alias":["Twynstra Gudde"]},
-{"name":"Boskalis","domain":"boskalis.com","sector":"services","cat":"baggeren en waterbouw"},
-{"name":"Van Oord","domain":"vanoord.com","sector":"services","cat":"baggeren en waterbouw","alias":["Van Oord"]},
-{"name":"Kiwa","domain":"kiwa.com","sector":"services","cat":"keuring en certificering","strict":1},
-{"name":"DEPT","domain":"deptagency.com","sector":"services","cat":"digitaal bureau voor marketing en technologie","alias":["DEPT®","Dept Agency"]},
-{"name":"Yacht","domain":"yacht.nl","sector":"services","cat":"detacheringsbureau voor specialisten","strict":1},
-{"name":"Bynder","domain":"bynder.com","sector":"martech","cat":"digital asset management (DAM)"},
-{"name":"CM.com","domain":"cm.com","sector":"martech","cat":"platform voor zakelijke berichten via sms en WhatsApp","alias":["CM.com"]},
-{"name":"Bird","domain":"bird.com","sector":"martech","cat":"platform voor zakelijke berichten via sms en WhatsApp","strict":1,"alias":["Bird","MessageBird"]},
-{"name":"Channable","domain":"channable.com","sector":"martech","cat":"productfeedsoftware voor e-commerce"},
-{"name":"Spotler","domain":"spotler.com","sector":"martech","cat":"e-mailmarketingsoftware"},
-{"name":"Copernica","domain":"copernica.com","sector":"martech","cat":"e-mailmarketingsoftware"},
-{"name":"Leadinfo","domain":"leadinfo.com","sector":"martech","cat":"software om websitebezoekers te herkennen voor B2B-leads"},
-{"name":"Trengo","domain":"trengo.com","sector":"martech","cat":"gedeelde inbox voor klantenservice"},
-{"name":"Sana Commerce","domain":"sana-commerce.com","sector":"martech","cat":"B2B-e-commerceplatform gekoppeld aan ERP","alias":["Sana Commerce"]},
-{"name":"Recruitee","domain":"recruitee.com","sector":"hr","cat":"recruitmentsoftware (ATS)","alias":["Recruitee","Tellent Recruitee"]},
-{"name":"Homerun","domain":"homerun.co","sector":"hr","cat":"recruitmentsoftware (ATS)"},
-{"name":"Nmbrs","domain":"nmbrs.com","sector":"hr","cat":"salarisadministratiesoftware"},
-{"name":"Effectory","domain":"effectory.com","sector":"hr","cat":"software voor medewerkersonderzoek"},
-{"name":"Shiftbase","domain":"shiftbase.com","sector":"hr","cat":"roosterplanningssoftware"},
-{"name":"GoodHabitz","domain":"goodhabitz.com","sector":"hr","cat":"online trainingsplatform voor medewerkers"},
-{"name":"StudyTube","domain":"studytube.nl","sector":"hr","cat":"online trainingsplatform voor medewerkers"},
-{"name":"Lepaya","domain":"lepaya.com","sector":"hr","cat":"online trainingsplatform voor medewerkers"},
-{"name":"Textkernel","domain":"textkernel.com","sector":"hr","cat":"AI-software om cv's te analyseren en kandidaten te matchen"},
-{"name":"Sendcloud","domain":"sendcloud.com","sector":"logistics","cat":"verzendsoftware voor webwinkels"},
-{"name":"Shypple","domain":"shypple.com","sector":"logistics","cat":"digitale expediteur voor zeevracht"},
-{"name":"Portbase","domain":"portbase.com","sector":"logistics","cat":"port community system voor havens"},
-{"name":"Kramp","domain":"kramp.com","sector":"logistics","cat":"groothandel in onderdelen voor landbouwmachines"}],
-"intl":[
-{"name":"Salesforce","domain":"salesforce.com","sector":"crm","cat":"CRM software for B2B companies"},
-{"name":"HubSpot","domain":"hubspot.com","sector":"crm","cat":"CRM software for B2B companies"},
-{"name":"Pipedrive","domain":"pipedrive.com","sector":"crm","cat":"CRM software for B2B companies"},
-{"name":"Zoho","domain":"zoho.com","sector":"crm","cat":"CRM software for B2B companies"},
-{"name":"Freshworks","domain":"freshworks.com","sector":"crm","cat":"CRM software for B2B companies"},
-{"name":"Gong","domain":"gong.io","sector":"crm","cat":"revenue intelligence software","strict":1},
-{"name":"Outreach","domain":"outreach.io","sector":"crm","cat":"sales engagement platform"},
-{"name":"Salesloft","domain":"salesloft.com","sector":"crm","cat":"sales engagement platform"},
-{"name":"Apollo.io","domain":"apollo.io","sector":"crm","cat":"B2B contact data and prospecting tool","alias":["Apollo.io","Apollo"]},
-{"name":"ZoomInfo","domain":"zoominfo.com","sector":"crm","cat":"B2B contact data and prospecting tool"},
-{"name":"Semrush","domain":"semrush.com","sector":"martech","cat":"SEO and competitive research tool"},
-{"name":"Ahrefs","domain":"ahrefs.com","sector":"martech","cat":"SEO and competitive research tool"},
-{"name":"Similarweb","domain":"similarweb.com","sector":"martech","cat":"SEO and competitive research tool"},
-{"name":"Mailchimp","domain":"mailchimp.com","sector":"martech","cat":"email marketing platform"},
-{"name":"Klaviyo","domain":"klaviyo.com","sector":"martech","cat":"email marketing platform"},
-{"name":"Braze","domain":"braze.com","sector":"martech","cat":"customer engagement platform","strict":1},
-{"name":"Sprout Social","domain":"sproutsocial.com","sector":"martech","cat":"social media management tool","alias":["Sprout Social"]},
-{"name":"Hootsuite","domain":"hootsuite.com","sector":"martech","cat":"social media management tool"},
-{"name":"Hotjar","domain":"hotjar.com","sector":"martech","cat":"website heatmap and session recording tool"},
-{"name":"6sense","domain":"6sense.com","sector":"martech","cat":"account-based marketing platform","alias":["6sense"]},
-{"name":"Atlassian","domain":"atlassian.com","sector":"work","cat":"issue tracking and project management for software teams","alias":["Atlassian","Jira"]},
-{"name":"Asana","domain":"asana.com","sector":"work","cat":"project management software","strict":1},
-{"name":"monday.com","domain":"monday.com","sector":"work","cat":"project management software","alias":["monday.com","Monday.com"]},
-{"name":"Notion","domain":"notion.com","sector":"work","cat":"team wiki and documentation tool","strict":1},
-{"name":"Slack","domain":"slack.com","sector":"work","cat":"team chat app for businesses","strict":1},
-{"name":"Miro","domain":"miro.com","sector":"work","cat":"online whiteboard for teams","strict":1},
-{"name":"ClickUp","domain":"clickup.com","sector":"work","cat":"project management software"},
-{"name":"Smartsheet","domain":"smartsheet.com","sector":"work","cat":"project management software"},
-{"name":"Airtable","domain":"airtable.com","sector":"work","cat":"no-code database platform"},
-{"name":"Figma","domain":"figma.com","sector":"work","cat":"UI design tool"},
-{"name":"Zendesk","domain":"zendesk.com","sector":"cx","cat":"customer service software"},
-{"name":"Intercom","domain":"intercom.com","sector":"cx","cat":"customer service software"},
-{"name":"ServiceNow","domain":"servicenow.com","sector":"cx","cat":"IT service management platform"},
-{"name":"Gorgias","domain":"gorgias.com","sector":"cx","cat":"customer service software"},
-{"name":"Front","domain":"front.com","sector":"cx","cat":"customer service software","strict":1},
-{"name":"Help Scout","domain":"helpscout.com","sector":"cx","cat":"customer service software","alias":["Help Scout","HelpScout"]},
-{"name":"Talkdesk","domain":"talkdesk.com","sector":"cx","cat":"contact center software"},
-{"name":"Genesys","domain":"genesys.com","sector":"cx","cat":"contact center software"},
-{"name":"Five9","domain":"five9.com","sector":"cx","cat":"contact center software"},
-{"name":"Dixa","domain":"dixa.com","sector":"cx","cat":"contact center software"},
-{"name":"Snowflake","domain":"snowflake.com","sector":"data","cat":"cloud data platform"},
-{"name":"Databricks","domain":"databricks.com","sector":"data","cat":"cloud data platform"},
-{"name":"Datadog","domain":"datadoghq.com","sector":"data","cat":"observability and monitoring platform","alias":["Datadog"]},
-{"name":"MongoDB","domain":"mongodb.com","sector":"data","cat":"NoSQL database"},
-{"name":"Confluent","domain":"confluent.io","sector":"data","cat":"data streaming platform"},
-{"name":"Elastic","domain":"elastic.co","sector":"data","cat":"observability and monitoring platform","strict":1},
-{"name":"Dataiku","domain":"dataiku.com","sector":"data","cat":"enterprise AI and data science platform"},
-{"name":"Fivetran","domain":"fivetran.com","sector":"data","cat":"data integration (ELT) tool"},
-{"name":"dbt Labs","domain":"getdbt.com","sector":"data","cat":"data transformation tool","alias":["dbt"]},
-{"name":"Amplitude","domain":"amplitude.com","sector":"data","cat":"product analytics tool"},
-{"name":"CrowdStrike","domain":"crowdstrike.com","sector":"security","cat":"endpoint security (EDR)"},
-{"name":"Palo Alto Networks","domain":"paloaltonetworks.com","sector":"security","cat":"network security and zero trust platform","alias":["Palo Alto Networks"]},
-{"name":"Zscaler","domain":"zscaler.com","sector":"security","cat":"network security and zero trust platform"},
-{"name":"Okta","domain":"okta.com","sector":"security","cat":"identity and access management"},
-{"name":"SentinelOne","domain":"sentinelone.com","sector":"security","cat":"endpoint security (EDR)"},
-{"name":"Wiz","domain":"wiz.io","sector":"security","cat":"cloud security platform","strict":1},
-{"name":"1Password","domain":"1password.com","sector":"security","cat":"business password manager","alias":["1Password"]},
-{"name":"Cloudflare","domain":"cloudflare.com","sector":"security","cat":"CDN and web security"},
-{"name":"Snyk","domain":"snyk.io","sector":"security","cat":"developer security tool"},
-{"name":"Vanta","domain":"vanta.com","sector":"security","cat":"compliance automation for SOC 2"},
-{"name":"Workday","domain":"workday.com","sector":"finance","cat":"HR and finance software for enterprises"},
-{"name":"Deel","domain":"deel.com","sector":"finance","cat":"HR and payroll software","strict":1},
-{"name":"Rippling","domain":"rippling.com","sector":"finance","cat":"HR and payroll software"},
-{"name":"Gusto","domain":"gusto.com","sector":"finance","cat":"HR and payroll software","strict":1},
-{"name":"Personio","domain":"personio.com","sector":"finance","cat":"HR and payroll software"},
-{"name":"BambooHR","domain":"bamboohr.com","sector":"finance","cat":"HR and payroll software"},
-{"name":"Stripe","domain":"stripe.com","sector":"finance","cat":"online payment processing"},
-{"name":"Ramp","domain":"ramp.com","sector":"finance","cat":"corporate cards and spend management","strict":1},
-{"name":"Xero","domain":"xero.com","sector":"finance","cat":"accounting software for small businesses"},
-{"name":"Docusign","domain":"docusign.com","sector":"finance","cat":"e-signature software"},
-{"name":"GitHub","domain":"github.com","sector":"dev","cat":"code hosting and DevOps platform"},
-{"name":"GitLab","domain":"gitlab.com","sector":"dev","cat":"code hosting and DevOps platform"},
-{"name":"Vercel","domain":"vercel.com","sector":"dev","cat":"frontend hosting platform"},
-{"name":"Netlify","domain":"netlify.com","sector":"dev","cat":"frontend hosting platform"},
-{"name":"DigitalOcean","domain":"digitalocean.com","sector":"dev","cat":"cloud hosting for developers"},
-{"name":"Twilio","domain":"twilio.com","sector":"dev","cat":"communications API for SMS and voice"},
-{"name":"Postman","domain":"postman.com","sector":"dev","cat":"API development tool"},
-{"name":"JetBrains","domain":"jetbrains.com","sector":"dev","cat":"IDE for developers"},
-{"name":"Sentry","domain":"sentry.io","sector":"dev","cat":"application error monitoring","strict":1},
-{"name":"HashiCorp","domain":"hashicorp.com","sector":"dev","cat":"infrastructure as code tool"},
-{"name":"Shopify","domain":"shopify.com","sector":"content","cat":"e-commerce platform"},
-{"name":"BigCommerce","domain":"bigcommerce.com","sector":"content","cat":"e-commerce platform"},
-{"name":"Contentful","domain":"contentful.com","sector":"content","cat":"headless CMS"},
-{"name":"Webflow","domain":"webflow.com","sector":"content","cat":"no-code website builder"},
-{"name":"Optimizely","domain":"optimizely.com","sector":"content","cat":"A/B testing and digital experience platform"},
-{"name":"Algolia","domain":"algolia.com","sector":"content","cat":"site search API"},
-{"name":"Sitecore","domain":"sitecore.com","sector":"content","cat":"enterprise CMS"},
-{"name":"Canva","domain":"canva.com","sector":"content","cat":"online design tool for marketing teams","strict":1},
-{"name":"Typeform","domain":"typeform.com","sector":"content","cat":"online form and survey builder"},
-{"name":"Contentsquare","domain":"contentsquare.com","sector":"content","cat":"website heatmap and session recording tool"},
-{"name":"Zapier","domain":"zapier.com","sector":"automation","cat":"workflow automation tool"},
-{"name":"Make","domain":"make.com","sector":"automation","cat":"workflow automation tool","strict":1,"alias":["Make.com","Make (formerly Integromat)","Make"]},
-{"name":"n8n","domain":"n8n.io","sector":"automation","cat":"workflow automation tool","alias":["n8n"]},
-{"name":"UiPath","domain":"uipath.com","sector":"automation","cat":"robotic process automation (RPA)"},
-{"name":"Celonis","domain":"celonis.com","sector":"automation","cat":"process mining software"},
-{"name":"Calendly","domain":"calendly.com","sector":"automation","cat":"meeting scheduling tool"},
-{"name":"Loom","domain":"loom.com","sector":"automation","cat":"async video messaging tool","strict":1},
-{"name":"Dropbox","domain":"dropbox.com","sector":"automation","cat":"cloud file storage for business"},
-{"name":"Box","domain":"box.com","sector":"automation","cat":"cloud file storage for business","strict":1},
-{"name":"Zoom","domain":"zoom.com","sector":"automation","cat":"video conferencing software","strict":1}]
+{
+ "version": "2026-11-25",
+ "standard": "SBI 2025 / NACE Rev. 2.1",
+ "sectors": {
+  "c20": [
+   "Chemie",
+   "Chemicals",
+   "20"
+  ],
+  "c26": [
+   "Elektronica en elektrotechniek",
+   "Electronics and electrical equipment",
+   "26-27"
+  ],
+  "c28": [
+   "Machinebouw",
+   "Machinery",
+   "28"
+  ],
+  "c29": [
+   "Voertuigen, schepen en vliegtuigen",
+   "Vehicles, ships and aircraft",
+   "29-30"
+  ],
+  "c35": [
+   "Energie",
+   "Energy",
+   "35"
+  ],
+  "c42": [
+   "Infrastructuur en waterbouw",
+   "Civil engineering",
+   "42"
+  ],
+  "c46": [
+   "Groothandel",
+   "Wholesale",
+   "46"
+  ],
+  "c49": [
+   "Transport en logistiek",
+   "Transport and logistics",
+   "49-53"
+  ],
+  "c581": [
+   "Vakinformatie en uitgeverijen",
+   "Professional publishing",
+   "58.1"
+  ],
+  "c582": [
+   "Software",
+   "Software",
+   "58.2"
+  ],
+  "c61": [
+   "Telecom",
+   "Telecommunications",
+   "61"
+  ],
+  "c62": [
+   "IT-diensten",
+   "IT services",
+   "62"
+  ],
+  "c63": [
+   "Hosting en datacenters",
+   "Hosting and data centers",
+   "63"
+  ],
+  "c64": [
+   "Banken en betalingen",
+   "Banking and payments",
+   "64"
+  ],
+  "c65": [
+   "Verzekeringen",
+   "Insurance",
+   "65"
+  ],
+  "c69": [
+   "Juridische dienstverlening",
+   "Legal services",
+   "69"
+  ],
+  "c70": [
+   "Managementadvies",
+   "Management consulting",
+   "70"
+  ],
+  "c71": [
+   "Ingenieurs, testen en keuren",
+   "Engineering, testing and inspection",
+   "71"
+  ],
+  "c73": [
+   "Reclame en marktonderzoek",
+   "Advertising and market research",
+   "73"
+  ],
+  "c78": [
+   "Uitzenden en werving",
+   "Staffing and recruitment",
+   "78"
+  ]
+ },
+ "nl": [
+  {
+   "name": "AkzoNobel",
+   "domain": "akzonobel.com",
+   "sector": "c20",
+   "cat": "leverancier van verf en coatings",
+   "alias": [
+    "Akzo Nobel",
+    "AkzoNobel"
+   ]
+  },
+  {
+   "name": "dsm-firmenich",
+   "domain": "dsm-firmenich.com",
+   "sector": "c20",
+   "cat": "leverancier van ingrediënten voor voeding en gezondheid",
+   "alias": [
+    "DSM-Firmenich",
+    "DSM",
+    "dsm-firmenich"
+   ]
+  },
+  {
+   "name": "Nouryon",
+   "domain": "nouryon.com",
+   "sector": "c20",
+   "cat": "leverancier van specialty chemicals"
+  },
+  {
+   "name": "Corbion",
+   "domain": "corbion.com",
+   "sector": "c20",
+   "cat": "leverancier van biobased chemie"
+  },
+  {
+   "name": "Avantium",
+   "domain": "avantium.com",
+   "sector": "c20",
+   "cat": "leverancier van biobased chemie"
+  },
+  {
+   "name": "NXP Semiconductors",
+   "domain": "nxp.com",
+   "sector": "c26",
+   "cat": "chipfabrikant voor auto's en industrie",
+   "alias": [
+    "NXP",
+    "NXP Semiconductors"
+   ]
+  },
+  {
+   "name": "Philips",
+   "domain": "philips.com",
+   "sector": "c26",
+   "cat": "leverancier van medische systemen voor ziekenhuizen",
+   "alias": [
+    "Philips",
+    "Royal Philips"
+   ]
+  },
+  {
+   "name": "Signify",
+   "domain": "signify.com",
+   "sector": "c26",
+   "cat": "leverancier van professionele verlichting",
+   "strict": 1,
+   "alias": [
+    "Signify",
+    "Philips Lighting"
+   ]
+  },
+  {
+   "name": "Alfen",
+   "domain": "alfen.com",
+   "sector": "c26",
+   "cat": "leverancier van laadpalen en energieopslag"
+  },
+  {
+   "name": "Nedap",
+   "domain": "nedap.com",
+   "sector": "c26",
+   "cat": "leverancier van RFID- en toegangstechnologie",
+   "strict": 1
+  },
+  {
+   "name": "ASML",
+   "domain": "asml.com",
+   "sector": "c28",
+   "cat": "leverancier van lithografiemachines voor chipfabrikanten"
+  },
+  {
+   "name": "ASM International",
+   "domain": "asm.com",
+   "sector": "c28",
+   "cat": "leverancier van apparatuur voor halfgeleiderproductie",
+   "alias": [
+    "ASM International",
+    "ASM"
+   ]
+  },
+  {
+   "name": "Besi",
+   "domain": "besi.com",
+   "sector": "c28",
+   "cat": "leverancier van apparatuur voor halfgeleiderproductie",
+   "alias": [
+    "Besi",
+    "BE Semiconductor"
+   ]
+  },
+  {
+   "name": "Lely",
+   "domain": "lely.com",
+   "sector": "c28",
+   "cat": "leverancier van melkrobots en stalautomatisering",
+   "strict": 1
+  },
+  {
+   "name": "Aalberts",
+   "domain": "aalberts.com",
+   "sector": "c28",
+   "cat": "leverancier van industriële technologie en installatiesystemen"
+  },
+  {
+   "name": "DAF Trucks",
+   "domain": "daf.com",
+   "sector": "c29",
+   "cat": "vrachtwagenfabrikant",
+   "alias": [
+    "DAF",
+    "DAF Trucks"
+   ]
+  },
+  {
+   "name": "VDL Groep",
+   "domain": "vdlgroep.com",
+   "sector": "c29",
+   "cat": "fabrikant van bussen en industriële systemen",
+   "alias": [
+    "VDL",
+    "VDL Groep",
+    "VDL Group"
+   ]
+  },
+  {
+   "name": "Damen Shipyards",
+   "domain": "damen.com",
+   "sector": "c29",
+   "cat": "scheepswerf voor werkschepen en marineschepen",
+   "alias": [
+    "Damen Shipyards",
+    "Damen"
+   ]
+  },
+  {
+   "name": "Royal IHC",
+   "domain": "royalihc.com",
+   "sector": "c29",
+   "cat": "bouwer van bagger- en offshoreschepen",
+   "alias": [
+    "Royal IHC",
+    "IHC"
+   ]
+  },
+  {
+   "name": "Nooteboom",
+   "domain": "nooteboom.com",
+   "sector": "c29",
+   "cat": "fabrikant van opleggers voor zwaar transport",
+   "alias": [
+    "Nooteboom",
+    "Koninklijke Nooteboom"
+   ]
+  },
+  {
+   "name": "TenneT",
+   "domain": "tennet.eu",
+   "sector": "c35",
+   "cat": "netbeheerder voor het hoogspanningsnet"
+  },
+  {
+   "name": "Gasunie",
+   "domain": "gasunie.nl",
+   "sector": "c35",
+   "cat": "beheerder van gas- en waterstofinfrastructuur"
+  },
+  {
+   "name": "Alliander",
+   "domain": "alliander.com",
+   "sector": "c35",
+   "cat": "regionale netbeheerder voor stroom en gas",
+   "alias": [
+    "Alliander",
+    "Liander"
+   ]
+  },
+  {
+   "name": "Stedin",
+   "domain": "stedin.net",
+   "sector": "c35",
+   "cat": "regionale netbeheerder voor stroom en gas"
+  },
+  {
+   "name": "Eneco",
+   "domain": "eneco.nl",
+   "sector": "c35",
+   "cat": "energieleverancier voor bedrijven"
+  },
+  {
+   "name": "BAM",
+   "domain": "bam.com",
+   "sector": "c42",
+   "cat": "aannemer voor infrastructuurprojecten",
+   "strict": 1,
+   "alias": [
+    "Royal BAM",
+    "Koninklijke BAM",
+    "BAM"
+   ]
+  },
+  {
+   "name": "Heijmans",
+   "domain": "heijmans.nl",
+   "sector": "c42",
+   "cat": "aannemer voor infrastructuurprojecten"
+  },
+  {
+   "name": "VolkerWessels",
+   "domain": "volkerwessels.com",
+   "sector": "c42",
+   "cat": "aannemer voor infrastructuurprojecten",
+   "alias": [
+    "VolkerWessels",
+    "Volker Wessels"
+   ]
+  },
+  {
+   "name": "Boskalis",
+   "domain": "boskalis.com",
+   "sector": "c42",
+   "cat": "aannemer voor baggerwerk en waterbouw"
+  },
+  {
+   "name": "Van Oord",
+   "domain": "vanoord.com",
+   "sector": "c42",
+   "cat": "aannemer voor baggerwerk en waterbouw",
+   "alias": [
+    "Van Oord"
+   ]
+  },
+  {
+   "name": "Kramp",
+   "domain": "kramp.com",
+   "sector": "c46",
+   "cat": "groothandel in onderdelen voor landbouwmachines",
+   "strict": 1
+  },
+  {
+   "name": "IMCD",
+   "domain": "imcdgroup.com",
+   "sector": "c46",
+   "cat": "distributeur van specialty chemicals",
+   "alias": [
+    "IMCD",
+    "IMCD Group"
+   ]
+  },
+  {
+   "name": "Sligro",
+   "domain": "sligro.nl",
+   "sector": "c46",
+   "cat": "groothandel voor horeca en foodservice",
+   "alias": [
+    "Sligro",
+    "Sligro Food Group"
+   ]
+  },
+  {
+   "name": "Technische Unie",
+   "domain": "technischeunie.nl",
+   "sector": "c46",
+   "cat": "groothandel voor installateurs"
+  },
+  {
+   "name": "ERIKS",
+   "domain": "eriks.com",
+   "sector": "c46",
+   "cat": "leverancier van industriële componenten",
+   "alias": [
+    "ERIKS",
+    "Eriks"
+   ]
+  },
+  {
+   "name": "Vopak",
+   "domain": "vopak.com",
+   "sector": "c49",
+   "cat": "terminaloperator voor tankopslag",
+   "alias": [
+    "Vopak",
+    "Royal Vopak"
+   ]
+  },
+  {
+   "name": "Port of Rotterdam",
+   "domain": "portofrotterdam.com",
+   "sector": "c49",
+   "cat": "haven voor containers, energie en industrie",
+   "alias": [
+    "Port of Rotterdam",
+    "Havenbedrijf Rotterdam"
+   ]
+  },
+  {
+   "name": "Portbase",
+   "domain": "portbase.com",
+   "sector": "c49",
+   "cat": "port community system voor havens"
+  },
+  {
+   "name": "Shypple",
+   "domain": "shypple.com",
+   "sector": "c49",
+   "cat": "digitale expediteur voor zeevracht"
+  },
+  {
+   "name": "Vos Logistics",
+   "domain": "voslogistics.com",
+   "sector": "c49",
+   "cat": "vervoerder voor wegtransport in Europa"
+  },
+  {
+   "name": "Wolters Kluwer",
+   "domain": "wolterskluwer.com",
+   "sector": "c581",
+   "cat": "aanbieder van juridische en fiscale vakinformatie",
+   "alias": [
+    "Wolters Kluwer"
+   ]
+  },
+  {
+   "name": "Sdu",
+   "domain": "sdu.nl",
+   "sector": "c581",
+   "cat": "aanbieder van juridische en fiscale vakinformatie"
+  },
+  {
+   "name": "Elsevier",
+   "domain": "elsevier.com",
+   "sector": "c581",
+   "cat": "uitgever van wetenschappelijke informatie"
+  },
+  {
+   "name": "Brill",
+   "domain": "brill.com",
+   "sector": "c581",
+   "cat": "uitgever van wetenschappelijke informatie",
+   "strict": 1
+  },
+  {
+   "name": "Noordhoff",
+   "domain": "noordhoff.nl",
+   "sector": "c581",
+   "cat": "uitgever van lesmateriaal"
+  },
+  {
+   "name": "Exact",
+   "domain": "exact.com",
+   "sector": "c582",
+   "cat": "boekhoudsoftware voor het mkb",
+   "strict": 1,
+   "alias": [
+    "Exact Online",
+    "Exact"
+   ]
+  },
+  {
+   "name": "AFAS Software",
+   "domain": "afas.nl",
+   "sector": "c582",
+   "cat": "ERP- en HR-software voor middelgrote bedrijven",
+   "alias": [
+    "AFAS",
+    "AFAS Software"
+   ]
+  },
+  {
+   "name": "TOPdesk",
+   "domain": "topdesk.com",
+   "sector": "c582",
+   "cat": "servicemanagementsoftware (ITSM)"
+  },
+  {
+   "name": "Mendix",
+   "domain": "mendix.com",
+   "sector": "c582",
+   "cat": "low-codeplatform voor bedrijfsapplicaties"
+  },
+  {
+   "name": "Bynder",
+   "domain": "bynder.com",
+   "sector": "c582",
+   "cat": "digital asset management (DAM)"
+  },
+  {
+   "name": "KPN",
+   "domain": "kpn.com",
+   "sector": "c61",
+   "cat": "zakelijke telecomprovider"
+  },
+  {
+   "name": "VodafoneZiggo",
+   "domain": "vodafoneziggo.nl",
+   "sector": "c61",
+   "cat": "zakelijke telecomprovider",
+   "alias": [
+    "VodafoneZiggo",
+    "Vodafone",
+    "Ziggo"
+   ]
+  },
+  {
+   "name": "Odido",
+   "domain": "odido.nl",
+   "sector": "c61",
+   "cat": "zakelijke telecomprovider"
+  },
+  {
+   "name": "Eurofiber",
+   "domain": "eurofiber.com",
+   "sector": "c61",
+   "cat": "aanbieder van glasvezel voor bedrijven"
+  },
+  {
+   "name": "CM.com",
+   "domain": "cm.com",
+   "sector": "c61",
+   "cat": "platform voor zakelijke berichten via sms en WhatsApp",
+   "alias": [
+    "CM.com",
+    "CM"
+   ]
+  },
+  {
+   "name": "Centric",
+   "domain": "centric.eu",
+   "sector": "c62",
+   "cat": "IT-dienstverlener voor maatwerksoftware",
+   "strict": 1
+  },
+  {
+   "name": "Conclusion",
+   "domain": "conclusion.nl",
+   "sector": "c62",
+   "cat": "IT-dienstverlener voor maatwerksoftware",
+   "strict": 1
+  },
+  {
+   "name": "Info Support",
+   "domain": "infosupport.com",
+   "sector": "c62",
+   "cat": "IT-dienstverlener voor maatwerksoftware",
+   "alias": [
+    "Info Support"
+   ]
+  },
+  {
+   "name": "Schuberg Philis",
+   "domain": "schubergphilis.com",
+   "sector": "c62",
+   "cat": "managed services voor bedrijfskritische IT",
+   "alias": [
+    "Schuberg Philis"
+   ]
+  },
+  {
+   "name": "Xebia",
+   "domain": "xebia.com",
+   "sector": "c62",
+   "cat": "IT-consultancy voor cloud, data en AI"
+  },
+  {
+   "name": "Nebius",
+   "domain": "nebius.com",
+   "sector": "c63",
+   "cat": "GPU-cloud voor AI"
+  },
+  {
+   "name": "Leaseweb",
+   "domain": "leaseweb.com",
+   "sector": "c63",
+   "cat": "aanbieder van dedicated servers en cloudhosting"
+  },
+  {
+   "name": "TransIP",
+   "domain": "transip.nl",
+   "sector": "c63",
+   "cat": "webhosting en domeinnamen"
+  },
+  {
+   "name": "Hostnet",
+   "domain": "hostnet.nl",
+   "sector": "c63",
+   "cat": "webhosting en domeinnamen"
+  },
+  {
+   "name": "NorthC",
+   "domain": "northcdatacenters.com",
+   "sector": "c63",
+   "cat": "datacenter voor colocatie",
+   "alias": [
+    "NorthC",
+    "NorthC Datacenters"
+   ]
+  },
+  {
+   "name": "ING",
+   "domain": "ing.com",
+   "sector": "c64",
+   "cat": "zakelijke bank",
+   "strict": 1
+  },
+  {
+   "name": "ABN AMRO",
+   "domain": "abnamro.com",
+   "sector": "c64",
+   "cat": "zakelijke bank",
+   "alias": [
+    "ABN AMRO",
+    "ABN Amro"
+   ]
+  },
+  {
+   "name": "Rabobank",
+   "domain": "rabobank.com",
+   "sector": "c64",
+   "cat": "zakelijke bank"
+  },
+  {
+   "name": "Adyen",
+   "domain": "adyen.com",
+   "sector": "c64",
+   "cat": "betaalprovider voor webwinkels en bedrijven"
+  },
+  {
+   "name": "Mollie",
+   "domain": "mollie.com",
+   "sector": "c64",
+   "cat": "betaalprovider voor webwinkels en bedrijven"
+  },
+  {
+   "name": "Atradius",
+   "domain": "atradius.com",
+   "sector": "c65",
+   "cat": "kredietverzekeraar"
+  },
+  {
+   "name": "Achmea",
+   "domain": "achmea.nl",
+   "sector": "c65",
+   "cat": "verzekeraar voor bedrijven",
+   "alias": [
+    "Achmea",
+    "Interpolis",
+    "Centraal Beheer"
+   ]
+  },
+  {
+   "name": "NN Group",
+   "domain": "nn-group.com",
+   "sector": "c65",
+   "cat": "verzekeraar voor bedrijven",
+   "alias": [
+    "NN Group",
+    "Nationale-Nederlanden"
+   ]
+  },
+  {
+   "name": "a.s.r.",
+   "domain": "asrnederland.nl",
+   "sector": "c65",
+   "cat": "verzekeraar voor bedrijven",
+   "alias": [
+    "a.s.r.",
+    "ASR Nederland",
+    "a.s.r. Nederland"
+   ]
+  },
+  {
+   "name": "De Goudse",
+   "domain": "goudse.nl",
+   "sector": "c65",
+   "cat": "verzekeraar voor bedrijven",
+   "alias": [
+    "De Goudse",
+    "Goudse Verzekeringen"
+   ]
+  },
+  {
+   "name": "De Brauw Blackstone Westbroek",
+   "domain": "debrauw.com",
+   "sector": "c69",
+   "cat": "advocatenkantoor voor ondernemingsrecht",
+   "alias": [
+    "De Brauw",
+    "De Brauw Blackstone Westbroek"
+   ]
+  },
+  {
+   "name": "NautaDutilh",
+   "domain": "nautadutilh.com",
+   "sector": "c69",
+   "cat": "advocatenkantoor voor ondernemingsrecht"
+  },
+  {
+   "name": "Loyens & Loeff",
+   "domain": "loyensloeff.com",
+   "sector": "c69",
+   "cat": "advocatenkantoor voor ondernemingsrecht",
+   "alias": [
+    "Loyens & Loeff",
+    "Loyens en Loeff"
+   ]
+  },
+  {
+   "name": "Houthoff",
+   "domain": "houthoff.com",
+   "sector": "c69",
+   "cat": "advocatenkantoor voor ondernemingsrecht"
+  },
+  {
+   "name": "Stibbe",
+   "domain": "stibbe.com",
+   "sector": "c69",
+   "cat": "advocatenkantoor voor ondernemingsrecht"
+  },
+  {
+   "name": "Berenschot",
+   "domain": "berenschot.nl",
+   "sector": "c70",
+   "cat": "adviesbureau voor organisatie en strategie"
+  },
+  {
+   "name": "Twynstra Gudde",
+   "domain": "twynstragudde.nl",
+   "sector": "c70",
+   "cat": "adviesbureau voor organisatie en strategie",
+   "alias": [
+    "Twynstra Gudde"
+   ]
+  },
+  {
+   "name": "KplusV",
+   "domain": "kplusv.nl",
+   "sector": "c70",
+   "cat": "adviesbureau voor organisatie en strategie"
+  },
+  {
+   "name": "Highberg",
+   "domain": "highberg.com",
+   "sector": "c70",
+   "cat": "adviesbureau voor organisatie en strategie"
+  },
+  {
+   "name": "Boer & Croon",
+   "domain": "boercroon.nl",
+   "sector": "c70",
+   "cat": "adviesbureau voor organisatie en strategie",
+   "alias": [
+    "Boer & Croon",
+    "BoerCroon"
+   ]
+  },
+  {
+   "name": "Arcadis",
+   "domain": "arcadis.com",
+   "sector": "c71",
+   "cat": "ingenieursbureau"
+  },
+  {
+   "name": "Royal HaskoningDHV",
+   "domain": "royalhaskoningdhv.com",
+   "sector": "c71",
+   "cat": "ingenieursbureau",
+   "alias": [
+    "Royal HaskoningDHV",
+    "HaskoningDHV"
+   ]
+  },
+  {
+   "name": "Witteveen+Bos",
+   "domain": "witteveenbos.com",
+   "sector": "c71",
+   "cat": "ingenieursbureau",
+   "alias": [
+    "Witteveen+Bos",
+    "Witteveen + Bos"
+   ]
+  },
+  {
+   "name": "Fugro",
+   "domain": "fugro.com",
+   "sector": "c71",
+   "cat": "leverancier van geodata en bodemonderzoek"
+  },
+  {
+   "name": "Kiwa",
+   "domain": "kiwa.com",
+   "sector": "c71",
+   "cat": "keurings- en certificeringsinstelling",
+   "strict": 1
+  },
+  {
+   "name": "DEPT",
+   "domain": "deptagency.com",
+   "sector": "c73",
+   "cat": "digitaal bureau voor marketing en technologie",
+   "strict": 1,
+   "alias": [
+    "DEPT",
+    "DEPT Agency"
+   ]
+  },
+  {
+   "name": "iO",
+   "domain": "iodigital.com",
+   "sector": "c73",
+   "cat": "digitaal bureau voor marketing en technologie",
+   "strict": 1,
+   "alias": [
+    "iO",
+    "iO Digital"
+   ]
+  },
+  {
+   "name": "Ster",
+   "domain": "ster.nl",
+   "sector": "c73",
+   "cat": "verkoper van reclame op radio en tv",
+   "strict": 1
+  },
+  {
+   "name": "Motivaction",
+   "domain": "motivaction.nl",
+   "sector": "c73",
+   "cat": "marktonderzoeksbureau"
+  },
+  {
+   "name": "Blauw Research",
+   "domain": "blauw.com",
+   "sector": "c73",
+   "cat": "marktonderzoeksbureau",
+   "strict": 1,
+   "alias": [
+    "Blauw Research",
+    "Blauw"
+   ]
+  },
+  {
+   "name": "Randstad",
+   "domain": "randstad.com",
+   "sector": "c78",
+   "cat": "uitzendbureau"
+  },
+  {
+   "name": "Brunel",
+   "domain": "brunel.net",
+   "sector": "c78",
+   "cat": "detacheringsbureau voor specialisten"
+  },
+  {
+   "name": "YoungCapital",
+   "domain": "youngcapital.nl",
+   "sector": "c78",
+   "cat": "uitzendbureau"
+  },
+  {
+   "name": "Olympia",
+   "domain": "olympia.nl",
+   "sector": "c78",
+   "cat": "uitzendbureau",
+   "strict": 1
+  },
+  {
+   "name": "OTTO Work Force",
+   "domain": "ottoworkforce.eu",
+   "sector": "c78",
+   "cat": "uitzendbureau",
+   "alias": [
+    "OTTO Work Force",
+    "OTTO"
+   ]
+  }
+ ],
+ "intl": [
+  {
+   "name": "BASF",
+   "domain": "basf.com",
+   "sector": "c20",
+   "cat": "chemical company for industrial customers"
+  },
+  {
+   "name": "Dow",
+   "domain": "dow.com",
+   "sector": "c20",
+   "cat": "chemical company for industrial customers",
+   "strict": 1
+  },
+  {
+   "name": "Covestro",
+   "domain": "covestro.com",
+   "sector": "c20",
+   "cat": "chemical company for industrial customers"
+  },
+  {
+   "name": "Evonik",
+   "domain": "evonik.com",
+   "sector": "c20",
+   "cat": "specialty chemicals supplier"
+  },
+  {
+   "name": "Clariant",
+   "domain": "clariant.com",
+   "sector": "c20",
+   "cat": "specialty chemicals supplier"
+  },
+  {
+   "name": "Infineon",
+   "domain": "infineon.com",
+   "sector": "c26",
+   "cat": "semiconductor manufacturer for automotive and industrial applications",
+   "alias": [
+    "Infineon",
+    "Infineon Technologies"
+   ]
+  },
+  {
+   "name": "STMicroelectronics",
+   "domain": "st.com",
+   "sector": "c26",
+   "cat": "semiconductor manufacturer for automotive and industrial applications",
+   "alias": [
+    "STMicroelectronics",
+    "STMicro"
+   ]
+  },
+  {
+   "name": "Texas Instruments",
+   "domain": "ti.com",
+   "sector": "c26",
+   "cat": "semiconductor manufacturer for automotive and industrial applications"
+  },
+  {
+   "name": "Schneider Electric",
+   "domain": "se.com",
+   "sector": "c26",
+   "cat": "electrical equipment and automation supplier",
+   "alias": [
+    "Schneider Electric",
+    "Schneider"
+   ]
+  },
+  {
+   "name": "ABB",
+   "domain": "abb.com",
+   "sector": "c26",
+   "cat": "electrical equipment and automation supplier"
+  },
+  {
+   "name": "Applied Materials",
+   "domain": "appliedmaterials.com",
+   "sector": "c28",
+   "cat": "semiconductor equipment supplier"
+  },
+  {
+   "name": "Lam Research",
+   "domain": "lamresearch.com",
+   "sector": "c28",
+   "cat": "semiconductor equipment supplier"
+  },
+  {
+   "name": "KLA",
+   "domain": "kla.com",
+   "sector": "c28",
+   "cat": "semiconductor equipment supplier",
+   "alias": [
+    "KLA",
+    "KLA Corporation"
+   ]
+  },
+  {
+   "name": "Atlas Copco",
+   "domain": "atlascopco.com",
+   "sector": "c28",
+   "cat": "industrial compressor supplier"
+  },
+  {
+   "name": "Caterpillar",
+   "domain": "caterpillar.com",
+   "sector": "c28",
+   "cat": "construction and mining equipment manufacturer",
+   "strict": 1
+  },
+  {
+   "name": "Volvo Group",
+   "domain": "volvogroup.com",
+   "sector": "c29",
+   "cat": "truck manufacturer",
+   "alias": [
+    "Volvo Group",
+    "Volvo Trucks"
+   ]
+  },
+  {
+   "name": "Daimler Truck",
+   "domain": "daimlertruck.com",
+   "sector": "c29",
+   "cat": "truck manufacturer",
+   "alias": [
+    "Daimler Truck",
+    "Mercedes-Benz Trucks"
+   ]
+  },
+  {
+   "name": "Scania",
+   "domain": "scania.com",
+   "sector": "c29",
+   "cat": "truck manufacturer"
+  },
+  {
+   "name": "Airbus",
+   "domain": "airbus.com",
+   "sector": "c29",
+   "cat": "commercial aircraft manufacturer"
+  },
+  {
+   "name": "Wärtsilä",
+   "domain": "wartsila.com",
+   "sector": "c29",
+   "cat": "marine engine and ship technology supplier",
+   "alias": [
+    "Wärtsilä",
+    "Wartsila"
+   ]
+  },
+  {
+   "name": "Ørsted",
+   "domain": "orsted.com",
+   "sector": "c35",
+   "cat": "offshore wind energy developer",
+   "alias": [
+    "Ørsted",
+    "Orsted"
+   ]
+  },
+  {
+   "name": "Iberdrola",
+   "domain": "iberdrola.com",
+   "sector": "c35",
+   "cat": "energy supplier for businesses"
+  },
+  {
+   "name": "Enel",
+   "domain": "enel.com",
+   "sector": "c35",
+   "cat": "energy supplier for businesses",
+   "strict": 1
+  },
+  {
+   "name": "Engie",
+   "domain": "engie.com",
+   "sector": "c35",
+   "cat": "energy supplier for businesses",
+   "alias": [
+    "Engie",
+    "ENGIE"
+   ]
+  },
+  {
+   "name": "RWE",
+   "domain": "rwe.com",
+   "sector": "c35",
+   "cat": "energy supplier for businesses"
+  },
+  {
+   "name": "Vinci",
+   "domain": "vinci.com",
+   "sector": "c42",
+   "cat": "infrastructure construction contractor",
+   "strict": 1,
+   "alias": [
+    "Vinci",
+    "VINCI"
+   ]
+  },
+  {
+   "name": "Skanska",
+   "domain": "skanska.com",
+   "sector": "c42",
+   "cat": "infrastructure construction contractor"
+  },
+  {
+   "name": "Strabag",
+   "domain": "strabag.com",
+   "sector": "c42",
+   "cat": "infrastructure construction contractor"
+  },
+  {
+   "name": "Hochtief",
+   "domain": "hochtief.com",
+   "sector": "c42",
+   "cat": "infrastructure construction contractor"
+  },
+  {
+   "name": "Jan De Nul",
+   "domain": "jandenul.com",
+   "sector": "c42",
+   "cat": "dredging and marine construction contractor",
+   "alias": [
+    "Jan De Nul",
+    "Jan de Nul"
+   ]
+  },
+  {
+   "name": "Brenntag",
+   "domain": "brenntag.com",
+   "sector": "c46",
+   "cat": "chemical distributor"
+  },
+  {
+   "name": "Grainger",
+   "domain": "grainger.com",
+   "sector": "c46",
+   "cat": "industrial supplies distributor",
+   "strict": 1,
+   "alias": [
+    "Grainger",
+    "W.W. Grainger"
+   ]
+  },
+  {
+   "name": "Sonepar",
+   "domain": "sonepar.com",
+   "sector": "c46",
+   "cat": "electrical supplies wholesaler"
+  },
+  {
+   "name": "Rexel",
+   "domain": "rexel.com",
+   "sector": "c46",
+   "cat": "electrical supplies wholesaler"
+  },
+  {
+   "name": "Bunzl",
+   "domain": "bunzl.com",
+   "sector": "c46",
+   "cat": "distributor of business consumables"
+  },
+  {
+   "name": "Kuehne+Nagel",
+   "domain": "kuehne-nagel.com",
+   "sector": "c49",
+   "cat": "freight forwarder and logistics provider",
+   "alias": [
+    "Kuehne+Nagel",
+    "Kuehne + Nagel",
+    "Kühne+Nagel"
+   ]
+  },
+  {
+   "name": "DSV",
+   "domain": "dsv.com",
+   "sector": "c49",
+   "cat": "freight forwarder and logistics provider"
+  },
+  {
+   "name": "CEVA Logistics",
+   "domain": "cevalogistics.com",
+   "sector": "c49",
+   "cat": "freight forwarder and logistics provider",
+   "alias": [
+    "CEVA Logistics",
+    "CEVA"
+   ]
+  },
+  {
+   "name": "Maersk",
+   "domain": "maersk.com",
+   "sector": "c49",
+   "cat": "container shipping company",
+   "alias": [
+    "Maersk",
+    "A.P. Moller - Maersk"
+   ]
+  },
+  {
+   "name": "Flexport",
+   "domain": "flexport.com",
+   "sector": "c49",
+   "cat": "digital freight forwarder"
+  },
+  {
+   "name": "Thomson Reuters",
+   "domain": "thomsonreuters.com",
+   "sector": "c581",
+   "cat": "legal and tax information provider"
+  },
+  {
+   "name": "LexisNexis",
+   "domain": "lexisnexis.com",
+   "sector": "c581",
+   "cat": "legal and tax information provider"
+  },
+  {
+   "name": "Springer Nature",
+   "domain": "springernature.com",
+   "sector": "c581",
+   "cat": "scientific publisher",
+   "alias": [
+    "Springer Nature",
+    "Springer"
+   ]
+  },
+  {
+   "name": "Wiley",
+   "domain": "wiley.com",
+   "sector": "c581",
+   "cat": "scientific publisher",
+   "strict": 1
+  },
+  {
+   "name": "Informa",
+   "domain": "informa.com",
+   "sector": "c581",
+   "cat": "B2B events and information company"
+  },
+  {
+   "name": "Salesforce",
+   "domain": "salesforce.com",
+   "sector": "c582",
+   "cat": "CRM software for B2B companies"
+  },
+  {
+   "name": "HubSpot",
+   "domain": "hubspot.com",
+   "sector": "c582",
+   "cat": "CRM software for B2B companies"
+  },
+  {
+   "name": "SAP",
+   "domain": "sap.com",
+   "sector": "c582",
+   "cat": "ERP software for enterprises"
+  },
+  {
+   "name": "ServiceNow",
+   "domain": "servicenow.com",
+   "sector": "c582",
+   "cat": "IT service management platform"
+  },
+  {
+   "name": "Atlassian",
+   "domain": "atlassian.com",
+   "sector": "c582",
+   "cat": "issue tracking and project management for software teams",
+   "alias": [
+    "Atlassian",
+    "Jira"
+   ]
+  },
+  {
+   "name": "Vodafone",
+   "domain": "vodafone.com",
+   "sector": "c61",
+   "cat": "business telecom provider",
+   "alias": [
+    "Vodafone",
+    "Vodafone Business"
+   ]
+  },
+  {
+   "name": "Deutsche Telekom",
+   "domain": "telekom.com",
+   "sector": "c61",
+   "cat": "business telecom provider",
+   "alias": [
+    "Deutsche Telekom",
+    "T-Systems"
+   ]
+  },
+  {
+   "name": "Orange Business",
+   "domain": "orange-business.com",
+   "sector": "c61",
+   "cat": "business telecom provider",
+   "alias": [
+    "Orange Business",
+    "Orange Business Services"
+   ]
+  },
+  {
+   "name": "Colt",
+   "domain": "colt.net",
+   "sector": "c61",
+   "cat": "business fiber network provider",
+   "strict": 1,
+   "alias": [
+    "Colt",
+    "Colt Technology Services"
+   ]
+  },
+  {
+   "name": "Twilio",
+   "domain": "twilio.com",
+   "sector": "c61",
+   "cat": "communications platform for business messaging"
+  },
+  {
+   "name": "Accenture",
+   "domain": "accenture.com",
+   "sector": "c62",
+   "cat": "IT consulting and services firm"
+  },
+  {
+   "name": "Capgemini",
+   "domain": "capgemini.com",
+   "sector": "c62",
+   "cat": "IT consulting and services firm"
+  },
+  {
+   "name": "Cognizant",
+   "domain": "cognizant.com",
+   "sector": "c62",
+   "cat": "IT consulting and services firm"
+  },
+  {
+   "name": "Infosys",
+   "domain": "infosys.com",
+   "sector": "c62",
+   "cat": "IT consulting and services firm"
+  },
+  {
+   "name": "Tata Consultancy Services",
+   "domain": "tcs.com",
+   "sector": "c62",
+   "cat": "IT consulting and services firm",
+   "alias": [
+    "Tata Consultancy Services",
+    "TCS"
+   ]
+  },
+  {
+   "name": "Cloudflare",
+   "domain": "cloudflare.com",
+   "sector": "c63",
+   "cat": "CDN and web security platform"
+  },
+  {
+   "name": "Equinix",
+   "domain": "equinix.com",
+   "sector": "c63",
+   "cat": "data center colocation provider"
+  },
+  {
+   "name": "Digital Realty",
+   "domain": "digitalrealty.com",
+   "sector": "c63",
+   "cat": "data center colocation provider"
+  },
+  {
+   "name": "DigitalOcean",
+   "domain": "digitalocean.com",
+   "sector": "c63",
+   "cat": "cloud hosting provider for developers"
+  },
+  {
+   "name": "OVHcloud",
+   "domain": "ovhcloud.com",
+   "sector": "c63",
+   "cat": "cloud hosting provider for developers",
+   "alias": [
+    "OVHcloud",
+    "OVH"
+   ]
+  },
+  {
+   "name": "JPMorgan Chase",
+   "domain": "jpmorganchase.com",
+   "sector": "c64",
+   "cat": "corporate bank",
+   "alias": [
+    "JPMorgan Chase",
+    "J.P. Morgan",
+    "JPMorgan"
+   ]
+  },
+  {
+   "name": "HSBC",
+   "domain": "hsbc.com",
+   "sector": "c64",
+   "cat": "corporate bank"
+  },
+  {
+   "name": "Stripe",
+   "domain": "stripe.com",
+   "sector": "c64",
+   "cat": "payment provider for online businesses",
+   "strict": 1
+  },
+  {
+   "name": "Checkout.com",
+   "domain": "checkout.com",
+   "sector": "c64",
+   "cat": "payment provider for online businesses"
+  },
+  {
+   "name": "PayPal",
+   "domain": "paypal.com",
+   "sector": "c64",
+   "cat": "payment provider for online businesses"
+  },
+  {
+   "name": "Allianz",
+   "domain": "allianz.com",
+   "sector": "c65",
+   "cat": "business insurance provider"
+  },
+  {
+   "name": "AXA",
+   "domain": "axa.com",
+   "sector": "c65",
+   "cat": "business insurance provider"
+  },
+  {
+   "name": "Zurich Insurance",
+   "domain": "zurich.com",
+   "sector": "c65",
+   "cat": "business insurance provider",
+   "alias": [
+    "Zurich Insurance",
+    "Zurich"
+   ]
+  },
+  {
+   "name": "Chubb",
+   "domain": "chubb.com",
+   "sector": "c65",
+   "cat": "business insurance provider"
+  },
+  {
+   "name": "Coface",
+   "domain": "coface.com",
+   "sector": "c65",
+   "cat": "trade credit insurer"
+  },
+  {
+   "name": "Clifford Chance",
+   "domain": "cliffordchance.com",
+   "sector": "c69",
+   "cat": "international law firm for corporate law"
+  },
+  {
+   "name": "Linklaters",
+   "domain": "linklaters.com",
+   "sector": "c69",
+   "cat": "international law firm for corporate law"
+  },
+  {
+   "name": "Freshfields",
+   "domain": "freshfields.com",
+   "sector": "c69",
+   "cat": "international law firm for corporate law"
+  },
+  {
+   "name": "A&O Shearman",
+   "domain": "aoshearman.com",
+   "sector": "c69",
+   "cat": "international law firm for corporate law",
+   "alias": [
+    "A&O Shearman",
+    "Allen & Overy"
+   ]
+  },
+  {
+   "name": "Baker McKenzie",
+   "domain": "bakermckenzie.com",
+   "sector": "c69",
+   "cat": "international law firm for corporate law"
+  },
+  {
+   "name": "McKinsey & Company",
+   "domain": "mckinsey.com",
+   "sector": "c70",
+   "cat": "strategy consulting firm",
+   "alias": [
+    "McKinsey & Company",
+    "McKinsey"
+   ]
+  },
+  {
+   "name": "Boston Consulting Group",
+   "domain": "bcg.com",
+   "sector": "c70",
+   "cat": "strategy consulting firm",
+   "alias": [
+    "Boston Consulting Group",
+    "BCG"
+   ]
+  },
+  {
+   "name": "Bain & Company",
+   "domain": "bain.com",
+   "sector": "c70",
+   "cat": "strategy consulting firm",
+   "alias": [
+    "Bain & Company",
+    "Bain"
+   ]
+  },
+  {
+   "name": "Roland Berger",
+   "domain": "rolandberger.com",
+   "sector": "c70",
+   "cat": "strategy consulting firm"
+  },
+  {
+   "name": "Oliver Wyman",
+   "domain": "oliverwyman.com",
+   "sector": "c70",
+   "cat": "strategy consulting firm"
+  },
+  {
+   "name": "AECOM",
+   "domain": "aecom.com",
+   "sector": "c71",
+   "cat": "engineering consultancy"
+  },
+  {
+   "name": "Jacobs",
+   "domain": "jacobs.com",
+   "sector": "c71",
+   "cat": "engineering consultancy",
+   "strict": 1
+  },
+  {
+   "name": "WSP",
+   "domain": "wsp.com",
+   "sector": "c71",
+   "cat": "engineering consultancy"
+  },
+  {
+   "name": "SGS",
+   "domain": "sgs.com",
+   "sector": "c71",
+   "cat": "testing, inspection and certification company"
+  },
+  {
+   "name": "Bureau Veritas",
+   "domain": "bureauveritas.com",
+   "sector": "c71",
+   "cat": "testing, inspection and certification company"
+  },
+  {
+   "name": "WPP",
+   "domain": "wpp.com",
+   "sector": "c73",
+   "cat": "advertising agency network"
+  },
+  {
+   "name": "Publicis Groupe",
+   "domain": "publicisgroupe.com",
+   "sector": "c73",
+   "cat": "advertising agency network",
+   "alias": [
+    "Publicis Groupe",
+    "Publicis"
+   ]
+  },
+  {
+   "name": "Omnicom",
+   "domain": "omnicomgroup.com",
+   "sector": "c73",
+   "cat": "advertising agency network",
+   "alias": [
+    "Omnicom",
+    "Omnicom Group"
+   ]
+  },
+  {
+   "name": "Ipsos",
+   "domain": "ipsos.com",
+   "sector": "c73",
+   "cat": "market research company"
+  },
+  {
+   "name": "Kantar",
+   "domain": "kantar.com",
+   "sector": "c73",
+   "cat": "market research company"
+  },
+  {
+   "name": "Adecco",
+   "domain": "adecco.com",
+   "sector": "c78",
+   "cat": "staffing and recruitment agency"
+  },
+  {
+   "name": "ManpowerGroup",
+   "domain": "manpowergroup.com",
+   "sector": "c78",
+   "cat": "staffing and recruitment agency",
+   "alias": [
+    "ManpowerGroup",
+    "Manpower"
+   ]
+  },
+  {
+   "name": "Robert Half",
+   "domain": "roberthalf.com",
+   "sector": "c78",
+   "cat": "staffing and recruitment agency"
+  },
+  {
+   "name": "Kelly Services",
+   "domain": "kellyservices.com",
+   "sector": "c78",
+   "cat": "staffing and recruitment agency"
+  },
+  {
+   "name": "Hays",
+   "domain": "hays.com",
+   "sector": "c78",
+   "cat": "staffing and recruitment agency",
+   "strict": 1
+  }
+ ]
 }

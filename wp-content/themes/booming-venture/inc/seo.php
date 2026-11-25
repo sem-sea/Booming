@@ -12,17 +12,23 @@ function bv_seo_active_plugin_handles_meta(): bool {
 	return defined( 'WPSEO_VERSION' ) || defined( 'RANK_MATH_VERSION' );
 }
 
-/* JSON-LD: Organization + WebSite + per-page graph.
- * Yoast and Rank Math both emit their own Organization/WebSite/Article graphs,
- * so when either is active we step back to avoid duplicate-schema warnings in
- * Google Search Console. Override with `add_filter( 'bv_emit_jsonld', '__return_true' )`. */
-add_action( 'wp_head', function () {
-	if ( is_admin() ) return;
-	if ( apply_filters( 'bv_emit_jsonld', ! bv_seo_active_plugin_handles_meta() ) === false ) return;
+/**
+ * Organization and founder nodes, shared by the theme graph and the Yoast
+ * graph (1.21.0). No private e-mail address or phone number in the Person node.
+ */
+/** Logo for schema: custom logo, else the site icon, else the brand mark the theme uses as favicon. */
+function bv_schema_logo_url(): string {
+	$logo_id = (int) get_theme_mod( 'custom_logo' );
+	$url     = $logo_id ? (string) wp_get_attachment_image_url( $logo_id, 'full' ) : '';
+	if ( ! $url && function_exists( 'get_site_icon_url' ) ) {
+		$url = (string) get_site_icon_url( 512 );
+	}
+	return $url ?: home_url( (string) apply_filters( 'bv_site_icon_url', '/wp-content/uploads/2026/05/icon-booming-venture.png' ) );
+}
 
+function bv_schema_identity_nodes(): array {
 	$site_url = home_url( '/' );
-	$logo_id  = (int) get_theme_mod( 'custom_logo' );
-	$logo_url = $logo_id ? wp_get_attachment_image_url( $logo_id, 'full' ) : BV_THEME_URI . '/assets/images/logo.png';
+	$logo_url = bv_schema_logo_url();
 
 	$graph = [];
 
@@ -82,8 +88,6 @@ add_action( 'wp_head', function () {
 		'description'   => 'Ben Verschuur is the founder of Booming Venture and a hands-on AI marketing strategist based in Rotterdam, the Netherlands. He helps premium brands and B2B SaaS companies turn AI into a working operating system for growth, with 15+ years of experience leading performance and growth marketing at Zeelander Yachts, DPDK Digital Agency, Knab, Aegon, and Hallmark Cards.',
 		'url'           => $site_url . 'about/',
 		'image'         => $site_url . 'wp-content/uploads/2026/05/Ben.png',
-		'email'         => 'benverschuur@hotmail.com',
-		'telephone'     => '+31613013266',
 		'nationality'   => [ '@type' => 'Country', 'name' => 'Netherlands' ],
 		'homeLocation'  => [ '@type' => 'Place', 'name' => 'Rotterdam, the Netherlands' ],
 		'worksFor'      => [ '@id' => $site_url . '#organization' ],
@@ -119,6 +123,21 @@ add_action( 'wp_head', function () {
 			'https://verantwoordai.nl/',
 		],
 	];
+
+	return $graph;
+}
+
+/* JSON-LD: Organization + WebSite + per-page graph.
+ * Yoast and Rank Math both emit their own Organization/WebSite/Article graphs,
+ * so when either is active we step back to avoid duplicate-schema warnings in
+ * Google Search Console. Override with `add_filter( 'bv_emit_jsonld', '__return_true' )`. */
+add_action( 'wp_head', function () {
+	if ( is_admin() ) return;
+	if ( apply_filters( 'bv_emit_jsonld', ! bv_seo_active_plugin_handles_meta() ) === false ) return;
+
+	$site_url = home_url( '/' );
+	$logo_url = bv_schema_logo_url();
+	$graph    = bv_schema_identity_nodes();
 
 	$graph[] = [
 		'@type'           => 'WebSite',
@@ -311,6 +330,35 @@ add_filter( 'wpseo_schema_graph', function ( $graph ) {
 } );
 
 /*
+ * Organization and founder in Yoast's graph (1.21.0). Without a site
+ * representation set in Yoast, its graph had no Organization and no sameAs,
+ * so search engines, AI systems and the GEO Index check saw no company.
+ * An Organization that Yoast does output keeps its fields and gets ours
+ * added where it has none (sameAs, KvK, address).
+ */
+add_filter( 'wpseo_schema_graph', static function ( $graph ) {
+	if ( ! is_array( $graph ) ) return $graph;
+	foreach ( bv_schema_identity_nodes() as $node ) {
+		$found = false;
+		foreach ( $graph as $i => $n ) {
+			if ( is_array( $n ) && ( $n['@id'] ?? '' ) === $node['@id'] ) {
+				$graph[ $i ] = $n + $node;
+				$found       = true;
+			}
+		}
+		if ( ! $found ) {
+			$graph[] = $node;
+		}
+	}
+	foreach ( $graph as $i => $n ) {
+		if ( is_array( $n ) && 'WebSite' === ( $n['@type'] ?? '' ) && empty( $n['publisher'] ) ) {
+			$graph[ $i ]['publisher'] = [ '@id' => home_url( '/' ) . '#organization' ];
+		}
+	}
+	return $graph;
+}, 5 );
+
+/*
  * B2B GEO Index pages (1.16.0): Dataset (Google Dataset Search, with the CSV
  * downloads as distribution) and the top 10 of each list as ItemList, built
  * from the live measurements. Added to Yoast's graph, or to the theme graph
@@ -341,8 +389,8 @@ function bv_gi_schema_nodes(): array {
 		'@id'                  => $url . '#dataset',
 		'name'                 => $t( 'B2B GEO Index: AI-zichtbaarheid van 200 B2B-bedrijven', 'B2B GEO Index: AI visibility of 200 B2B companies' ),
 		'description'          => $t(
-			'Maandelijkse meting van 100 Nederlandse B2B-bedrijven en 100 internationale B2B-softwarebedrijven: hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn voor AI-zoekmachines, met zeven websitechecks en een score van 0 tot 100.',
-			'Monthly measurement of 100 Dutch B2B companies and 100 international B2B software companies: how often AI assistants name them and how ready their websites are for AI search, with seven website checks and a score from 0 to 100.'
+			'Maandelijkse meting van 100 Nederlandse en 100 internationale B2B-bedrijven in dezelfde 20 sectoren (SBI 2025 en NACE Rev. 2.1): hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn voor AI-zoekmachines, met zeven websitechecks en een score van 0 tot 100.',
+			'Monthly measurement of 100 Dutch and 100 international B2B companies in the same 20 sectors (SBI 2025 and NACE Rev. 2.1): how often AI assistants name them and how ready their websites are for AI search, with seven website checks and a score from 0 to 100.'
 		),
 		'url'                  => $url,
 		'creator'              => $org,

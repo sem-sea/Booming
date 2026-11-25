@@ -105,8 +105,8 @@ function bv_gi_ai_active(): array {
 
 /*
  * Monthly cap per assistant, counted in this site: a second brake on top of
- * the spend limit at each provider. 300 covers the 143 questions of the
- * monthly run plus one extra manual run.
+ * the spend limit at each provider. 300 covers the monthly run (about 110
+ * questions since 1.21.0, one per category) plus extra manual runs.
  */
 function bv_gi_ai_cap(): int {
 	return max( 0, (int) bv_gi_ai_settings()['cap'] );

@@ -151,6 +151,18 @@ def data_band(title, text, btns):
     return group([group([head3(title), p(text)], "bv-gip-data__text"), buttons(btns, "bv-gip-data__btns")], "bv-gip-data")
 
 
+SECTORS = json.loads((ROOT / "wp-content/themes/booming-venture/blocks/geo-index/companies.json").read_text(encoding="utf-8"))["sectors"]
+CBS_EN = "https://www.cbs.nl/en-gb/our-services/methods/classifications/activiteiten/standard-industrial-classifications"
+CBS_NL = "https://www.cbs.nl/nl-nl/onze-diensten/methoden/classificaties/activiteiten/standaard-bedrijfsindeling--sbi--"
+
+
+def sector_list(lang):
+    """The 20 sectors with their SBI/NACE code, as a list block (chips on the page)."""
+    i = 0 if lang == "nl" else 1
+    items = "".join(f'<!-- wp:list-item -->\n<li><span class="bv-gip-code">{v[2]}</span> {v[i].replace("Managementadvies", "Management&shy;advies").replace("Telecommunications", "Tele&shy;communications")}</li>\n<!-- /wp:list-item -->\n' for v in SECTORS.values())
+    return f'<!-- wp:list {{"className":"bv-gip-sectors"}} -->\n<ul class="wp-block-list bv-gip-sectors">{items}</ul>\n<!-- /wp:list -->'
+
+
 CSV_NL = "/wp-json/bv/v1/geo-index?list=nl&amp;format=csv"
 CSV_INTL = "/wp-json/bv/v1/geo-index?list=intl&amp;format=csv"
 
@@ -158,7 +170,7 @@ EN = [
     hero("Updated every month",
          'B2B GEO Index: <span class="bv-gradient-text">who is ready for AI search?</span>',
          "200 B2B companies, measured every month: how often ChatGPT, Claude, Gemini and Perplexity name them, and whether their websites are ready for AI search.",
-         [("200", "B2B companies"), ("4", "AI assistants"), ("7", "website checks")],
+         [("200", "B2B companies"), ("20", "sectors"), ("4", "AI assistants"), ("7", "website checks")],
          [("View the ranking", "#ranking", "bv-cta-gradient"), ("How the score works", "#methodology", "outline")]),
     section([
         sec_head("Why it matters", lead="Buyers now meet vendors in AI answers first. Whether a company shows up depends partly on things it controls on its own website."),
@@ -205,12 +217,13 @@ EN = [
     ], extra="bv-gip-sec--method"),
     section([
         sec_head("Selection", "Which companies are in the index?",
-                 "The index is a fixed set of 100 Dutch B2B companies in eight sectors and 100 international B2B software companies in ten categories."),
+                 "The index is a fixed set of 200 B2B companies: 100 Dutch and 100 international, five in each of the same 20 sectors."),
         grid([
-            card([para("100", "bv-gip-num"), head3("Dutch B2B companies"), p("Eight sectors, from SaaS and fintech to high-tech and logistics. Every company has its head office in the Netherlands.")]),
-            card([para("100", "bv-gip-num"), head3("International B2B software companies"), p("Ten categories, from CRM and marketing to security, finance and developer tools.")]),
+            card([para("20", "bv-gip-num"), head3("Sectors from a standard"), p("The sectors follow " + a("SBI 2025", CBS_EN) + ", the Dutch version of the European NACE classification. They run from chemicals and machinery to software, banking and staffing.")]),
+            card([para("5", "bv-gip-num"), head3("Companies per sector, in both lists"), p("Every sector has five Dutch and five international companies. So you can compare the same sector in the Netherlands and abroad.")]),
         ], 2),
-        para("We picked well-known companies with a B2B model. Companies cannot pay for a place or a better score. Missing a company? Email " + a("info@boomingventure.com", "mailto:info@boomingventure.com") + " and we add it to the next measurement.", "bv-gip-note"),
+        sector_list("en"),
+        para("We picked well-known companies with a B2B model. For the Dutch list, the head office is in the Netherlands. Companies cannot pay for a place or a better score. Missing a company? Email " + a("info@boomingventure.com", "mailto:info@boomingventure.com") + " and we consider it for the next measurement.", "bv-gip-note"),
     ]),
     faq_grid("FAQ", "Frequently asked questions", [
         ("How often is the index updated?", "Every month, on the first Monday. The site measures all 200 companies again and shows the change against the previous month."),
@@ -232,7 +245,7 @@ NL = [
     hero("Elke maand bijgewerkt",
          'B2B GEO Index: <span class="bv-gradient-text">wie is klaar voor AI-zoekmachines?</span>',
          "200 B2B-bedrijven, elke maand gemeten: hoe vaak ChatGPT, Claude, Gemini en Perplexity ze noemen en of hun websites klaar zijn voor AI-zoekmachines.",
-         [("200", "B2B-bedrijven"), ("4", "AI-assistenten"), ("7", "websitechecks")],
+         [("200", "B2B-bedrijven"), ("20", "sectoren"), ("4", "AI-assistenten"), ("7", "websitechecks")],
          [("Bekijk de ranglijst", "#ranglijst", "bv-cta-gradient"), ("Zo werkt de score", "#methode", "outline")]),
     section([
         sec_head("Waarom dit telt", lead="Kopers zien leveranciers nu eerst in AI-antwoorden. Of een bedrijf daarin verschijnt, hangt deels af van dingen die het op zijn eigen website regelt."),
@@ -279,12 +292,13 @@ NL = [
     ], extra="bv-gip-sec--method bv-gip--nl"),
     section([
         sec_head("Selectie", "Welke bedrijven staan in de index?",
-                 "De index is een vaste groep van 100 Nederlandse B2B-bedrijven in acht sectoren en 100 internationale B2B-softwarebedrijven in tien categorieën."),
+                 "De index is een vaste groep van 200 B2B-bedrijven: 100 Nederlandse en 100 internationale, vijf in elk van dezelfde 20 sectoren."),
         grid([
-            card([para("100", "bv-gip-num"), head3("Nederlandse B2B-bedrijven"), p("Acht sectoren, van SaaS en fintech tot hightech en logistiek. Elk bedrijf heeft zijn hoofdkantoor in Nederland.")]),
-            card([para("100", "bv-gip-num"), head3("Internationale B2B-softwarebedrijven"), p("Tien categorieën, van CRM en marketing tot security, finance en tools voor developers.")]),
+            card([para("20", "bv-gip-num"), head3("Sectoren uit een standaard"), p("De sectoren volgen de " + a("SBI 2025", CBS_NL) + " van het CBS, de Nederlandse versie van de Europese NACE-indeling. Van chemie en machinebouw tot software, banken en uitzenden.")]),
+            card([para("5", "bv-gip-num"), head3("Bedrijven per sector, in beide lijsten"), p("Elke sector heeft vijf Nederlandse en vijf internationale bedrijven. Zo vergelijk je dezelfde sector in Nederland en daarbuiten.")]),
         ], 2),
-        para("We kozen bekende bedrijven met een B2B-model. Bedrijven kunnen niet betalen voor een plek of een hogere score. Mis je een bedrijf? Mail " + a("info@boomingventure.com", "mailto:info@boomingventure.com") + ", dan nemen we het mee in de volgende meting.", "bv-gip-note"),
+        sector_list("nl"),
+        para("We kozen bekende bedrijven met een B2B-model. Voor de Nederlandse lijst zit het hoofdkantoor in Nederland. Bedrijven kunnen niet betalen voor een plek of een hogere score. Mis je een bedrijf? Mail " + a("info@boomingventure.com", "mailto:info@boomingventure.com") + ", dan bekijken we het voor de volgende meting.", "bv-gip-note"),
     ]),
     faq_grid("FAQ", "Veelgestelde vragen", [
         ("Hoe vaak wordt de index bijgewerkt?", "Elke maand, op de eerste maandag. De site meet alle 200 bedrijven opnieuw en toont het verschil met de maand ervoor."),

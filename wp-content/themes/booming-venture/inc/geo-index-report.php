@@ -83,6 +83,12 @@ function bv_gi_report_data( array $st ): array {
 			'measured' => count( $ok ),
 			'ai_rows'  => count( $with_ai ),
 			'top'      => array_slice( $rows, 0, 10 ),
+			'bysector' => array_reduce( $rows, static function ( $acc, $r ) { // rows are ranked, so the first per sector leads it
+				if ( ! isset( $acc[ $r['sector'] ] ) ) {
+					$acc[ $r['sector'] ] = $r;
+				}
+				return $acc;
+			}, [] ),
 			'leaders'  => array_values( array_filter( $rows, static fn( $r ) => 1 === (int) $r['rank'] ) ),
 			'avg'      => $avg( $rows, 'score' ),
 			'named'    => $with_ai ? (int) round( 100 * count( array_filter( $with_ai, static fn( $r ) => (bool) array_filter( (array) $r['ai_eng'] ) ) ) / $na ) : null,
@@ -183,7 +189,7 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 		}
 		$cap = 'nl' === $list
 			? ( $nl ? 'Top 10 van 100 Nederlandse B2B-bedrijven. Verschil met vorige maand. Bron: B2B GEO Index, ' . $when . '.' : 'Top 10 of 100 Dutch B2B companies. Change against last month. Source: B2B GEO Index, ' . $when . '.' )
-			: ( $nl ? 'Top 10 van 100 internationale B2B-softwarebedrijven. Verschil met vorige maand. Bron: B2B GEO Index, ' . $when . '.' : 'Top 10 of 100 international B2B software companies. Change against last month. Source: B2B GEO Index, ' . $when . '.' );
+			: ( $nl ? 'Top 10 van 100 internationale B2B-bedrijven. Verschil met vorige maand. Bron: B2B GEO Index, ' . $when . '.' : 'Top 10 of 100 international B2B companies. Change against last month. Source: B2B GEO Index, ' . $when . '.' );
 		return $table( $cols, $rows, $cap );
 	};
 
@@ -204,8 +210,8 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 
 	/* Intro with the numbers and their sources (the first 30%). */
 	$c[] = $p( $nl
-		? sprintf( 'Elke maand meet de %s 200 B2B-bedrijven: 100 uit Nederland en 100 internationale softwarebedrijven. In %s was de gemiddelde GEO-score %d voor de Nederlandse lijst en %d voor de internationale lijst.', $link( 'B2B GEO Index', $page ), $when, $L['nl']['avg'], $L['intl']['avg'] )
-		: sprintf( 'Every month the %s measures 200 B2B companies: 100 from the Netherlands and 100 international software companies. In %s the average GEO score was %d for the Dutch list and %d for the international list.', $link( 'B2B GEO Index', $page ), $when, $L['nl']['avg'], $L['intl']['avg'] ) );
+		? sprintf( 'Elke maand meet de %s 200 B2B-bedrijven: 100 Nederlandse en 100 internationale, vijf in elk van dezelfde 20 sectoren. In %s was de gemiddelde GEO-score %d voor de Nederlandse lijst en %d voor de internationale lijst.', $link( 'B2B GEO Index', $page ), $when, $L['nl']['avg'], $L['intl']['avg'] )
+		: sprintf( 'Every month the %s measures 200 B2B companies: 100 Dutch and 100 international, five in each of the same 20 sectors. In %s the average GEO score was %d for the Dutch list and %d for the international list.', $link( 'B2B GEO Index', $page ), $when, $L['nl']['avg'], $L['intl']['avg'] ) );
 	$c[] = $p( $nl
 		? sprintf( 'Aan de websitekant laat %d%% van de Nederlandse en %d%% van de internationale bedrijven OAI-SearchBot toe (%s). %d%% toont minstens 150 woorden tekst op de homepage zonder JavaScript (%s). Dat telt: in de %s renderde geen van de grote AI-crawlers JavaScript. En volgens %s gebruikt 94%% van de zakelijke kopers AI tijdens het aankoopproces.', $L['nl']['checks']['oai'], $L['intl']['checks']['oai'], $src, $d['all']['html'], $src, $link( 'analyse van Vercel', 'https://vercel.com/blog/the-rise-of-the-ai-crawler' ), $link( 'Forrester', 'https://www.forrester.com/blogs/b2b_buyers_make_zero_click_buying_number_one/' ) )
 		: sprintf( 'On the website side, %d%% of the Dutch and %d%% of the international companies allow OAI-SearchBot (%s). %d%% show at least 150 words of homepage text without JavaScript (%s). That matters: none of the major AI crawlers rendered JavaScript in %s. And %s reports that 94%% of business buyers use AI in their buying process.', $L['nl']['checks']['oai'], $L['intl']['checks']['oai'], $src, $d['all']['html'], $src, $link( "Vercel's analysis", 'https://vercel.com/blog/the-rise-of-the-ai-crawler' ), $link( 'Forrester', 'https://www.forrester.com/blogs/b2b_buyers_make_zero_click_buying_number_one/' ) ) );
@@ -224,6 +230,23 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 	$c[] = $rank_table( 'nl' );
 	$c[] = $h2( ( $nl ? 'Top 10 internationaal: ' : 'Top 10 international: ' ) . $when );
 	$c[] = $rank_table( 'intl' );
+
+	/* Sector leaders: both lists use the same 20 sectors, so they sit side by side. */
+	$sectors = (array) ( bv_gi_companies()['sectors'] ?? [] );
+	$cell    = static fn( $r ) => $r ? '<strong>' . esc_html( $r['name'] ) . '</strong> (' . (int) $r['score'] . ')' : '-';
+	$rows    = [];
+	foreach ( $sectors as $key => $sec ) {
+		if ( empty( $L['nl']['bysector'][ $key ] ) && empty( $L['intl']['bysector'][ $key ] ) ) {
+			continue;
+		}
+		$rows[] = [ esc_html( $nl ? $sec[0] : $sec[1] ), $cell( $L['nl']['bysector'][ $key ] ?? null ), $cell( $L['intl']['bysector'][ $key ] ?? null ) ];
+	}
+	if ( $rows ) {
+		$c[] = $h2( $nl ? 'Koplopers per sector' : 'Sector leaders' );
+		$c[] = $p( $nl ? 'Beide lijsten gebruiken dezelfde 20 sectoren, gebaseerd op de SBI 2025 van het CBS en de Europese NACE-indeling. Per sector het bedrijf met de hoogste GEO-score.' : 'Both lists use the same 20 sectors, based on the Dutch SBI 2025 and the European NACE classification. For each sector, the company with the highest GEO score.' );
+		$c[] = $table( $nl ? [ 'Sector', 'Nederland', 'Internationaal' ] : [ 'Sector', 'Netherlands', 'International' ], $rows,
+			$nl ? 'GEO-score tussen haakjes. Bron: B2B GEO Index, ' . $when . '.' : 'GEO score in brackets. Source: B2B GEO Index, ' . $when . '.' );
+	}
 
 	/* Risers. */
 	if ( $d['risers'] ) {
