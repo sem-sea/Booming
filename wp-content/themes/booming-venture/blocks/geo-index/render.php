@@ -151,6 +151,32 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 		<?php endforeach; ?>
 	</div>
 
+	<?php
+	/* How the ranking works, right at the ranking. Folded on phones, open on wide screens (view.js). */
+	$eng  = array_column( $ai_cols, 0 );
+	$last = array_pop( $eng );
+	$engs = $eng ? implode( ', ', $eng ) . $t( ' en ', ' and ' ) . $last : (string) $last;
+	$how  = [
+		[ $t( '200 vaste bedrijven.', '200 fixed companies.' ), $t( '100 Nederlandse B2B-bedrijven en 100 internationale B2B-softwarebedrijven. Niemand kan betalen voor een plek of een hogere score.', '100 Dutch B2B companies and 100 international B2B software companies. Nobody can pay for a place or a higher score.' ) ],
+	];
+	if ( $ai_cols ) {
+		$how[] = [ $t( 'AI-score.', 'AI score.' ), sprintf( $t( 'Elke maandag stelt de site per categorie een koopvraag aan %s, met zoeken op internet aan. We tellen hoe vaak ze het bedrijf noemen (80%%) en de website als bron geven (20%%).', 'Every Monday the site asks %s one buyer question per category, with web search on. We count how often they name the company (80%%) and cite its website (20%%).' ), $engs ) ];
+	}
+	$how[] = [ $t( 'Websitescore.', 'Website score.' ), $t( 'Zeven checks op de eigen website: AI-crawlers in robots.txt, tekst zonder JavaScript, gestructureerde data, Wikidata en Wikipedia, actualiteit, taal en llms.txt.', 'Seven checks on the company website: AI crawlers in robots.txt, text without JavaScript, structured data, Wikidata and Wikipedia, freshness, language and llms.txt.' ) ];
+	$how[] = $ai_cols
+		? [ $t( 'Totaalscore.', 'Total score.' ), $t( 'Het gemiddelde van de AI-score en de websitescore, van 0 tot 100. Elke maandag opnieuw gemeten, met het verschil met vorige week.', 'The average of the AI score and the website score, from 0 to 100. Measured again every Monday, with the change since last week.' ) ]
+		: [ $t( 'Score.', 'Score.' ), $t( 'De websitescore, van 0 tot 100. Elke maandag opnieuw gemeten, met het verschil met vorige week.', 'The website score, from 0 to 100. Measured again every Monday, with the change since last week.' ) ];
+	?>
+	<details class="bv-gi__how">
+		<summary><?php echo esc_html( $t( 'Zo werkt de ranking', 'How the ranking works' ) ); ?></summary>
+		<ol>
+			<?php foreach ( $how as [ $head, $body ] ) : ?>
+				<li><strong><?php echo esc_html( $head ); ?></strong> <?php echo esc_html( $body ); ?></li>
+			<?php endforeach; ?>
+		</ol>
+		<p><a href="#<?php echo esc_attr( $t( 'methode', 'methodology' ) ); ?>"><?php echo esc_html( $t( 'Lees de volledige methode en bronnen', 'Read the full method and sources' ) ); ?></a></p>
+	</details>
+
 	<div class="bv-gi__filters" hidden>
 		<input type="search" class="bv-gi__q" placeholder="<?php echo esc_attr( $i18n['search'] ); ?>" aria-label="<?php echo esc_attr( $i18n['search'] ); ?>">
 		<label class="bv-gi__field"><span><?php echo esc_html( $t( 'Sector', 'Sector' ) ); ?></span>

@@ -517,3 +517,16 @@ function bv_gi_ranked( string $list ): array {
 	}
 	return $rows;
 }
+
+/*
+ * The GEO Index menu link only shows once its page is published, so the
+ * menu never points to a page that visitors cannot open.
+ */
+add_filter( 'render_block_core/navigation-link', function ( $html, $block ) {
+	$url = (string) ( $block['attrs']['url'] ?? '' );
+	if ( false === strpos( $url, 'b2b-geo-index' ) ) {
+		return $html;
+	}
+	$page = get_page_by_path( trim( (string) wp_parse_url( $url, PHP_URL_PATH ), '/' ) );
+	return ( $page && 'publish' === $page->post_status ) ? $html : '';
+}, 10, 2 );

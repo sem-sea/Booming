@@ -33,6 +33,12 @@ def hero(title, sub):
     )
 
 
+def h2a(text, anchor):
+    """H2 with an anchor, so the ranking can link to the method."""
+    return (f'<!-- wp:heading {{"anchor":"{anchor}"}} -->\n'
+            f'<h2 class="wp-block-heading" id="{anchor}">{text}</h2>\n<!-- /wp:heading -->')
+
+
 def block(lst):
     return f'<!-- wp:booming-venture/geo-index {{"list":"{lst}","align":"wide"}} /-->'
 
@@ -53,7 +59,7 @@ EN = [
     h2("What is the B2B GEO Index?"),
     cap("The B2B GEO Index is a weekly ranking of 200 B2B companies by how often AI assistants name them and how ready their websites are."),
     block("intl"),
-    h2("How is the score calculated?"),
+    h2a("How is the score calculated?", "methodology"),
     cap("The GEO score is a number from 0 to 100: half comes from how often AI assistants name the company, half from seven website checks."),
     p("<strong>AI score.</strong> Every Monday the site asks one buyer question per category to ChatGPT, Claude, Gemini and Perplexity, through their official APIs with web search switched on. Dutch companies get the question in Dutch, international companies in English. The AI score is the share of answers that name the company (80%) or cite its website (20%)."),
     p("<strong>Website score.</strong> Seven checks on the company's own website, with these points:"),
@@ -94,7 +100,7 @@ NL = [
     h2("Wat is de B2B GEO Index?"),
     cap("De B2B GEO Index is een wekelijkse ranglijst van 200 B2B-bedrijven op hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn."),
     block("nl"),
-    h2("Hoe wordt de score berekend?"),
+    h2a("Hoe wordt de score berekend?", "methode"),
     cap("De GEO-score is een getal van 0 tot 100: de helft komt uit hoe vaak AI-assistenten het bedrijf noemen, de helft uit zeven websitechecks."),
     p("<strong>AI-score.</strong> Elke maandag stelt de site per categorie één koopvraag aan ChatGPT, Claude, Gemini en Perplexity, via hun officiële API's met zoeken op internet aan. Nederlandse bedrijven krijgen de vraag in het Nederlands, internationale bedrijven in het Engels. De AI-score is het aandeel antwoorden dat het bedrijf noemt (80%) of naar de website verwijst (20%)."),
     p("<strong>Websitescore.</strong> Zeven checks op de eigen website van het bedrijf, met deze punten:"),

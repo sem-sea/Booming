@@ -21,6 +21,8 @@
 		var more = root.querySelector('.bv-gi__more');
 		var active = root.querySelector('.bv-gi__active');
 		var current = root.getAttribute('data-default-list');
+		var how = root.querySelector('.bv-gi__how');
+		if (how && root.clientWidth >= 720) how.open = true;
 
 		function activeList() {
 			return root.querySelector('.bv-gi__list[data-list="' + current + '"]');
