@@ -352,7 +352,7 @@ function bv_gi_schema_nodes(): array {
 		'keywords'             => [ 'GEO', 'generative engine optimization', 'AI search', 'B2B', 'ChatGPT', 'Claude', 'Gemini', 'Perplexity' ],
 		'measurementTechnique' => $t(
 			'Elke maandag: per categorie een koopvraag aan AI-assistenten via hun API, met de eigen zoekfunctie van elke assistent, plus robots.txt, HTML zonder JavaScript, structured data, Wikidata, Wikipedia, sitemap-actualiteit, taalversies en llms.txt van elke website.',
-			'Every Monday: one buyer question per category to AI assistants through their APIs, with each assistant's own web search, plus robots.txt, HTML without JavaScript, structured data, Wikidata, Wikipedia, sitemap freshness, language versions and llms.txt of each website.'
+			'Every Monday: one buyer question per category to AI assistants through their APIs, each using its own web search, plus robots.txt, HTML without JavaScript, structured data, Wikidata, Wikipedia, sitemap freshness, language versions and llms.txt of each website.'
 		),
 		'variableMeasured'     => [ 'GEO score', 'AI score', 'Website score', 'AI crawler access', 'Text without JavaScript', 'Organization schema', 'Wikipedia article', 'Sitemap freshness', 'Language versions' ],
 		'distribution'         => $data,
