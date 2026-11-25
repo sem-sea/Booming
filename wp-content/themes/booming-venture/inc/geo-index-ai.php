@@ -26,7 +26,7 @@ defined( 'ABSPATH' ) || exit;
 
 function bv_gi_ai_engines(): array {
 	return [
-		'openai'     => [ 'label' => 'ChatGPT', 'const' => 'BV_GI_OPENAI_KEY', 'model' => 'gpt-4.1-mini', 'model_label' => 'Model' ],
+		'openai'     => [ 'label' => 'ChatGPT', 'const' => 'BV_GI_OPENAI_KEY', 'model' => 'gpt-6-luna', 'model_label' => 'Model' ],
 		'claude'     => [ 'label' => 'Claude', 'const' => 'BV_GI_ANTHROPIC_KEY', 'model' => 'claude-haiku-5-5', 'model_label' => 'Model' ],
 		'gemini'     => [ 'label' => 'Gemini', 'const' => 'BV_GI_GEMINI_KEY', 'model' => 'gemini-3.8-flash', 'model_label' => 'Model' ],
 		'perplexity' => [ 'label' => 'Perplexity', 'const' => 'BV_GI_PERPLEXITY_KEY', 'model' => 'fast', 'model_label' => 'Effort-preset' ],
@@ -149,7 +149,9 @@ function bv_gi_ai_request( string $engine, string $prompt ): array {
 			return [
 				'url'     => 'https://api.openai.com/v1/responses',
 				'headers' => [ 'Authorization' => 'Bearer ' . $key, 'Content-Type' => 'application/json' ],
-				'data'    => wp_json_encode( [ 'model' => $model, 'input' => $prompt, 'tools' => [ [ 'type' => 'web_search' ] ] ] ),
+				/* Reasoning models think briefly: the answer is a short list, and thinking tokens cost money. */
+				'data'    => wp_json_encode( [ 'model' => $model, 'input' => $prompt, 'tools' => [ [ 'type' => 'web_search' ] ], 'max_output_tokens' => 3000 ]
+					+ ( preg_match( '/^(gpt-5|gpt-6|o\d)/', $model ) ? [ 'reasoning' => [ 'effort' => 'low' ] ] : [] ) ),
 				'type'    => 'POST',
 			];
 		case 'claude':
@@ -160,7 +162,7 @@ function bv_gi_ai_request( string $engine, string $prompt ): array {
 					'model'      => $model,
 					'max_tokens' => 1500,
 					'messages'   => [ [ 'role' => 'user', 'content' => $prompt ] ],
-					'tools'      => [ [ 'type' => 'web_search_20250305', 'name' => 'web_search', 'max_uses' => 3 ] ],
+					'tools'      => [ [ 'type' => 'web_search_20250305', 'name' => 'web_search', 'max_uses' => 1 ] ], // one search keeps the cost at about 1 cent per question
 				] ),
 				'type'    => 'POST',
 			];
