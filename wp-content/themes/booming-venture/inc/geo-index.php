@@ -522,11 +522,17 @@ function bv_gi_ranked( string $list ): array {
  * The GEO Index menu link only shows once its page is published, so the
  * menu never points to a page that visitors cannot open.
  */
-add_filter( 'render_block_core/navigation-link', function ( $html, $block ) {
-	$url = (string) ( $block['attrs']['url'] ?? '' );
-	if ( false === strpos( $url, 'b2b-geo-index' ) ) {
+add_filter( 'render_block_core/navigation', function ( $html ) {
+	if ( false === strpos( $html, 'b2b-geo-index' ) ) {
 		return $html;
 	}
-	$page = get_page_by_path( trim( (string) wp_parse_url( $url, PHP_URL_PATH ), '/' ) );
-	return ( $page && 'publish' === $page->post_status ) ? $html : '';
-}, 10, 2 );
+	/* Removing the <li> from the finished menu keeps one list; an empty link block would split it in two. */
+	return preg_replace_callback(
+		'#<li\b[^>]*>\s*<a\b[^>]*href="([^"]*b2b-geo-index/?)"[^>]*>.*?</a>\s*</li>#s',
+		static function ( $m ) {
+			$page = get_page_by_path( trim( (string) wp_parse_url( $m[1], PHP_URL_PATH ), '/' ) );
+			return ( $page && 'publish' === $page->post_status ) ? $m[0] : '';
+		},
+		$html
+	);
+} );
