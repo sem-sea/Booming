@@ -299,6 +299,9 @@ add_action( 'bv_gi_ai_batch', static function () {
 		update_option( 'bv_gi_ai_results', [ 'completed' => $work['completed'], 'engines' => $engines, 'rows' => $work['rows'], 'prompts' => $work['prompts'] ?? [] ], false );
 		update_option( 'bv_gi_ai_answers', $work['answers'], false );
 		update_option( 'bv_gi_ai_work', $work, false );
+		if ( function_exists( 'bv_gi_touch_pages' ) ) {
+			bv_gi_touch_pages();
+		}
 	}
 } );
 

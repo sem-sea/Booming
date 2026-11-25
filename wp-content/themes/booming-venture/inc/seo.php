@@ -256,6 +256,8 @@ add_action( 'wp_head', function () {
 		];
 	}
 
+	$graph = array_merge( $graph, bv_gi_schema_nodes() );
+
 	$payload = [ '@context' => 'https://schema.org', '@graph' => $graph ];
 	echo "\n<script type=\"application/ld+json\">" . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . "</script>\n";
 }, 5 );
@@ -287,7 +289,7 @@ add_action( 'wp_head', function () {
  * own graph stands down, so the FAQ piece is added to Yoast's graph from
  * the same "Frequently asked questions" / "Veelgestelde vragen" section. */
 add_filter( 'wpseo_schema_graph', function ( $graph ) {
-	if ( ! is_singular( 'post' ) || ! is_array( $graph ) ) return $graph;
+	if ( ! is_singular( [ 'post', 'page' ] ) || ! is_array( $graph ) ) return $graph;
 	$post  = get_post();
 	$items = $post ? bv_extract_faq_from_content( (string) $post->post_content ) : [];
 	if ( count( $items ) < 2 ) return $graph;
@@ -306,6 +308,83 @@ add_filter( 'wpseo_schema_graph', function ( $graph ) {
 		}, $items ),
 	];
 	return $graph;
+} );
+
+/*
+ * B2B GEO Index pages (1.16.0): Dataset (Google Dataset Search, with the CSV
+ * downloads as distribution) and the top 10 of each list as ItemList, built
+ * from the live measurements. Added to Yoast's graph, or to the theme graph
+ * when no SEO plugin runs.
+ */
+function bv_gi_schema_nodes(): array {
+	if ( ! is_singular( 'page' ) || ! function_exists( 'bv_gi_ranked' ) ) return [];
+	$post = get_post();
+	if ( ! $post || ! has_block( 'booming-venture/geo-index', $post ) ) return [];
+	$nl   = function_exists( 'bv_post_lang' ) && 'nl' === bv_post_lang( $post->ID );
+	$t    = static fn( $a, $b ) => $nl ? $a : $b;
+	$url  = get_permalink( $post );
+	$org  = [ '@id' => home_url( '/' ) . '#organization' ];
+	$meta = (array) get_option( 'bv_gi_meta', [] );
+	$ai   = (array) get_option( 'bv_gi_ai_results', [] );
+	$done = max( (int) ( $meta['completed'] ?? 0 ), (int) ( $ai['completed'] ?? 0 ) );
+	$data = [];
+	foreach ( [ 'nl', 'intl' ] as $list ) {
+		$data[] = [
+			'@type'          => 'DataDownload',
+			'name'           => 'nl' === $list ? $t( 'Top 100 Nederland (CSV)', 'Top 100 Netherlands (CSV)' ) : $t( 'Top 100 internationaal (CSV)', 'Top 100 international (CSV)' ),
+			'encodingFormat' => 'text/csv',
+			'contentUrl'     => add_query_arg( [ 'list' => $list, 'format' => 'csv' ], rest_url( 'bv/v1/geo-index' ) ),
+		];
+	}
+	$dataset = [
+		'@type'                => 'Dataset',
+		'@id'                  => $url . '#dataset',
+		'name'                 => $t( 'B2B GEO Index: AI-zichtbaarheid van 200 B2B-bedrijven', 'B2B GEO Index: AI visibility of 200 B2B companies' ),
+		'description'          => $t(
+			'Wekelijkse meting van 100 Nederlandse B2B-bedrijven en 100 internationale B2B-softwarebedrijven: hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn voor AI-zoekmachines, met zeven websitechecks en een score van 0 tot 100.',
+			'Weekly measurement of 100 Dutch B2B companies and 100 international B2B software companies: how often AI assistants name them and how ready their websites are for AI search, with seven website checks and a score from 0 to 100.'
+		),
+		'url'                  => $url,
+		'creator'              => $org,
+		'publisher'            => $org,
+		'isAccessibleForFree'  => true,
+		'inLanguage'           => $nl ? 'nl-NL' : 'en',
+		'keywords'             => [ 'GEO', 'generative engine optimization', 'AI search', 'B2B', 'ChatGPT', 'Claude', 'Gemini', 'Perplexity' ],
+		'measurementTechnique' => $t(
+			'Elke maandag: per categorie een koopvraag aan AI-assistenten via hun officiële API met zoeken aan, plus robots.txt, HTML zonder JavaScript, structured data, Wikidata, Wikipedia, sitemap-actualiteit, taalversies en llms.txt van elke website.',
+			'Every Monday: one buyer question per category to AI assistants through their official APIs with web search on, plus robots.txt, HTML without JavaScript, structured data, Wikidata, Wikipedia, sitemap freshness, language versions and llms.txt of each website.'
+		),
+		'variableMeasured'     => [ 'GEO score', 'AI score', 'Website score', 'AI crawler access', 'Text without JavaScript', 'Organization schema', 'Wikipedia article', 'Sitemap freshness', 'Language versions' ],
+		'distribution'         => $data,
+	];
+	if ( $done ) {
+		$dataset['dateModified'] = gmdate( 'c', $done );
+	}
+	if ( ! empty( $meta['first'] ) ) {
+		$dataset['temporalCoverage'] = gmdate( 'Y-m-d', (int) $meta['first'] ) . '/..';
+	}
+	$nodes = [ $dataset ];
+	foreach ( [ 'nl', 'intl' ] as $list ) {
+		$rows = array_slice( bv_gi_ranked( $list ), 0, 10 );
+		if ( ! $rows ) continue;
+		$items = [];
+		foreach ( $rows as $i => $r ) {
+			$items[] = [ '@type' => 'ListItem', 'position' => $i + 1, 'item' => [ '@type' => 'Organization', 'name' => $r['name'], 'url' => 'https://' . $r['domain'] . '/' ] ];
+		}
+		$nodes[] = [
+			'@type'           => 'ItemList',
+			'@id'             => $url . '#top10-' . $list,
+			'name'            => 'nl' === $list ? $t( 'B2B GEO Index: top 10 Nederland', 'B2B GEO Index: top 10 Netherlands' ) : $t( 'B2B GEO Index: top 10 internationaal', 'B2B GEO Index: top 10 international' ),
+			'itemListOrder'   => 'https://schema.org/ItemListOrderDescending',
+			'numberOfItems'   => count( $items ),
+			'itemListElement' => $items,
+		];
+	}
+	return $nodes;
+}
+
+add_filter( 'wpseo_schema_graph', static function ( $graph ) {
+	return is_array( $graph ) ? array_merge( $graph, bv_gi_schema_nodes() ) : $graph;
 } );
 
 /* Canonical for paged archives / search. */

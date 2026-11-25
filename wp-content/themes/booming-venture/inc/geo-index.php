@@ -436,7 +436,11 @@ add_action( 'bv_gi_batch', static function () {
 	} else {
 		$meta = (array) get_option( 'bv_gi_meta', [] );
 		$meta['completed'] = time();
+		if ( empty( $meta['first'] ) ) {
+			$meta['first'] = $meta['completed'];
+		}
 		update_option( 'bv_gi_meta', $meta, false );
+		bv_gi_touch_pages();
 	}
 } );
 
@@ -536,3 +540,101 @@ add_filter( 'render_block_core/navigation', function ( $html ) {
 		$html
 	);
 } );
+
+/* ------------------------------------------------------------------ open data and freshness */
+
+/** IDs of published pages that show the index (EN and NL). */
+function bv_gi_pages(): array {
+	global $wpdb;
+	return array_map( 'intval', (array) $wpdb->get_col(
+		"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'publish' AND post_content LIKE '%wp:booming-venture/geo-index%' LIMIT 5"
+	) );
+}
+
+/*
+ * After each weekly run the index pages get a new modified date: the
+ * sitemap lastmod, dateModified and "Last updated" follow the data, and the
+ * publish hook in inc/geo.php pings IndexNow. Content stays as it is.
+ */
+function bv_gi_touch_pages(): void {
+	$ids = bv_gi_pages();
+	if ( ! $ids ) {
+		return;
+	}
+	kses_remove_filters();
+	foreach ( $ids as $id ) {
+		wp_update_post( [ 'ID' => $id ] );
+	}
+	kses_init_filters();
+}
+
+/** One ranking row as a flat record for CSV and JSON downloads. */
+function bv_gi_export_row( array $r, string $list ): array {
+	$sectors = (array) ( bv_gi_companies()['sectors'] ?? [] );
+	$yn      = static fn( $v ) => true === $v ? 'yes' : ( false === $v ? 'no' : '' );
+	$bots    = [ 'bot_OAI-SearchBot', 'bot_Claude-SearchBot', 'bot_PerplexityBot', 'bot_Google-Extended', 'bot_Bingbot' ];
+	return [
+		'rank'            => (int) $r['rank'],
+		'company'         => $r['name'],
+		'domain'          => $r['domain'],
+		'sector'          => $sectors[ $r['sector'] ][ 'nl' === $list ? 0 : 1 ] ?? $r['sector'],
+		'geo_score'       => (int) $r['score'],
+		'ai_score'        => null === $r['ai'] ? '' : (int) $r['ai'],
+		'website_score'   => (int) $r['ready'],
+		'change_week'     => null === $r['change'] ? '' : (int) $r['change'],
+		'ai_crawlers'     => count( array_filter( $bots, static fn( $k ) => true === ( $r['checks'][ $k ] ?? null ) ) ) . '/5',
+		'html_without_js' => $yn( $r['checks']['html'] ?? null ),
+		'schema_org'      => $yn( $r['checks']['schema_org'] ?? null ),
+		'wikipedia'       => $yn( $r['checks']['wikipedia'] ?? null ),
+		'fresh_sitemap'   => $yn( $r['checks']['fresh'] ?? null ),
+		'language'        => $yn( $r['checks']['lang'] ?? null ),
+	];
+}
+
+/*
+ * Open data: GET /wp-json/bv/v1/geo-index?list=nl|intl&format=json|csv.
+ * Journalists, analysts and AI tools can cite the numbers with a source link.
+ */
+add_action( 'rest_api_init', static function () {
+	register_rest_route( 'bv/v1', '/geo-index', [
+		'methods'             => 'GET',
+		'permission_callback' => '__return_true',
+		'args'                => [
+			'list'   => [ 'type' => 'string', 'enum' => [ 'nl', 'intl' ], 'default' => 'nl' ],
+			'format' => [ 'type' => 'string', 'enum' => [ 'json', 'csv' ], 'default' => 'json' ],
+		],
+		'callback'            => static function ( WP_REST_Request $req ) {
+			$list = (string) $req['list'];
+			$meta = (array) get_option( 'bv_gi_meta', [] );
+			$page = get_page_by_path( 'nl' === $list ? 'nl/b2b-geo-index' : 'b2b-geo-index' );
+			$res  = rest_ensure_response( [
+				'name'     => 'B2B GEO Index',
+				'list'     => $list,
+				'measured' => empty( $meta['completed'] ) ? null : gmdate( 'c', (int) $meta['completed'] ),
+				'source'   => ( $page && 'publish' === $page->post_status ) ? get_permalink( $page ) : home_url( '/' ),
+				'rows'     => array_map( static fn( $r ) => bv_gi_export_row( $r, $list ), bv_gi_ranked( $list ) ),
+			] );
+			$res->header( 'Cache-Control', 'public, max-age=3600' );
+			return $res;
+		},
+	] );
+} );
+
+add_filter( 'rest_pre_serve_request', static function ( $served, $result, $request ) {
+	if ( $served || '/bv/v1/geo-index' !== $request->get_route() || 'csv' !== $request['format'] || $result->is_error() ) {
+		return $served;
+	}
+	$data = $result->get_data();
+	header( 'Content-Type: text/csv; charset=utf-8' );
+	header( 'Content-Disposition: inline; filename="b2b-geo-index-' . sanitize_key( $data['list'] ) . '.csv"' );
+	header( 'Cache-Control: public, max-age=3600' );
+	$out = fopen( 'php://output', 'w' );
+	fwrite( $out, "\xEF\xBB\xBF" ); // UTF-8 mark, so Excel shows accents correctly
+	$head = $data['rows'] ? array_keys( $data['rows'][0] ) : array_keys( bv_gi_export_row( [ 'rank' => 0, 'name' => '', 'domain' => '', 'sector' => '', 'score' => 0, 'ai' => null, 'ready' => 0, 'change' => null, 'checks' => [] ], 'intl' ) );
+	fputcsv( $out, $head, ',', '"', '' );
+	foreach ( $data['rows'] as $row ) {
+		fputcsv( $out, $row, ',', '"', '' );
+	}
+	fclose( $out );
+	return true;
+}, 10, 3 );
