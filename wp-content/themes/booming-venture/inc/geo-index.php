@@ -2,8 +2,8 @@
 /**
  * B2B GEO Index (1.12.0).
  *
- * Measures, every week, how ready the websites of 200 B2B companies are for
- * AI search, and ranks them. Two lists: 100 Dutch companies and 100
+ * Measures, every month, how ready the websites of 400 B2B companies are for
+ * AI search, and ranks them. Two lists: 200 Dutch companies and 200
  * international B2B software companies (blocks/geo-index/companies.json).
  *
  * How it runs
@@ -460,15 +460,19 @@ function bv_gi_start_web( string $source = 'manual' ): void {
 			$queue[] = [ $list, $i ];
 		}
 	}
-	$results = (array) get_option( 'bv_gi_results', [] );
-	$prev    = [];
-	foreach ( $results as $list => $rows ) {
-		foreach ( (array) $rows as $domain => $r ) {
-			$ai = function_exists( 'bv_gi_ai_score' ) ? bv_gi_ai_score( $list, $domain ) : null;
-			$prev[ $list ][ $domain ] = isset( $r['score'] ) ? bv_gi_combined( (int) $r['score'], $ai ) : null;
+	/* The reference for "change since last month" is the last run of an earlier month (1.24.0): a second run in the same month keeps it. */
+	$last_done = (int) ( ( (array) get_option( 'bv_gi_meta', [] ) )['completed'] ?? 0 );
+	if ( ! get_option( 'bv_gi_prev' ) || ( $last_done && gmdate( 'Y-m', $last_done ) !== gmdate( 'Y-m' ) ) ) {
+		$results = (array) get_option( 'bv_gi_results', [] );
+		$prev    = [];
+		foreach ( $results as $list => $rows ) {
+			foreach ( (array) $rows as $domain => $r ) {
+				$ai = function_exists( 'bv_gi_ai_score' ) ? bv_gi_ai_score( $list, $domain ) : null;
+				$prev[ $list ][ $domain ] = isset( $r['score'] ) ? bv_gi_combined( (int) $r['score'], $ai ) : null;
+			}
 		}
+		update_option( 'bv_gi_prev', $prev, false );
 	}
-	update_option( 'bv_gi_prev', $prev, false );
 	update_option( 'bv_gi_queue', $queue, false );
 	$source = in_array( $source, [ 'monthly', 'manual', 'list' ], true ) ? $source : 'manual';
 	update_option( 'bv_gi_meta', [ 'started' => time(), 'completed' => 0, 'source' => $source, 'total' => count( $queue ), 'current' => '', 'stopped' => 0 ] + (array) get_option( 'bv_gi_meta', [] ), false );
@@ -549,6 +553,7 @@ add_action( 'rest_api_init', static function () {
 		'args'                => [
 			'domain' => [ 'required' => true, 'type' => 'string' ],
 			'lang'   => [ 'type' => 'string', 'default' => 'en' ],
+			'sector' => [ 'type' => 'string', 'default' => '' ],
 		],
 		'callback'            => static function ( WP_REST_Request $req ) {
 			$raw    = strtolower( trim( (string) $req['domain'] ) );
@@ -558,9 +563,10 @@ add_action( 'rest_api_init', static function () {
 				return new WP_Error( 'bv_domain', 'invalid domain', [ 'status' => 400 ] );
 			}
 			$list   = 'nl' === $req['lang'] ? 'nl' : 'intl';
+			$sector = sanitize_key( (string) $req['sector'] );
 			$cached = get_transient( 'bv_gi_c_' . md5( $list . $domain ) );
 			if ( $cached ) {
-				return $cached;
+				return bv_gi_check_extra( (array) $cached, $list, $sector );
 			}
 			$ip  = preg_replace( '/[^0-9a-f:.]/i', '', (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ) );
 			$key = 'bv_gi_rl_' . md5( $ip );
@@ -572,37 +578,121 @@ add_action( 'rest_api_init', static function () {
 			$m   = bv_gi_measure( $domain, preg_replace( '/\..*$/', '', $domain ), $list );
 			$out = [ 'domain' => $domain, 'score' => $m['score'], 'parts' => $m['parts'], 'checks' => $m['checks'], 'status' => $m['status'] ];
 			set_transient( 'bv_gi_c_' . md5( $list . $domain ), $out, DAY_IN_SECONDS );
-			return $out;
+			return bv_gi_check_extra( $out, $list, $sector );
 		},
 	] );
 } );
 
-/** Total score: website score alone, or half website and half AI score when AI data exists. */
-function bv_gi_combined( int $ready, ?array $ai ): int {
-	return $ai ? (int) round( ( $ready + (int) $ai['score'] ) / 2 ) : $ready;
+/**
+ * Extra for the public check (1.24.0): the gap with the sector leader (the
+ * checks the leader has, the most cited sources in the sector) and, for a
+ * domain in the index, its AI numbers. Computed on every request from the
+ * stored results, so it is not part of the cached measurement.
+ */
+function bv_gi_check_extra( array $out, string $list, string $sector ): array {
+	$rows = bv_gi_ranked( $list );
+	$self = null;
+	foreach ( $rows as $r ) {
+		if ( $r['domain'] === $out['domain'] ) {
+			$self = $r;
+			break;
+		}
+	}
+	if ( $self ) {
+		$sector = $self['sector'];
+		$ai     = $self['ai_data'];
+		$out['index'] = [
+			'name'  => $self['name'],
+			'rank'  => (int) $self['rank'],
+			'group' => (string) $self['group'],
+			'score' => (int) $self['score'],
+			'ai'    => $ai ? [ 'score' => $ai['score'], 'n' => $ai['n'], 'm' => $ai['m'], 'vis' => $ai['vis'], 'lo' => $ai['vis_lo'], 'hi' => $ai['vis_hi'], 'low' => $ai['low'] ] : null,
+		];
+	}
+	$sectors = (array) ( bv_gi_companies()['sectors'] ?? [] );
+	if ( '' === $sector || ! isset( $sectors[ $sector ] ) ) {
+		return $out;
+	}
+	$leaders = function_exists( 'bv_gi_leaders' ) ? bv_gi_leaders( $rows ) : [];
+	$leader  = $leaders[ $sector ] ?? null;
+	if ( ! $leader ) {
+		return $out;
+	}
+	$gap = bv_gi_gap( $list, $sector, $leader, (string) $out['domain'], (array) $out['checks'], $self ? (int) $self['score'] : -1, $self ? (int) $self['margin'] : 0 );
+	$res = (array) get_option( 'bv_gi_ai_results', [] );
+	$top = [];
+	$ans = max( 1, (int) ( $res['ans'][ $list ][ $sector ] ?? 0 ) );
+	foreach ( array_slice( (array) ( $res['src'][ $list ][ $sector ] ?? [] ), 0, 5, true ) as $h => $d ) {
+		$top[] = [ 'host' => (string) $h, 'pct' => (int) round( 100 * (int) $d['a'] / $ans ) ];
+	}
+	$out['gap'] = [
+		'sector'  => (string) $sectors[ $sector ][ 'nl' === $list ? 0 : 1 ],
+		'leader'  => $gap ? $gap['leader'] : [ 'name' => $leader['name'], 'domain' => $leader['domain'], 'score' => (int) $leader['score'] ],
+		'self'    => ! $gap,
+		'points'  => $gap['points'] ?? null,
+		'tied'    => (bool) ( $gap['tied'] ?? false ),
+		'missing' => $gap['missing'] ?? [],
+		'sources' => $top,
+	];
+	return $out;
 }
 
-/** Rows for one list, ranked, with the change since the previous run. */
+/** Total score: half website and half AI score when there are enough AI answers, else the website score alone. */
+function bv_gi_combined( int $ready, ?array $ai ): int {
+	return ( $ai && empty( $ai['low'] ) ) ? (int) round( ( $ready + (int) $ai['score'] ) / 2 ) : $ready;
+}
+
+/**
+ * Rows for one list, ranked, with the change since last month (1.24.0):
+ * - margin: half the AI margin of error (the website half is exact);
+ * - change_sig: the change is larger than the noise of both months' AI
+ *   scores (95%), or the AI half is not part of the score;
+ * - method_new: last month used another method or had no AI score, so the
+ *   two months cannot be compared;
+ * - group: strong, mid or low for places outside the top 10.
+ */
 function bv_gi_ranked( string $list ): array {
 	$results = (array) ( get_option( 'bv_gi_results', [] )[ $list ] ?? [] );
 	$prev    = (array) ( get_option( 'bv_gi_prev', [] )[ $list ] ?? [] );
+	$aires   = (array) get_option( 'bv_gi_ai_results', [] );
+	$aiprev  = (array) get_option( 'bv_gi_ai_prev', [] );
+	$same    = (int) ( $aiprev['method'] ?? 1 ) === (int) ( $aires['method'] ?? 1 );
 	$rows    = [];
 	foreach ( (array) ( bv_gi_companies()[ $list ] ?? [] ) as $c ) {
 		$r = $results[ $c['domain'] ] ?? null;
 		if ( ! $r ) {
 			continue;
 		}
-		$p     = $prev[ $c['domain'] ] ?? null;
-		$ai    = function_exists( 'bv_gi_ai_score' ) ? bv_gi_ai_score( $list, $c['domain'] ) : null;
-		$total = bv_gi_combined( (int) $r['score'], $ai );
+		$p      = $prev[ $c['domain'] ] ?? null;
+		$ai     = function_exists( 'bv_gi_ai_score_in' ) ? bv_gi_ai_score_in( $aires, $list, $c['domain'] ) : null;
+		$pai    = ( function_exists( 'bv_gi_ai_score_in' ) && $aiprev ) ? bv_gi_ai_score_in( $aiprev, $list, $c['domain'] ) : null;
+		$use    = $ai && empty( $ai['low'] );
+		$p_use  = $pai && empty( $pai['low'] );
+		$total  = bv_gi_combined( (int) $r['score'], $ai );
+		$change = null;
+		$sig    = null;
+		$new    = false;
+		if ( null !== $p ) {
+			if ( $use !== $p_use || ( $use && ! $same ) ) {
+				$new = true;
+			} else {
+				$change = $total - (int) $p;
+				$sig    = $use ? abs( $change ) > 0.5 * 196 * sqrt( (float) $ai['var'] + (float) $pai['var'] ) : 0 !== $change;
+			}
+		}
 		$rows[] = $c + [
-			'score'  => $total,
-			'ready'  => (int) $r['score'],
-			'ai'     => $ai ? $ai['score'] : null,
-			'ai_eng' => $ai ? $ai['eng'] : [],
-			'change' => null === $p ? null : $total - (int) $p,
-			'checks' => (array) $r['checks'],
-			'status' => $r['status'] ?? 'ok',
+			'score'      => $total,
+			'ready'      => (int) $r['score'],
+			'ai'         => $ai ? $ai['score'] : null,
+			'ai_low'     => $ai ? (bool) $ai['low'] : false,
+			'ai_data'    => $ai,
+			'ai_eng'     => $ai ? $ai['eng'] : [],
+			'margin'     => $use ? (int) round( $ai['margin'] / 2 ) : 0,
+			'change'     => $change,
+			'change_sig' => $sig,
+			'method_new' => $new,
+			'checks'     => (array) $r['checks'],
+			'status'     => $r['status'] ?? 'ok',
 		];
 	}
 	usort( $rows, static fn( $a, $b ) => [ $b['score'], $a['name'] ] <=> [ $a['score'], $b['name'] ] );
@@ -613,8 +703,10 @@ function bv_gi_ranked( string $list ): array {
 			$rank = $i + 1;
 			$last = $row['score'];
 		}
-		$row['rank'] = $rank;
+		$row['rank']  = $rank;
+		$row['group'] = $rank <= 10 ? '' : bv_gi_group( (int) $row['score'] );
 	}
+	unset( $row );
 	return $rows;
 }
 
@@ -667,6 +759,7 @@ function bv_gi_touch_pages(): void {
 /** One ranking row as a flat record for CSV and JSON downloads. */
 function bv_gi_export_row( array $r, string $list ): array {
 	$sectors = (array) ( bv_gi_companies()['sectors'] ?? [] );
+	$ai      = $r['ai_data'] ?? null;
 	$yn      = static fn( $v ) => true === $v ? 'yes' : ( false === $v ? 'no' : '' );
 	$bots    = [ 'bot_OAI-SearchBot', 'bot_Claude-SearchBot', 'bot_PerplexityBot', 'bot_Google-Extended', 'bot_Bingbot' ];
 	return [
@@ -674,10 +767,22 @@ function bv_gi_export_row( array $r, string $list ): array {
 		'company'         => $r['name'],
 		'domain'          => $r['domain'],
 		'sector'          => $sectors[ $r['sector'] ][ 'nl' === $list ? 0 : 1 ] ?? $r['sector'],
+		'group'           => (string) ( $r['group'] ?? '' ),
 		'geo_score'       => (int) $r['score'],
+		'geo_margin'      => (int) ( $r['margin'] ?? 0 ),
 		'ai_score'        => null === $r['ai'] ? '' : (int) $r['ai'],
+		'ai_answers'      => (int) ( $ai['n'] ?? 0 ) ?: '',
+		'ai_low_data'     => $ai ? ( empty( $ai['low'] ) ? 'no' : 'yes' ) : '',
+		'visibility_pct'  => $ai ? (int) $ai['vis'] : '',
+		'visibility_low'  => $ai ? (int) $ai['vis_lo'] : '',
+		'visibility_high' => $ai ? (int) $ai['vis_hi'] : '',
+		'share_of_voice'  => $ai && null !== $ai['sov'] ? (int) $ai['sov'] : '',
+		'first_mention'   => $ai ? (int) $ai['first'] : '',
+		'sentiment'       => $ai && null !== $ai['sent'] ? (int) $ai['sent'] : '',
+		'cited_pct'       => $ai ? (int) $ai['cite'] : '',
 		'website_score'   => (int) $r['ready'],
-		'change_week'     => null === $r['change'] ? '' : (int) $r['change'],
+		'change_month'    => null === $r['change'] ? '' : (int) $r['change'],
+		'change_real'     => null === ( $r['change_sig'] ?? null ) ? '' : ( $r['change_sig'] ? 'yes' : 'within margin' ),
 		'ai_crawlers'     => count( array_filter( $bots, static fn( $k ) => true === ( $r['checks'][ $k ] ?? null ) ) ) . '/5',
 		'html_without_js' => $yn( $r['checks']['html'] ?? null ),
 		'schema_org'      => $yn( $r['checks']['schema_org'] ?? null ),

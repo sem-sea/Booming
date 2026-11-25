@@ -214,7 +214,7 @@ function bv_chat_knowledge( string $lang ): string {
 		$text = preg_replace( '/([.!?:])\s\.\s/', '$1 ', $text );
 		$out[] = '## ' . get_the_title( $p ) . ' (' . wp_parse_url( get_permalink( $p ), PHP_URL_PATH ) . ")\n" . wp_trim_words( $text, 900, ' ...' );
 	}
-	$out[] = "## B2B GEO Index\nMonthly ranking of 200 B2B companies (100 Dutch, 100 international, five in each of the same 20 sectors from the SBI 2025 and NACE standard): how often ChatGPT, Claude, Gemini and Perplexity name them (AI score) and seven website checks (website score). New measurement on the first Monday of every month. Anyone can check their own domain on the index page.";
+	$out[] = "## B2B GEO Index\nMonthly ranking of 400 B2B companies (200 Dutch, 200 international, ten in each of the same 20 sectors from the SBI 2025 and NACE standard): how often ChatGPT, Claude, Gemini and Perplexity name them (AI score) and seven website checks (website score). New measurement on the first Monday of every month. Anyone can check their own domain on the index page.";
 	$out[] = "## Company\nBooming Venture, Breedveldsingel 1, 3055 PG Rotterdam, the Netherlands. KvK 96442018. Founder: Ben Verschuur. Contact: through the contact form on the website or LinkedIn.";
 	$kb = implode( "\n\n", $out );
 	set_transient( $key, $kb, 12 * HOUR_IN_SECONDS );

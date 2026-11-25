@@ -169,8 +169,8 @@ CSV_INTL = "/wp-json/bv/v1/geo-index?list=intl&amp;format=csv"
 EN = [
     hero("Updated every month",
          'B2B GEO Index: <span class="bv-gradient-text">who is ready for AI search?</span>',
-         "200 B2B companies, measured every month: how often ChatGPT, Claude, Gemini and Perplexity name them, and whether their websites are ready for AI search.",
-         [("200", "B2B companies"), ("20", "sectors"), ("4", "AI assistants"), ("7", "website checks")],
+         "400 B2B companies, measured every month: how often ChatGPT, Claude, Gemini and Perplexity name them, with a margin of error, and whether their websites are ready for AI search.",
+         [("400", "B2B companies"), ("20", "sectors"), ("4", "AI assistants"), ("5", "buyer questions per category")],
          [("View the ranking", "#ranking", "bv-cta-gradient"), ("How the score works", "#methodology", "outline")]),
     section([
         sec_head("Why it matters", lead="Buyers now meet vendors in AI answers first. Whether a company shows up depends partly on things it controls on its own website."),
@@ -183,7 +183,7 @@ EN = [
     ], extra="bv-gip-sec--why"),
     section([
         sec_head("The ranking", "What is the B2B GEO Index?",
-                 "The B2B GEO Index is a monthly ranking of 200 B2B companies by how often AI assistants name them and how ready their websites are."),
+                 "The B2B GEO Index is a monthly ranking of 400 B2B companies by how often AI assistants name them and how ready their websites are."),
         block("intl"),
     ], anchor="ranking"),
     section([
@@ -192,8 +192,8 @@ EN = [
                  anchor="methodology"),
         grid([
             card([para("50% of the GEO score", "bv-gip-badge"), head3("AI score"),
-                  p("Every month the site asks one buyer question per category to ChatGPT, Claude, Gemini and Perplexity, through their APIs with each assistant's own web search switched on. Dutch companies get the question in Dutch, international companies in English."),
-                  p("The AI score is the share of answers that name the company (80%) or cite its website (20%).")]),
+                  p("Every month the site asks ChatGPT, Claude, Gemini and Perplexity five buyer questions per category, through their APIs with each assistant's own web search switched on. Where the result is still uncertain, a second round follows. Dutch companies get the questions in Dutch, international companies in English."),
+                  p("The AI score is the share of answers that name the company (80%) or cite its website (20%). Every score shows its margin of error. " + a("Read the full methodology", "/b2b-geo-index/methodology/") + ".")]),
             card([para("50% of the GEO score", "bv-gip-badge"), head3("Website score"),
                   p("Seven checks on the company's own website, worth 100 points together: AI crawler access, text without JavaScript, structured data, entity, freshness, language and llms.txt."),
                   p("The table below shows what we measure for each check and why it matters.")]),
@@ -213,23 +213,23 @@ EN = [
         ),
         data_band("Open data",
                   "Download the full ranking as CSV. The files update every month. You may quote the numbers with a link to this page as the source.",
-                  [("Top 100 Netherlands (CSV)", CSV_NL, ""), ("Top 100 international (CSV)", CSV_INTL, "")]),
+                  [("Top 200 Netherlands (CSV)", CSV_NL, ""), ("Top 200 international (CSV)", CSV_INTL, "")]),
     ], extra="bv-gip-sec--method"),
     section([
         sec_head("Selection", "Which companies are in the index?",
-                 "The index is a fixed set of 200 B2B companies: 100 Dutch and 100 international, five in each of the same 20 sectors."),
+                 "The index is a fixed set of 400 B2B companies: 200 Dutch and 200 international, ten in each of the same 20 sectors."),
         grid([
             card([para("20", "bv-gip-num"), head3("Sectors from a standard"), p("The sectors follow " + a("SBI 2025", CBS_EN) + ", the Dutch version of the European NACE classification. They run from chemicals and machinery to software, banking and staffing.")]),
-            card([para("5", "bv-gip-num"), head3("Companies per sector, in both lists"), p("Every sector has five Dutch and five international companies. So you can compare the same sector in the Netherlands and abroad.")]),
+            card([para("10", "bv-gip-num"), head3("Companies per sector, in both lists"), p("Every sector has ten Dutch and ten international companies. So you can compare the same sector in the Netherlands and abroad.")]),
         ], 2),
         sector_list("en"),
         para("We picked well-known companies with a B2B model. For the Dutch list, the head office is in the Netherlands. Companies cannot pay for a place or a better score. Missing a company? Email " + a("info@boomingventure.com", "mailto:info@boomingventure.com") + " and we consider it for the next measurement.", "bv-gip-note"),
     ]),
     faq_grid("FAQ", "Frequently asked questions", [
-        ("How often is the index updated?", "Every month, on the first Monday. The site measures all 200 companies again and shows the change against the previous month."),
+        ("How often is the index updated?", "Every month, on the first Monday. The site measures all 400 companies again and shows the change against the previous month, when it is larger than the margin of error."),
         ("Can I check my own company?", "Yes. Enter your domain in the check below the ranking. You get the same score as the companies in the index."),
-        ("Which questions do you ask the AI assistants?", "One question per category, such as: What is the best CRM software for B2B companies? Name a few providers and say briefly why. The wording alternates each month, so no score depends on one phrasing."),
-        ("Do the answers match what a user sees in ChatGPT?", "Every category gets the same question in the same way every month, so companies are compared fairly. Individual users can see other answers, depending on their location, account and model."),
+        ("Which questions do you ask the AI assistants?", "Five questions per category, each with a different buying intent: the best provider, a recommendation, a shortlist, reputation and switching. For example: What is the best CRM software for B2B companies? The full list is on the methodology page."),
+        ("Do the answers match what a user sees in ChatGPT?", "Every category gets the same questions in the same way, so companies are compared fairly. Users can see other answers, depending on location, account and model. That is why every score has a margin of error."),
         ("Why does blocking GPTBot cost fewer points than blocking OAI-SearchBot?", "OAI-SearchBot decides whether a site can appear in ChatGPT search. GPTBot collects training data, and OpenAI treats the two settings separately."),
         ("Can a company pay for a higher place?", "No. Scores come only from the measurements. Every company is measured the same way."),
         ("Why is Wikipedia part of the score?", "Muck Rack found Wikipedia to be ChatGPT's most cited domain. A Wikidata item and a Wikipedia article help AI systems recognize a company as an entity."),
@@ -244,8 +244,8 @@ EN = [
 NL = [
     hero("Elke maand bijgewerkt",
          'B2B GEO Index: <span class="bv-gradient-text">wie is klaar voor AI-zoekmachines?</span>',
-         "200 B2B-bedrijven, elke maand gemeten: hoe vaak ChatGPT, Claude, Gemini en Perplexity ze noemen en of hun websites klaar zijn voor AI-zoekmachines.",
-         [("200", "B2B-bedrijven"), ("20", "sectoren"), ("4", "AI-assistenten"), ("7", "websitechecks")],
+         "400 B2B-bedrijven, elke maand gemeten: hoe vaak ChatGPT, Claude, Gemini en Perplexity ze noemen, met foutmarge, en of hun websites klaar zijn voor AI-zoekmachines.",
+         [("400", "B2B-bedrijven"), ("20", "sectoren"), ("4", "AI-assistenten"), ("5", "koopvragen per categorie")],
          [("Bekijk de ranglijst", "#ranglijst", "bv-cta-gradient"), ("Zo werkt de score", "#methode", "outline")]),
     section([
         sec_head("Waarom dit telt", lead="Kopers zien leveranciers nu eerst in AI-antwoorden. Of een bedrijf daarin verschijnt, hangt deels af van dingen die het op zijn eigen website regelt."),
@@ -258,7 +258,7 @@ NL = [
     ], extra="bv-gip-sec--why"),
     section([
         sec_head("De ranglijst", "Wat is de B2B GEO Index?",
-                 "De B2B GEO Index is een maandelijkse ranglijst van 200 B2B-bedrijven op hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn."),
+                 "De B2B GEO Index is een maandelijkse ranglijst van 400 B2B-bedrijven op hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn."),
         block("nl"),
     ], anchor="ranglijst"),
     section([
@@ -267,8 +267,8 @@ NL = [
                  anchor="methode"),
         grid([
             card([para("50% van de GEO-score", "bv-gip-badge"), head3("AI-score"),
-                  p("Elke maand stelt de site per categorie één koopvraag aan ChatGPT, Claude, Gemini en Perplexity, via hun API's met de eigen zoekfunctie van elke assistent aan. Nederlandse bedrijven krijgen de vraag in het Nederlands, internationale bedrijven in het Engels."),
-                  p("De AI-score is het aandeel antwoorden dat het bedrijf noemt (80%) of naar de website verwijst (20%).")]),
+                  p("Elke maand stelt de site ChatGPT, Claude, Gemini en Perplexity per categorie vijf koopvragen, via hun API's met de eigen zoekfunctie van elke assistent aan. Waar de uitkomst nog onzeker is, volgt een tweede ronde. Nederlandse bedrijven krijgen de vragen in het Nederlands, internationale bedrijven in het Engels."),
+                  p("De AI-score is het aandeel antwoorden dat het bedrijf noemt (80%) of naar de website verwijst (20%). Bij elke score staat de foutmarge. " + a("Lees de volledige methode", "/nl/b2b-geo-index/methode/") + ".")]),
             card([para("50% van de GEO-score", "bv-gip-badge"), head3("Websitescore"),
                   p("Zeven checks op de eigen website van het bedrijf, samen goed voor 100 punten: toegang voor AI-crawlers, tekst zonder JavaScript, gestructureerde data, entiteit, actualiteit, taal en llms.txt."),
                   p("In de tabel hieronder staat per check wat we meten en waarom het telt.")]),
@@ -288,23 +288,23 @@ NL = [
         ),
         data_band("Open data",
                   "Download de volledige ranglijst als CSV. De bestanden worden elke maand bijgewerkt. Je mag de cijfers citeren met een link naar deze pagina als bron.",
-                  [("Top 100 Nederland (CSV)", CSV_NL, ""), ("Top 100 internationaal (CSV)", CSV_INTL, "")]),
+                  [("Top 200 Nederland (CSV)", CSV_NL, ""), ("Top 200 internationaal (CSV)", CSV_INTL, "")]),
     ], extra="bv-gip-sec--method bv-gip--nl"),
     section([
         sec_head("Selectie", "Welke bedrijven staan in de index?",
-                 "De index is een vaste groep van 200 B2B-bedrijven: 100 Nederlandse en 100 internationale, vijf in elk van dezelfde 20 sectoren."),
+                 "De index is een vaste groep van 400 B2B-bedrijven: 200 Nederlandse en 200 internationale, tien in elk van dezelfde 20 sectoren."),
         grid([
             card([para("20", "bv-gip-num"), head3("Sectoren uit een standaard"), p("De sectoren volgen de " + a("SBI 2025", CBS_NL) + " van het CBS, de Nederlandse versie van de Europese NACE-indeling. Van chemie en machinebouw tot software, banken en uitzenden.")]),
-            card([para("5", "bv-gip-num"), head3("Bedrijven per sector, in beide lijsten"), p("Elke sector heeft vijf Nederlandse en vijf internationale bedrijven. Zo vergelijk je dezelfde sector in Nederland en daarbuiten.")]),
+            card([para("10", "bv-gip-num"), head3("Bedrijven per sector, in beide lijsten"), p("Elke sector heeft tien Nederlandse en tien internationale bedrijven. Zo vergelijk je dezelfde sector in Nederland en daarbuiten.")]),
         ], 2),
         sector_list("nl"),
         para("We kozen bekende bedrijven met een B2B-model. Voor de Nederlandse lijst zit het hoofdkantoor in Nederland. Bedrijven kunnen niet betalen voor een plek of een hogere score. Mis je een bedrijf? Mail " + a("info@boomingventure.com", "mailto:info@boomingventure.com") + ", dan bekijken we het voor de volgende meting.", "bv-gip-note"),
     ]),
     faq_grid("FAQ", "Veelgestelde vragen", [
-        ("Hoe vaak wordt de index bijgewerkt?", "Elke maand, op de eerste maandag. De site meet alle 200 bedrijven opnieuw en toont het verschil met de maand ervoor."),
+        ("Hoe vaak wordt de index bijgewerkt?", "Elke maand, op de eerste maandag. De site meet alle 400 bedrijven opnieuw en toont het verschil met de maand ervoor, als dat groter is dan de foutmarge."),
         ("Kan ik mijn eigen bedrijf checken?", "Ja. Vul je domein in bij de check onder de ranglijst. Je krijgt dezelfde score als de bedrijven in de index."),
-        ("Welke vragen stellen jullie aan de AI-assistenten?", "Eén vraag per categorie, zoals: Wat is de beste boekhoudsoftware voor het mkb in Nederland? Noem een paar aanbieders en zeg kort waarom. De formulering wisselt per maand, zodat geen score van één formulering afhangt."),
-        ("Komen de antwoorden overeen met wat een gebruiker in ChatGPT ziet?", "Elke categorie krijgt elke maand dezelfde vraag op dezelfde manier, dus bedrijven worden eerlijk vergeleken. Een individuele gebruiker kan andere antwoorden zien, afhankelijk van locatie, account en model."),
+        ("Welke vragen stellen jullie aan de AI-assistenten?", "Vijf vragen per categorie, elk met een andere koopreden: de beste aanbieder, een aanrader, een shortlist, reputatie en overstappen. Bijvoorbeeld: Wat is de beste boekhoudsoftware voor het mkb in Nederland? De volledige lijst staat op de methodepagina."),
+        ("Komen de antwoorden overeen met wat een gebruiker in ChatGPT ziet?", "Elke categorie krijgt dezelfde vragen op dezelfde manier, dus bedrijven worden eerlijk vergeleken. Een gebruiker kan andere antwoorden zien, afhankelijk van locatie, account en model. Daarom heeft elke score een foutmarge."),
         ("Waarom kost het blokkeren van GPTBot minder punten dan het blokkeren van OAI-SearchBot?", "OAI-SearchBot bepaalt of een site in ChatGPT search kan verschijnen. GPTBot verzamelt trainingsdata, en OpenAI behandelt die twee instellingen apart."),
         ("Kan een bedrijf betalen voor een hogere plek?", "Nee. Scores komen alleen uit de metingen. Elk bedrijf wordt op dezelfde manier gemeten."),
         ("Waarom telt Wikipedia mee in de score?", "Muck Rack zag dat Wikipedia het meest geciteerde domein in ChatGPT is. Een Wikidata-item en een Wikipedia-artikel helpen AI-systemen een bedrijf als entiteit te herkennen."),
@@ -317,8 +317,8 @@ NL = [
 ]
 
 SEO = {
-    "en": ("B2B GEO Index: 200 companies ranked for AI search", "Monthly ranking of 200 B2B companies: how often ChatGPT, Claude, Gemini and Perplexity name them, plus seven website checks. Check your own domain."),
-    "nl": ("B2B GEO Index: 200 bedrijven gerangschikt op AI-zoekmachines", "Maandelijkse ranglijst van 200 B2B-bedrijven: hoe vaak ChatGPT, Claude, Gemini en Perplexity ze noemen, plus zeven websitechecks. Check je eigen domein."),
+    "en": ("B2B GEO Index: 400 companies ranked for AI search", "Monthly ranking of 400 B2B companies: how often ChatGPT, Claude, Gemini and Perplexity name them, with margins of error. Check your own domain."),
+    "nl": ("B2B GEO Index: 400 bedrijven gerangschikt op AI-zoekmachines", "Maandelijkse ranglijst van 400 B2B-bedrijven: hoe vaak ChatGPT, Claude, Gemini en Perplexity ze noemen, met foutmarge. Check je eigen domein."),
 }
 
 

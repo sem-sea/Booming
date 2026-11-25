@@ -33,7 +33,7 @@ function bv_gi_scan_status(): array {
 	$wtot    = (int) ( $meta['total'] ?? 0 ) ?: count( (array) ( $co['nl'] ?? [] ) ) + count( (array) ( $co['intl'] ?? [] ) );
 	$work    = (array) get_option( 'bv_gi_ai_work', [] );
 	$aq      = count( (array) get_option( 'bv_gi_ai_queue', [] ) );
-	$atot    = (int) ( $work['total'] ?? 0 ) ?: count( bv_gi_ai_categories() );
+	$atot    = (int) ( $work['total'] ?? 0 ) ?: count( bv_gi_ai_categories() ) * bv_gi_ai_variants();
 	$active  = bv_gi_ai_active();
 	$engines = [];
 	foreach ( $active as $e ) {
@@ -164,8 +164,8 @@ add_action( 'bv_gi_settings_top', static function () {
 		'ajax'    => admin_url( 'admin-ajax.php' ),
 		'nonce'   => wp_create_nonce( 'bv_gi_scan' ),
 		'confirm' => $ai
-			? sprintf( 'Volledige scan starten? De site meet 200 websites en stelt %d vragen aan elke actieve AI-assistent. Bij OpenRouter kost dat ongeveer $4 tot $6.', $cats )
-			: 'Scan starten? De site meet 200 websites. Zonder actieve AI-assistent kost dit niets.',
+			? sprintf( 'Volledige scan starten? De site meet %1$d websites en stelt in ronde 1 %2$d vragen aan elke actieve AI-assistent%3$s. Bij OpenRouter kost dat naar schatting $%4$d tot $%5$d. Het duurt enkele uren; de meting loopt door als je dit venster sluit.', count( (array) ( bv_gi_companies()['nl'] ?? [] ) ) + count( (array) ( bv_gi_companies()['intl'] ?? [] ) ), $cats * bv_gi_ai_variants(), bv_gi_ai_runs() > 1 ? ( bv_gi_ai_adaptive() ? ', daarna een tweede ronde waar de uitkomst onzeker is' : ', daarna nog ' . ( bv_gi_ai_runs() - 1 ) . ' ronde(s)' ) : '', bv_gi_ai_cost_range( max( 1, count( bv_gi_ai_active() ) ) )[0], bv_gi_ai_cost_range( max( 1, count( bv_gi_ai_active() ) ) )[1] )
+			: sprintf( 'Scan starten? De site meet %d websites. Zonder actieve AI-assistent kost dit niets.', count( (array) ( bv_gi_companies()['nl'] ?? [] ) ) + count( (array) ( bv_gi_companies()['intl'] ?? [] ) ) ),
 		'stop'    => 'Scan stoppen? Gemeten websites blijven staan. Een onafgemaakte AI-meting vervalt; de laatste volledige AI-resultaten blijven staan.',
 	];
 	?>

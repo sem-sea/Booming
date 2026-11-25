@@ -200,3 +200,104 @@
  * the list so both lists always show all 100 companies and all 20 sectors. */
 .bv-gi__pending .bv-gi__co strong, .bv-gi__pending .bv-gi__rank { color: var(--wp--preset--color--muted, #5b6b80); }
 .bv-gi__wait { display: inline-block; padding: 0.125rem 0.5rem; font-size: 0.75rem; font-weight: 600; white-space: nowrap; color: var(--wp--preset--color--muted, #5b6b80); background: var(--wp--preset--color--base-50, #f8fafc); border: 1px dashed var(--wp--preset--color--border, #e2e8f0); border-radius: 999px; }
+
+/* ---------- Method 2 (1.24.0): margins, groups, details and insights ---------- */
+.bv-gi__pm { display: inline-block; margin-left: 0.25rem; font-size: 0.75rem; font-weight: 600; color: var(--wp--preset--color--muted, #5b6b80); white-space: nowrap; }
+.bv-gi__ns { color: var(--wp--preset--color--muted, #5b6b80); font-weight: 600; text-decoration: underline dotted; text-underline-offset: 2px; cursor: help; }
+.bv-gi__table .bv-gi__rank--grp { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; }
+.bv-gi__g-strong { color: #047857; }
+.bv-gi__g-mid { color: #b45309; }
+.bv-gi__g-low { color: var(--wp--preset--color--muted, #5b6b80); }
+.bv-gi__dbtn { display: inline-flex; align-items: center; gap: 0.375rem; min-height: 32px; margin-top: 0.375rem; padding: 0.25rem 0.625rem; border: 1px solid var(--wp--preset--color--booming-200, #bae6fd); border-radius: 999px; background: var(--wp--preset--color--booming-50, #f0f9ff); font: inherit; font-size: 0.75rem; font-weight: 600; line-height: 1.2; color: var(--wp--preset--color--booming-700, #0369a1); cursor: pointer; }
+.bv-gi__dbtn::after { content: ""; width: 0.375rem; height: 0.375rem; margin-top: -0.125rem; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg); transition: transform 0.15s; }
+.bv-gi__dbtn[aria-expanded="true"]::after { margin-top: 0.1875rem; transform: rotate(-135deg); }
+.bv-gi__dgrid { display: grid; gap: 0.75rem; text-align: left; }
+.bv-gi__dblk { min-width: 0; padding: 0.75rem 0.875rem; background: #fff; border: 1px solid var(--wp--preset--color--border, #e2e8f0); border-radius: 0.75rem; font-size: 0.8125rem; line-height: 1.5; }
+.bv-gi__dblk h4 { margin: 0 0 0.375rem; font-size: 0.8125rem; font-weight: 700; color: var(--wp--preset--color--contrast, #0c1a2e); }
+.bv-gi__dblk p { margin: 0 0 0.375rem; }
+.bv-gi__dblk p:last-child { margin-bottom: 0; }
+.bv-gi__facts { display: grid; gap: 0.25rem; margin: 0; padding-left: 1rem; }
+.bv-gi__warn { padding: 0.375rem 0.5rem; border-radius: 0.5rem; background: #fffbeb; color: #92400e; }
+.bv-gi__small { font-size: 0.75rem; color: var(--wp--preset--color--muted, #5b6b80); }
+.bv-gi__hosts, .bv-gi__host { font-family: var(--wp--preset--font-family--mono, ui-monospace, monospace); font-size: 0.75rem; overflow-wrap: anywhere; }
+.bv-gi__bars { display: grid; gap: 0.375rem; margin: 0; padding: 0; list-style: none; }
+.bv-gi__bars li { display: grid; grid-template-columns: 5.5rem 1fr auto; align-items: center; gap: 0.5rem; font-size: 0.75rem; }
+.bv-gi__bl { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bv-gi__bv { font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--wp--preset--color--muted, #5b6b80); }
+.bv-gi__mini { position: relative; height: 0.5rem; border-radius: 999px; background: var(--wp--preset--color--base-50, #f1f5f9); overflow: hidden; }
+.bv-gi__mini::before { content: ""; position: absolute; inset: 0 auto 0 0; width: calc(var(--p, 0) * 1%); border-radius: inherit; background: linear-gradient(90deg, #0284c7, #14b8a6); }
+
+/* Detail rows: a card under the company card on phones, a full-width cell in the table. */
+.bv-gi__table tr.bv-gi__detail td { background: var(--wp--preset--color--base-50, #f8fafc); }
+@container (max-width: 1039.98px) {
+	.bv-gi__table tr.bv-gi__detail { display: block; margin-top: -0.375rem; padding: 0.625rem; background: var(--wp--preset--color--base-50, #f8fafc); border-style: dashed; }
+	.bv-gi__table tr.bv-gi__detail::before, .bv-gi__table tr.bv-gi__detail::after { content: none; display: none; }
+	.bv-gi__table tr.bv-gi__detail td { display: block; background: transparent; }
+	.bv-gi__table .bv-gi__rank--grp { width: auto; min-width: 2rem; padding: 0 0.5rem; }
+	.bv-gi__table .bv-gi__score { display: flex; flex-direction: column; align-items: flex-end; gap: 0.125rem; }
+	.bv-gi__pm { margin-left: 0; }
+	.bv-gi__co .bv-gi__dbtn { display: inline-flex; }
+}
+@container (min-width: 640px) and (max-width: 1039.98px) {
+	.bv-gi__table tr.bv-gi__detail { grid-column: 1 / -1; }
+	.bv-gi__dgrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@container (min-width: 1040px) {
+	.bv-gi__table tr.bv-gi__detail td { padding: 0.875rem 1rem 1rem; }
+	.bv-gi__table tbody tr.bv-gi__detail:hover td { background: var(--wp--preset--color--base-50, #f8fafc); }
+	.bv-gi__dgrid { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+	.bv-gi__table .bv-gi__rank--grp { width: auto; }
+	.bv-gi__co .bv-gi__dbtn { margin-top: 0.25rem; }
+}
+
+/* Insights below each list. */
+.bv-gi__ins { margin: 1.75rem 0 0; }
+.bv-gi__ins > h3 { margin: 0 0 0.25rem; font-size: 1.125rem; line-height: 1.3; }
+.bv-gi__ins-lead { margin: 0 0 1rem; font-size: 0.875rem; color: var(--wp--preset--color--muted, #5b6b80); }
+.bv-gi__ins-grid { display: grid; gap: 0.75rem; }
+.bv-gi__icard { min-width: 0; padding: 1rem; background: #fff; border: 1px solid var(--wp--preset--color--border, #e2e8f0); border-radius: 1rem; font-size: 0.875rem; line-height: 1.5; }
+.bv-gi__icard h4 { margin: 0 0 0.625rem; font-size: 0.9375rem; line-height: 1.3; }
+.bv-gi__icard p { margin: 0.625rem 0 0; }
+.bv-gi__quad { display: grid; grid-template-columns: 1fr 1fr; gap: 0.375rem; }
+.bv-gi__quad > div { display: flex; flex-direction: column; gap: 0.125rem; padding: 0.625rem; border-radius: 0.625rem; background: var(--wp--preset--color--base-50, #f8fafc); font-size: 0.75rem; line-height: 1.35; }
+.bv-gi__quad strong { font: 700 1.375rem/1.1 var(--wp--preset--font-family--display, system-ui); color: var(--wp--preset--color--booming-700, #0369a1); }
+.bv-gi__quad .bv-gi__q-both { background: #ecfdf5; }
+.bv-gi__quad .bv-gi__q-web { background: #eff6ff; }
+.bv-gi__quad .bv-gi__q-ai { background: #f0fdfa; }
+.bv-gi__pairs { display: grid; gap: 0.25rem; margin: 0.375rem 0 0; padding: 0; list-style: none; font-size: 0.8125rem; }
+.bv-gi__pairs li { display: flex; justify-content: space-between; gap: 0.75rem; padding: 0.25rem 0; border-bottom: 1px solid var(--wp--preset--color--border, #e2e8f0); }
+.bv-gi__pairs li:last-child { border-bottom: 0; }
+.bv-gi__duo { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.bv-gi__duo > div { display: flex; flex-direction: column; gap: 0.125rem; padding: 0.75rem; border-radius: 0.75rem; background: var(--wp--preset--color--base-50, #f8fafc); font-size: 0.75rem; line-height: 1.35; }
+.bv-gi__duo strong { font: 700 1.625rem/1.1 var(--wp--preset--font-family--display, system-ui); color: var(--wp--preset--color--booming-700, #0369a1); }
+.bv-gi__fold { margin-top: 0.625rem; border-top: 1px solid var(--wp--preset--color--border, #e2e8f0); }
+.bv-gi__fold > summary { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: 44px; padding: 0.5rem 0; list-style: none; font-weight: 600; cursor: pointer; }
+.bv-gi__fold > summary::-webkit-details-marker { display: none; }
+.bv-gi__fold > summary span { margin-left: auto; white-space: nowrap; font-size: 0.75rem; font-weight: 500; color: var(--wp--preset--color--muted, #5b6b80); }
+.bv-gi__fold > summary::after { content: ""; flex: none; width: 0.4375rem; height: 0.4375rem; margin: -0.25rem 0.125rem 0 0.25rem; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); transition: transform 0.15s; }
+.bv-gi__fold[open] > summary::after { margin-top: 0.25rem; transform: rotate(-135deg); }
+.bv-gi__mt { width: 100%; border-collapse: collapse; font-size: 0.8125rem; }
+.bv-gi__mt th, .bv-gi__mt td { padding: 0.375rem 0.25rem; border-bottom: 1px solid var(--wp--preset--color--border, #e2e8f0); text-align: right; font-weight: 400; }
+.bv-gi__mt th[scope="row"], .bv-gi__mt thead th:first-child { text-align: left; }
+.bv-gi__mt thead th { font-size: 0.75rem; font-weight: 700; color: var(--wp--preset--color--muted, #5b6b80); }
+.bv-gi__src { margin-top: 0.75rem; }
+.bv-gi__srcs { display: grid; column-gap: 1.25rem; }
+.bv-gi__srcs ol { display: grid; gap: 0.25rem; margin: 0 0 0.75rem; padding-left: 1.25rem; font-size: 0.8125rem; }
+.bv-gi__srcs li { padding-left: 0.125rem; }
+.bv-gi__srcs li strong { float: right; margin-left: 0.5rem; font-variant-numeric: tabular-nums; }
+.bv-gi__srcs li em { font-size: 0.75rem; font-style: normal; color: var(--wp--preset--color--muted, #5b6b80); }
+@container (min-width: 720px) {
+	.bv-gi__ins-grid { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+	.bv-gi__srcs { grid-template-columns: 1fr 1fr; }
+}
+
+/* The public check: sector choice and the gap with the leader. */
+.bv-gi__csec { width: 100%; min-width: 0; min-height: 48px; padding: 0.75rem 1rem; font: inherit; font-size: 1rem; border: 1.5px solid #cbd5e1; border-radius: 0.625rem; background: #fff; color: inherit; }
+.bv-gi__inidx { margin: 0.875rem 0 0; padding: 0.625rem 0.75rem; border-radius: 0.625rem; background: var(--wp--preset--color--booming-50, #f0f9ff); font-size: 0.875rem; }
+.bv-gi__gap { margin-top: 0.875rem; padding-top: 0.875rem; border-top: 1px solid var(--wp--preset--color--border, #e2e8f0); font-size: 0.875rem; }
+.bv-gi__gap h4 { margin: 0 0 0.375rem; font-size: 1rem; }
+.bv-gi__gap p { margin: 0.375rem 0; }
+.bv-gi__gapl { display: grid; gap: 0.25rem; margin: 0.25rem 0 0.5rem; padding-left: 1.25rem; }
+@container (min-width: 720px) {
+	.bv-gi__csec { flex: 0 1 15rem; width: auto; }
+}

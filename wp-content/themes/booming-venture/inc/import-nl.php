@@ -115,6 +115,47 @@ add_action( 'rest_api_init', static function () {
 				return rest_ensure_response( [ 'items' => $log ] );
 			}
 
+			/*
+			 * ?update=geo-method (1.24.0): create or refresh the method pages
+			 * under the two GEO Index pages: /b2b-geo-index/methodology/ and
+			 * /nl/b2b-geo-index/methode/, published, linked as translations.
+			 */
+			if ( 'geo-method' === $req->get_param( 'update' ) ) {
+				$ids = [];
+				foreach ( [ 'en' => 'b2b-geo-index', 'nl' => 'nl/b2b-geo-index' ] as $lang => $parent_path ) {
+					$parent = get_page_by_path( $parent_path );
+					$b      = (array) ( $data['geo_method'][ $lang ] ?? [] );
+					if ( ! $parent || empty( $b['content'] ) || empty( $b['slug'] ) ) {
+						$log[] = [ 'id' => 0, 'state' => 'missing', 'slug' => $parent_path ];
+						continue;
+					}
+					$meta = array_intersect_key( (array) ( $b['meta'] ?? [] ), array_flip( [ '_yoast_wpseo_title', '_yoast_wpseo_metadesc' ] ) );
+					if ( 'nl' === $lang ) {
+						$meta['_bv_lang'] = 'nl';
+						if ( ! empty( $ids['en'] ) ) {
+							$meta['_bv_translation'] = (int) $ids['en'];
+						}
+					}
+					$page = get_page_by_path( $parent_path . '/' . sanitize_title( $b['slug'] ) );
+					if ( $page ) {
+						$id    = wp_update_post( wp_slash( [ 'ID' => $page->ID, 'post_title' => (string) $b['title'], 'post_content' => (string) $b['content'], 'post_status' => 'publish', 'meta_input' => $meta ] ), true );
+						$state = 'updated';
+					} else {
+						$id    = wp_insert_post( wp_slash( [ 'post_type' => 'page', 'post_title' => (string) $b['title'], 'post_name' => sanitize_title( $b['slug'] ), 'post_parent' => (int) $parent->ID, 'post_status' => 'publish', 'post_content' => (string) $b['content'], 'comment_status' => 'closed', 'ping_status' => 'closed', 'meta_input' => $meta ] ), true );
+						$state = 'created';
+					}
+					if ( is_wp_error( $id ) ) {
+						$log[] = [ 'id' => 0, 'state' => 'error', 'slug' => $parent_path, 'error' => $id->get_error_message() ];
+						continue;
+					}
+					update_post_meta( (int) $id, '_wp_page_template', 'page-landing' );
+					$ids[ $lang ] = (int) $id;
+					$log[]        = [ 'id' => (int) $id, 'state' => $state, 'slug' => get_page_uri( (int) $id ) ];
+				}
+				kses_init_filters();
+				return rest_ensure_response( [ 'items' => $log ] );
+			}
+
 			/* Dutch home, then its child pages. */
 			$home  = bv_import_item( (array) $data['pages']['parent'], 'page' );
 			$log[] = $home;

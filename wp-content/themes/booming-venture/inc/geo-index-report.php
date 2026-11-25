@@ -31,8 +31,8 @@ function bv_gi_report_state(): array {
 	$ai_on   = function_exists( 'bv_gi_ai_active' ) && (bool) bv_gi_ai_active();
 	$air     = (array) get_option( 'bv_gi_ai_results', [] );
 	$ai      = $ai_on && (int) ( $air['completed'] ?? 0 ) >= $started && ! get_option( 'bv_gi_ai_queue' );
-	/* AI answers that never finish (no credit, all caps hit) do not block the report for more than 5 days. */
-	$late    = $started && time() - $started > 5 * DAY_IN_SECONDS;
+	/* AI answers that never finish (no credit, all caps hit) do not block the report for more than 7 days. */
+	$late    = $started && time() - $started > 7 * DAY_IN_SECONDS;
 	return [
 		'month'   => $started ? gmdate( 'Y-m', $started ) : '',
 		'source'  => (string) ( $meta['source'] ?? '' ),
@@ -95,7 +95,7 @@ function bv_gi_report_data( array $st ): array {
 			],
 		];
 		foreach ( $rows as $r ) {
-			if ( null !== $r['change'] && $r['change'] > 0 ) {
+			if ( null !== $r['change'] && $r['change'] > 0 && ! empty( $r['change_sig'] ) ) { // only changes larger than the margin of error
 				$d['risers'][] = $r + [ 'list' => $list ];
 			}
 		}
@@ -110,9 +110,18 @@ function bv_gi_report_data( array $st ): array {
 	];
 	$ai_rows   = $d['lists']['nl']['ai_rows'] + $d['lists']['intl']['ai_rows'];
 	$d['all']['named'] = $ai_rows ? (int) round( ( (int) $d['lists']['nl']['named'] * $d['lists']['nl']['ai_rows'] + (int) $d['lists']['intl']['named'] * $d['lists']['intl']['ai_rows'] ) / $ai_rows ) : null;
-	/* Publish only numbers that look complete: 80 of 100 companies per list, and AI data when AI is on. */
-	$d['complete'] = $d['lists']['nl']['measured'] >= 80 && $d['lists']['intl']['measured'] >= 80
-		&& ( ! $st['ai_on'] || ( $engines && $d['lists']['nl']['ai_rows'] >= 80 && $d['lists']['intl']['ai_rows'] >= 80 ) );
+	/* Publish only numbers that look complete: 80% of the companies per list, and AI data when AI is on. */
+	$need = static fn( string $l ) => (int) ceil( 0.8 * count( (array) ( bv_gi_companies()[ $l ] ?? [] ) ) );
+	$d['complete'] = $d['lists']['nl']['measured'] >= $need( 'nl' ) && $d['lists']['intl']['measured'] >= $need( 'intl' )
+		&& ( ! $st['ai_on'] || ( $engines && $d['lists']['nl']['ai_rows'] >= $need( 'nl' ) && $d['lists']['intl']['ai_rows'] >= $need( 'intl' ) ) );
+	/* Method 2 insights for the "differences" section. */
+	$d['ins'] = [];
+	if ( $use_ai && function_exists( 'bv_gi_insights' ) ) {
+		foreach ( [ 'nl', 'intl' ] as $list ) {
+			$d['ins'][ $list ] = bv_gi_insights( $list, bv_gi_ranked( $list ) );
+		}
+	}
+	$d['method_new'] = (bool) array_filter( array_merge( bv_gi_ranked( 'nl' ), bv_gi_ranked( 'intl' ) ), static fn( $r ) => ! empty( $r['method_new'] ) );
 	return $d;
 }
 
@@ -131,6 +140,8 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 	$and    = $nl ? ' en ' : ' and ';
 	$join   = static fn( array $a ) => count( $a ) > 1 ? implode( ', ', array_slice( $a, 0, -1 ) ) . $and . end( $a ) : implode( '', $a );
 	$page   = home_url( $nl ? '/nl/b2b-geo-index/' : '/b2b-geo-index/' );
+	$mp     = get_page_by_path( $nl ? 'nl/b2b-geo-index/methode' : 'b2b-geo-index/methodology' );
+	$murl   = ( $mp && 'publish' === $mp->post_status ) ? get_permalink( $mp ) : $page . ( $nl ? '#methode' : '#methodology' );
 	$link   = static fn( string $text, string $url ) => '<a href="' . esc_url( $url ) . '"' . ( 0 === strpos( $url, 'http' ) && 0 !== strpos( $url, home_url() ) ? ' target="_blank" rel="noopener"' : '' ) . '>' . $text . '</a>';
 	$src    = $link( 'B2B GEO Index, ' . $when, $page );
 	$e      = static fn( $s ) => esc_html( (string) $s );
@@ -178,8 +189,8 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 			$rows[] = $row;
 		}
 		$cap = 'nl' === $list
-			? ( $nl ? 'Top 10 van 100 Nederlandse B2B-bedrijven. Verschil met vorige maand. Bron: B2B GEO Index, ' . $when . '.' : 'Top 10 of 100 Dutch B2B companies. Change against last month. Source: B2B GEO Index, ' . $when . '.' )
-			: ( $nl ? 'Top 10 van 100 internationale B2B-bedrijven. Verschil met vorige maand. Bron: B2B GEO Index, ' . $when . '.' : 'Top 10 of 100 international B2B companies. Change against last month. Source: B2B GEO Index, ' . $when . '.' );
+			? ( $nl ? 'Top 10 van 200 Nederlandse B2B-bedrijven. Verschil met vorige maand. Bron: B2B GEO Index, ' . $when . '.' : 'Top 10 of 200 Dutch B2B companies. Change against last month. Source: B2B GEO Index, ' . $when . '.' )
+			: ( $nl ? 'Top 10 van 200 internationale B2B-bedrijven. Verschil met vorige maand. Bron: B2B GEO Index, ' . $when . '.' : 'Top 10 of 200 international B2B companies. Change against last month. Source: B2B GEO Index, ' . $when . '.' );
 		return $table( $cols, $rows, $cap );
 	};
 
@@ -200,8 +211,8 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 
 	/* Intro with the numbers and their sources (the first 30%). */
 	$c[] = $p( $nl
-		? sprintf( 'Elke maand meet de %s 200 B2B-bedrijven: 100 Nederlandse en 100 internationale, vijf in elk van dezelfde 20 sectoren. In %s was de gemiddelde GEO-score %d voor de Nederlandse lijst en %d voor de internationale lijst.', $link( 'B2B GEO Index', $page ), $when, $L['nl']['avg'], $L['intl']['avg'] )
-		: sprintf( 'Every month the %s measures 200 B2B companies: 100 Dutch and 100 international, five in each of the same 20 sectors. In %s the average GEO score was %d for the Dutch list and %d for the international list.', $link( 'B2B GEO Index', $page ), $when, $L['nl']['avg'], $L['intl']['avg'] ) );
+		? sprintf( 'Elke maand meet de %s 400 B2B-bedrijven: 200 Nederlandse en 200 internationale, tien in elk van dezelfde 20 sectoren. In %s was de gemiddelde GEO-score %d voor de Nederlandse lijst en %d voor de internationale lijst.', $link( 'B2B GEO Index', $page ), $when, $L['nl']['avg'], $L['intl']['avg'] )
+		: sprintf( 'Every month the %s measures 400 B2B companies: 200 Dutch and 200 international, ten in each of the same 20 sectors. In %s the average GEO score was %d for the Dutch list and %d for the international list.', $link( 'B2B GEO Index', $page ), $when, $L['nl']['avg'], $L['intl']['avg'] ) );
 	$c[] = $p( $nl
 		? sprintf( 'Aan de websitekant laat %d%% van de Nederlandse en %d%% van de internationale bedrijven OAI-SearchBot toe (%s). %d%% toont minstens 150 woorden tekst op de homepage zonder JavaScript (%s). Dat telt: in de %s renderde geen van de grote AI-crawlers JavaScript. En volgens %s gebruikt 94%% van de zakelijke kopers AI tijdens het aankoopproces.', $L['nl']['checks']['oai'], $L['intl']['checks']['oai'], $src, $d['all']['html'], $src, $link( 'analyse van Vercel', 'https://vercel.com/blog/the-rise-of-the-ai-crawler' ), $link( 'Forrester', 'https://www.forrester.com/blogs/b2b_buyers_make_zero_click_buying_number_one/' ) )
 		: sprintf( 'On the website side, %d%% of the Dutch and %d%% of the international companies allow OAI-SearchBot (%s). %d%% show at least 150 words of homepage text without JavaScript (%s). That matters: none of the major AI crawlers rendered JavaScript in %s. And %s reports that 94%% of business buyers use AI in their buying process.', $L['nl']['checks']['oai'], $L['intl']['checks']['oai'], $src, $d['all']['html'], $src, $link( "Vercel's analysis", 'https://vercel.com/blog/the-rise-of-the-ai-crawler' ), $link( 'Forrester', 'https://www.forrester.com/blogs/b2b_buyers_make_zero_click_buying_number_one/' ) ) );
@@ -209,11 +220,11 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 	/* Definition. */
 	$c[] = $h2( $nl ? 'Wat is de B2B GEO Index?' : 'What is the B2B GEO Index?' );
 	$c[] = $cap( $nl
-		? 'De B2B GEO Index is een maandelijkse ranglijst van 200 B2B-bedrijven op hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn.'
-		: 'The B2B GEO Index is a monthly ranking of 200 B2B companies by how often AI assistants name them and how ready their websites are.' );
+		? 'De B2B GEO Index is een maandelijkse ranglijst van 400 B2B-bedrijven op hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn.'
+		: 'The B2B GEO Index is a monthly ranking of 400 B2B companies by how often AI assistants name them and how ready their websites are.' );
 	$c[] = $p( $has_ai
-		? ( $nl ? sprintf( 'De helft van de GEO-score komt uit hoe vaak %s een bedrijf noemen in antwoorden op koopvragen, de helft uit zeven websitechecks. De %s legt elke check en de punten uit.', $join( $eng ), $link( 'methode', $page . '#methode' ) ) : sprintf( 'Half of the GEO score comes from how often %s name a company in answers to buyer questions, half from seven website checks. The %s explains every check and its points.', $join( $eng ), $link( 'methodology', $page . '#methodology' ) ) )
-		: ( $nl ? sprintf( 'Deze maand is de GEO-score gelijk aan de websitescore: zeven checks op de eigen website van elk bedrijf, van 0 tot 100. De %s legt elke check uit.', $link( 'methode', $page . '#methode' ) ) : sprintf( 'This month the GEO score is the website score: seven checks on each company\'s own website, from 0 to 100. The %s explains every check.', $link( 'methodology', $page . '#methodology' ) ) ) );
+		? ( $nl ? sprintf( 'De helft van de GEO-score komt uit hoe vaak %s een bedrijf noemen in antwoorden op koopvragen, de helft uit zeven websitechecks. De %s legt elke check en de punten uit.', $join( $eng ), $link( 'methode', $murl ) ) : sprintf( 'Half of the GEO score comes from how often %s name a company in answers to buyer questions, half from seven website checks. The %s explains every check and its points.', $join( $eng ), $link( 'methodology', $murl ) ) )
+		: ( $nl ? sprintf( 'Deze maand is de GEO-score gelijk aan de websitescore: zeven checks op de eigen website van elk bedrijf, van 0 tot 100. De %s legt elke check uit.', $link( 'methode', $murl ) ) : sprintf( 'This month the GEO score is the website score: seven checks on each company\'s own website, from 0 to 100. The %s explains every check.', $link( 'methodology', $murl ) ) ) );
 
 	/* The two top 10s. */
 	$c[] = $h2( ( $nl ? 'Top 10 Nederland: ' : 'Top 10 Netherlands: ' ) . $when );
@@ -238,10 +249,10 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 			$nl ? 'GEO-score tussen haakjes. Bron: B2B GEO Index, ' . $when . '.' : 'GEO score in brackets. Source: B2B GEO Index, ' . $when . '.' );
 	}
 
-	/* Risers. */
+	/* Risers: only changes larger than the margin of error. */
 	if ( $d['risers'] ) {
 		$c[] = $h2( $nl ? 'Grootste stijgers deze maand' : 'Biggest risers this month' );
-		$c[] = $p( $nl ? 'De bedrijven waarvan de GEO-score sinds vorige maand het meest steeg:' : 'The companies whose GEO score rose most since last month:' );
+		$c[] = $p( $nl ? 'De bedrijven waarvan de GEO-score sinds vorige maand het meest steeg, meer dan de foutmarge:' : 'The companies whose GEO score rose most since last month, by more than the margin of error:' );
 		$c[] = $ol( array_map( static fn( $r ) => '<strong>' . esc_html( $r['name'] ) . '</strong> (' . ( 'nl' === $r['list'] ? ( $nl ? 'Nederland' : 'Netherlands' ) : ( $nl ? 'internationaal' : 'international' ) ) . '): +' . (int) $r['change'] . ( $nl ? ' naar ' : ' to ' ) . (int) $r['score'], $d['risers'] ) );
 	}
 
@@ -254,7 +265,57 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 			$rows[] = [ '<strong>' . esc_html( bv_gi_engines_label( $k ) ) . '</strong>', (int) ( $L['nl']['eng'][ $k ] ?? 0 ) . '%', (int) ( $L['intl']['eng'][ $k ] ?? 0 ) . '%' ];
 		}
 		$c[] = $table( $nl ? [ 'Assistent', 'Nederland', 'Internationaal' ] : [ 'Assistant', 'Netherlands', 'International' ], $rows,
-			$nl ? 'Eén koopvraag per categorie, met de eigen zoekfunctie van elke assistent aan. Bron: B2B GEO Index, ' . $when . '.' : 'One buyer question per category, with each assistant\'s own web search on. Source: B2B GEO Index, ' . $when . '.' );
+			$nl ? 'Vijf koopvragen per categorie, met de eigen zoekfunctie van elke assistent aan. Bron: B2B GEO Index, ' . $when . '.' : 'Five buyer questions per category, with each assistant\'s own web search on. Source: B2B GEO Index, ' . $when . '.' );
+	}
+
+	/* Differences this month (method 2): website versus AI, the assistants, Dutch versus international, the sources. */
+	if ( ! empty( $d['ins']['nl'] ) || ! empty( $d['ins']['intl'] ) ) {
+		$I    = $d['ins'];
+		$dec  = static fn( $v ) => $nl ? str_replace( '.', ',', number_format( (float) $v, 2, '.', '' ) ) : number_format( (float) $v, 2, '.', '' );
+		$bul  = [];
+		foreach ( [ 'nl' => $nl ? 'Nederlandse lijst' : 'Dutch list', 'intl' => $nl ? 'internationale lijst' : 'international list' ] as $l => $lab ) {
+			if ( null !== ( $I[ $l ]['rho'] ?? null ) ) {
+				$abs   = abs( (float) $I[ $l ]['rho'] );
+				$bul[] = $nl
+					? sprintf( 'Website versus AI (%s): de samenhang tussen websitescore en AI-score is %s (Spearman), %s. %d bedrijven hebben een sterke website maar worden weinig genoemd.', $lab, $dec( $I[ $l ]['rho'] ), $abs < 0.3 ? 'zwak' : ( $abs < 0.5 ? 'matig' : 'sterk' ), (int) $I[ $l ]['quad_n']['web'] )
+					: sprintf( 'Website versus AI (%s): the correlation between website score and AI score is %s (Spearman), %s. %d companies have a strong website but are rarely named.', $lab, $dec( $I[ $l ]['rho'] ), $abs < 0.3 ? 'weak' : ( $abs < 0.5 ? 'moderate' : 'strong' ), (int) $I[ $l ]['quad_n']['web'] );
+			}
+		}
+		$cross = $I['nl']['cross'] ?? ( $I['intl']['cross'] ?? null );
+		if ( $cross && null !== $cross['nl_q'] && null !== $cross['en_q'] ) {
+			$bul[] = $nl
+				? sprintf( 'Nederland versus internationaal: bij Nederlandse vragen is %d%% van de genoemde indexbedrijven Nederlands, bij Engelse vragen %d%%.', $cross['nl_q'], $cross['en_q'] )
+				: sprintf( 'Netherlands versus international: in answers to Dutch questions %d%% of the index companies named are Dutch, in answers to English questions %d%%.', $cross['nl_q'], $cross['en_q'] );
+		}
+		$pairs = (array) ( $I['nl']['pairs'] ?? [] );
+		if ( $pairs ) {
+			$avg   = (int) round( array_sum( $pairs ) / count( $pairs ) );
+			$bul[] = $nl
+				? sprintf( 'De assistenten verschillen: bij dezelfde vraag hebben twee assistenten gemiddeld %d%% van de genoemde bedrijven gemeen.', $avg )
+				: sprintf( 'The assistants differ: for the same question, two assistants have on average %d%% of the companies they name in common.', $avg );
+		}
+		$hosts = [];
+		foreach ( [ 'nl', 'intl' ] as $l ) {
+			foreach ( (array) ( $I[ $l ]['src'] ?? [] ) as $sd ) {
+				foreach ( (array) $sd['top'] as $h ) {
+					$hosts[ $h['host'] ] = ( $hosts[ $h['host'] ] ?? 0 ) + 1;
+				}
+			}
+		}
+		arsort( $hosts );
+		if ( $hosts ) {
+			$top3  = array_slice( array_keys( $hosts ), 0, 3 );
+			$bul[] = $nl
+				? sprintf( 'De websites die in de meeste sectoren bij de vaakst aangehaalde bronnen horen: %s.', $join( array_map( 'esc_html', $top3 ) ) )
+				: sprintf( 'The websites among the most cited sources in the most sectors: %s.', $join( array_map( 'esc_html', $top3 ) ) );
+		}
+		if ( $bul ) {
+			$c[] = $h2( $nl ? 'Wat verschilt er deze maand?' : 'What differs this month?' );
+			$c[] = $p( $nl
+				? sprintf( 'Elk getal in de index heeft een foutmarge van 95%%, omdat AI-antwoorden per keer verschillen. Onderzoek van %s liet zien dat AI-assistenten minder dan 1 op de 100 keer dezelfde lijst merken noemen. Daarom meten we elke vraag vaker en tonen we alleen verschillen die groter zijn dan de marge.', $link( 'SparkToro en Gumshoe', 'https://searchengineland.com/ai-recommendation-lists-rarely-repeat-study-468076' ) )
+				: sprintf( 'Every number in the index has a 95%% margin of error, because AI answers vary from run to run. Research by %s showed AI assistants name the same list of brands in under 1 of 100 runs. So we ask every question more often and only show differences larger than the margin.', $link( 'SparkToro and Gumshoe', 'https://searchengineland.com/ai-recommendation-lists-rarely-repeat-study-468076' ) ) );
+			$c[] = $ul( $bul );
+		}
 	}
 
 	/* Website checks. */
@@ -279,13 +340,13 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 	$faq = $nl
 		? [
 			[ 'Wanneer verschijnt de volgende B2B GEO Index?', sprintf( 'Op de eerste maandag van de volgende maand: %s. De ranglijst op de indexpagina wordt bijgewerkt zodra die meting klaar is.', $next_s ) ],
-			[ 'Hoe wordt de GEO-score berekend?', $has_ai ? sprintf( 'De helft komt uit hoe vaak %s het bedrijf noemen in antwoorden op koopvragen, de helft uit zeven websitechecks. Beide delen lopen van 0 tot 100.', $join( $eng ) ) : 'Deze maand is het de websitescore: zeven checks op de eigen website van het bedrijf, van 0 tot 100. Als de AI-meting draait, komt de helft van de score uit hoe vaak AI-assistenten het bedrijf noemen.' ],
+			[ 'Hoe wordt de GEO-score berekend?', $has_ai ? sprintf( 'De helft komt uit hoe vaak %s het bedrijf noemen in antwoorden op vijf koopvragen per categorie, de helft uit zeven websitechecks. Beide delen lopen van 0 tot 100, met een foutmarge van 95%%.', $join( $eng ) ) : 'Deze maand is het de websitescore: zeven checks op de eigen website van het bedrijf, van 0 tot 100. Als de AI-meting draait, komt de helft van de score uit hoe vaak AI-assistenten het bedrijf noemen.' ],
 			[ 'Kan ik mijn eigen bedrijf checken?', 'Ja. Vul je domein in bij de check op de pagina van de B2B GEO Index. Je krijgt dezelfde websitescore als de bedrijven in de ranglijst.' ],
 			[ 'Mag ik deze cijfers gebruiken?', 'Ja. Download de volledige ranglijst als CSV op de pagina van de B2B GEO Index en citeer de cijfers met een link naar de index als bron.' ],
 		]
 		: [
 			[ 'When is the next B2B GEO Index?', sprintf( 'On the first Monday of next month: %s. The ranking on the index page updates as soon as that measurement is done.', $next_s ) ],
-			[ 'How is the GEO score calculated?', $has_ai ? sprintf( 'Half comes from how often %s name the company in answers to buyer questions, half from seven website checks. Both parts run from 0 to 100.', $join( $eng ) ) : 'This month it is the website score: seven checks on the company\'s own website, from 0 to 100. When the AI measurement runs, half of the score comes from how often AI assistants name the company.' ],
+			[ 'How is the GEO score calculated?', $has_ai ? sprintf( 'Half comes from how often %s name the company in answers to five buyer questions per category, half from seven website checks. Both parts run from 0 to 100, with a 95%% margin of error.', $join( $eng ) ) : 'This month it is the website score: seven checks on the company\'s own website, from 0 to 100. When the AI measurement runs, half of the score comes from how often AI assistants name the company.' ],
 			[ 'Can I check my own company?', 'Yes. Enter your domain in the check on the B2B GEO Index page. You get the same website score as the companies in the ranking.' ],
 			[ 'Can I use these numbers?', 'Yes. Download the full ranking as CSV on the B2B GEO Index page and quote the numbers with a link to the index as the source.' ],
 		];
@@ -305,8 +366,8 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 
 	$title = $nl ? sprintf( 'B2B GEO Index %s: top 10 Nederland en internationaal', $when ) : sprintf( 'B2B GEO Index %s: top 10 Netherlands and international', $when );
 	$desc  = $nl
-		? sprintf( 'B2B GEO Index %s: de top 10 van 200 B2B-bedrijven in AI-zoekmachines, de grootste stijgers en hoe klaar hun websites zijn.', $when )
-		: sprintf( 'B2B GEO Index %s: the top 10 of 200 B2B companies in AI search, the biggest risers and how ready their websites are.', $when );
+		? sprintf( 'B2B GEO Index %s: de top 10 van 400 B2B-bedrijven in AI-zoekmachines, de echte stijgers, de meest aangehaalde bronnen en hoe klaar hun websites zijn.', $when )
+		: sprintf( 'B2B GEO Index %s: the top 10 of 400 B2B companies in AI search, the real risers, the most cited sources and how ready their websites are.', $when );
 	return [
 		'title'   => $title,
 		'slug'    => sanitize_title( 'b2b-geo-index-' . $m . '-' . $y . ( $nl ? '-resultaten' : '-results' ) ),

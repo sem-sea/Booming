@@ -10,6 +10,14 @@ touching code.
 
 ---
 
+## 1.24.0 (November 2026)
+
+- GEO Index method 2: five buyer questions per category with a different intent, round 1 for every category and a second round only where the result is still uncertain (adaptive, cheaper), 95% margins of error (Wilson) on every AI number, ranks for the top 10 and groups after that, changes since last month only when larger than the margin, at least 12 answers for an AI score.
+- New measures per company: visibility, share of voice in the sector, named first, tone (rated by Claude Haiku), citation share, per assistant.
+- Difference insights: change since last month, per assistant (and overlap between assistants), gap with the sector leader (points, sources, checks), website versus AI (four groups and Spearman), Netherlands versus international, most cited sources per sector. Details load on demand from compact data.
+- Ten companies per sector in both lists: 400 companies, 137 categories. The public check shows the gap with the sector leader.
+- Method pages /b2b-geo-index/methodology/ and /nl/b2b-geo-index/methode/ (tools/geo-index/method.py, POST /bv/v1/import-nl?update=geo-method) with live details from [bv_geo_method].
+
 ## 1.23.1 (November 2026)
 
 - Chat language follows the page: English pages show the English chat and answers, Dutch pages (/nl/) the Dutch ones, also when a visitor types in the other language. Each language keeps its own conversation.

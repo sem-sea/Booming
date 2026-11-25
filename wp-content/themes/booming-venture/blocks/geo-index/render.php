@@ -32,6 +32,14 @@ foreach ( (array) ( $ai_run['engines'] ?? [] ) as $e ) {
 	$ai_cols[ 'ai_' . $e ] = [ $label, sprintf( $t( 'Genoemd door %s bij de vraag over de eigen categorie', 'Named by %s for the question about its own category' ), $label ) ];
 }
 
+$v2      = function_exists( 'bv_gi_has_v2' ) && bv_gi_has_v2( $ai_run );
+$eng_lbl = static fn( $e ) => function_exists( 'bv_gi_ai_engines' ) ? ( bv_gi_ai_engines()[ $e ]['label'] ?? $e ) : $e;
+$num     = static fn( $v ) => $nl ? str_replace( '.', ',', (string) $v ) : (string) $v;
+
+/* The method page, once it is published; else the method section on this page. */
+$mpage      = get_page_by_path( $nl ? 'nl/b2b-geo-index/methode' : 'b2b-geo-index/methodology' );
+$method_url = ( $mpage && 'publish' === $mpage->post_status ) ? get_permalink( $mpage ) : '#' . $t( 'methode', 'methodology' );
+
 /* Crawler access: filter chips, and one "x/5" column in the table. */
 $bots = [
 	'bot_OAI-SearchBot'    => [ 'ChatGPT', $t( 'ChatGPT search mag de site lezen (OAI-SearchBot)', 'ChatGPT search may read the site (OAI-SearchBot)' ) ],
@@ -82,8 +90,8 @@ $stats = static function ( array $rows ) {
 };
 
 $lists = [
-	'nl'   => $t( 'Top 100 Nederland', 'Top 100 Netherlands' ),
-	'intl' => $t( 'Top 100 internationaal', 'Top 100 international' ),
+	'nl'   => $t( 'Top 200 Nederland', 'Top 200 Netherlands' ),
+	'intl' => $t( 'Top 200 internationaal', 'Top 200 international' ),
 ];
 $tabs  = [
 	'nl'   => $t( 'Nederland', 'Netherlands' ),
@@ -111,6 +119,17 @@ $i18n = [
 	'pass'     => $t( 'In orde', 'In place' ),
 	'fail'     => $t( 'Ontbreekt', 'Missing' ),
 	'unknown'  => $t( 'Niet te meten', 'Could not measure' ),
+	'gapTitle' => $t( 'Verschil met de leider in %s', 'Gap with the leader in %s' ),
+	'gapLead'  => $t( '%1$s leidt deze sector met een score van %2$s.', '%1$s leads this sector with a score of %2$s.' ),
+	'gapSelf'  => $t( 'Je bent zelf de leider van deze sector.', 'You lead this sector yourself.' ),
+	'gapPts'   => $t( 'Verschil: %s punten.', 'Gap: %s points.' ),
+	'gapTied'  => $t( 'Dat valt binnen de foutmarge.', 'That is within the margin of error.' ),
+	'gapMiss'  => $t( 'Checks die de leider wel heeft en jij niet:', 'Checks the leader has and you do not:' ),
+	'gapNone'  => $t( 'Je mist geen checks die de leider wel heeft.', 'You miss no checks the leader has.' ),
+	'gapSrc'   => $t( 'Hier halen AI-assistenten in deze sector hun bronnen het vaakst vandaan:', 'This is where AI assistants cite their sources most in this sector:' ),
+	'gapSrcP'  => $t( '%s%% van de antwoorden', '%s%% of answers' ),
+	'inIndex'  => $t( '%1$s staat in de index: score %2$s.', '%1$s is in the index: score %2$s.' ),
+	'inAi'     => $t( 'Genoemd in %1$s van %2$s antwoorden (%3$s%%, marge %4$s tot %5$s%%).', 'Named in %1$s of %2$s answers (%3$s%%, margin %4$s to %5$s%%).' ),
 	'labels'   => array_map( static fn( $c ) => $c[1], $bots + $cols ) + [
 		'bot_GPTBot'       => $t( 'GPTBot (training van OpenAI) mag de site lezen', 'GPTBot (OpenAI training) may read the site' ),
 		'bot_ChatGPT-User' => $t( 'ChatGPT mag pagina\'s openen op verzoek van gebruikers (ChatGPT-User)', 'ChatGPT may open pages for users (ChatGPT-User)' ),
@@ -157,10 +176,16 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 	$last = array_pop( $eng );
 	$engs = $eng ? implode( ', ', $eng ) . $t( ' en ', ' and ' ) . $last : (string) $last;
 	$how  = [
-		[ $t( '200 vaste bedrijven.', '200 fixed companies.' ), $t( '100 Nederlandse en 100 internationale B2B-bedrijven: vijf per sector, in dezelfde 20 sectoren uit de SBI- en NACE-indeling. Niemand kan betalen voor een plek of een hogere score.', '100 Dutch and 100 international B2B companies: five per sector, in the same 20 sectors from the SBI and NACE classification. Nobody can pay for a place or a higher score.' ) ],
+		[ $t( '400 vaste bedrijven.', '400 fixed companies.' ), $t( '200 Nederlandse en 200 internationale B2B-bedrijven: tien per sector, in dezelfde 20 sectoren uit de SBI- en NACE-indeling. Niemand kan betalen voor een plek of een hogere score.', '200 Dutch and 200 international B2B companies: ten per sector, in the same 20 sectors from the SBI and NACE classification. Nobody can pay for a place or a higher score.' ) ],
 	];
 	if ( $ai_cols ) {
-		$how[] = [ $t( 'AI-score.', 'AI score.' ), sprintf( $t( 'Elke maand stelt de site per categorie een koopvraag aan %s, met zoeken op internet aan. We tellen hoe vaak ze het bedrijf noemen (80%%) en de website als bron geven (20%%).', 'Every month the site asks %s one buyer question per category, with web search on. We count how often they name the company (80%%) and cite its website (20%%).' ), $engs ) ];
+		$vq    = (int) ( $ai_run['variants'] ?? 1 );
+		$rq    = (int) ( $ai_run['runs'] ?? 1 );
+		$how[] = $v2
+			? ( ! empty( $ai_run['adaptive'] ) && $rq > 1
+				? [ $t( 'AI-score.', 'AI score.' ), sprintf( $t( 'Elke maand stelt de site per categorie %1$d koopvragen aan %2$s, met zoeken op internet aan. Waar de uitkomst nog onzeker is, volgt een tweede ronde. Zo krijgt elk bedrijf %3$d tot %4$d antwoorden. We tellen hoe vaak ze het bedrijf noemen (80%%) en de website als bron geven (20%%), met een foutmarge van 95%%.', 'Every month the site asks %2$s %1$d buyer questions per category, with web search on. Where the result is still uncertain, a second round follows. That gives each company %3$d to %4$d answers. We count how often they name the company (80%%) and cite its website (20%%), with a 95%% margin of error.' ), $vq, $engs, $vq * max( 1, count( $ai_cols ) ), $vq * $rq * max( 1, count( $ai_cols ) ) ) ]
+				: [ $t( 'AI-score.', 'AI score.' ), sprintf( $t( 'Elke maand stelt de site per categorie %1$d koopvragen, elk %2$d keer, aan %3$s, met zoeken op internet aan. Zo krijgt elk bedrijf ongeveer %4$d antwoorden. We tellen hoe vaak ze het bedrijf noemen (80%%) en de website als bron geven (20%%), met een foutmarge van 95%%.', 'Every month the site asks %3$s %1$d buyer questions per category, each %2$d times, with web search on. That gives each company about %4$d answers. We count how often they name the company (80%%) and cite its website (20%%), with a 95%% margin of error.' ), $vq, $rq, $engs, $vq * $rq * max( 1, count( $ai_cols ) ) ) ] )
+			: [ $t( 'AI-score.', 'AI score.' ), sprintf( $t( 'Elke maand stelt de site per categorie een koopvraag aan %s, met zoeken op internet aan. We tellen hoe vaak ze het bedrijf noemen (80%%) en de website als bron geven (20%%).', 'Every month the site asks %s one buyer question per category, with web search on. We count how often they name the company (80%%) and cite its website (20%%).' ), $engs ) ];
 	}
 	$how[] = [ $t( 'Websitescore.', 'Website score.' ), $t( 'Zeven checks op de eigen website: AI-crawlers in robots.txt, tekst zonder JavaScript, gestructureerde data, Wikidata en Wikipedia, actualiteit, taal en llms.txt.', 'Seven checks on the company website: AI crawlers in robots.txt, text without JavaScript, structured data, Wikidata and Wikipedia, freshness, language and llms.txt.' ) ];
 	$how[] = $ai_cols
@@ -174,7 +199,7 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 				<li><strong><?php echo esc_html( $head ); ?></strong> <?php echo esc_html( $body ); ?></li>
 			<?php endforeach; ?>
 		</ol>
-		<p><a href="#<?php echo esc_attr( $t( 'methode', 'methodology' ) ); ?>"><?php echo esc_html( $t( 'Lees de volledige methode en bronnen', 'Read the full method and sources' ) ); ?></a></p>
+		<p><a href="<?php echo esc_url( $method_url ); ?>"><?php echo esc_html( $t( 'Lees de volledige methode en bronnen', 'Read the full method and sources' ) ); ?></a></p>
 	</details>
 
 	<div class="bv-gi__filters" hidden>
@@ -226,8 +251,93 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 		<p class="bv-gi__count" aria-live="polite"></p>
 	</div>
 
+	<?php
+	$groups_l = [ 'strong' => $t( 'Sterk', 'Strong' ), 'mid' => $t( 'Midden', 'Middle' ), 'low' => $t( 'Laag', 'Low' ) ];
+	$quad_l   = [
+		'both' => $t( 'Koploper: sterke website en vaak genoemd', 'Front runner: strong website and often named' ),
+		'web'  => $t( 'Klaar, maar nog onbekend: sterke website, weinig genoemd', 'Ready but not yet known: strong website, rarely named' ),
+		'ai'   => $t( 'Bekend ondanks de website: vaak genoemd, zwakkere website', 'Known despite the website: often named, weaker website' ),
+		'none' => $t( 'Achterblijver: zwakkere website en weinig genoemd', 'Lagging: weaker website and rarely named' ),
+	];
+
+	/*
+	 * Details per company, as compact data: view.js builds the panel when the
+	 * button is pressed. Keeps the page light with 400 companies; the CSV and
+	 * the open data API carry the same numbers for machines.
+	 * a: [ answers, named, visibility, low, high, share of voice, first, tone, cited, too few ]
+	 * e: [ [ assistant, answers, named ] ], c: change, l: sector leader, q: website versus AI
+	 */
+	$dpack = static function ( array $r, string $list, array $ins, array $leaders, array $bysec ): array {
+		$ai = $r['ai_data'];
+		$o  = [];
+		if ( $ai ) {
+			$o['a'] = [ (int) $ai['n'], (int) $ai['m'], (int) $ai['vis'], (int) $ai['vis_lo'], (int) $ai['vis_hi'], $ai['sov'], (int) $ai['first'], $ai['sent'], (int) $ai['cite'], $ai['low'] ? 1 : 0 ];
+			foreach ( (array) $ai['e'] as $eng => $nm ) {
+				$o['e'][] = [ (string) $eng, (int) $nm[0], (int) $nm[1] ];
+			}
+		}
+		$o['c'] = ! empty( $r['method_new'] ) ? 'm' : ( null === $r['change'] ? 'n' : [ (int) $r['change'], $r['change_sig'] ? 1 : 0 ] );
+		$leader = $leaders[ $r['sector'] ] ?? null;
+		if ( $leader && $leader['domain'] === $r['domain'] ) {
+			$second = '';
+			foreach ( (array) ( $bysec[ $r['sector'] ] ?? [] ) as $other ) {
+				if ( $other['domain'] !== $r['domain'] ) {
+					$second = ( $r['score'] - $other['score'] ) <= $r['margin'] + $other['margin'] ? (string) $other['name'] : '';
+					break;
+				}
+			}
+			$o['l'] = [ 1, $second ];
+		} elseif ( $leader ) {
+			$gap    = function_exists( 'bv_gi_gap' ) ? bv_gi_gap( $list, $r['sector'], $leader, $r['domain'], (array) $r['checks'], (int) $r['score'], (int) $r['margin'] ) : null;
+			$o['l'] = [ 0, (string) $leader['name'], (int) $leader['score'], (int) ( $gap['points'] ?? 0 ), empty( $gap['tied'] ) ? 0 : 1, array_values( (array) ( $gap['sources'] ?? [] ) ), array_values( (array) ( $gap['missing'] ?? [] ) ) ];
+		}
+		if ( ! empty( $ins['quad'][ $r['domain'] ] ) ) {
+			$o['q'] = $ins['quad'][ $r['domain'] ];
+		}
+		return $o;
+	};
+	$i18n['d'] = [
+		'ai'       => $t( 'AI-zichtbaarheid', 'AI visibility' ),
+		'noAi'     => $t( 'Nog geen AI-meting voor dit bedrijf.', 'No AI measurement for this company yet.' ),
+		'low'      => $t( 'Te weinig antwoorden voor een betrouwbare AI-score: {1} van minimaal {2}. De totaalscore is daarom alleen de websitescore.', 'Too few answers for a reliable AI score: {1} of at least {2}. The total score is therefore the website score only.' ),
+		'min'      => defined( 'BV_GI_MIN_ANSWERS' ) ? BV_GI_MIN_ANSWERS : 12,
+		'named'    => $t( 'Genoemd in {1} van {2} antwoorden: {3}% (marge {4} tot {5}%)', 'Named in {1} of {2} answers: {3}% (margin {4} to {5}%)' ),
+		'sov'      => $t( 'Share of voice in {1}: {2}% van alle keren dat AI een indexbedrijf uit deze sector noemde', 'Share of voice in {1}: {2}% of all times AI named an index company from this sector' ),
+		'first'    => $t( 'Als eerste genoemd: {1}% van de antwoorden', 'Named first: {1}% of answers' ),
+		'tone'     => $t( 'Toon: {1} van 100 ({2})', 'Tone: {1} out of 100 ({2})' ),
+		'tones'    => [ $t( 'kritisch', 'critical' ), $t( 'neutraal', 'neutral' ), $t( 'positief', 'positive' ) ],
+		'cite'     => $t( 'Eigen website als bron: {1}% van de antwoorden', 'Own website cited as a source: {1}% of answers' ),
+		'perEng'   => $t( 'Per assistent', 'Per assistant' ),
+		'of'       => $t( '{1} van {2}', '{1} of {2}' ),
+		'chg'      => $t( 'Verschil met vorige maand', 'Change since last month' ),
+		'chgM'     => $t( 'Deze maand is de eerste meting met de nieuwe methode. Het verschil met vorige maand zie je vanaf de volgende meting.', 'This month is the first measurement with the new method. The change since last month shows from the next measurement.' ),
+		'chgN'     => $t( 'Eerste meting van dit bedrijf.', 'First measurement of this company.' ),
+		'chgSame'  => $t( 'Gelijk aan vorige maand.', 'Same as last month.' ),
+		'chgSig'   => $t( 'Totaalscore {1} punten. Dat is meer dan de foutmarge: een echte verandering.', 'Total score {1} points. That is more than the margin of error: a real change.' ),
+		'chgNs'    => $t( 'Totaalscore {1} punten, binnen de foutmarge. Waarschijnlijk toeval.', 'Total score {1} points, within the margin of error. Probably chance.' ),
+		'lead'     => $t( 'Verschil met de leider in {1}', 'Gap with the leader in {1}' ),
+		'leadSelf' => $t( '{1} leidt deze sector.', '{1} leads this sector.' ),
+		'leadTwo'  => $t( 'Nummer 2, {1}, zit binnen de foutmarge.', 'Number 2, {1}, is within the margin of error.' ),
+		'leadGap'  => $t( '{1} leidt met een score van {2}. Verschil: {3} punten', '{1} leads with a score of {2}. Gap: {3} points' ),
+		'tied'     => $t( ', binnen de foutmarge.', ', within the margin of error.' ),
+		'srcs'     => $t( 'Bronnen die {1} noemen en {2} niet:', 'Sources that name {1} and not {2}:' ),
+		'miss'     => $t( 'Checks die {1} wel heeft:', 'Checks {1} has:' ),
+		'quad'     => $t( 'Website versus AI', 'Website versus AI' ),
+		'quadNote' => $t( 'Sterk of zwak ten opzichte van de mediaan van deze lijst.', 'Strong or weak compared with the median of this list.' ),
+		'quads'    => $quad_l,
+		'eng'      => array_map( static fn( $e ) => $e['label'], function_exists( 'bv_gi_ai_engines' ) ? bv_gi_ai_engines() : [] ),
+	];
+	echo '<script type="application/json" class="bv-gi__i18d">' . wp_json_encode( $i18n['d'], JSON_UNESCAPED_UNICODE ) . '</script>'; // phpcs:ignore
+	?>
 	<?php foreach ( $lists as $key => $label ) :
 		$rows    = bv_gi_ranked( $key );
+		$ins     = $v2 && function_exists( 'bv_gi_insights' ) ? bv_gi_insights( $key, $rows ) : [];
+		$leaders = function_exists( 'bv_gi_leaders' ) ? bv_gi_leaders( $rows ) : [];
+		$bysec   = [];
+		foreach ( $rows as $rr ) {
+			$bysec[ $rr['sector'] ][] = $rr;
+		}
+		$dd = [];
 		$s       = $stats( $rows );
 		$have    = array_flip( array_column( $rows, 'domain' ) );
 		$pending = array_values( array_filter( (array) ( $data[ $key ] ?? [] ), static fn( $c ) => ! isset( $have[ $c['domain'] ] ) ) );
@@ -281,25 +391,43 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 								$attrs .= ' data-c-' . esc_attr( strtolower( $k ) ) . '="' . ( true === $v ? '1' : ( false === $v ? '0' : '' ) ) . '"';
 							}
 							$open = count( array_filter( array_keys( $bots ), static fn( $k ) => true === ( $r['checks'][ $k ] ?? null ) ) );
-							$chg = null === $r['change'] ? '' : (string) $r['change'];
+							$chg = null === $r['change'] ? '' : ( $r['change_sig'] ? (string) $r['change'] : '0' ); // risers: only changes larger than the margin
+							$did = $id . '-' . $key . '-d' . sanitize_html_class( str_replace( '.', '-', $r['domain'] ) );
 							?>
 							<tr data-name="<?php echo esc_attr( strtolower( $r['name'] . ' ' . $r['domain'] ) ); ?>" data-sector="<?php echo esc_attr( $sector ); ?>" data-score="<?php echo (int) $r['score']; ?>" data-change="<?php echo esc_attr( $chg ); ?>" data-ai="<?php echo null === $r['ai'] ? '' : (int) $r['ai']; ?>" data-ready="<?php echo (int) $r['ready']; ?>"<?php echo $attrs; ?>>
-								<td class="bv-gi__rank<?php echo $r['rank'] <= 3 ? ' bv-gi__rank--top' : ''; ?>"><?php echo (int) $r['rank']; ?></td>
-								<td class="bv-gi__co"><strong><?php echo esc_html( $r['name'] ); ?></strong><span><?php echo esc_html( $r['domain'] ); ?> &middot; <?php echo esc_html( $sector ); ?></span></td>
-								<td class="bv-gi__score"><span class="bv-gi__bar" style="--s:<?php echo (int) $r['score']; ?>"><?php echo (int) $r['score']; ?></span></td>
+								<?php if ( '' === $r['group'] ) : ?>
+									<td class="bv-gi__rank<?php echo $r['rank'] <= 3 ? ' bv-gi__rank--top' : ''; ?>"><?php echo (int) $r['rank']; ?></td>
+								<?php else : ?>
+									<td class="bv-gi__rank bv-gi__rank--grp bv-gi__g-<?php echo esc_attr( $r['group'] ); ?>" title="<?php echo esc_attr( sprintf( $t( 'Plaats %d', 'Place %d' ), (int) $r['rank'] ) ); ?>"><?php echo esc_html( $groups_l[ $r['group'] ] ); ?></td>
+								<?php endif; ?>
+								<td class="bv-gi__co"><strong><?php echo esc_html( $r['name'] ); ?></strong><span><?php echo esc_html( $r['domain'] ); ?> &middot; <?php echo esc_html( $sector ); ?></span><button type="button" class="bv-gi__dbtn" aria-expanded="false" aria-controls="<?php echo esc_attr( $did ); ?>"><?php echo esc_html( $t( 'Details en verschillen', 'Details and gaps' ) ); ?></button></td>
+								<td class="bv-gi__score"><span class="bv-gi__bar" style="--s:<?php echo (int) $r['score']; ?>"><?php echo (int) $r['score']; ?></span><?php if ( $r['margin'] > 0 ) : ?><span class="bv-gi__pm">&plusmn;<?php echo (int) $r['margin']; ?></span><?php endif; ?></td>
 								<td class="bv-gi__chg" data-label="<?php echo esc_attr( $ml['chg'] ); ?>"><?php
-									if ( '' === $chg || '0' === $chg ) {
-										echo '<span class="bv-gi__flat">' . ( '' === $chg ? esc_html( $t( 'nieuw', 'new' ) ) : '0' ) . '</span>';
+									if ( ! empty( $r['method_new'] ) ) {
+										echo '<span class="bv-gi__flat" title="' . esc_attr( $t( 'Nieuwe meetmethode: vergelijking vanaf de volgende meting', 'New method: comparison from the next measurement' ) ) . '">-</span>';
+									} elseif ( null === $r['change'] || 0 === (int) $r['change'] ) {
+										echo '<span class="bv-gi__flat">' . ( null === $r['change'] ? esc_html( $t( 'nieuw', 'new' ) ) : '0' ) . '</span>';
+									} elseif ( ! $r['change_sig'] ) {
+										echo '<span class="bv-gi__ns" title="' . esc_attr( $t( 'Binnen de foutmarge', 'Within the margin of error' ) ) . '">' . ( $r['change'] > 0 ? '+' : '' ) . (int) $r['change'] . '</span>';
 									} else {
 										echo '<span class="' . ( $r['change'] > 0 ? 'bv-gi__up">+' : 'bv-gi__down">' ) . (int) $r['change'] . '</span>';
 									}
 								?></td>
-								<?php if ( $ai_cols ) : ?><td class="bv-gi__num" data-label="<?php echo esc_attr( $ml['ai'] ); ?>"><?php echo null === $r['ai'] ? '-' : (int) $r['ai']; ?></td><?php endif; ?>
+								<?php if ( $ai_cols ) : ?><td class="bv-gi__num" data-label="<?php echo esc_attr( $ml['ai'] ); ?>"><?php
+									if ( null === $r['ai'] ) {
+										echo '-';
+									} elseif ( $r['ai_low'] ) {
+										echo '<span class="bv-gi__flat" title="' . esc_attr( $t( 'Te weinig antwoorden voor een betrouwbare AI-score', 'Too few answers for a reliable AI score' ) ) . '">' . esc_html( $t( 'n.b.', 'n/a' ) ) . '</span>';
+									} else {
+										echo (int) $r['ai'];
+									}
+								?></td><?php endif; ?>
 								<td class="bv-gi__num" data-label="<?php echo esc_attr( $ml['ready'] ); ?>"><?php echo (int) $r['ready']; ?></td>
 								<?php foreach ( $ai_cols as $k => $c ) { echo $cell( $vals[ $k ], $c[0], ' bv-gi__ai' ); } // phpcs:ignore ?>
 								<td class="bv-gi__crawl <?php echo 5 === $open ? 'bv-gi__y' : ( 0 === $open ? 'bv-gi__n' : 'bv-gi__p' ); ?>" data-label="<?php echo esc_attr( $ml['crawl'] ); ?>"><?php echo (int) $open; ?>/5</td>
 								<?php foreach ( $cols as $k => $c ) { echo $cell( $r['checks'][ $k ] ?? null, $c[0] ); } // phpcs:ignore ?>
 							</tr>
+							<?php $dd[ $r['domain'] ] = $dpack( $r, $key, $ins, $leaders, $bysec ); ?>
 						<?php endforeach; ?>
 						<?php foreach ( $pending as $c ) :
 							$sector = $sectors[ $c['sector'] ][ $nl ? 0 : 1 ] ?? $c['sector'];
@@ -320,6 +448,106 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 					</table>
 				</div>
 				<button type="button" class="bv-gi__next" hidden></button>
+				<?php if ( $dd ) : ?><script type="application/json" class="bv-gi__dd"><?php echo wp_json_encode( $dd, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES ); ?></script><?php endif; ?>
+				<?php if ( $ins ) :
+					$pct  = static fn( $v ) => null === $v ? '-' : (int) $v . '%';
+					$rho  = $ins['rho'];
+					$abs  = null === $rho ? 0 : abs( $rho );
+					$str  = $abs < 0.3 ? $t( 'zwak', 'weak' ) : ( $abs < 0.5 ? $t( 'matig', 'moderate' ) : $t( 'sterk', 'strong' ) );
+					$ans  = array_sum( array_map( 'intval', (array) ( $ai_run['ok'] ?? [] ) ) );
+					?>
+					<section class="bv-gi__ins" aria-labelledby="<?php echo esc_attr( $id . '-' . $key . '-ins' ); ?>">
+						<h3 id="<?php echo esc_attr( $id . '-' . $key . '-ins' ); ?>"><?php echo esc_html( $t( 'Verschillen en inzichten', 'Differences and insights' ) ); ?></h3>
+						<p class="bv-gi__ins-lead"><?php echo esc_html( sprintf( $t( 'Uit de meting van %1$s: %2$s antwoorden van %3$s op dezelfde koopvragen.', 'From the measurement of %1$s: %2$s answers from %3$s to the same buyer questions.' ), $date ?: wp_date( 'j F Y', (int) ( $ai_run['completed'] ?? time() ) ), number_format_i18n( $ans ), $engs ) ); ?></p>
+						<div class="bv-gi__ins-grid">
+							<?php if ( null !== $rho ) : ?>
+							<div class="bv-gi__icard">
+								<h4><?php echo esc_html( $t( 'Website versus AI', 'Website versus AI' ) ); ?></h4>
+								<div class="bv-gi__quad">
+									<?php foreach ( [ 'web', 'both', 'none', 'ai' ] as $q ) : ?>
+										<div class="bv-gi__q-<?php echo esc_attr( $q ); ?>"><strong><?php echo (int) $ins['quad_n'][ $q ]; ?></strong><span><?php echo esc_html( $quad_l[ $q ] ); ?></span></div>
+									<?php endforeach; ?>
+								</div>
+								<p><?php echo esc_html( sprintf( $t( 'Samenhang tussen websitescore en AI-score (Spearman): %1$s, %2$s.', 'Correlation between website score and AI score (Spearman): %1$s, %2$s.' ), $num( number_format( $rho, 2, '.', '' ) ), $str ) ); ?>
+								<?php echo esc_html( $abs < 0.3
+									? $t( 'Een sterke website alleen verklaart weinig van hoe vaak AI een bedrijf noemt.', 'A strong website alone explains little of how often AI names a company.' )
+									: ( $rho > 0 ? $t( 'Bedrijven met een sterkere website worden vaker genoemd.', 'Companies with a stronger website are named more often.' ) : $t( 'Bedrijven met een sterkere website worden juist minder vaak genoemd.', 'Companies with a stronger website are named less often.' ) ) ); ?></p>
+								<p class="bv-gi__small"><?php echo esc_html( sprintf( $t( 'Gesplitst op de mediaan van deze lijst: websitescore %1$d, AI-score %2$d. %3$d bedrijven.', 'Split at the median of this list: website score %1$d, AI score %2$d. %3$d companies.' ), $ins['med_w'], $ins['med_a'], $ins['n_pair'] ) ); ?></p>
+							</div>
+							<?php endif; ?>
+							<?php if ( $ins['eng'] ) : ?>
+							<div class="bv-gi__icard">
+								<h4><?php echo esc_html( $t( 'Verschil per assistent', 'Differences per assistant' ) ); ?></h4>
+								<p class="bv-gi__small"><?php echo esc_html( $t( 'Hoe vaak elke assistent het bedrijf noemt waar de vraag over gaat.', 'How often each assistant names the company the question is about.' ) ); ?></p>
+								<ul class="bv-gi__bars">
+									<?php foreach ( $ins['eng'] as $e => $v ) : ?>
+										<li><span class="bv-gi__bl"><?php echo esc_html( $eng_lbl( $e ) ); ?></span><span class="bv-gi__mini" style="--p:<?php echo (int) $v; ?>" aria-hidden="true"></span><span class="bv-gi__bv"><?php echo (int) $v; ?>%</span></li>
+									<?php endforeach; ?>
+								</ul>
+								<?php if ( $ins['pairs'] ) : ?>
+									<p class="bv-gi__small"><?php echo esc_html( $t( 'Overlap: welk deel van de genoemde indexbedrijven twee assistenten gemeen hebben bij dezelfde vraag.', 'Overlap: the share of index companies named that two assistants have in common for the same question.' ) ); ?></p>
+									<ul class="bv-gi__pairs">
+										<?php foreach ( $ins['pairs'] as $k => $v ) :
+											[ $a1, $a2 ] = explode( '|', $k );
+											?>
+											<li><span><?php echo esc_html( $eng_lbl( $a1 ) . $t( ' en ', ' and ' ) . $eng_lbl( $a2 ) ); ?></span><strong><?php echo (int) $v; ?>%</strong></li>
+										<?php endforeach; ?>
+									</ul>
+								<?php endif; ?>
+							</div>
+							<?php endif; ?>
+							<?php if ( null !== $ins['cross']['nl_q'] || null !== $ins['cross']['en_q'] ) : ?>
+							<div class="bv-gi__icard">
+								<h4><?php echo esc_html( $t( 'Nederland versus internationaal', 'Netherlands versus international' ) ); ?></h4>
+								<div class="bv-gi__duo">
+									<div><strong><?php echo esc_html( $pct( $ins['cross']['nl_q'] ) ); ?></strong><span><?php echo esc_html( $t( 'Nederlands bij Nederlandse vragen', 'Dutch in answers to Dutch questions' ) ); ?></span></div>
+									<div><strong><?php echo esc_html( $pct( $ins['cross']['en_q'] ) ); ?></strong><span><?php echo esc_html( $t( 'Nederlands bij Engelse vragen', 'Dutch in answers to English questions' ) ); ?></span></div>
+								</div>
+								<p class="bv-gi__small"><?php echo esc_html( $t( 'Aandeel Nederlandse bedrijven onder alle indexbedrijven die AI noemt. Beide lijsten gebruiken dezelfde 20 sectoren.', 'Share of Dutch companies among all index companies AI names. Both lists use the same 20 sectors.' ) ); ?></p>
+								<details class="bv-gi__fold">
+									<summary><?php echo esc_html( $t( 'Per sector', 'Per sector' ) ); ?></summary>
+									<table class="bv-gi__mt">
+										<thead><tr><th scope="col"><?php echo esc_html( $t( 'Sector', 'Sector' ) ); ?></th><th scope="col"><?php echo esc_html( $t( 'NL-vragen', 'Dutch questions' ) ); ?></th><th scope="col"><?php echo esc_html( $t( 'EN-vragen', 'English questions' ) ); ?></th></tr></thead>
+										<tbody>
+											<?php foreach ( $sectors as $sk => $sec ) :
+												$x = $ins['cross']['sectors'][ $sk ] ?? null;
+												if ( ! $x ) {
+													continue;
+												}
+												?>
+												<tr><th scope="row"><?php echo esc_html( $sec[ $nl ? 0 : 1 ] ); ?></th><td><?php echo esc_html( $pct( $x['nl_q'] ?? null ) ); ?></td><td><?php echo esc_html( $pct( $x['en_q'] ?? null ) ); ?></td></tr>
+											<?php endforeach; ?>
+										</tbody>
+									</table>
+								</details>
+							</div>
+							<?php endif; ?>
+						</div>
+						<?php if ( $ins['src'] ) : ?>
+						<div class="bv-gi__icard bv-gi__src">
+							<h4><?php echo esc_html( $t( 'Meest aangehaalde bronnen per sector', 'Most cited sources per sector' ) ); ?></h4>
+							<p class="bv-gi__small"><?php echo esc_html( $t( 'De websites die AI-assistenten het vaakst als bron gaven bij de vragen over een sector, als deel van de antwoorden. Hier genoemd worden helpt om genoemd te worden.', 'The websites AI assistants cited most for the questions about a sector, as a share of the answers. Being mentioned here helps you get named.' ) ); ?></p>
+							<div class="bv-gi__srcs">
+								<?php foreach ( $sectors as $sk => $sec ) :
+									$sd = $ins['src'][ $sk ] ?? null;
+									if ( ! $sd || ! $sd['top'] ) {
+										continue;
+									}
+									?>
+									<details class="bv-gi__fold" data-sector="<?php echo esc_attr( $sec[ $nl ? 0 : 1 ] ); ?>">
+										<summary><?php echo esc_html( $sec[ $nl ? 0 : 1 ] ); ?> <span><?php echo esc_html( sprintf( $t( '%d antwoorden', '%d answers' ), $sd['answers'] ) ); ?></span></summary>
+										<ol>
+											<?php foreach ( $sd['top'] as $hst ) : ?>
+												<li><span class="bv-gi__host"><?php echo esc_html( $hst['host'] ); ?></span><?php if ( $hst['owner'] ) : ?> <em><?php echo esc_html( sprintf( $t( 'site van %s', 'site of %s' ), $hst['owner'] ) ); ?></em><?php endif; ?><strong><?php echo (int) $hst['pct']; ?>%</strong></li>
+											<?php endforeach; ?>
+										</ol>
+									</details>
+								<?php endforeach; ?>
+							</div>
+						</div>
+						<?php endif; ?>
+					</section>
+				<?php endif; ?>
 			<?php endif; ?>
 		</section>
 	<?php endforeach; ?>
@@ -334,6 +562,11 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 		<span><strong><?php echo esc_html( $t( 'Score', 'Score' ) ); ?></strong> <?php echo esc_html( $ai_cols ? $t( 'helft AI-score, helft websitescore', 'half AI score, half website score' ) : $t( 'websitescore', 'website score' ) ); ?></span>
 		<?php if ( $ai_cols ) : ?><span><strong>AI</strong> <?php echo esc_html( $t( 'hoe vaak AI-assistenten het bedrijf noemen bij de vraag over zijn categorie', 'how often AI assistants name the company for the question about its category' ) ); ?></span><?php endif; ?>
 		<span><strong>Crawlers</strong> <?php echo esc_html( $t( 'aantal van 5 AI-crawlers dat de site mag lezen', 'number of 5 AI crawlers allowed to read the site' ) ); ?></span>
+		<?php if ( $v2 ) : ?>
+			<span><strong>&plusmn;</strong> <?php echo esc_html( $t( 'foutmarge (95%): de score ligt met 95% zekerheid binnen deze marge', 'margin of error (95%): the score lies within this margin with 95% certainty' ) ); ?></span>
+			<span><strong class="bv-gi__ns">+3</strong> <?php echo esc_html( $t( 'grijs verschil: binnen de foutmarge, waarschijnlijk toeval', 'grey change: within the margin of error, probably chance' ) ); ?></span>
+			<span><strong><?php echo esc_html( $t( 'Sterk, Midden, Laag', 'Strong, Middle, Low' ) ); ?></strong> <?php echo esc_html( $t( 'buiten de top 10 een groep in plaats van een plaats (score 50 of meer, 25 tot 49, onder 25)', 'outside the top 10 a group instead of a place (score 50 or more, 25 to 49, under 25)' ) ); ?></span>
+		<?php endif; ?>
 		<span><strong>&#10003;</strong> <?php echo esc_html( $t( 'in orde', 'in place' ) ); ?>, <strong>&#10005;</strong> <?php echo esc_html( $t( 'ontbreekt', 'missing' ) ); ?>, <strong>-</strong> <?php echo esc_html( $t( 'niet te meten', 'could not measure' ) ); ?></span>
 		<?php foreach ( $cols as [ $short, $full ] ) : ?>
 			<span><strong><?php echo esc_html( $short ); ?></strong> <?php echo esc_html( $full ); ?></span>
@@ -342,10 +575,21 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 
 	<div class="bv-gi__check" id="<?php echo esc_attr( $id ); ?>-check">
 		<h3><?php echo esc_html( $t( 'Check je eigen bedrijf', 'Check your own company' ) ); ?></h3>
-		<p><?php echo esc_html( $t( 'Vul je domein in en zie in 30 seconden de websitescore van je bedrijf, gemeten op dezelfde manier als de bedrijven in de index.', 'Enter your domain and see your website score in 30 seconds, measured the same way as the companies in the index.' ) ); ?></p>
+		<p><?php echo esc_html( $v2
+			? $t( 'Vul je domein in en zie in 30 seconden de websitescore van je bedrijf, gemeten op dezelfde manier als de bedrijven in de index. Kies je sector om ook je verschil met de sectorleider te zien.', 'Enter your domain and see your website score in 30 seconds, measured the same way as the companies in the index. Pick your sector to also see your gap with the sector leader.' )
+			: $t( 'Vul je domein in en zie in 30 seconden de websitescore van je bedrijf, gemeten op dezelfde manier als de bedrijven in de index.', 'Enter your domain and see your website score in 30 seconds, measured the same way as the companies in the index.' ) ); ?></p>
 		<form class="bv-gi__form" novalidate>
 			<label class="screen-reader-text" for="<?php echo esc_attr( $id ); ?>-domain"><?php echo esc_html( $t( 'Domein', 'Domain' ) ); ?></label>
 			<input type="text" id="<?php echo esc_attr( $id ); ?>-domain" name="domain" inputmode="url" autocomplete="url" placeholder="<?php echo esc_attr( $t( 'jouwbedrijf.nl', 'yourcompany.com' ) ); ?>" required>
+			<?php if ( $v2 ) : ?>
+				<label class="screen-reader-text" for="<?php echo esc_attr( $id ); ?>-sector"><?php echo esc_html( $t( 'Sector', 'Sector' ) ); ?></label>
+				<select id="<?php echo esc_attr( $id ); ?>-sector" name="sector" class="bv-gi__csec">
+					<option value=""><?php echo esc_html( $t( 'Je sector (optioneel)', 'Your sector (optional)' ) ); ?></option>
+					<?php foreach ( $sectors as $sk => $sec ) : ?>
+						<option value="<?php echo esc_attr( $sk ); ?>"><?php echo esc_html( $sec[ $nl ? 0 : 1 ] ); ?></option>
+					<?php endforeach; ?>
+				</select>
+			<?php endif; ?>
 			<button type="submit" class="bv-gi__btn"><?php echo esc_html( $t( 'Check mijn score', 'Check my score' ) ); ?></button>
 		</form>
 		<noscript><p><?php echo esc_html( $t( 'De check heeft JavaScript nodig.', 'The check needs JavaScript.' ) ); ?></p></noscript>

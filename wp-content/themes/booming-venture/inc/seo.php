@@ -379,7 +379,7 @@ function bv_gi_schema_nodes(): array {
 	foreach ( [ 'nl', 'intl' ] as $list ) {
 		$data[] = [
 			'@type'          => 'DataDownload',
-			'name'           => 'nl' === $list ? $t( 'Top 100 Nederland (CSV)', 'Top 100 Netherlands (CSV)' ) : $t( 'Top 100 internationaal (CSV)', 'Top 100 international (CSV)' ),
+			'name'           => 'nl' === $list ? $t( 'Top 200 Nederland (CSV)', 'Top 200 Netherlands (CSV)' ) : $t( 'Top 200 internationaal (CSV)', 'Top 200 international (CSV)' ),
 			'encodingFormat' => 'text/csv',
 			'contentUrl'     => add_query_arg( [ 'list' => $list, 'format' => 'csv' ], rest_url( 'bv/v1/geo-index' ) ),
 		];
@@ -387,10 +387,10 @@ function bv_gi_schema_nodes(): array {
 	$dataset = [
 		'@type'                => 'Dataset',
 		'@id'                  => $url . '#dataset',
-		'name'                 => $t( 'B2B GEO Index: AI-zichtbaarheid van 200 B2B-bedrijven', 'B2B GEO Index: AI visibility of 200 B2B companies' ),
+		'name'                 => $t( 'B2B GEO Index: AI-zichtbaarheid van 400 B2B-bedrijven', 'B2B GEO Index: AI visibility of 400 B2B companies' ),
 		'description'          => $t(
-			'Maandelijkse meting van 100 Nederlandse en 100 internationale B2B-bedrijven in dezelfde 20 sectoren (SBI 2025 en NACE Rev. 2.1): hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn voor AI-zoekmachines, met zeven websitechecks en een score van 0 tot 100.',
-			'Monthly measurement of 100 Dutch and 100 international B2B companies in the same 20 sectors (SBI 2025 and NACE Rev. 2.1): how often AI assistants name them and how ready their websites are for AI search, with seven website checks and a score from 0 to 100.'
+			'Maandelijkse meting van 200 Nederlandse en 200 internationale B2B-bedrijven in dezelfde 20 sectoren (SBI 2025 en NACE Rev. 2.1): hoe vaak AI-assistenten ze noemen, met foutmarge, share of voice, toon en bronnen per sector, en hoe klaar hun websites zijn voor AI-zoekmachines, met zeven websitechecks en een score van 0 tot 100.',
+			'Monthly measurement of 200 Dutch and 200 international B2B companies in the same 20 sectors (SBI 2025 and NACE Rev. 2.1): how often AI assistants name them, with margins of error, share of voice, tone and sources per sector, and how ready their websites are for AI search, with seven website checks and a score from 0 to 100.'
 		),
 		'url'                  => $url,
 		'creator'              => $org,
@@ -399,10 +399,10 @@ function bv_gi_schema_nodes(): array {
 		'inLanguage'           => $nl ? 'nl-NL' : 'en',
 		'keywords'             => [ 'GEO', 'generative engine optimization', 'AI search', 'B2B', 'ChatGPT', 'Claude', 'Gemini', 'Perplexity' ],
 		'measurementTechnique' => $t(
-			'Elke eerste maandag van de maand: per categorie een koopvraag aan AI-assistenten via hun API, met de eigen zoekfunctie van elke assistent, plus robots.txt, HTML zonder JavaScript, structured data, Wikidata, Wikipedia, sitemap-actualiteit, taalversies en llms.txt van elke website.',
-			'On the first Monday of every month: one buyer question per category to AI assistants through their APIs, each using its own web search, plus robots.txt, HTML without JavaScript, structured data, Wikidata, Wikipedia, sitemap freshness, language versions and llms.txt of each website.'
+			'Elke eerste maandag van de maand: per categorie vijf koopvragen aan AI-assistenten via hun API, met de eigen zoekfunctie van elke assistent, een tweede ronde waar de uitkomst onzeker is en een foutmarge van 95% (Wilson), plus robots.txt, HTML zonder JavaScript, structured data, Wikidata, Wikipedia, sitemap-actualiteit, taalversies en llms.txt van elke website.',
+			'On the first Monday of every month: five buyer questions per category to AI assistants through their APIs, each using its own web search, a second round where the result is uncertain and a 95% margin of error (Wilson), plus robots.txt, HTML without JavaScript, structured data, Wikidata, Wikipedia, sitemap freshness, language versions and llms.txt of each website.'
 		),
-		'variableMeasured'     => [ 'GEO score', 'AI score', 'Website score', 'AI crawler access', 'Text without JavaScript', 'Organization schema', 'Wikipedia article', 'Sitemap freshness', 'Language versions' ],
+		'variableMeasured'     => [ 'GEO score', 'Margin of error', 'AI score', 'Visibility', 'Share of voice', 'First mention', 'Sentiment', 'Cited sources', 'Website score', 'AI crawler access', 'Text without JavaScript', 'Organization schema', 'Wikipedia article', 'Sitemap freshness', 'Language versions' ],
 		'distribution'         => $data,
 	];
 	if ( $done ) {
