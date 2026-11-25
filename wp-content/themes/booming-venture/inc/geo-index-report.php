@@ -1,8 +1,8 @@
 <?php
 /**
- * Monthly B2B GEO Index report (1.20.0).
+ * Monthly B2B GEO Index report (1.20.0, monthly scans only since 1.22.0).
  *
- * When all numbers of a monthly measurement are in (the website checks and,
+ * When all numbers of the first-Monday measurement are in (the website checks and,
  * when AI measuring is on, the AI answers), the site writes one blog post in
  * English and one in Dutch from the measured data. No AI writes the text, so
  * nothing is made up and it costs nothing. The posts follow the blog layout
@@ -23,22 +23,11 @@ function bv_gi_report_opts(): array {
 	return [ 'mode' => in_array( $o['mode'] ?? '', [ 'publish', 'draft', 'off' ], true ) ? $o['mode'] : 'publish' ];
 }
 
-/*
- * Automatic reports start with the first run after this version is
- * installed, so an older run never turns into a post by surprise. The
- * button in the settings works for any run.
- */
-add_action( 'init', static function () {
-	if ( false === get_option( 'bv_gi_report_since' ) ) {
-		update_option( 'bv_gi_report_since', time(), false );
-	}
-} );
-
 /** Where the latest run stands: month, and whether website and AI numbers are complete. */
 function bv_gi_report_state(): array {
 	$meta    = (array) get_option( 'bv_gi_meta', [] );
 	$started = (int) ( $meta['started'] ?? 0 );
-	$web     = $started && (int) ( $meta['completed'] ?? 0 ) >= $started && ! get_option( 'bv_gi_queue' );
+	$web     = $started && (int) ( $meta['completed'] ?? 0 ) >= $started && ! get_option( 'bv_gi_queue' ) && empty( $meta['stopped'] );
 	$ai_on   = function_exists( 'bv_gi_ai_active' ) && (bool) bv_gi_ai_active();
 	$air     = (array) get_option( 'bv_gi_ai_results', [] );
 	$ai      = $ai_on && (int) ( $air['completed'] ?? 0 ) >= $started && ! get_option( 'bv_gi_ai_queue' );
@@ -46,6 +35,7 @@ function bv_gi_report_state(): array {
 	$late    = $started && time() - $started > 5 * DAY_IN_SECONDS;
 	return [
 		'month'   => $started ? gmdate( 'Y-m', $started ) : '',
+		'source'  => (string) ( $meta['source'] ?? '' ),
 		'started' => $started,
 		'web'     => $web,
 		'ai_on'   => $ai_on,
@@ -342,8 +332,8 @@ function bv_gi_report_maybe( bool $force = false ): array {
 	if ( ! $force && 'off' === $opts['mode'] ) {
 		return [ 'state' => 'off' ];
 	}
-	if ( ! $force && $st['started'] < (int) get_option( 'bv_gi_report_since', 0 ) ) {
-		return [ 'state' => 'early' ];
+	if ( ! $force && 'monthly' !== $st['source'] ) {
+		return [ 'state' => 'manual' ]; // automatic posts only follow the first-Monday scan
 	}
 	$done = (array) get_option( 'bv_gi_report', [] );
 	$have = (array) ( $done[ $st['month'] ] ?? [] );
@@ -421,7 +411,7 @@ add_action( 'bv_gi_settings_rows', static function () {
 			<?php foreach ( $choices as $k => $label ) : ?>
 				<label style="margin-right:16px"><input type="radio" name="report_mode" value="<?php echo esc_attr( $k ); ?>" <?php checked( $o['mode'], $k ); ?>> <?php echo esc_html( $label ); ?></label>
 			<?php endforeach; ?>
-			<p class="description">Zodra de cijfers van een maand compleet zijn, schrijft de site een blogbericht in het Engels en het Nederlands met de top 10, de stijgers en de websitescores. De tekst komt uit de meetdata. Is een lijst niet goed gemeten (minder dan 80 van de 100 bedrijven), dan wordt het een concept.</p>
+			<p class="description">Na de automatische scan op de eerste maandag van de maand schrijft de site een blogbericht in het Engels en het Nederlands met de top 10, de koplopers per sector, de stijgers en de websitescores. Na een handmatige scan maak je het bericht met de knop hieronder. De tekst komt uit de meetdata. Is een lijst niet goed gemeten (minder dan 80 van de 100 bedrijven), dan wordt het een concept.</p>
 		</td>
 	</tr>
 	<?php

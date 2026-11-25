@@ -399,20 +399,32 @@ add_action( 'init', static function () {
 	}
 } );
 
+/*
+ * The automatic scan runs on the first Monday of each month (06:00 in the
+ * Netherlands). Its own month marker means a manual scan earlier in the
+ * month never cancels it. On a site that gets this version mid-month the
+ * current month counts as done, so the first automatic scan is next month.
+ */
+add_action( 'init', static function () {
+	if ( false === get_option( 'bv_gi_monthly_last' ) ) {
+		$done = time() >= strtotime( 'first monday of this month 05:00 UTC' );
+		update_option( 'bv_gi_monthly_last', $done ? gmdate( 'Y-m' ) : gmdate( 'Y-m', strtotime( 'first day of last month' ) ), false );
+	}
+} );
 add_action( 'bv_gi_daily', static function () {
-	$meta  = (array) get_option( 'bv_gi_meta', [] );
 	$month = gmdate( 'Y-m' );
-	if ( time() >= strtotime( 'first monday of this month 05:00 UTC' ) && gmdate( 'Y-m', (int) ( $meta['started'] ?? 0 ) ) !== $month ) {
-		do_action( 'bv_gi_run' );
+	if ( time() >= strtotime( 'first monday of this month 05:00 UTC' ) && get_option( 'bv_gi_monthly_last' ) !== $month ) {
+		update_option( 'bv_gi_monthly_last', $month, false );
+		do_action( 'bv_gi_run', 'monthly' );
 	}
 } );
 
 /*
  * A new company list (the "version" in companies.json) starts one fresh
- * measurement right after the theme update, so the new companies get scores
- * without waiting for the next month. Results of companies that left the
- * list are dropped. This run writes no monthly report: the report of the
- * next first-Monday run does (or the button in Settings > GEO Index).
+ * website measurement right after the theme update, so the new companies get
+ * a website score without waiting for the next month. It asks no AI questions
+ * (no cost) and writes no monthly report; both follow on the first Monday.
+ * Results of companies that left the list are dropped.
  */
 add_action( 'init', static function () {
 	$version = (string) ( bv_gi_companies()['version'] ?? '' );
@@ -431,14 +443,17 @@ add_action( 'init', static function () {
 		$results[ $list ] = array_intersect_key( (array) $rows, $keep[ $list ] ?? [] );
 	}
 	update_option( 'bv_gi_results', $results, false );
-	update_option( 'bv_gi_report_since', time() + MINUTE_IN_SECONDS, false );
-	do_action( 'bv_gi_run' );
+	bv_gi_start_web( 'list' ); // websites only: free, AI questions wait for the monthly run
 }, 20 );
 
 /* Kept for anyone who still calls the old hook. */
 add_action( 'bv_gi_weekly', static fn() => do_action( 'bv_gi_run' ) );
 
-add_action( 'bv_gi_run', static function () {
+/**
+ * Start a website measurement. $source: monthly (first Monday, gets the
+ * monthly report), manual (Settings > GEO Index) or list (new company list).
+ */
+function bv_gi_start_web( string $source = 'manual' ): void {
 	$queue = [];
 	foreach ( [ 'nl', 'intl' ] as $list ) {
 		foreach ( (array) ( bv_gi_companies()[ $list ] ?? [] ) as $i => $c ) {
@@ -455,9 +470,12 @@ add_action( 'bv_gi_run', static function () {
 	}
 	update_option( 'bv_gi_prev', $prev, false );
 	update_option( 'bv_gi_queue', $queue, false );
-	update_option( 'bv_gi_meta', [ 'started' => time(), 'completed' => 0 ] + (array) get_option( 'bv_gi_meta', [] ), false );
+	$source = in_array( $source, [ 'monthly', 'manual', 'list' ], true ) ? $source : 'manual';
+	update_option( 'bv_gi_meta', [ 'started' => time(), 'completed' => 0, 'source' => $source, 'total' => count( $queue ), 'current' => '', 'stopped' => 0 ] + (array) get_option( 'bv_gi_meta', [] ), false );
+	wp_clear_scheduled_hook( 'bv_gi_batch' );
 	wp_schedule_single_event( time() + 5, 'bv_gi_batch' );
-} );
+}
+add_action( 'bv_gi_run', static fn( $source = '' ) => bv_gi_start_web( (string) $source ) );
 
 /*
  * Short runs that save after every company (1.21.1). The next run is
@@ -480,6 +498,7 @@ add_action( 'bv_gi_batch', static function () {
 		update_option( 'bv_gi_queue', $queue, false );
 		$c = bv_gi_companies()[ $list ][ $i ] ?? null;
 		if ( $c ) {
+			update_option( 'bv_gi_meta', [ 'current' => $c['name'] ] + (array) get_option( 'bv_gi_meta', [] ), false );
 			$results = (array) get_option( 'bv_gi_results', [] );
 			$results[ $list ][ $c['domain'] ] = bv_gi_measure( $c['domain'], $c['name'], $list );
 			update_option( 'bv_gi_results', $results, false );
@@ -496,6 +515,7 @@ add_action( 'bv_gi_batch', static function () {
 		return; // this run was already finished by an earlier event
 	}
 	$meta['completed'] = time();
+	$meta['current']   = '';
 	if ( empty( $meta['first'] ) ) {
 		$meta['first'] = $meta['completed'];
 	}

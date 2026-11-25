@@ -328,8 +328,9 @@ function bv_gi_ai_start(): void {
 	if ( ! bv_gi_ai_active() ) {
 		return;
 	}
-	update_option( 'bv_gi_ai_queue', bv_gi_ai_categories(), false );
-	update_option( 'bv_gi_ai_work', [ 'started' => time(), 'week' => (int) gmdate( 'n' ), 'rows' => [], 'answers' => [], 'errors' => [] ], false );
+	$cats = bv_gi_ai_categories();
+	update_option( 'bv_gi_ai_queue', $cats, false );
+	update_option( 'bv_gi_ai_work', [ 'started' => time(), 'week' => (int) gmdate( 'n' ), 'total' => count( $cats ), 'current' => '', 'rows' => [], 'answers' => [], 'errors' => [] ], false );
 	wp_clear_scheduled_hook( 'bv_gi_ai_batch' );
 	wp_schedule_single_event( time() + 30, 'bv_gi_ai_batch' );
 }
@@ -379,7 +380,9 @@ add_action( 'bv_gi_ai_batch', static function () {
 		wp_clear_scheduled_hook( 'bv_gi_ai_batch' );
 		wp_schedule_single_event( time() + 3 * MINUTE_IN_SECONDS, 'bv_gi_ai_batch' ); // safety net if this request is stopped
 
-		$prompt  = bv_gi_ai_prompt( $list, $cat, (int) ( $work['week'] ?? 0 ) );
+		$prompt          = bv_gi_ai_prompt( $list, $cat, (int) ( $work['week'] ?? 0 ) );
+		$work['current'] = $cat;
+		update_option( 'bv_gi_ai_work', $work, false ); // the status bar shows the question being asked
 		bv_gi_ai_count( $engines );
 		$answers = bv_gi_ai_ask( $prompt, $engines );
 		foreach ( (array) ( bv_gi_companies()[ $list ] ?? [] ) as $c ) {
@@ -411,10 +414,13 @@ add_action( 'bv_gi_ai_batch', static function () {
 		}
 		$work['prompts'][ $list ][ $cat ] = $prompt;
 		update_option( 'bv_gi_ai_work', $work, false );
-		delete_transient( 'bv_gi_ai_lock' );
 		wp_clear_scheduled_hook( 'bv_gi_ai_batch' );
-		wp_schedule_single_event( time() + ( $queue ? 15 : 5 ), 'bv_gi_ai_batch' );
-		return;
+		if ( $queue ) {
+			delete_transient( 'bv_gi_ai_lock' );
+			wp_schedule_single_event( time() + 15, 'bv_gi_ai_batch' );
+			return;
+		}
+		/* That was the last question: finish the run right away. */
 	}
 
 	delete_transient( 'bv_gi_ai_lock' );
@@ -427,6 +433,7 @@ add_action( 'bv_gi_ai_batch', static function () {
 			}
 		}
 		$work['completed'] = time();
+		$work['current']   = '';
 		$work['engines']   = $answered;
 		update_option( 'bv_gi_ai_results', [ 'completed' => $work['completed'], 'engines' => $answered, 'rows' => $work['rows'], 'prompts' => $work['prompts'] ?? [] ], false );
 		update_option( 'bv_gi_ai_answers', $work['answers'] ?? [], false );
@@ -513,6 +520,7 @@ function bv_gi_ai_settings_page(): void {
 		<h1>B2B GEO Index</h1>
 		<?php if ( isset( $_GET['saved'] ) ) : ?><div class="notice notice-success"><p>Opgeslagen.</p></div><?php endif; ?>
 		<p>De index meet op de eerste maandag van elke maand de websites van 200 bedrijven. Met API-sleutels meet hij ook hoe vaak ChatGPT, Claude, Gemini en Perplexity deze bedrijven noemen: één vraag per categorie per AI-assistent (<?php echo (int) $cats; ?> vragen per assistent per maand).</p>
+		<?php do_action( 'bv_gi_settings_top' ); ?>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="bv_gi_ai_save">
 			<?php wp_nonce_field( 'bv_gi_ai_save' ); ?>
@@ -558,7 +566,6 @@ function bv_gi_ai_settings_page(): void {
 				<?php endforeach; ?>
 				<tr><th scope="row">Maandlimiet</th><td><input type="number" name="cap" min="0" max="5000" step="10" value="<?php echo (int) $s['cap']; ?>" class="small-text"> vragen per AI-assistent per maand<p class="description">Een rem in je eigen site, naast de bestedingslimiet bij de aanbieder. Een normale maand is <?php echo (int) $cats; ?> vragen.</p></td></tr>
 				<?php do_action( 'bv_gi_settings_rows' ); ?>
-				<tr><th scope="row">Nu meten</th><td><label><input type="checkbox" name="run" value="1"> Start na opslaan direct een nieuwe meting (websites en AI)</label></td></tr>
 			</table>
 			<?php submit_button( 'Opslaan' ); ?>
 		</form>
