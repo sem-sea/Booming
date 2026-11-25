@@ -45,9 +45,30 @@ function bv_gi_ai_key( string $engine ): string {
 	return (string) ( bv_gi_ai_settings()['keys'][ $engine ] ?? '' );
 }
 
+/*
+ * Only low-cost models: a model typed in the settings is used only when it
+ * matches the cheap family of that assistant (mini/nano/luna, Haiku, Flash,
+ * Sonar or the fast/low Perplexity presets). Anything else, such as Opus or
+ * a full GPT model, falls back to the default.
+ */
+function bv_gi_ai_cheap( string $engine, string $model ): bool {
+	$m = strtolower( $model );
+	switch ( $engine ) {
+		case 'openai':
+			return (bool) preg_match( '#^(openai/)?gpt-[\d.]+-?(luna|mini|nano)\b#', $m );
+		case 'claude':
+			return (bool) preg_match( '#^(anthropic/)?claude-[\w.-]*haiku#', $m );
+		case 'gemini':
+			return (bool) preg_match( '#^(google/)?gemini-[\d.]+-flash#', $m );
+		case 'perplexity':
+			return in_array( $m, [ 'fast', 'low', 'perplexity/sonar' ], true );
+	}
+	return false;
+}
+
 function bv_gi_ai_model( string $engine ): string {
-	$m = (string) ( bv_gi_ai_settings()['models'][ $engine ] ?? '' );
-	return '' !== $m ? $m : bv_gi_ai_engines()[ $engine ]['model'];
+	$m = trim( (string) ( bv_gi_ai_settings()['models'][ $engine ] ?? '' ) );
+	return ( '' !== $m && bv_gi_ai_cheap( $engine, $m ) ) ? $m : bv_gi_ai_engines()[ $engine ]['model'];
 }
 
 /*
@@ -192,9 +213,10 @@ function bv_gi_ai_cites( array $urls, string $domain ): bool {
 
 function bv_gi_ai_request( string $engine, string $prompt ): array {
 	if ( 'openrouter' === bv_gi_ai_via( $engine ) ) {
-		$model = (string) ( bv_gi_ai_settings()['models'][ 'router_' . $engine ] ?? '' );
-		$model = '' !== $model ? $model : bv_gi_ai_engines()[ $engine ]['router'];
-		$body  = [ 'model' => $model, 'input' => $prompt, 'max_output_tokens' => 3000 ];
+		$model = trim( (string) ( bv_gi_ai_settings()['models'][ 'router_' . $engine ] ?? '' ) );
+		$model = ( '' !== $model && bv_gi_ai_cheap( $engine, $model ) ) ? $model : bv_gi_ai_engines()[ $engine ]['router'];
+		/* Price cap per million tokens (room for Gemini Flash at $1.50/$7.50 from 2027): OpenRouter refuses the request rather than use a dearer model or provider. */
+		$body  = [ 'model' => $model, 'input' => $prompt, 'max_output_tokens' => 3000, 'provider' => [ 'sort' => 'price', 'max_price' => [ 'prompt' => 2, 'completion' => 8 ] ] ];
 		if ( 0 !== strpos( $model, 'perplexity/' ) ) { // Perplexity models search by themselves
 			$body['tools'] = [ [ 'type' => 'openrouter:web_search', 'parameters' => [ 'engine' => 'native', 'max_results' => 5 ] ] ];
 		}
@@ -500,7 +522,9 @@ function bv_gi_ai_settings_page(): void {
 								<?php if ( $k ) : ?><label><input type="checkbox" name="del[<?php echo esc_attr( $e ); ?>]" value="1"> Verwijder</label><?php endif; ?>
 								<p class="description">Maak een aparte sleutel aan via <a href="<?php echo esc_url( $links[ $e ] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( wp_parse_url( $links[ $e ], PHP_URL_HOST ) ); ?></a> en stel daar een harde bestedingslimiet in. Veiliger: zet hem in wp-config.php als <code><?php echo esc_html( "define( '" . $def['const'] . "', '...' );" ); ?></code>, dan staat hij niet in de database.</p>
 							<?php endif; ?>
-							<p><label><?php echo esc_html( $def['model_label'] ); ?>: <input type="text" name="model[<?php echo esc_attr( $e ); ?>]" value="<?php echo esc_attr( $s['models'][ $e ] ?? '' ); ?>" placeholder="<?php echo esc_attr( $def['model'] ); ?>"></label></p>
+							<p><label><?php echo esc_html( $def['model_label'] ); ?>: <input type="text" name="model[<?php echo esc_attr( $e ); ?>]" value="<?php echo esc_attr( $s['models'][ $e ] ?? '' ); ?>" placeholder="<?php echo esc_attr( $def['model'] ); ?>"></label>
+							<?php if ( '' !== trim( (string) ( $s['models'][ $e ] ?? '' ) ) && ! bv_gi_ai_cheap( $e, (string) $s['models'][ $e ] ) ) : ?><br><span style="color:#b32d2e">Dit model is niet goedkoop genoeg en wordt niet gebruikt. De site gebruikt <?php echo esc_html( $def['model'] ); ?>.</span><?php endif; ?></p>
+							<p class="description">Leeg laten is het goedkoopst. Alleen goedkope modellen worden geaccepteerd (mini, nano, luna, Haiku, Flash, Sonar).</p>
 						</td>
 					</tr>
 				<?php endforeach; ?>
