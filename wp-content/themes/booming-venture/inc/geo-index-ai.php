@@ -218,7 +218,8 @@ function bv_gi_ai_request( string $engine, string $prompt ): array {
 		/* Price cap per million tokens (room for Gemini Flash at $1.50/$7.50 from 2027): OpenRouter refuses the request rather than use a dearer model or provider. */
 		$body  = [ 'model' => $model, 'input' => $prompt, 'max_output_tokens' => 3000, 'provider' => [ 'sort' => 'price', 'max_price' => [ 'prompt' => 2, 'completion' => 8 ] ] ];
 		if ( 0 !== strpos( $model, 'perplexity/' ) ) { // Perplexity models search by themselves
-			$body['tools'] = [ [ 'type' => 'openrouter:web_search', 'parameters' => [ 'engine' => 'native', 'max_results' => 5 ] ] ];
+			/* auto: the model's own search where OpenRouter supports it, else Exa ($0.007 per search), so no model fails on the search setting. */
+			$body['tools'] = [ [ 'type' => 'openrouter:web_search', 'parameters' => [ 'engine' => 'auto', 'max_results' => 5 ] ] ];
 		}
 		if ( 0 === strpos( $model, 'openai/' ) ) {
 			$body['reasoning'] = [ 'effort' => 'low' ];
@@ -282,12 +283,12 @@ function bv_gi_ai_ask( string $prompt, array $engines ): array {
 	$out   = [];
 	if ( ! $class ) {
 		foreach ( $reqs as $e => $r ) {
-			$res = wp_remote_post( $r['url'], [ 'headers' => $r['headers'], 'body' => $r['data'], 'timeout' => 60 ] );
+			$res = wp_remote_post( $r['url'], [ 'headers' => $r['headers'], 'body' => $r['data'], 'timeout' => 55 ] );
 			$out[ $e ] = bv_gi_ai_parse( is_wp_error( $res ) ? 0 : (int) wp_remote_retrieve_response_code( $res ), is_wp_error( $res ) ? $res->get_error_message() : (string) wp_remote_retrieve_body( $res ) );
 		}
 		return $out;
 	}
-	$responses = $class::request_multiple( $reqs, [ 'timeout' => 75, 'connect_timeout' => 10, 'useragent' => BV_GI_UA ] );
+	$responses = $class::request_multiple( $reqs, [ 'timeout' => 55, 'connect_timeout' => 10, 'useragent' => BV_GI_UA ] );
 	foreach ( $responses as $e => $res ) {
 		if ( is_object( $res ) && isset( $res->status_code ) ) {
 			$out[ $e ] = bv_gi_ai_parse( (int) $res->status_code, (string) $res->body );
@@ -334,34 +335,50 @@ function bv_gi_ai_start(): void {
 }
 add_action( 'bv_gi_run', 'bv_gi_ai_start', 20 );
 
+/*
+ * One category per run (1.21.1). The run takes the question off the queue
+ * and plans the next run before it asks anything, so a host that stops a
+ * long request loses at most this one question and the chain keeps going.
+ * Every answer and error is saved straight away.
+ */
 add_action( 'bv_gi_ai_batch', static function () {
 	if ( get_transient( 'bv_gi_ai_lock' ) ) {
 		return;
 	}
-	set_transient( 'bv_gi_ai_lock', 1, 5 * MINUTE_IN_SECONDS );
+	set_transient( 'bv_gi_ai_lock', 1, 2 * MINUTE_IN_SECONDS );
 	if ( function_exists( 'set_time_limit' ) ) {
-		@set_time_limit( 240 ); // phpcs:ignore
+		@set_time_limit( 120 ); // phpcs:ignore
 	}
 	$active  = bv_gi_ai_active();
-	$engines = $active;
-	$capped  = false;
 	$queue   = (array) get_option( 'bv_gi_ai_queue', [] );
 	$work    = (array) get_option( 'bv_gi_ai_work', [] );
-	$t0      = time();
-	while ( $engines && $queue && time() - $t0 < 120 ) {
-		$cap = bv_gi_ai_cap();
-		foreach ( $engines as $i => $e ) {
-			if ( bv_gi_ai_used( $e ) >= $cap ) {
-				unset( $engines[ $i ] );
-				$work['errors'][ $e ] = sprintf( 'Maandlimiet van %d vragen bereikt; de meting gaat volgende maand verder.', $cap );
-			}
+	$cap     = bv_gi_ai_cap();
+	$engines = [];
+	foreach ( $active as $e ) {
+		if ( bv_gi_ai_used( $e ) >= $cap ) {
+			$work['errors'][ $e ] = sprintf( 'Maandlimiet van %d vragen bereikt; de meting gaat volgende maand verder.', $cap );
+		} elseif ( empty( $work['ok'][ $e ] ) && (int) ( $work['failed'][ $e ] ?? 0 ) >= 5 ) {
+			continue; // failed 5 times without a single answer this run (key, model or privacy setting): stop asking it
+		} else {
+			$engines[] = $e;
 		}
-		$engines = array_values( $engines );
-		if ( ! $engines ) {
-			$capped = true;
-			break;
-		}
+	}
+
+	if ( $queue && ! $engines ) {
+		/* Every assistant hit its monthly cap: keep the run and the last full results, try again tomorrow. */
+		update_option( 'bv_gi_ai_work', $work, false );
+		delete_transient( 'bv_gi_ai_lock' );
+		wp_clear_scheduled_hook( 'bv_gi_ai_batch' );
+		wp_schedule_single_event( time() + DAY_IN_SECONDS, 'bv_gi_ai_batch' );
+		return;
+	}
+
+	if ( $queue ) {
 		[ $list, $cat ] = array_shift( $queue );
+		update_option( 'bv_gi_ai_queue', $queue, false );
+		wp_clear_scheduled_hook( 'bv_gi_ai_batch' );
+		wp_schedule_single_event( time() + 3 * MINUTE_IN_SECONDS, 'bv_gi_ai_batch' ); // safety net if this request is stopped
+
 		$prompt  = bv_gi_ai_prompt( $list, $cat, (int) ( $work['week'] ?? 0 ) );
 		bv_gi_ai_count( $engines );
 		$answers = bv_gi_ai_ask( $prompt, $engines );
@@ -385,25 +402,34 @@ add_action( 'bv_gi_ai_batch', static function () {
 		}
 		foreach ( $answers as $e => $a ) {
 			$work['answers'][ $list ][ $cat ][ $e ] = [ 'text' => mb_substr( trim( $a['text'] ), 0, 900 ), 'urls' => array_slice( $a['urls'], 0, 8 ) ];
-			if ( ! $a['ok'] ) {
-				$work['errors'][ $e ] = $a['error'];
+			if ( $a['ok'] ) {
+				$work['ok'][ $e ] = (int) ( $work['ok'][ $e ] ?? 0 ) + 1;
+			} else {
+				$work['errors'][ $e ] = mb_substr( (string) $a['error'], 0, 300 );
+				$work['failed'][ $e ] = (int) ( $work['failed'][ $e ] ?? 0 ) + 1;
 			}
 		}
 		$work['prompts'][ $list ][ $cat ] = $prompt;
+		update_option( 'bv_gi_ai_work', $work, false );
+		delete_transient( 'bv_gi_ai_lock' );
+		wp_clear_scheduled_hook( 'bv_gi_ai_batch' );
+		wp_schedule_single_event( time() + ( $queue ? 15 : 5 ), 'bv_gi_ai_batch' );
+		return;
 	}
-	update_option( 'bv_gi_ai_queue', $queue, false );
-	update_option( 'bv_gi_ai_work', $work, false );
+
 	delete_transient( 'bv_gi_ai_lock' );
-	if ( $queue && $capped ) {
-		/* Every assistant hit its monthly cap: keep the run and the last full results, try again tomorrow. */
-		wp_schedule_single_event( time() + DAY_IN_SECONDS, 'bv_gi_ai_batch' );
-	} elseif ( $queue && $engines ) {
-		wp_schedule_single_event( time() + 60, 'bv_gi_ai_batch' );
-	} elseif ( ! empty( $work['rows'] ) ) {
+	if ( ! empty( $work['rows'] ) && empty( $work['completed'] ) ) {
+		/* Only assistants that answered at least once count; one that failed every time gets no column. */
+		$answered = array_values( array_filter( $active, static fn( $e ) => ! empty( $work['ok'][ $e ] ) ) );
+		foreach ( $work['rows'] as $list => $rows ) {
+			foreach ( $rows as $domain => $row ) {
+				$work['rows'][ $list ][ $domain ]['eng'] = array_intersect_key( (array) $row['eng'], array_flip( $answered ) );
+			}
+		}
 		$work['completed'] = time();
-		$work['engines']   = $active;
-		update_option( 'bv_gi_ai_results', [ 'completed' => $work['completed'], 'engines' => $active, 'rows' => $work['rows'], 'prompts' => $work['prompts'] ?? [] ], false );
-		update_option( 'bv_gi_ai_answers', $work['answers'], false );
+		$work['engines']   = $answered;
+		update_option( 'bv_gi_ai_results', [ 'completed' => $work['completed'], 'engines' => $answered, 'rows' => $work['rows'], 'prompts' => $work['prompts'] ?? [] ], false );
+		update_option( 'bv_gi_ai_answers', $work['answers'] ?? [], false );
 		update_option( 'bv_gi_ai_work', $work, false );
 		if ( function_exists( 'bv_gi_touch_pages' ) ) {
 			bv_gi_touch_pages();
@@ -545,6 +571,9 @@ function bv_gi_ai_settings_page(): void {
 				<tr><td>AI-meting klaar</td><td><?php echo esc_html( $fmt( $res['completed'] ?? 0 ) ); ?><?php echo $queue ? ' (nog ' . (int) $queue . ' vragen in de wachtrij)' : ''; ?></td></tr>
 				<tr><td>Vragen deze maand</td><td><?php echo esc_html( implode( ', ', array_map( static fn( $e ) => bv_gi_ai_engines()[ $e ]['label'] . ' ' . bv_gi_ai_used( $e ) . ' / ' . bv_gi_ai_cap(), array_keys( bv_gi_ai_engines() ) ) ) ); ?></td></tr>
 				<tr><td>Actieve AI-assistenten</td><td><?php echo esc_html( implode( ', ', array_map( static fn( $e ) => bv_gi_ai_engines()[ $e ]['label'] . ( 'openrouter' === bv_gi_ai_via( $e ) ? ' (via OpenRouter)' : '' ), bv_gi_ai_active() ) ) ?: 'geen' ); ?></td></tr>
+				<?php if ( ! empty( $work['ok'] ) || ! empty( $work['failed'] ) ) : ?>
+					<tr><td>Antwoorden deze meting</td><td><?php echo esc_html( implode( ', ', array_map( static fn( $e ) => bv_gi_ai_engines()[ $e ]['label'] . ' ' . (int) ( $work['ok'][ $e ] ?? 0 ) . ' goed' . ( empty( $work['failed'][ $e ] ) ? '' : ', ' . (int) $work['failed'][ $e ] . ' fout' ), bv_gi_ai_active() ) ) ); ?></td></tr>
+				<?php endif; ?>
 				<?php foreach ( (array) ( $work['errors'] ?? [] ) as $e => $err ) : ?>
 					<tr><td>Laatste fout <?php echo esc_html( bv_gi_ai_engines()[ $e ]['label'] ?? $e ); ?></td><td><?php echo esc_html( $err ); ?></td></tr>
 				<?php endforeach; ?>

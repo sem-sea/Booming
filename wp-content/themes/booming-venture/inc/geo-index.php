@@ -459,37 +459,66 @@ add_action( 'bv_gi_run', static function () {
 	wp_schedule_single_event( time() + 5, 'bv_gi_batch' );
 } );
 
+/*
+ * Short runs that save after every company (1.21.1). The next run is
+ * planned before any company is measured, so a host that stops a long
+ * request loses at most one company and the chain keeps going.
+ */
 add_action( 'bv_gi_batch', static function () {
 	if ( get_transient( 'bv_gi_lock' ) ) {
 		return;
 	}
-	set_transient( 'bv_gi_lock', 1, 4 * MINUTE_IN_SECONDS );
-	$queue   = (array) get_option( 'bv_gi_queue', [] );
-	$results = (array) get_option( 'bv_gi_results', [] );
-	$t0      = time();
-	while ( $queue && time() - $t0 < 40 ) {
+	set_transient( 'bv_gi_lock', 1, 2 * MINUTE_IN_SECONDS );
+	$queue = (array) get_option( 'bv_gi_queue', [] );
+	if ( $queue ) {
+		wp_clear_scheduled_hook( 'bv_gi_batch' );
+		wp_schedule_single_event( time() + 3 * MINUTE_IN_SECONDS, 'bv_gi_batch' ); // safety net if this request is stopped
+	}
+	$t0 = time();
+	while ( $queue && time() - $t0 < 20 ) {
 		[ $list, $i ] = array_shift( $queue );
+		update_option( 'bv_gi_queue', $queue, false );
 		$c = bv_gi_companies()[ $list ][ $i ] ?? null;
 		if ( $c ) {
+			$results = (array) get_option( 'bv_gi_results', [] );
 			$results[ $list ][ $c['domain'] ] = bv_gi_measure( $c['domain'], $c['name'], $list );
+			update_option( 'bv_gi_results', $results, false );
 		}
 	}
-	update_option( 'bv_gi_results', $results, false );
-	update_option( 'bv_gi_queue', $queue, false );
 	delete_transient( 'bv_gi_lock' );
 	if ( $queue ) {
-		wp_schedule_single_event( time() + 120, 'bv_gi_batch' );
-	} else {
-		$meta = (array) get_option( 'bv_gi_meta', [] );
-		$meta['completed'] = time();
-		if ( empty( $meta['first'] ) ) {
-			$meta['first'] = $meta['completed'];
-		}
-		update_option( 'bv_gi_meta', $meta, false );
-		bv_gi_touch_pages();
-		do_action( 'bv_gi_complete', 'web' );
+		wp_clear_scheduled_hook( 'bv_gi_batch' );
+		wp_schedule_single_event( time() + 30, 'bv_gi_batch' );
+		return;
 	}
+	$meta = (array) get_option( 'bv_gi_meta', [] );
+	if ( ! empty( $meta['completed'] ) && $meta['completed'] >= ( $meta['started'] ?? 0 ) ) {
+		return; // this run was already finished by an earlier event
+	}
+	$meta['completed'] = time();
+	if ( empty( $meta['first'] ) ) {
+		$meta['first'] = $meta['completed'];
+	}
+	update_option( 'bv_gi_meta', $meta, false );
+	bv_gi_touch_pages();
+	do_action( 'bv_gi_complete', 'web' );
 } );
+
+/*
+ * Watchdog (1.21.1): every 10 minutes, a queue with work but no planned run
+ * gets a new run. This restarts a measurement that stopped halfway.
+ */
+add_action( 'init', static function () {
+	if ( get_transient( 'bv_gi_watchdog' ) ) {
+		return;
+	}
+	set_transient( 'bv_gi_watchdog', 1, 10 * MINUTE_IN_SECONDS );
+	foreach ( [ 'bv_gi_queue' => 'bv_gi_batch', 'bv_gi_ai_queue' => 'bv_gi_ai_batch' ] as $option => $hook ) {
+		if ( get_option( $option ) && ! wp_next_scheduled( $hook ) ) {
+			wp_schedule_single_event( time() + 10, $hook );
+		}
+	}
+}, 30 );
 
 /* ------------------------------------------------------------------ public check */
 
