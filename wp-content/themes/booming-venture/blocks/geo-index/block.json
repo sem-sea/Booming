@@ -6,7 +6,7 @@
   "title": "B2B GEO Index",
   "category": "booming-venture",
   "icon": "chart-bar",
-  "description": "Weekly measured GEO readiness of 200 B2B companies, with filters, sorting and a domain check. Server-rendered, so crawlers read the full ranking.",
+  "description": "Monthly measured GEO readiness of 200 B2B companies, with filters, sorting and a domain check. Server-rendered, so crawlers read the full ranking.",
   "keywords": ["geo", "ranking", "ai search", "index"],
   "supports": {
     "html": false,

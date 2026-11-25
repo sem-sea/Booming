@@ -341,8 +341,8 @@ function bv_gi_schema_nodes(): array {
 		'@id'                  => $url . '#dataset',
 		'name'                 => $t( 'B2B GEO Index: AI-zichtbaarheid van 200 B2B-bedrijven', 'B2B GEO Index: AI visibility of 200 B2B companies' ),
 		'description'          => $t(
-			'Wekelijkse meting van 100 Nederlandse B2B-bedrijven en 100 internationale B2B-softwarebedrijven: hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn voor AI-zoekmachines, met zeven websitechecks en een score van 0 tot 100.',
-			'Weekly measurement of 100 Dutch B2B companies and 100 international B2B software companies: how often AI assistants name them and how ready their websites are for AI search, with seven website checks and a score from 0 to 100.'
+			'Maandelijkse meting van 100 Nederlandse B2B-bedrijven en 100 internationale B2B-softwarebedrijven: hoe vaak AI-assistenten ze noemen en hoe klaar hun websites zijn voor AI-zoekmachines, met zeven websitechecks en een score van 0 tot 100.',
+			'Monthly measurement of 100 Dutch B2B companies and 100 international B2B software companies: how often AI assistants name them and how ready their websites are for AI search, with seven website checks and a score from 0 to 100.'
 		),
 		'url'                  => $url,
 		'creator'              => $org,
@@ -351,8 +351,8 @@ function bv_gi_schema_nodes(): array {
 		'inLanguage'           => $nl ? 'nl-NL' : 'en',
 		'keywords'             => [ 'GEO', 'generative engine optimization', 'AI search', 'B2B', 'ChatGPT', 'Claude', 'Gemini', 'Perplexity' ],
 		'measurementTechnique' => $t(
-			'Elke maandag: per categorie een koopvraag aan AI-assistenten via hun API, met de eigen zoekfunctie van elke assistent, plus robots.txt, HTML zonder JavaScript, structured data, Wikidata, Wikipedia, sitemap-actualiteit, taalversies en llms.txt van elke website.',
-			'Every Monday: one buyer question per category to AI assistants through their APIs, each using its own web search, plus robots.txt, HTML without JavaScript, structured data, Wikidata, Wikipedia, sitemap freshness, language versions and llms.txt of each website.'
+			'Elke eerste maandag van de maand: per categorie een koopvraag aan AI-assistenten via hun API, met de eigen zoekfunctie van elke assistent, plus robots.txt, HTML zonder JavaScript, structured data, Wikidata, Wikipedia, sitemap-actualiteit, taalversies en llms.txt van elke website.',
+			'On the first Monday of every month: one buyer question per category to AI assistants through their APIs, each using its own web search, plus robots.txt, HTML without JavaScript, structured data, Wikidata, Wikipedia, sitemap freshness, language versions and llms.txt of each website.'
 		),
 		'variableMeasured'     => [ 'GEO score', 'AI score', 'Website score', 'AI crawler access', 'Text without JavaScript', 'Organization schema', 'Wikipedia article', 'Sitemap freshness', 'Language versions' ],
 		'distribution'         => $data,

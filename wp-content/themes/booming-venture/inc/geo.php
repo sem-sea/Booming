@@ -162,7 +162,7 @@ add_action( 'template_redirect', function () {
 		[ 'free-growth-guide',   'Free Growth Strategy Guide download' ],
 		[ 'boardroom-quickscan', '15-minute Boardroom Quickscan diagnostic' ],
 		[ 'head-of-growth',      'Fractional Head of Growth service'   ],
-		[ 'b2b-geo-index',       'B2B GEO Index: weekly ranking of 200 B2B companies by how often ChatGPT, Claude, Gemini and Perplexity name them, plus seven website checks' ],
+		[ 'b2b-geo-index',       'B2B GEO Index: monthly ranking of 200 B2B companies by how often ChatGPT, Claude, Gemini and Perplexity name them, plus seven website checks' ],
 	];
 	foreach ( $leads as [ $slug, $desc ] ) {
 		$p = get_page_by_path( $slug );
@@ -170,7 +170,7 @@ add_action( 'template_redirect', function () {
 			echo '- [' . bv_llms_text( $p->post_title ) . '](' . get_permalink( $p ) . "): {$desc}\n";
 			if ( 'b2b-geo-index' === $slug ) {
 				foreach ( [ 'nl' => 'Netherlands', 'intl' => 'international' ] as $list => $label ) {
-					echo '- [B2B GEO Index data, top 100 ' . $label . ' (CSV)](' . add_query_arg( [ 'list' => $list, 'format' => 'csv' ], rest_url( 'bv/v1/geo-index' ) ) . "): open data, updated every Monday\n";
+					echo '- [B2B GEO Index data, top 100 ' . $label . ' (CSV)](' . add_query_arg( [ 'list' => $list, 'format' => 'csv' ], rest_url( 'bv/v1/geo-index' ) ) . "): open data, updated monthly\n";
 				}
 			}
 		}

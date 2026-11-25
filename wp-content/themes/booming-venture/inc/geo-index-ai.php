@@ -34,7 +34,7 @@ function bv_gi_ai_engines(): array {
 }
 
 function bv_gi_ai_settings(): array {
-	return wp_parse_args( (array) get_option( 'bv_gi_ai', [] ), [ 'keys' => [], 'models' => [], 'enabled' => 0, 'cap' => 700, 'router_engines' => [ 'openai', 'claude', 'gemini', 'perplexity' ] ] );
+	return wp_parse_args( (array) get_option( 'bv_gi_ai', [] ), [ 'keys' => [], 'models' => [], 'enabled' => 0, 'cap' => 300, 'router_engines' => [ 'openai', 'claude', 'gemini', 'perplexity' ] ] );
 }
 
 function bv_gi_ai_key( string $engine ): string {
@@ -105,8 +105,8 @@ function bv_gi_ai_active(): array {
 
 /*
  * Monthly cap per assistant, counted in this site: a second brake on top of
- * the spend limit at each provider. 700 covers the 143 weekly questions of
- * a long month plus one extra manual run.
+ * the spend limit at each provider. 300 covers the 143 questions of the
+ * monthly run plus one extra manual run.
  */
 function bv_gi_ai_cap(): int {
 	return max( 0, (int) bv_gi_ai_settings()['cap'] );
@@ -130,7 +130,7 @@ function bv_gi_ai_count( array $engines ): void {
 
 /* ------------------------------------------------------------------ prompts and parsing (pure) */
 
-/** The weekly question for a category; the wording alternates per ISO week. */
+/** The question for a category; the wording alternates per month. */
 function bv_gi_ai_prompt( string $list, string $cat, int $week ): string {
 	$t = 'nl' === $list
 		? [ 'Wat is de beste %s in Nederland? Noem een paar aanbieders en zeg kort waarom.', 'Welke %s raad je aan voor een Nederlands bedrijf? Geef een korte lijst met aanbieders.' ]
@@ -308,7 +308,7 @@ function bv_gi_ai_parse( int $code, string $body ): array {
 	return [ 'ok' => '' !== trim( $x['text'] ), 'text' => $x['text'], 'urls' => $x['urls'], 'error' => '' === trim( $x['text'] ) ? 'empty answer' : '' ];
 }
 
-/* ------------------------------------------------------------------ weekly run */
+/* ------------------------------------------------------------------ monthly run */
 
 /** Unique [ list, category ] pairs. */
 function bv_gi_ai_categories(): array {
@@ -328,11 +328,11 @@ function bv_gi_ai_start(): void {
 		return;
 	}
 	update_option( 'bv_gi_ai_queue', bv_gi_ai_categories(), false );
-	update_option( 'bv_gi_ai_work', [ 'started' => time(), 'week' => (int) gmdate( 'W' ), 'rows' => [], 'answers' => [], 'errors' => [] ], false );
+	update_option( 'bv_gi_ai_work', [ 'started' => time(), 'week' => (int) gmdate( 'n' ), 'rows' => [], 'answers' => [], 'errors' => [] ], false );
 	wp_clear_scheduled_hook( 'bv_gi_ai_batch' );
 	wp_schedule_single_event( time() + 30, 'bv_gi_ai_batch' );
 }
-add_action( 'bv_gi_weekly', 'bv_gi_ai_start', 20 );
+add_action( 'bv_gi_run', 'bv_gi_ai_start', 20 );
 
 add_action( 'bv_gi_ai_batch', static function () {
 	if ( get_transient( 'bv_gi_ai_lock' ) ) {
@@ -453,10 +453,10 @@ add_action( 'admin_post_bv_gi_ai_save', static function () {
 	}
 	$s['router_engines'] = array_values( array_intersect( array_keys( bv_gi_ai_engines() ), array_map( 'sanitize_key', (array) wp_unslash( $_POST['router_engines'] ?? [] ) ) ) );
 	$s['enabled'] = empty( $_POST['enabled'] ) ? 0 : 1;
-	$s['cap']     = max( 0, min( 5000, (int) ( $_POST['cap'] ?? 700 ) ) );
+	$s['cap']     = max( 0, min( 5000, (int) ( $_POST['cap'] ?? 300 ) ) );
 	update_option( 'bv_gi_ai', $s, false );
 	if ( ! empty( $_POST['run'] ) ) {
-		do_action( 'bv_gi_weekly' );
+		do_action( 'bv_gi_run' );
 	}
 	wp_safe_redirect( admin_url( 'options-general.php?page=bv-geo-index&saved=1' ) );
 	exit;
@@ -484,7 +484,7 @@ function bv_gi_ai_settings_page(): void {
 	<div class="wrap">
 		<h1>B2B GEO Index</h1>
 		<?php if ( isset( $_GET['saved'] ) ) : ?><div class="notice notice-success"><p>Opgeslagen.</p></div><?php endif; ?>
-		<p>De index meet elke maandag de websites van 200 bedrijven. Met API-sleutels meet hij ook hoe vaak ChatGPT, Claude, Gemini en Perplexity deze bedrijven noemen: één vraag per categorie per AI-assistent (<?php echo (int) $cats; ?> vragen per assistent per week).</p>
+		<p>De index meet op de eerste maandag van elke maand de websites van 200 bedrijven. Met API-sleutels meet hij ook hoe vaak ChatGPT, Claude, Gemini en Perplexity deze bedrijven noemen: één vraag per categorie per AI-assistent (<?php echo (int) $cats; ?> vragen per assistent per maand).</p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="bv_gi_ai_save">
 			<?php wp_nonce_field( 'bv_gi_ai_save' ); ?>
@@ -528,7 +528,7 @@ function bv_gi_ai_settings_page(): void {
 						</td>
 					</tr>
 				<?php endforeach; ?>
-				<tr><th scope="row">Maandlimiet</th><td><input type="number" name="cap" min="0" max="5000" step="10" value="<?php echo (int) $s['cap']; ?>" class="small-text"> vragen per AI-assistent per maand<p class="description">Een rem in je eigen site, naast de bestedingslimiet bij de aanbieder. Een normale maand is ongeveer <?php echo (int) ( $cats * 4.35 ); ?> vragen.</p></td></tr>
+				<tr><th scope="row">Maandlimiet</th><td><input type="number" name="cap" min="0" max="5000" step="10" value="<?php echo (int) $s['cap']; ?>" class="small-text"> vragen per AI-assistent per maand<p class="description">Een rem in je eigen site, naast de bestedingslimiet bij de aanbieder. Een normale maand is <?php echo (int) $cats; ?> vragen.</p></td></tr>
 				<tr><th scope="row">Nu meten</th><td><label><input type="checkbox" name="run" value="1"> Start na opslaan direct een nieuwe meting (websites en AI)</label></td></tr>
 			</table>
 			<?php submit_button( 'Opslaan' ); ?>

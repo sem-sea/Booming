@@ -7,11 +7,11 @@
  * international B2B software companies (blocks/geo-index/companies.json).
  *
  * How it runs
- *  - Every Monday 05:00 UTC WP-Cron queues both lists. A batch job then
+ *  - On the first Monday of each month (05:00 UTC) WP-Cron queues both lists. A batch job then
  *    measures a few domains per run, every two minutes, until the queue is
  *    empty. No outside service, no browser, no computer needs to be on.
  *  - Results live in the option bv_gi_results (not autoloaded); the scores
- *    of the previous run in bv_gi_prev, for the weekly change column.
+ *    of the previous run in bv_gi_prev, for the monthly change column.
  *  - Public check for one domain: GET /wp-json/bv/v1/geo-check?domain=x.com
  *    (rate limited per IP, cached per domain for 24 hours).
  *
@@ -383,16 +383,34 @@ function bv_gi_measure( string $domain, string $name, string $list ): array {
 	return array_merge( $m, bv_gi_score( $m, $list ) );
 }
 
-/* ------------------------------------------------------------------ weekly run (WP-Cron) */
+/* ------------------------------------------------------------------ monthly run (WP-Cron) */
 
+/*
+ * A daily check starts the run on the first Monday of each month, or the
+ * first day after it that WP-Cron fires, once per month. The old weekly
+ * event (up to 1.18.2) is removed.
+ */
 add_action( 'init', static function () {
-	if ( ! wp_next_scheduled( 'bv_gi_weekly' ) ) {
-		$first = get_option( 'bv_gi_results' ) ? strtotime( 'next monday 05:00 UTC' ) : time() + 60;
-		wp_schedule_event( $first, 'weekly', 'bv_gi_weekly' );
+	if ( wp_next_scheduled( 'bv_gi_weekly' ) ) {
+		wp_clear_scheduled_hook( 'bv_gi_weekly' );
+	}
+	if ( ! wp_next_scheduled( 'bv_gi_daily' ) ) {
+		wp_schedule_event( strtotime( 'tomorrow 05:00 UTC' ), 'daily', 'bv_gi_daily' );
 	}
 } );
 
-add_action( 'bv_gi_weekly', static function () {
+add_action( 'bv_gi_daily', static function () {
+	$meta  = (array) get_option( 'bv_gi_meta', [] );
+	$month = gmdate( 'Y-m' );
+	if ( time() >= strtotime( 'first monday of this month 05:00 UTC' ) && gmdate( 'Y-m', (int) ( $meta['started'] ?? 0 ) ) !== $month ) {
+		do_action( 'bv_gi_run' );
+	}
+} );
+
+/* Kept for anyone who still calls the old hook. */
+add_action( 'bv_gi_weekly', static fn() => do_action( 'bv_gi_run' ) );
+
+add_action( 'bv_gi_run', static function () {
 	$queue = [];
 	foreach ( [ 'nl', 'intl' ] as $list ) {
 		foreach ( (array) ( bv_gi_companies()[ $list ] ?? [] ) as $i => $c ) {
@@ -486,7 +504,7 @@ function bv_gi_combined( int $ready, ?array $ai ): int {
 	return $ai ? (int) round( ( $ready + (int) $ai['score'] ) / 2 ) : $ready;
 }
 
-/** Rows for one list, ranked, with the weekly change. */
+/** Rows for one list, ranked, with the change since the previous run. */
 function bv_gi_ranked( string $list ): array {
 	$results = (array) ( get_option( 'bv_gi_results', [] )[ $list ] ?? [] );
 	$prev    = (array) ( get_option( 'bv_gi_prev', [] )[ $list ] ?? [] );
@@ -552,7 +570,7 @@ function bv_gi_pages(): array {
 }
 
 /*
- * After each weekly run the index pages get a new modified date: the
+ * After each monthly run the index pages get a new modified date: the
  * sitemap lastmod, dateModified and "Last updated" follow the data, and the
  * publish hook in inc/geo.php pings IndexNow. Content stays as it is.
  */

@@ -59,7 +59,7 @@ $cell = static function ( $v, string $label, string $extra = '' ) {
 
 /* Labels for the small-screen cards (the table header covers wide screens). */
 $ml = [
-	'chg'   => $t( 'Week', 'Week' ),
+	'chg'   => $t( 'Maand', 'Month' ),
 	'ai'    => $t( 'AI-score', 'AI score' ),
 	'ready' => $t( 'Website', 'Website' ),
 	'crawl' => $t( 'Crawlers', 'Crawlers' ),
@@ -95,7 +95,7 @@ $i18n = [
 	'allSect'  => $t( 'Alle sectoren', 'All sectors' ),
 	'sort'     => $t( 'Sorteer op', 'Sort by' ),
 	'byScore'  => $t( 'Score', 'Score' ),
-	'byChange' => $t( 'Verschil met vorige week', 'Change since last week' ),
+	'byChange' => $t( 'Verschil met vorige maand', 'Change since last month' ),
 	'byName'   => $t( 'Naam', 'Name' ),
 	'only'     => $t( 'Toon bedrijven die dit hebben', 'Show companies that have this' ),
 	'missing'  => $t( 'Toon bedrijven die dit missen', 'Show companies that miss this' ),
@@ -160,12 +160,12 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 		[ $t( '200 vaste bedrijven.', '200 fixed companies.' ), $t( '100 Nederlandse B2B-bedrijven en 100 internationale B2B-softwarebedrijven. Niemand kan betalen voor een plek of een hogere score.', '100 Dutch B2B companies and 100 international B2B software companies. Nobody can pay for a place or a higher score.' ) ],
 	];
 	if ( $ai_cols ) {
-		$how[] = [ $t( 'AI-score.', 'AI score.' ), sprintf( $t( 'Elke maandag stelt de site per categorie een koopvraag aan %s, met zoeken op internet aan. We tellen hoe vaak ze het bedrijf noemen (80%%) en de website als bron geven (20%%).', 'Every Monday the site asks %s one buyer question per category, with web search on. We count how often they name the company (80%%) and cite its website (20%%).' ), $engs ) ];
+		$how[] = [ $t( 'AI-score.', 'AI score.' ), sprintf( $t( 'Elke maand stelt de site per categorie een koopvraag aan %s, met zoeken op internet aan. We tellen hoe vaak ze het bedrijf noemen (80%%) en de website als bron geven (20%%).', 'Every month the site asks %s one buyer question per category, with web search on. We count how often they name the company (80%%) and cite its website (20%%).' ), $engs ) ];
 	}
 	$how[] = [ $t( 'Websitescore.', 'Website score.' ), $t( 'Zeven checks op de eigen website: AI-crawlers in robots.txt, tekst zonder JavaScript, gestructureerde data, Wikidata en Wikipedia, actualiteit, taal en llms.txt.', 'Seven checks on the company website: AI crawlers in robots.txt, text without JavaScript, structured data, Wikidata and Wikipedia, freshness, language and llms.txt.' ) ];
 	$how[] = $ai_cols
-		? [ $t( 'Totaalscore.', 'Total score.' ), $t( 'Het gemiddelde van de AI-score en de websitescore, van 0 tot 100. Elke maandag opnieuw gemeten, met het verschil met vorige week.', 'The average of the AI score and the website score, from 0 to 100. Measured again every Monday, with the change since last week.' ) ]
-		: [ $t( 'Score.', 'Score.' ), $t( 'De websitescore, van 0 tot 100. Elke maandag opnieuw gemeten, met het verschil met vorige week.', 'The website score, from 0 to 100. Measured again every Monday, with the change since last week.' ) ];
+		? [ $t( 'Totaalscore.', 'Total score.' ), $t( 'Het gemiddelde van de AI-score en de websitescore, van 0 tot 100. Elke maand opnieuw gemeten, met het verschil met vorige maand.', 'The average of the AI score and the website score, from 0 to 100. Measured again every month, with the change since last month.' ) ]
+		: [ $t( 'Score.', 'Score.' ), $t( 'De websitescore, van 0 tot 100. Elke maand opnieuw gemeten, met het verschil met vorige maand.', 'The website score, from 0 to 100. Measured again every month, with the change since last month.' ) ];
 	?>
 	<details class="bv-gi__how">
 		<summary><?php echo esc_html( $t( 'Zo werkt de ranking', 'How the ranking works' ) ); ?></summary>
@@ -245,7 +245,7 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 							<th scope="col" rowspan="2">#</th>
 							<th scope="col" rowspan="2"><?php echo esc_html( $t( 'Bedrijf', 'Company' ) ); ?></th>
 							<th scope="col" rowspan="2"><?php echo esc_html( $t( 'Score', 'Score' ) ); ?></th>
-							<th scope="col" rowspan="2" title="<?php echo esc_attr( $i18n['byChange'] ); ?>"><?php echo esc_html( $t( 'Week', 'Week' ) ); ?></th>
+							<th scope="col" rowspan="2" title="<?php echo esc_attr( $i18n['byChange'] ); ?>"><?php echo esc_html( $t( 'Maand', 'Month' ) ); ?></th>
 							<?php if ( $ai_cols ) : ?><th scope="col" rowspan="2" title="<?php echo esc_attr( $t( 'Hoe vaak AI-assistenten het bedrijf noemen (0 tot 100)', 'How often AI assistants name the company (0 to 100)' ) ); ?>">AI</th><?php endif; ?>
 							<th scope="col" rowspan="2" title="<?php echo esc_attr( $t( 'Score van de websitemeting (0 tot 100)', 'Score of the website measurement (0 to 100)' ) ); ?>"><?php echo esc_html( $t( 'Website', 'Website' ) ); ?></th>
 							<?php if ( $ai_cols ) : ?><th scope="colgroup" colspan="<?php echo count( $ai_cols ); ?>" class="bv-gi__grp"><?php echo esc_html( $t( 'Genoemd door', 'Named by' ) ); ?></th><?php endif; ?>
@@ -302,8 +302,8 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 
 	<p class="bv-gi__meta"><?php
 		echo esc_html( $date
-			? sprintf( $t( 'Laatst gemeten: %s. Elke maandag opnieuw gemeten.', 'Last measured: %s. Measured again every Monday.' ), $date )
-			: $t( 'Elke maandag opnieuw gemeten.', 'Measured again every Monday.' ) );
+			? sprintf( $t( 'Laatst gemeten: %s. Elke eerste maandag van de maand opnieuw gemeten.', 'Last measured: %s. Measured again on the first Monday of every month.' ), $date )
+			: $t( 'Elke eerste maandag van de maand opnieuw gemeten.', 'Measured again on the first Monday of every month.' ) );
 	?></p>
 
 	<div class="bv-gi__legend">
