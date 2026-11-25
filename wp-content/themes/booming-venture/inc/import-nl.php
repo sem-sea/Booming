@@ -10,6 +10,8 @@
  * Every item that already exists (same path or slug) is skipped, so the
  * import can run again without making duplicates. Nothing is published:
  * the site owner checks each page and publishes it when ready.
+ * POST /wp-json/bv/v1/import-nl?update=geo only refreshes the text of the
+ * two existing GEO Index pages (1.20.0).
  *
  * @package BoomingVenture
  */
@@ -83,7 +85,7 @@ add_action( 'rest_api_init', static function () {
 	register_rest_route( 'bv/v1', '/import-nl', [
 		'methods'             => 'POST',
 		'permission_callback' => static fn() => current_user_can( 'manage_options' ),
-		'callback'            => static function () {
+		'callback'            => static function ( WP_REST_Request $req ) {
 			$file = get_theme_file_path( 'import/nl/content.json' );
 			$data = is_readable( $file ) ? json_decode( (string) file_get_contents( $file ), true ) : null;
 			if ( ! is_array( $data ) ) {
@@ -91,6 +93,27 @@ add_action( 'rest_api_init', static function () {
 			}
 			$log = [];
 			kses_remove_filters(); // trusted content shipped with the theme
+
+			/*
+			 * ?update=geo (1.20.0): put the shipped text of the two GEO Index
+			 * pages into the existing pages. Status, slug, parent and date stay
+			 * as they are; WordPress keeps the old text as a revision.
+			 */
+			if ( 'geo' === $req->get_param( 'update' ) ) {
+				foreach ( [ 'en' => 'b2b-geo-index', 'nl' => 'nl/b2b-geo-index' ] as $lang => $path ) {
+					$page = get_page_by_path( $path );
+					$b    = (array) ( $data['geo'][ $lang ] ?? [] );
+					if ( ! $page || empty( $b['content'] ) ) {
+						$log[] = [ 'id' => 0, 'state' => 'missing', 'slug' => $path ];
+						continue;
+					}
+					$meta  = array_intersect_key( (array) ( $b['meta'] ?? [] ), array_flip( [ '_yoast_wpseo_title', '_yoast_wpseo_metadesc' ] ) );
+					$id    = wp_update_post( wp_slash( [ 'ID' => $page->ID, 'post_content' => (string) $b['content'], 'meta_input' => $meta ] ), true );
+					$log[] = [ 'id' => (int) $page->ID, 'state' => is_wp_error( $id ) ? 'error' : 'updated', 'slug' => $path ];
+				}
+				kses_init_filters();
+				return rest_ensure_response( [ 'items' => $log ] );
+			}
 
 			/* Dutch home, then its child pages. */
 			$home  = bv_import_item( (array) $data['pages']['parent'], 'page' );

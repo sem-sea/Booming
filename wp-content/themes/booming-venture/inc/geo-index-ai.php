@@ -408,6 +408,7 @@ add_action( 'bv_gi_ai_batch', static function () {
 		if ( function_exists( 'bv_gi_touch_pages' ) ) {
 			bv_gi_touch_pages();
 		}
+		do_action( 'bv_gi_complete', 'ai' );
 	}
 } );
 
@@ -455,6 +456,7 @@ add_action( 'admin_post_bv_gi_ai_save', static function () {
 	$s['enabled'] = empty( $_POST['enabled'] ) ? 0 : 1;
 	$s['cap']     = max( 0, min( 5000, (int) ( $_POST['cap'] ?? 300 ) ) );
 	update_option( 'bv_gi_ai', $s, false );
+	do_action( 'bv_gi_settings_save' );
 	if ( ! empty( $_POST['run'] ) ) {
 		do_action( 'bv_gi_run' );
 	}
@@ -529,6 +531,7 @@ function bv_gi_ai_settings_page(): void {
 					</tr>
 				<?php endforeach; ?>
 				<tr><th scope="row">Maandlimiet</th><td><input type="number" name="cap" min="0" max="5000" step="10" value="<?php echo (int) $s['cap']; ?>" class="small-text"> vragen per AI-assistent per maand<p class="description">Een rem in je eigen site, naast de bestedingslimiet bij de aanbieder. Een normale maand is <?php echo (int) $cats; ?> vragen.</p></td></tr>
+				<?php do_action( 'bv_gi_settings_rows' ); ?>
 				<tr><th scope="row">Nu meten</th><td><label><input type="checkbox" name="run" value="1"> Start na opslaan direct een nieuwe meting (websites en AI)</label></td></tr>
 			</table>
 			<?php submit_button( 'Opslaan' ); ?>
@@ -545,8 +548,10 @@ function bv_gi_ai_settings_page(): void {
 				<?php foreach ( (array) ( $work['errors'] ?? [] ) as $e => $err ) : ?>
 					<tr><td>Laatste fout <?php echo esc_html( bv_gi_ai_engines()[ $e ]['label'] ?? $e ); ?></td><td><?php echo esc_html( $err ); ?></td></tr>
 				<?php endforeach; ?>
+				<?php do_action( 'bv_gi_settings_status' ); ?>
 			</tbody>
 		</table>
+		<?php do_action( 'bv_gi_settings_after' ); ?>
 	</div>
 	<?php
 }

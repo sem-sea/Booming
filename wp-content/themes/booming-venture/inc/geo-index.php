@@ -459,6 +459,7 @@ add_action( 'bv_gi_batch', static function () {
 		}
 		update_option( 'bv_gi_meta', $meta, false );
 		bv_gi_touch_pages();
+		do_action( 'bv_gi_complete', 'web' );
 	}
 } );
 
