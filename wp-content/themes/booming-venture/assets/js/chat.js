@@ -5,7 +5,8 @@
 	var cfg = window.bvChatCfg;
 	if (!cfg || window.bvChat) return;
 	var t = cfg.t;
-	var KEY = 'bv-chat', OPEN = 'bv-chat-open', MAX = 600;
+	// One conversation per language: the English pages show the English chat, the Dutch pages the Dutch one.
+	var KEY = 'bv-chat-' + cfg.lang, OPEN = 'bv-chat-open-' + cfg.lang, MAX = 600;
 	var launch = document.querySelector('.bv-chat-launch');
 	var msgs = [], busy = false, panel, log, form, input, sendBtn, counter, startersEl;
 

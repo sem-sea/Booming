@@ -247,7 +247,7 @@ function bv_chat_pages( string $lang ): array {
 	return $pages;
 }
 
-/** Up to three blog posts in the visitor's language that match the question. */
+/** Up to three blog posts in the language of the page that match the question. */
 function bv_chat_related( string $question, string $lang ): array {
 	$stop  = '/^(what|which|when|where|who|why|how|does|doing|about|have|with|that|this|from|your|tell|please|know|more|info|need|want|wat|welke|wanneer|waar|wie|waarom|hoe|doet|over|heeft|hebben|met|voor|deze|die|dat|jullie|kunnen|kun|kunt|kan|mijn|onze|een|het|van|zijn|meer|vertel|weten|the|and|for|you|are|can|ben|wil|graag|ook|nog|naar|maar|verschuur|booming|venture)$/i';
 	$words = array_values( array_filter(
@@ -301,7 +301,7 @@ Rules
 - Do not write web addresses, e-mail addresses or phone numbers. To point to a page, end your answer with up to two tags from PAGE TAGS, each in double square brackets, for example [[quickscan]]. For a related article use [[post:ID]] with an ID from RELATED ARTICLES. Buttons are added automatically for the tags.
 
 How you write
-- Answer in the visitor's language. If unclear, use {$language}.
+- Always answer in {$language}, the language of this version of the website, also when the visitor writes in another language.
 - Plain, friendly and direct. Short sentences. At most about 90 words. Plain text: no markdown, no lists with symbols, no headings, no emoji, no exclamation marks, no dashes as punctuation.
 - Avoid hype words such as delve, elevate, leverage, unlock, seamless, robust, game-changer, revolutionize.
 
@@ -535,7 +535,7 @@ add_action( 'wp_footer', static function () {
 			document.head.appendChild(s);
 		}
 		btn.addEventListener('click', function () { load(true); });
-		try { if (sessionStorage.getItem('bv-chat-open') === '1') load(true); } catch (e) {}
+		try { if (sessionStorage.getItem('bv-chat-open-' + cfg.lang) === '1') load(true); } catch (e) {}
 	})();
 	</script>
 	<?php

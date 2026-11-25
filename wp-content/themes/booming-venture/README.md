@@ -10,6 +10,10 @@ touching code.
 
 ---
 
+## 1.23.1 (November 2026)
+
+- Chat language follows the page: English pages show the English chat and answers, Dutch pages (/nl/) the Dutch ones, also when a visitor types in the other language. Each language keeps its own conversation.
+
 ## 1.23.0 (November 2026)
 
 - "Ask Ben" AI chat (`inc/chat.php`, `assets/js/chat.js`): launcher with Ben's photo on every page, panel loaded only after a click, always labelled as an AI assistant (EU AI Act art. 50). Answers from the site's own pages and blog posts with Claude Haiku via OpenRouter (`data_collection: deny`, no transcripts stored).
