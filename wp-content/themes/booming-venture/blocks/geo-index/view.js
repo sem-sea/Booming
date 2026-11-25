@@ -33,22 +33,9 @@
 			return list ? Array.prototype.slice.call(list.querySelectorAll('tbody tr')) : [];
 		}
 
-		function fillSectors() {
-			var seen = {};
-			var keep = sector.value;
-			while (sector.options.length > 1) sector.remove(1);
-			rows().forEach(function (tr) {
-				var s = tr.getAttribute('data-sector');
-				if (s && !seen[s]) seen[s] = true;
-			});
-			Object.keys(seen).sort().forEach(function (s) {
-				var o = document.createElement('option');
-				o.value = s;
-				o.textContent = s;
-				sector.appendChild(o);
-			});
-			sector.value = seen[keep] ? keep : '';
-		}
+		/* The sector list is rendered on the server: the same 20 sectors, in the
+		   standard's order, for both lists. Nothing to rebuild per tab. */
+		function fillSectors() {}
 
 		var PAGE = 25;
 		var limit = PAGE;

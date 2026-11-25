@@ -195,3 +195,8 @@
 @container (min-width: 1040px) {
 	.bv-gi__stats { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 1fr; }
 }
+
+/* Companies that have no result yet (first measurement of a new list): kept in
+ * the list so both lists always show all 100 companies and all 20 sectors. */
+.bv-gi__pending .bv-gi__co strong, .bv-gi__pending .bv-gi__rank { color: var(--wp--preset--color--muted, #5b6b80); }
+.bv-gi__wait { display: inline-block; padding: 0.125rem 0.5rem; font-size: 0.75rem; font-weight: 600; white-space: nowrap; color: var(--wp--preset--color--muted, #5b6b80); background: var(--wp--preset--color--base-50, #f8fafc); border: 1px dashed var(--wp--preset--color--border, #e2e8f0); border-radius: 999px; }

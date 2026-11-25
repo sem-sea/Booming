@@ -46,7 +46,7 @@ function bv_gi_scan_status(): array {
 			'used'    => bv_gi_ai_used( $e ),
 			'cap'     => bv_gi_ai_cap(),
 			'error'   => (string) ( $work['errors'][ $e ] ?? '' ),
-			'skipped' => ! $ok && $failed >= 5,
+			'skipped' => ! $ok && ( (int) ( $work['hard'][ $e ] ?? 0 ) >= 5 || $failed >= 15 ),
 		];
 	}
 	$web_running = $wq > 0;
@@ -259,7 +259,7 @@ add_action( 'bv_gi_settings_top', static function () {
 				var li = document.createElement('li');
 				var bad = e.skipped || (e.failed && !e.ok);
 				li.className = bad ? 'is-bad' : '';
-				li.textContent = e.label + ': ' + e.ok + ' goed' + (e.failed ? ', ' + e.failed + ' fout' : '') + ' · deze maand ' + e.used + ' / ' + e.cap + ' vragen' + (e.skipped ? ' · overgeslagen na 5 fouten' : '') + (e.error && bad ? ' · ' + e.error : '');
+				li.textContent = e.label + ': ' + e.ok + ' goed' + (e.failed ? ', ' + e.failed + ' fout' : '') + ' · deze maand ' + e.used + ' / ' + e.cap + ' vragen' + (e.skipped ? ' · overgeslagen voor deze scan' : '') + (e.error && bad ? ' · ' + e.error : '');
 				ul.appendChild(li);
 			});
 			var rep = el('report');

@@ -180,7 +180,12 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 	<div class="bv-gi__filters" hidden>
 		<input type="search" class="bv-gi__q" placeholder="<?php echo esc_attr( $i18n['search'] ); ?>" aria-label="<?php echo esc_attr( $i18n['search'] ); ?>">
 		<label class="bv-gi__field"><span><?php echo esc_html( $t( 'Sector', 'Sector' ) ); ?></span>
-			<select class="bv-gi__sector"><option value=""><?php echo esc_html( $i18n['allSect'] ); ?></option></select>
+			<select class="bv-gi__sector"><option value=""><?php echo esc_html( $i18n['allSect'] ); ?></option><?php
+				foreach ( $sectors as $sec ) {
+					$sl = (string) ( $sec[ $nl ? 0 : 1 ] ?? '' );
+					echo '<option value="' . esc_attr( $sl ) . '">' . esc_html( $sl ) . '</option>'; // phpcs:ignore
+				}
+			?></select>
 		</label>
 		<label class="bv-gi__field"><span><?php echo esc_html( $i18n['sort'] ); ?></span>
 			<select class="bv-gi__sort">
@@ -222,14 +227,17 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 	</div>
 
 	<?php foreach ( $lists as $key => $label ) :
-		$rows = bv_gi_ranked( $key );
-		$s    = $stats( $rows );
+		$rows    = bv_gi_ranked( $key );
+		$s       = $stats( $rows );
+		$have    = array_flip( array_column( $rows, 'domain' ) );
+		$pending = array_values( array_filter( (array) ( $data[ $key ] ?? [] ), static fn( $c ) => ! isset( $have[ $c['domain'] ] ) ) );
 		?>
 		<section class="bv-gi__list" id="<?php echo esc_attr( $id . '-' . $key ); ?>" data-list="<?php echo esc_attr( $key ); ?>" role="tabpanel" <?php echo $key === $default ? '' : 'hidden'; ?>>
 			<h3 class="bv-gi__title"><?php echo esc_html( 'B2B GEO Index: ' . $label ); ?></h3>
-			<?php if ( ! $s ) : ?>
+			<?php if ( ! $s && ! $pending ) : ?>
 				<p class="bv-gi__empty"><?php echo esc_html( $t( 'De eerste meting loopt nu. De ranglijst verschijnt hier zodra alle bedrijven zijn gemeten.', 'The first measurement is running. The ranking appears here once every company has been measured.' ) ); ?></p>
 			<?php else : ?>
+				<?php if ( $s ) : ?>
 				<div class="bv-gi__stats">
 					<div><strong><?php echo (int) $s['n']; ?></strong><span><?php echo esc_html( $t( 'bedrijven gemeten', 'companies measured' ) ); ?></span></div>
 					<div><strong><?php echo (int) $s['avg']; ?></strong><span><?php echo esc_html( $t( 'gemiddelde score van 100', 'average score out of 100' ) ); ?></span></div>
@@ -238,6 +246,7 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 					<div><strong><?php echo (int) $s['html']; ?>%</strong><span><?php echo esc_html( $t( 'leesbaar zonder JavaScript', 'readable without JavaScript' ) ); ?></span></div>
 					<div><strong><?php echo (int) $s['wikipedia']; ?>%</strong><span><?php echo esc_html( $t( 'heeft een Wikipedia-artikel', 'have a Wikipedia article' ) ); ?></span></div>
 				</div>
+				<?php endif; ?>
 				<div class="bv-gi__scroll">
 					<table class="bv-gi__table">
 						<caption class="screen-reader-text"><?php echo esc_html( 'B2B GEO Index: ' . $label ); ?></caption>
@@ -290,6 +299,21 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 								<?php foreach ( $ai_cols as $k => $c ) { echo $cell( $vals[ $k ], $c[0], ' bv-gi__ai' ); } // phpcs:ignore ?>
 								<td class="bv-gi__crawl <?php echo 5 === $open ? 'bv-gi__y' : ( 0 === $open ? 'bv-gi__n' : 'bv-gi__p' ); ?>" data-label="<?php echo esc_attr( $ml['crawl'] ); ?>"><?php echo (int) $open; ?>/5</td>
 								<?php foreach ( $cols as $k => $c ) { echo $cell( $r['checks'][ $k ] ?? null, $c[0] ); } // phpcs:ignore ?>
+							</tr>
+						<?php endforeach; ?>
+						<?php foreach ( $pending as $c ) :
+							$sector = $sectors[ $c['sector'] ][ $nl ? 0 : 1 ] ?? $c['sector'];
+							?>
+							<tr class="bv-gi__pending" data-name="<?php echo esc_attr( strtolower( $c['name'] . ' ' . $c['domain'] ) ); ?>" data-sector="<?php echo esc_attr( $sector ); ?>" data-score="" data-change="" data-ai="" data-ready="">
+								<td class="bv-gi__rank">-</td>
+								<td class="bv-gi__co"><strong><?php echo esc_html( $c['name'] ); ?></strong><span><?php echo esc_html( $c['domain'] ); ?> &middot; <?php echo esc_html( $sector ); ?></span></td>
+								<td class="bv-gi__score"><span class="bv-gi__wait"><?php echo esc_html( $t( 'wordt gemeten', 'being measured' ) ); ?></span></td>
+								<td class="bv-gi__chg" data-label="<?php echo esc_attr( $ml['chg'] ); ?>"><span class="bv-gi__flat">-</span></td>
+								<?php if ( $ai_cols ) : ?><td class="bv-gi__num" data-label="<?php echo esc_attr( $ml['ai'] ); ?>">-</td><?php endif; ?>
+								<td class="bv-gi__num" data-label="<?php echo esc_attr( $ml['ready'] ); ?>">-</td>
+								<?php foreach ( $ai_cols as $k => $col ) { echo $cell( null, $col[0], ' bv-gi__ai' ); } // phpcs:ignore ?>
+								<td class="bv-gi__crawl bv-gi__u" data-label="<?php echo esc_attr( $ml['crawl'] ); ?>">-</td>
+								<?php foreach ( $cols as $k => $col ) { echo $cell( null, $col[0] ); } // phpcs:ignore ?>
 							</tr>
 						<?php endforeach; ?>
 						</tbody>

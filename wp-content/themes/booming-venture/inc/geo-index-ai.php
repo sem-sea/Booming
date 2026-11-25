@@ -221,8 +221,8 @@ function bv_gi_ai_request( string $engine, string $prompt ): array {
 			/* auto: the model's own search where OpenRouter supports it, else Exa ($0.007 per search), so no model fails on the search setting. */
 			$body['tools'] = [ [ 'type' => 'openrouter:web_search', 'parameters' => [ 'engine' => 'auto', 'max_results' => 5 ] ] ];
 		}
-		if ( 0 === strpos( $model, 'openai/' ) ) {
-			$body['reasoning'] = [ 'effort' => 'low' ];
+		if ( 0 === strpos( $model, 'openai/' ) || 0 === strpos( $model, 'google/' ) ) {
+			$body['reasoning'] = [ 'effort' => 'low' ]; // short thinking: the answer is a short list, and thinking tokens cost money
 		}
 		return [
 			'url'     => 'https://openrouter.ai/api/v1/responses',
@@ -274,7 +274,7 @@ function bv_gi_ai_request( string $engine, string $prompt ): array {
 }
 
 /** Send one prompt to all active engines at once. Returns [ engine => [ 'ok', 'text', 'urls', 'error' ] ]. */
-function bv_gi_ai_ask( string $prompt, array $engines ): array {
+function bv_gi_ai_ask( string $prompt, array $engines, int $timeout = 55 ): array {
 	$reqs = [];
 	foreach ( $engines as $e ) {
 		$reqs[ $e ] = bv_gi_ai_request( $e, $prompt );
@@ -283,12 +283,12 @@ function bv_gi_ai_ask( string $prompt, array $engines ): array {
 	$out   = [];
 	if ( ! $class ) {
 		foreach ( $reqs as $e => $r ) {
-			$res = wp_remote_post( $r['url'], [ 'headers' => $r['headers'], 'body' => $r['data'], 'timeout' => 55 ] );
+			$res = wp_remote_post( $r['url'], [ 'headers' => $r['headers'], 'body' => $r['data'], 'timeout' => $timeout ] );
 			$out[ $e ] = bv_gi_ai_parse( is_wp_error( $res ) ? 0 : (int) wp_remote_retrieve_response_code( $res ), is_wp_error( $res ) ? $res->get_error_message() : (string) wp_remote_retrieve_body( $res ) );
 		}
 		return $out;
 	}
-	$responses = $class::request_multiple( $reqs, [ 'timeout' => 55, 'connect_timeout' => 10, 'useragent' => BV_GI_UA ] );
+	$responses = $class::request_multiple( $reqs, [ 'timeout' => $timeout, 'connect_timeout' => 10, 'useragent' => BV_GI_UA, 'max_bytes' => 3000000 ] );
 	foreach ( $responses as $e => $res ) {
 		if ( is_object( $res ) && isset( $res->status_code ) ) {
 			$out[ $e ] = bv_gi_ai_parse( (int) $res->status_code, (string) $res->body );
@@ -336,6 +336,17 @@ function bv_gi_ai_start(): void {
 }
 add_action( 'bv_gi_run', 'bv_gi_ai_start', 20 );
 
+/**
+ * Errors worth one more try: rate limits and overload at the provider (429,
+ * 5xx) and network or memory errors on the way (no HTTP status).
+ */
+function bv_gi_ai_transient( string $error ): bool {
+	if ( 0 !== strpos( $error, 'HTTP ' ) ) {
+		return '' !== $error && 'empty answer' !== $error;
+	}
+	return (bool) preg_match( '/^HTTP (0|408|409|425|429|5\d\d)\b/', $error );
+}
+
 /*
  * One category per run (1.21.1). The run takes the question off the queue
  * and plans the next run before it asks anything, so a host that stops a
@@ -350,16 +361,26 @@ add_action( 'bv_gi_ai_batch', static function () {
 	if ( function_exists( 'set_time_limit' ) ) {
 		@set_time_limit( 120 ); // phpcs:ignore
 	}
+	$t0      = time();
 	$active  = bv_gi_ai_active();
 	$queue   = (array) get_option( 'bv_gi_ai_queue', [] );
 	$work    = (array) get_option( 'bv_gi_ai_work', [] );
 	$cap     = bv_gi_ai_cap();
+	/* A run started before the company list changed: drop questions about categories that left the list (they would cost money and score nobody). */
+	$valid = array_flip( array_map( static fn( $q ) => $q[0] . '|' . $q[1], bv_gi_ai_categories() ) );
+	$kept  = array_values( array_filter( $queue, static fn( $q ) => is_array( $q ) && isset( $valid[ ( $q[0] ?? '' ) . '|' . ( $q[1] ?? '' ) ] ) ) );
+	if ( count( $kept ) !== count( $queue ) || empty( $work['total'] ) ) {
+		$queue         = $kept;
+		$work['total'] = count( $queue ) + count( (array) ( $work['prompts']['nl'] ?? [] ) ) + count( (array) ( $work['prompts']['intl'] ?? [] ) );
+		update_option( 'bv_gi_ai_queue', $queue, false );
+		update_option( 'bv_gi_ai_work', $work, false );
+	}
 	$engines = [];
 	foreach ( $active as $e ) {
 		if ( bv_gi_ai_used( $e ) >= $cap ) {
 			$work['errors'][ $e ] = sprintf( 'Maandlimiet van %d vragen bereikt; de meting gaat volgende maand verder.', $cap );
-		} elseif ( empty( $work['ok'][ $e ] ) && (int) ( $work['failed'][ $e ] ?? 0 ) >= 5 ) {
-			continue; // failed 5 times without a single answer this run (key, model or privacy setting): stop asking it
+		} elseif ( empty( $work['ok'][ $e ] ) && ( (int) ( $work['hard'][ $e ] ?? 0 ) >= 5 || (int) ( $work['failed'][ $e ] ?? 0 ) >= 15 ) ) {
+			continue; // no answer this run after 5 hard errors (key, model, guardrail) or 15 errors of any kind: stop asking it
 		} else {
 			$engines[] = $e;
 		}
@@ -385,6 +406,15 @@ add_action( 'bv_gi_ai_batch', static function () {
 		update_option( 'bv_gi_ai_work', $work, false ); // the status bar shows the question being asked
 		bv_gi_ai_count( $engines );
 		$answers = bv_gi_ai_ask( $prompt, $engines );
+		/* A rate limit or a network hiccup gets one more try for that assistant, within the host's time limit. */
+		$retry = array_keys( array_filter( $answers, static fn( $a ) => ! $a['ok'] && bv_gi_ai_transient( (string) $a['error'] ) ) );
+		if ( $retry && time() - $t0 < 50 ) {
+			sleep( 8 );
+			bv_gi_ai_count( $retry );
+			foreach ( bv_gi_ai_ask( $prompt, $retry, 40 ) as $e => $a ) {
+				$answers[ $e ] = $a;
+			}
+		}
 		foreach ( (array) ( bv_gi_companies()[ $list ] ?? [] ) as $c ) {
 			if ( ( $c['cat'] ?? '' ) !== $cat ) {
 				continue;
@@ -410,6 +440,9 @@ add_action( 'bv_gi_ai_batch', static function () {
 			} else {
 				$work['errors'][ $e ] = mb_substr( (string) $a['error'], 0, 300 );
 				$work['failed'][ $e ] = (int) ( $work['failed'][ $e ] ?? 0 ) + 1;
+				if ( ! bv_gi_ai_transient( (string) $a['error'] ) ) {
+					$work['hard'][ $e ] = (int) ( $work['hard'][ $e ] ?? 0 ) + 1;
+				}
 			}
 		}
 		$work['prompts'][ $list ][ $cat ] = $prompt;
