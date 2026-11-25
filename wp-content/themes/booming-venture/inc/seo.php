@@ -323,7 +323,7 @@ function bv_gi_schema_nodes(): array {
 	$nl   = function_exists( 'bv_post_lang' ) && 'nl' === bv_post_lang( $post->ID );
 	$t    = static fn( $a, $b ) => $nl ? $a : $b;
 	$url  = get_permalink( $post );
-	$org  = [ '@id' => home_url( '/' ) . '#organization' ];
+	$org  = [ '@type' => 'Organization', '@id' => home_url( '/' ) . '#organization', 'name' => 'Booming Venture', 'url' => home_url( '/' ) ];
 	$meta = (array) get_option( 'bv_gi_meta', [] );
 	$ai   = (array) get_option( 'bv_gi_ai_results', [] );
 	$done = max( (int) ( $meta['completed'] ?? 0 ), (int) ( $ai['completed'] ?? 0 ) );

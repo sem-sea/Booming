@@ -34,7 +34,7 @@ function bv_gi_ai_engines(): array {
 }
 
 function bv_gi_ai_settings(): array {
-	return wp_parse_args( (array) get_option( 'bv_gi_ai', [] ), [ 'keys' => [], 'models' => [], 'enabled' => 0 ] );
+	return wp_parse_args( (array) get_option( 'bv_gi_ai', [] ), [ 'keys' => [], 'models' => [], 'enabled' => 0, 'cap' => 700 ] );
 }
 
 function bv_gi_ai_key( string $engine ): string {
@@ -56,6 +56,31 @@ function bv_gi_ai_active(): array {
 		return [];
 	}
 	return array_values( array_filter( array_keys( bv_gi_ai_engines() ), static fn( $e ) => '' !== bv_gi_ai_key( $e ) ) );
+}
+
+/*
+ * Monthly cap per assistant, counted in this site: a second brake on top of
+ * the spend limit at each provider. 700 covers the 143 weekly questions of
+ * a long month plus one extra manual run.
+ */
+function bv_gi_ai_cap(): int {
+	return max( 0, (int) bv_gi_ai_settings()['cap'] );
+}
+
+function bv_gi_ai_used( string $engine ): int {
+	$u = (array) get_option( 'bv_gi_ai_usage', [] );
+	return ( $u['month'] ?? '' ) === gmdate( 'Y-m' ) ? (int) ( $u['n'][ $engine ] ?? 0 ) : 0;
+}
+
+function bv_gi_ai_count( array $engines ): void {
+	$u = (array) get_option( 'bv_gi_ai_usage', [] );
+	if ( ( $u['month'] ?? '' ) !== gmdate( 'Y-m' ) ) {
+		$u = [ 'month' => gmdate( 'Y-m' ), 'n' => [] ];
+	}
+	foreach ( $engines as $e ) {
+		$u['n'][ $e ] = (int) ( $u['n'][ $e ] ?? 0 ) + 1;
+	}
+	update_option( 'bv_gi_ai_usage', $u, false );
 }
 
 /* ------------------------------------------------------------------ prompts and parsing (pure) */
@@ -254,13 +279,28 @@ add_action( 'bv_gi_ai_batch', static function () {
 	if ( function_exists( 'set_time_limit' ) ) {
 		@set_time_limit( 240 ); // phpcs:ignore
 	}
-	$engines = bv_gi_ai_active();
+	$active  = bv_gi_ai_active();
+	$engines = $active;
+	$capped  = false;
 	$queue   = (array) get_option( 'bv_gi_ai_queue', [] );
 	$work    = (array) get_option( 'bv_gi_ai_work', [] );
 	$t0      = time();
 	while ( $engines && $queue && time() - $t0 < 120 ) {
+		$cap = bv_gi_ai_cap();
+		foreach ( $engines as $i => $e ) {
+			if ( bv_gi_ai_used( $e ) >= $cap ) {
+				unset( $engines[ $i ] );
+				$work['errors'][ $e ] = sprintf( 'Maandlimiet van %d vragen bereikt; de meting gaat volgende maand verder.', $cap );
+			}
+		}
+		$engines = array_values( $engines );
+		if ( ! $engines ) {
+			$capped = true;
+			break;
+		}
 		[ $list, $cat ] = array_shift( $queue );
 		$prompt  = bv_gi_ai_prompt( $list, $cat, (int) ( $work['week'] ?? 0 ) );
+		bv_gi_ai_count( $engines );
 		$answers = bv_gi_ai_ask( $prompt, $engines );
 		foreach ( (array) ( bv_gi_companies()[ $list ] ?? [] ) as $c ) {
 			if ( ( $c['cat'] ?? '' ) !== $cat ) {
@@ -291,12 +331,15 @@ add_action( 'bv_gi_ai_batch', static function () {
 	update_option( 'bv_gi_ai_queue', $queue, false );
 	update_option( 'bv_gi_ai_work', $work, false );
 	delete_transient( 'bv_gi_ai_lock' );
-	if ( $queue && $engines ) {
+	if ( $queue && $capped ) {
+		/* Every assistant hit its monthly cap: keep the run and the last full results, try again tomorrow. */
+		wp_schedule_single_event( time() + DAY_IN_SECONDS, 'bv_gi_ai_batch' );
+	} elseif ( $queue && $engines ) {
 		wp_schedule_single_event( time() + 60, 'bv_gi_ai_batch' );
 	} elseif ( ! empty( $work['rows'] ) ) {
 		$work['completed'] = time();
-		$work['engines']   = $engines;
-		update_option( 'bv_gi_ai_results', [ 'completed' => $work['completed'], 'engines' => $engines, 'rows' => $work['rows'], 'prompts' => $work['prompts'] ?? [] ], false );
+		$work['engines']   = $active;
+		update_option( 'bv_gi_ai_results', [ 'completed' => $work['completed'], 'engines' => $active, 'rows' => $work['rows'], 'prompts' => $work['prompts'] ?? [] ], false );
 		update_option( 'bv_gi_ai_answers', $work['answers'], false );
 		update_option( 'bv_gi_ai_work', $work, false );
 		if ( function_exists( 'bv_gi_touch_pages' ) ) {
@@ -340,6 +383,7 @@ add_action( 'admin_post_bv_gi_ai_save', static function () {
 		$s['models'][ $e ] = trim( sanitize_text_field( wp_unslash( $_POST['model'][ $e ] ?? '' ) ) );
 	}
 	$s['enabled'] = empty( $_POST['enabled'] ) ? 0 : 1;
+	$s['cap']     = max( 0, min( 5000, (int) ( $_POST['cap'] ?? 700 ) ) );
 	update_option( 'bv_gi_ai', $s, false );
 	if ( ! empty( $_POST['run'] ) ) {
 		do_action( 'bv_gi_weekly' );
@@ -388,12 +432,13 @@ function bv_gi_ai_settings_page(): void {
 							<?php else : ?>
 								<input type="password" name="key[<?php echo esc_attr( $e ); ?>]" value="" autocomplete="new-password" class="regular-text" placeholder="<?php echo $k ? esc_attr( 'Ingesteld, eindigt op ' . substr( $k, -4 ) ) : 'API-sleutel'; ?>">
 								<?php if ( $k ) : ?><label><input type="checkbox" name="del[<?php echo esc_attr( $e ); ?>]" value="1"> Verwijder</label><?php endif; ?>
-								<p class="description">Maak een sleutel aan via <a href="<?php echo esc_url( $links[ $e ] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( wp_parse_url( $links[ $e ], PHP_URL_HOST ) ); ?></a> en stel daar een bestedingslimiet in.</p>
+								<p class="description">Maak een aparte sleutel aan via <a href="<?php echo esc_url( $links[ $e ] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( wp_parse_url( $links[ $e ], PHP_URL_HOST ) ); ?></a> en stel daar een harde bestedingslimiet in. Veiliger: zet hem in wp-config.php als <code><?php echo esc_html( "define( '" . $def['const'] . "', '...' );" ); ?></code>, dan staat hij niet in de database.</p>
 							<?php endif; ?>
 							<p><label><?php echo esc_html( $def['model_label'] ); ?>: <input type="text" name="model[<?php echo esc_attr( $e ); ?>]" value="<?php echo esc_attr( $s['models'][ $e ] ?? '' ); ?>" placeholder="<?php echo esc_attr( $def['model'] ); ?>"></label></p>
 						</td>
 					</tr>
 				<?php endforeach; ?>
+				<tr><th scope="row">Maandlimiet</th><td><input type="number" name="cap" min="0" max="5000" step="10" value="<?php echo (int) $s['cap']; ?>" class="small-text"> vragen per AI-assistent per maand<p class="description">Een rem in je eigen site, naast de bestedingslimiet bij de aanbieder. Een normale maand is ongeveer <?php echo (int) ( $cats * 4.35 ); ?> vragen.</p></td></tr>
 				<tr><th scope="row">Nu meten</th><td><label><input type="checkbox" name="run" value="1"> Start na opslaan direct een nieuwe meting (websites en AI)</label></td></tr>
 			</table>
 			<?php submit_button( 'Opslaan' ); ?>
@@ -405,6 +450,7 @@ function bv_gi_ai_settings_page(): void {
 				<tr><td>Websitemeting klaar</td><td><?php echo esc_html( $fmt( $meta['completed'] ?? 0 ) ); ?><?php echo $squeue ? ' (nog ' . (int) $squeue . ' bedrijven in de wachtrij)' : ''; ?></td></tr>
 				<tr><td>AI-meting gestart</td><td><?php echo esc_html( $fmt( $work['started'] ?? 0 ) ); ?></td></tr>
 				<tr><td>AI-meting klaar</td><td><?php echo esc_html( $fmt( $res['completed'] ?? 0 ) ); ?><?php echo $queue ? ' (nog ' . (int) $queue . ' vragen in de wachtrij)' : ''; ?></td></tr>
+				<tr><td>Vragen deze maand</td><td><?php echo esc_html( implode( ', ', array_map( static fn( $e ) => bv_gi_ai_engines()[ $e ]['label'] . ' ' . bv_gi_ai_used( $e ) . ' / ' . bv_gi_ai_cap(), array_keys( bv_gi_ai_engines() ) ) ) ); ?></td></tr>
 				<tr><td>Actieve AI-assistenten</td><td><?php echo esc_html( implode( ', ', array_map( static fn( $e ) => bv_gi_ai_engines()[ $e ]['label'], bv_gi_ai_active() ) ) ?: 'geen' ); ?></td></tr>
 				<?php foreach ( (array) ( $work['errors'] ?? [] ) as $e => $err ) : ?>
 					<tr><td>Laatste fout <?php echo esc_html( bv_gi_ai_engines()[ $e ]['label'] ?? $e ); ?></td><td><?php echo esc_html( $err ); ?></td></tr>
