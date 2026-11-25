@@ -26,15 +26,15 @@ defined( 'ABSPATH' ) || exit;
 
 function bv_gi_ai_engines(): array {
 	return [
-		'openai'     => [ 'label' => 'ChatGPT', 'const' => 'BV_GI_OPENAI_KEY', 'model' => 'gpt-6-luna', 'model_label' => 'Model' ],
-		'claude'     => [ 'label' => 'Claude', 'const' => 'BV_GI_ANTHROPIC_KEY', 'model' => 'claude-haiku-5-5', 'model_label' => 'Model' ],
-		'gemini'     => [ 'label' => 'Gemini', 'const' => 'BV_GI_GEMINI_KEY', 'model' => 'gemini-3.8-flash', 'model_label' => 'Model' ],
-		'perplexity' => [ 'label' => 'Perplexity', 'const' => 'BV_GI_PERPLEXITY_KEY', 'model' => 'fast', 'model_label' => 'Effort-preset' ],
+		'openai'     => [ 'label' => 'ChatGPT', 'const' => 'BV_GI_OPENAI_KEY', 'model' => 'gpt-6-luna', 'model_label' => 'Model', 'router' => 'openai/gpt-6-luna' ],
+		'claude'     => [ 'label' => 'Claude', 'const' => 'BV_GI_ANTHROPIC_KEY', 'model' => 'claude-haiku-5-5', 'model_label' => 'Model', 'router' => 'anthropic/claude-haiku-5.5' ],
+		'gemini'     => [ 'label' => 'Gemini', 'const' => 'BV_GI_GEMINI_KEY', 'model' => 'gemini-3.8-flash', 'model_label' => 'Model', 'router' => 'google/gemini-3.8-flash' ],
+		'perplexity' => [ 'label' => 'Perplexity', 'const' => 'BV_GI_PERPLEXITY_KEY', 'model' => 'fast', 'model_label' => 'Effort-preset', 'router' => 'perplexity/sonar' ],
 	];
 }
 
 function bv_gi_ai_settings(): array {
-	return wp_parse_args( (array) get_option( 'bv_gi_ai', [] ), [ 'keys' => [], 'models' => [], 'enabled' => 0, 'cap' => 700 ] );
+	return wp_parse_args( (array) get_option( 'bv_gi_ai', [] ), [ 'keys' => [], 'models' => [], 'enabled' => 0, 'cap' => 700, 'router_engines' => [ 'openai', 'claude', 'gemini', 'perplexity' ] ] );
 }
 
 function bv_gi_ai_key( string $engine ): string {
@@ -50,12 +50,36 @@ function bv_gi_ai_model( string $engine ): string {
 	return '' !== $m ? $m : bv_gi_ai_engines()[ $engine ]['model'];
 }
 
-/** Engines that have a key and AI measuring switched on. */
+/*
+ * OpenRouter: one key for all four assistants. Each request goes to the
+ * same model family with the provider's own web search (engine "native"),
+ * billed at the provider's rates plus OpenRouter's fee on credits. An
+ * assistant with its own key always uses that key directly.
+ */
+function bv_gi_ai_router_key(): string {
+	if ( defined( 'BV_GI_OPENROUTER_KEY' ) && BV_GI_OPENROUTER_KEY ) {
+		return (string) BV_GI_OPENROUTER_KEY;
+	}
+	return (string) ( bv_gi_ai_settings()['keys']['openrouter'] ?? '' );
+}
+
+/** 'direct', 'openrouter' or '' (not measured). */
+function bv_gi_ai_via( string $engine ): string {
+	if ( '' !== bv_gi_ai_key( $engine ) ) {
+		return 'direct';
+	}
+	if ( '' !== bv_gi_ai_router_key() && in_array( $engine, (array) bv_gi_ai_settings()['router_engines'], true ) ) {
+		return 'openrouter';
+	}
+	return '';
+}
+
+/** Engines that have a key (own or OpenRouter) and AI measuring switched on. */
 function bv_gi_ai_active(): array {
 	if ( empty( bv_gi_ai_settings()['enabled'] ) ) {
 		return [];
 	}
-	return array_values( array_filter( array_keys( bv_gi_ai_engines() ), static fn( $e ) => '' !== bv_gi_ai_key( $e ) ) );
+	return array_values( array_filter( array_keys( bv_gi_ai_engines() ), static fn( $e ) => '' !== bv_gi_ai_via( $e ) ) );
 }
 
 /*
@@ -167,6 +191,23 @@ function bv_gi_ai_cites( array $urls, string $domain ): bool {
 /* ------------------------------------------------------------------ requests */
 
 function bv_gi_ai_request( string $engine, string $prompt ): array {
+	if ( 'openrouter' === bv_gi_ai_via( $engine ) ) {
+		$model = (string) ( bv_gi_ai_settings()['models'][ 'router_' . $engine ] ?? '' );
+		$model = '' !== $model ? $model : bv_gi_ai_engines()[ $engine ]['router'];
+		$body  = [ 'model' => $model, 'input' => $prompt, 'max_output_tokens' => 3000 ];
+		if ( 0 !== strpos( $model, 'perplexity/' ) ) { // Perplexity models search by themselves
+			$body['tools'] = [ [ 'type' => 'openrouter:web_search', 'parameters' => [ 'engine' => 'native', 'max_results' => 5 ] ] ];
+		}
+		if ( 0 === strpos( $model, 'openai/' ) ) {
+			$body['reasoning'] = [ 'effort' => 'low' ];
+		}
+		return [
+			'url'     => 'https://openrouter.ai/api/v1/responses',
+			'headers' => [ 'Authorization' => 'Bearer ' . bv_gi_ai_router_key(), 'Content-Type' => 'application/json', 'HTTP-Referer' => home_url( '/' ), 'X-Title' => 'Booming Venture B2B GEO Index' ],
+			'data'    => wp_json_encode( $body ),
+			'type'    => 'POST',
+		];
+	}
 	$key   = bv_gi_ai_key( $engine );
 	$model = bv_gi_ai_model( $engine );
 	switch ( $engine ) {
@@ -382,6 +423,13 @@ add_action( 'admin_post_bv_gi_ai_save', static function () {
 		}
 		$s['models'][ $e ] = trim( sanitize_text_field( wp_unslash( $_POST['model'][ $e ] ?? '' ) ) );
 	}
+	$rk = trim( sanitize_text_field( wp_unslash( $_POST['key']['openrouter'] ?? '' ) ) );
+	if ( ! empty( $_POST['del']['openrouter'] ) ) {
+		unset( $s['keys']['openrouter'] );
+	} elseif ( '' !== $rk ) {
+		$s['keys']['openrouter'] = $rk;
+	}
+	$s['router_engines'] = array_values( array_intersect( array_keys( bv_gi_ai_engines() ), array_map( 'sanitize_key', (array) wp_unslash( $_POST['router_engines'] ?? [] ) ) ) );
 	$s['enabled'] = empty( $_POST['enabled'] ) ? 0 : 1;
 	$s['cap']     = max( 0, min( 5000, (int) ( $_POST['cap'] ?? 700 ) ) );
 	update_option( 'bv_gi_ai', $s, false );
@@ -420,6 +468,24 @@ function bv_gi_ai_settings_page(): void {
 			<?php wp_nonce_field( 'bv_gi_ai_save' ); ?>
 			<table class="form-table" role="presentation">
 				<tr><th scope="row">AI-meting</th><td><label><input type="checkbox" name="enabled" value="1" <?php checked( ! empty( $s['enabled'] ) ); ?>> Aan</label></td></tr>
+				<?php $rk = bv_gi_ai_router_key(); $rconst = defined( 'BV_GI_OPENROUTER_KEY' ) && BV_GI_OPENROUTER_KEY; ?>
+				<tr>
+					<th scope="row">OpenRouter<br><span style="font-weight:400">(één sleutel voor alle vier)</span></th>
+					<td>
+						<?php if ( $rconst ) : ?>
+							<p>Sleutel staat in wp-config.php (BV_GI_OPENROUTER_KEY).</p>
+						<?php else : ?>
+							<input type="password" name="key[openrouter]" value="" autocomplete="new-password" class="regular-text" placeholder="<?php echo $rk ? esc_attr( 'Ingesteld, eindigt op ' . substr( $rk, -4 ) ) : 'OpenRouter API-sleutel'; ?>">
+							<?php if ( $rk ) : ?><label><input type="checkbox" name="del[openrouter]" value="1"> Verwijder</label><?php endif; ?>
+						<?php endif; ?>
+						<p>
+							<?php foreach ( bv_gi_ai_engines() as $e => $def ) : ?>
+								<label style="margin-right:12px"><input type="checkbox" name="router_engines[]" value="<?php echo esc_attr( $e ); ?>" <?php checked( in_array( $e, (array) $s['router_engines'], true ) ); ?>> <?php echo esc_html( $def['label'] ); ?></label>
+							<?php endforeach; ?>
+						</p>
+						<p class="description">Maak een sleutel aan op <a href="https://openrouter.ai/settings/keys" target="_blank" rel="noopener">openrouter.ai</a>, koop vooraf tegoed, zet automatisch bijvullen uit en geef de sleutel een limiet met maandelijkse reset (bijvoorbeeld $20). Elke assistent met een eigen sleutel hieronder gebruikt die eigen sleutel. Veiliger: <code>define( 'BV_GI_OPENROUTER_KEY', '...' );</code> in wp-config.php.</p>
+					</td>
+				</tr>
 				<?php foreach ( bv_gi_ai_engines() as $e => $def ) :
 					$k     = bv_gi_ai_key( $e );
 					$const = defined( $def['const'] ) && constant( $def['const'] );
@@ -451,7 +517,7 @@ function bv_gi_ai_settings_page(): void {
 				<tr><td>AI-meting gestart</td><td><?php echo esc_html( $fmt( $work['started'] ?? 0 ) ); ?></td></tr>
 				<tr><td>AI-meting klaar</td><td><?php echo esc_html( $fmt( $res['completed'] ?? 0 ) ); ?><?php echo $queue ? ' (nog ' . (int) $queue . ' vragen in de wachtrij)' : ''; ?></td></tr>
 				<tr><td>Vragen deze maand</td><td><?php echo esc_html( implode( ', ', array_map( static fn( $e ) => bv_gi_ai_engines()[ $e ]['label'] . ' ' . bv_gi_ai_used( $e ) . ' / ' . bv_gi_ai_cap(), array_keys( bv_gi_ai_engines() ) ) ) ); ?></td></tr>
-				<tr><td>Actieve AI-assistenten</td><td><?php echo esc_html( implode( ', ', array_map( static fn( $e ) => bv_gi_ai_engines()[ $e ]['label'], bv_gi_ai_active() ) ) ?: 'geen' ); ?></td></tr>
+				<tr><td>Actieve AI-assistenten</td><td><?php echo esc_html( implode( ', ', array_map( static fn( $e ) => bv_gi_ai_engines()[ $e ]['label'] . ( 'openrouter' === bv_gi_ai_via( $e ) ? ' (via OpenRouter)' : '' ), bv_gi_ai_active() ) ) ?: 'geen' ); ?></td></tr>
 				<?php foreach ( (array) ( $work['errors'] ?? [] ) as $e => $err ) : ?>
 					<tr><td>Laatste fout <?php echo esc_html( bv_gi_ai_engines()[ $e ]['label'] ?? $e ); ?></td><td><?php echo esc_html( $err ); ?></td></tr>
 				<?php endforeach; ?>

@@ -61,7 +61,7 @@ EN = [
     block("intl"),
     h2a("How is the score calculated?", "methodology"),
     cap("The GEO score is a number from 0 to 100: half comes from how often AI assistants name the company, half from seven website checks."),
-    p("<strong>AI score.</strong> Every Monday the site asks one buyer question per category to ChatGPT, Claude, Gemini and Perplexity, through their official APIs with web search switched on. Dutch companies get the question in Dutch, international companies in English. The AI score is the share of answers that name the company (80%) or cite its website (20%)."),
+    p("<strong>AI score.</strong> Every Monday the site asks one buyer question per category to ChatGPT, Claude, Gemini and Perplexity, through their APIs with each assistant's own web search switched on. Dutch companies get the question in Dutch, international companies in English. The AI score is the share of answers that name the company (80%) or cite its website (20%)."),
     p("<strong>Website score.</strong> Seven checks on the company's own website, with these points:"),
     table(
         ["Check", "Points", "What we measure", "Why it matters"],
@@ -103,7 +103,7 @@ NL = [
     block("nl"),
     h2a("Hoe wordt de score berekend?", "methode"),
     cap("De GEO-score is een getal van 0 tot 100: de helft komt uit hoe vaak AI-assistenten het bedrijf noemen, de helft uit zeven websitechecks."),
-    p("<strong>AI-score.</strong> Elke maandag stelt de site per categorie één koopvraag aan ChatGPT, Claude, Gemini en Perplexity, via hun officiële API's met zoeken op internet aan. Nederlandse bedrijven krijgen de vraag in het Nederlands, internationale bedrijven in het Engels. De AI-score is het aandeel antwoorden dat het bedrijf noemt (80%) of naar de website verwijst (20%)."),
+    p("<strong>AI-score.</strong> Elke maandag stelt de site per categorie één koopvraag aan ChatGPT, Claude, Gemini en Perplexity, via hun API's met de eigen zoekfunctie van elke assistent aan. Nederlandse bedrijven krijgen de vraag in het Nederlands, internationale bedrijven in het Engels. De AI-score is het aandeel antwoorden dat het bedrijf noemt (80%) of naar de website verwijst (20%)."),
     p("<strong>Websitescore.</strong> Zeven checks op de eigen website van het bedrijf, met deze punten:"),
     table(
         ["Check", "Punten", "Wat we meten", "Waarom het telt"],
