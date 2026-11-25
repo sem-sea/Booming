@@ -230,20 +230,38 @@ add_action( 'wp_head', static function () {
 	printf( '<link rel="alternate" hreflang="x-default" href="%s">' . "\n", esc_url( $alt['en'] ) );
 }, 2 );
 
-/* Language link in the footer: the counterpart of this page, else the
- * other language's home. Empty until the Dutch home is published. */
-add_shortcode( 'bv_lang_switch', static function () {
+/* Language switch: the same page in the other language when a published
+ * translation exists, else the other language's blog (for a post) or home.
+ * Empty until the Dutch home is published, so it never links to a 404.
+ * [bv_lang_switch] in the footer, [bv_lang_switch style="short"] in the
+ * header (globe + NL/EN). Plain links, no redirects, as Google advises. */
+add_shortcode( 'bv_lang_switch', static function ( $atts ) {
+	$atts    = shortcode_atts( [ 'style' => 'full' ], $atts, 'bv_lang_switch' );
 	$to      = 'nl' === bv_lang() ? 'en' : 'nl';
 	$nl_home = get_page_by_path( 'nl' );
 	if ( ! $nl_home || 'publish' !== $nl_home->post_status ) return '';
-	$alt = bv_alternates();
-	$url = $alt[ $to ] ?? ( 'nl' === $to ? get_permalink( $nl_home ) : home_url( '/' ) );
+	$alt  = bv_alternates();
+	$same = ! empty( $alt[ $to ] );
+	if ( $same ) {
+		$url = $alt[ $to ];
+	} else {
+		$url = 'nl' === $to ? get_permalink( $nl_home ) : home_url( '/' );
+		if ( is_singular( 'post' ) || is_home() ) {
+			$blog = 'nl' === $to ? get_page_by_path( 'nl/blog' ) : get_post( (int) get_option( 'page_for_posts' ) );
+			if ( $blog && 'publish' === $blog->post_status ) $url = get_permalink( $blog );
+		}
+	}
+	$name = 'nl' === $to ? 'Nederlands' : 'English';
+	if ( 'short' !== $atts['style'] ) {
+		return sprintf( '<a class="bv-lang-switch" href="%s" hreflang="%s" lang="%s">%s</a>', esc_url( $url ), $to, $to, $name );
+	}
+	$label = 'nl' === $to
+		? ( $same ? 'Bekijk deze pagina in het Nederlands' : 'Naar de Nederlandse website' )
+		: ( $same ? 'View this page in English' : 'Go to the English website' );
+	$globe = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>';
 	return sprintf(
-		'<a class="bv-lang-switch" href="%s" hreflang="%s" lang="%s">%s</a>',
-		esc_url( $url ),
-		$to,
-		$to,
-		'nl' === $to ? 'Nederlands' : 'English'
+		'<a class="bv-lang-switch bv-lang-switch--short" href="%s" hreflang="%s" lang="%s" aria-label="%s" title="%s">%s<span>%s</span></a>',
+		esc_url( $url ), $to, $to, esc_attr( $label ), esc_attr( $label ), $globe, strtoupper( $to )
 	);
 } );
 

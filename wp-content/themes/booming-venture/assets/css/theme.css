@@ -905,7 +905,10 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	gap: 0.5rem 1.25rem !important;
 	flex-wrap: nowrap;
 }
-@media (min-width: 1200px) {
+@media (min-width: 1200px) and (max-width: 1279px) {
+	.bv-header .wp-block-navigation__container { gap: 0.5rem 1rem !important; }
+}
+@media (min-width: 1280px) {
 	.bv-header .wp-block-navigation__container { gap: 0.5rem 1.75rem !important; }
 }
 .bv-header .wp-block-navigation .wp-block-navigation-item {
@@ -928,15 +931,15 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 	color: var(--wp--preset--color--booming-700);
 }
 
-/* Hamburger -> overlay up to 1139px. Core switches at 600px, but logo,
- * seven links and the button need about 1120px, so tablets got a menu
- * that ran off the screen. */
-@media (min-width: 600px) and (max-width: 1139px) {
+/* Hamburger -> overlay up to 1199px. Core switches at 600px, but logo,
+ * seven links, the language switch and the button need about 1180px, so
+ * tablets got a menu that ran off the screen. */
+@media (min-width: 600px) and (max-width: 1199px) {
 	.bv-header .wp-block-navigation__responsive-container-open:not(.always-shown) { display: flex; }
 	.bv-header .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) { display: none; }
 	.bv-header .bv-nav { margin-left: auto; justify-content: flex-end; }
 }
-@media (max-width: 1139px) {
+@media (max-width: 1199px) {
 	.bv-header .wp-block-navigation__responsive-container-open svg { color: var(--wp--preset--color--contrast); }
 	.bv-header .wp-block-navigation__responsive-container.is-menu-open {
 		background: rgba(255,255,255,0.98);
@@ -2160,3 +2163,29 @@ body:has(:is(input, textarea, select):focus) :is(.bv-chat-launch, .bv-fabs) { op
 .wp-block-table.bv-compare thead { border-bottom: 2px solid #cbd5e1; }
 @media (max-width: 600px) { .wp-block-table.bv-compare table { min-width: 480px; font-size: 0.875rem; } }
 @media (max-width: 599px) { .bv-header .bv-nav { margin-left: auto; justify-content: flex-end; } }
+
+/* Language switch in the header (1.15.0): globe + NL/EN, same page in the
+ * other language. Before the menu button on phones and tablets. */
+.bv-lang-switch--short { display: inline-flex; align-items: center; gap: 0.375rem; flex-shrink: 0; min-height: 40px; padding: 0.375rem 0.75rem; border: 1px solid var(--wp--preset--color--border); border-radius: 999px; font-size: 0.875rem; font-weight: 600; line-height: 1; color: var(--wp--preset--color--contrast); text-decoration: none; white-space: nowrap; transition: border-color var(--bv-trans), color var(--bv-trans); }
+.bv-lang-switch--short:hover, .bv-lang-switch--short:focus-visible { border-color: var(--wp--preset--color--booming-500); color: var(--wp--preset--color--booming-700); }
+.bv-lang-switch--short svg { flex-shrink: 0; }
+@media (max-width: 1199px) {
+	.bv-header .bv-lang-switch--short { order: 1; margin-left: auto; }
+	.bv-header__inner:has(.bv-lang-switch--short) .bv-nav { order: 2; flex: 0 0 auto; margin-left: 0.25rem; }
+	.bv-header__inner .bv-header__cta { order: 3; }
+}
+/* Up to 539px there is no room for the button next to the switch; the
+ * menu carries a Contact link there. */
+@media (max-width: 539px) {
+	.bv-header__inner:has(.bv-lang-switch--short) .bv-header__cta { display: none !important; }
+}
+/* Small phones: logo, switch and menu button must fit next to each other. */
+@media (max-width: 420px) {
+	.bv-header__inner:has(.bv-lang-switch--short) { column-gap: 0.75rem; }
+	.bv-lang-switch--short { padding: 0.375rem 0.625rem; }
+	.bv-lang-switch--short svg { display: none; }
+}
+@media (max-width: 359px) {
+	.bv-header__inner:has(.bv-lang-switch--short) { padding-left: 1rem !important; padding-right: 1rem !important; }
+	.bv-header__inner:has(.bv-lang-switch--short) .bv-brand { font-size: 1.25rem !important; }
+}
