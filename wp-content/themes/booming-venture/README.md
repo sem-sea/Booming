@@ -10,6 +10,13 @@ touching code.
 
 ---
 
+## 1.25.0 (November 2026)
+
+- PDF report per company: GET /wp-json/bv/v1/geo-pdf?domain=&list=&lang= (inc/geo-index-pdf.php, FPDF 1.9 in inc/lib/fpdf). Brand header, score card, every check with its points, AI numbers when measured, gap with the sector leader and a numbered improvement plan, in Dutch or English. Download button in every details panel, and "Download your improvement plan as PDF" after the newsletter step of the check. Built from stored data only (no outside requests), 30 per hour per visitor.
+- Labels and advice per check live in bv_gi_texts(), shared by the block and the PDF.
+- Details button restyled (white pill with a round chevron, gradient when open) and pinned to the right edge of the company column on wide screens, under the company name on phones. Short label "Details" in the wide table, full label for screen readers.
+- Motion: details grow open and closed, cards and bars animate in, lists fade when you switch tabs or filter, the check shows a spinner, fades in and counts the score up, folding sections open smoothly where supported. All motion is off with "reduce motion".
+
 ## 1.24.1 (November 2026)
 
 - Public check: when a homepage refuses our request (bot protection, firewall), the score shows as incomplete with the HTTP status, the points that could not be measured and what to ask the web team. Such results are kept 15 minutes instead of 24 hours, so a fix can be checked again the same day.

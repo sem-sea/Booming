@@ -649,7 +649,7 @@ function bv_gi_check_extra( array $out, string $list, string $sector ): array {
 	 * leader's website score, which has no margin. Not for an incomplete check. */
 	if ( $gap && ! $self ) {
 		$out['gap']['leader']['score'] = (int) $leader['ready'];
-		$out['gap']['points']          = $out['gap']['partial'] ? null : (int) $leader['ready'] - (int) $out['score'];
+		$out['gap']['points']          = $out['gap']['partial'] ? null : (int) $leader['ready'] - (int) ( $out['score'] ?? 0 );
 		$out['gap']['tied']            = false;
 	}
 	return $out;

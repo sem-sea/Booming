@@ -44,23 +44,11 @@ $method_url = ( $mpage && 'publish' === $mpage->post_status ) ? get_permalink( $
 $opage     = get_page_by_path( $nl ? 'b2b-geo-index' : 'nl/b2b-geo-index' );
 $other_url = ( $opage && 'publish' === $opage->post_status ) ? get_permalink( $opage ) . '#check' : '';
 
-/* Crawler access: filter chips, and one "x/5" column in the table. */
-$bots = [
-	'bot_OAI-SearchBot'    => [ 'ChatGPT', $t( 'ChatGPT search mag de site lezen (OAI-SearchBot)', 'ChatGPT search may read the site (OAI-SearchBot)' ) ],
-	'bot_Claude-SearchBot' => [ 'Claude', $t( 'Claude mag de site lezen (Claude-SearchBot)', 'Claude may read the site (Claude-SearchBot)' ) ],
-	'bot_PerplexityBot'    => [ 'Perplexity', $t( 'Perplexity mag de site lezen (PerplexityBot)', 'Perplexity may read the site (PerplexityBot)' ) ],
-	'bot_Google-Extended'  => [ 'Gemini', $t( 'Gemini mag de content gebruiken (Google-Extended)', 'Gemini may use the content (Google-Extended)' ) ],
-	'bot_Bingbot'          => [ 'Copilot', $t( 'Bing en Copilot mogen de site lezen (Bingbot)', 'Bing and Copilot may read the site (Bingbot)' ) ],
-];
-
-/* Website checks shown as columns. */
-$cols = [
-	'html'                 => [ 'HTML', $t( 'Tekst leesbaar zonder JavaScript', 'Text readable without JavaScript' ) ],
-	'schema_org'           => [ 'Schema', $t( 'Organization-schema op de homepage', 'Organization schema on the homepage' ) ],
-	'wikipedia'            => [ 'Wikipedia', $t( 'Wikipedia-artikel over het bedrijf', 'Wikipedia article about the company' ) ],
-	'fresh'                => [ $t( 'Actueel', 'Fresh' ), $t( 'Sitemap bijgewerkt in de laatste 90 dagen', 'Sitemap updated in the last 90 days' ) ],
-	'lang'                 => [ $t( 'Taal', 'Lang' ), $t( 'Nederlandse versie (lijst Nederland) of meerdere talen (internationaal)', 'Dutch version (Dutch list) or several languages (international list)' ) ],
-];
+/* Crawler access chips and website check columns: shared with the PDF (inc/geo-index-pdf.php). */
+$tx     = bv_gi_texts( $nl );
+$dlabel = $t( 'Details en verschillen', 'Details and gaps' );
+$bots = $tx['bots'];
+$cols = $tx['cols'];
 
 /* One check cell. On small screens it shows as a pill: icon plus data-label. */
 $cell = static function ( $v, string $label, string $extra = '' ) {
@@ -143,33 +131,16 @@ $i18n = [
 	'otherUrl' => $other_url,
 	'otherTxt' => $t( 'Engelse versie van deze check', 'Dutch version of this check' ),
 	'gapPart'  => $t( 'We kunnen je niet goed vergelijken met de leider, omdat een deel van de checks niet lukte.', 'We cannot compare you with the leader properly, because part of the checks did not run.' ),
-	'labels'   => array_merge( array_map( static fn( $c ) => $c[1], $bots + $cols ), [
-		'bot_GPTBot'       => $t( 'GPTBot (training van OpenAI) mag de site lezen', 'GPTBot (OpenAI training) may read the site' ),
-		'bot_ChatGPT-User' => $t( 'ChatGPT mag pagina\'s openen op verzoek van gebruikers (ChatGPT-User)', 'ChatGPT may open pages for users (ChatGPT-User)' ),
-		'bot_ClaudeBot'    => $t( 'ClaudeBot (training van Anthropic) mag de site lezen', 'ClaudeBot (Anthropic training) may read the site' ),
-		'schema_sameas'    => $t( 'Links naar profielen elders (sameAs)', 'Links to profiles elsewhere (sameAs)' ),
-		'wikidata'         => $t( 'Wikidata-item met de juiste website', 'Wikidata item with the right website' ),
-		'llms'             => $t( 'llms.txt aanwezig', 'llms.txt present' ),
-		'lang'             => $t( 'Nederlandse versie van de site', 'Two or more language versions (hreflang)' ),
-	] ),
-	'advice'   => [
-		'bot_OAI-SearchBot'    => $t( 'Sta OAI-SearchBot toe in robots.txt en in je firewall. Zonder deze crawler verschijn je niet als bron in ChatGPT search.', 'Allow OAI-SearchBot in robots.txt and your firewall. Without it you do not appear as a source in ChatGPT search.' ),
-		'bot_ChatGPT-User'     => $t( 'Sta ChatGPT-User toe, zodat ChatGPT je pagina\'s kan openen als een gebruiker erom vraagt.', 'Allow ChatGPT-User so ChatGPT can open your pages when a user asks for them.' ),
-		'bot_GPTBot'           => $t( 'GPTBot verzamelt trainingsdata. Toestaan is een keuze; het staat los van ChatGPT search.', 'GPTBot collects training data. Allowing it is a choice; it is separate from ChatGPT search.' ),
-		'bot_Claude-SearchBot' => $t( 'Sta Claude-SearchBot toe, zodat Claude je pagina\'s kan vinden en citeren.', 'Allow Claude-SearchBot so Claude can find and cite your pages.' ),
-		'bot_ClaudeBot'        => $t( 'ClaudeBot verzamelt trainingsdata voor Anthropic. Toestaan is een keuze.', 'ClaudeBot collects training data for Anthropic. Allowing it is a choice.' ),
-		'bot_PerplexityBot'    => $t( 'Sta PerplexityBot toe, anders kan Perplexity je niet als bron tonen.', 'Allow PerplexityBot, or Perplexity cannot show you as a source.' ),
-		'bot_Google-Extended'  => $t( 'Google-Extended bepaalt of Gemini je content mag gebruiken. Het heeft geen invloed op Google Zoeken.', 'Google-Extended controls whether Gemini may use your content. It does not affect Google Search.' ),
-		'bot_Bingbot'          => $t( 'Sta Bingbot toe. Copilot gebruikt de index van Bing.', 'Allow Bingbot. Copilot uses the Bing index.' ),
-		'html'                 => $t( 'Zorg dat de tekst in de HTML van de server staat. AI-crawlers voeren meestal geen JavaScript uit.', 'Make sure your text is in the server HTML. AI crawlers usually do not run JavaScript.' ),
-		'schema_org'           => $t( 'Voeg Organization-schema toe aan je homepage met naam, logo, adres en links naar je profielen.', 'Add Organization schema to your homepage with name, logo, address and links to your profiles.' ),
-		'schema_sameas'        => $t( 'Voeg sameAs-links toe naar LinkedIn, Wikidata en andere profielen, zodat AI je bedrijf goed herkent.', 'Add sameAs links to LinkedIn, Wikidata and other profiles so AI recognizes your company.' ),
-		'wikidata'             => $t( 'Maak of verbeter een Wikidata-item met je officiële website. AI-systemen gebruiken het om entiteiten te herkennen.', 'Create or improve a Wikidata item with your official website. AI systems use it to recognize entities.' ),
-		'wikipedia'            => $t( 'Een Wikipedia-artikel kun je niet zelf schrijven. Verdien eerst vermeldingen in onafhankelijke media.', 'You cannot write a Wikipedia article yourself. Earn coverage in independent media first.' ),
-		'fresh'                => $t( 'Werk je belangrijkste pagina\'s bij en laat je sitemap de juiste lastmod-datum tonen.', 'Update your key pages and make your sitemap show the right lastmod date.' ),
-		'lang'                 => $t( 'Publiceer een Nederlandse versie voor Nederlandse kopers, met hreflang. Bij Nederlandse vragen kiest AI vooral Nederlandstalige bronnen.', 'Publish language versions for your markets, with hreflang. AI mostly picks sources in the language of the question.' ),
-		'llms'                 => $t( 'Een llms.txt is optioneel. Er is weinig bewijs dat AI-crawlers het gebruiken, maar het kost weinig.', 'An llms.txt is optional. There is little evidence AI crawlers use it, but it costs little.' ),
-	],
+	'labels'   => $tx['labels'],
+	'langList' => $tx['lang_label'],
+	'advice'   => $tx['advice'],
+	'pdf'      => esc_url_raw( rest_url( 'bv/v1/geo-pdf' ) ),
+	'pdfLang'  => $nl ? 'nl' : 'en',
+	'pdfBtn'   => $t( 'Download als PDF', 'Download as PDF' ),
+	'pdfPlan'  => $t( 'Download je verbeterplan als PDF', 'Download your improvement plan as PDF' ),
+	'pdfBusy'  => $t( 'PDF wordt gemaakt...', 'Making the PDF...' ),
+	'planHead' => $t( 'Je verbeterplan', 'Your improvement plan' ),
+	'pdfGone'  => $t( 'Deze check is verlopen. Doe de check opnieuw en download dan de PDF.', 'This check has expired. Run the check again, then download the PDF.' ),
 ];
 
 $caps    = ( $ai_cols ? "--bv-gi-cap-ai:'" . $t( 'Genoemd door', 'Named by' ) . "';" : '' ) . "--bv-gi-cap-web:'" . $t( 'Website', 'Website' ) . "'";
@@ -414,7 +385,7 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 								<?php else : ?>
 									<td class="bv-gi__rank bv-gi__rank--grp bv-gi__g-<?php echo esc_attr( $r['group'] ); ?>" title="<?php echo esc_attr( sprintf( $t( 'Plaats %d', 'Place %d' ), (int) $r['rank'] ) ); ?>"><?php echo esc_html( $groups_l[ $r['group'] ] ); ?></td>
 								<?php endif; ?>
-								<td class="bv-gi__co"><strong><?php echo esc_html( $r['name'] ); ?></strong><span><?php echo esc_html( $r['domain'] ); ?> &middot; <?php echo esc_html( $sector ); ?></span><button type="button" class="bv-gi__dbtn" aria-expanded="false" aria-controls="<?php echo esc_attr( $did ); ?>"><?php echo esc_html( $t( 'Details en verschillen', 'Details and gaps' ) ); ?></button></td>
+								<td class="bv-gi__co"><div class="bv-gi__cow"><div class="bv-gi__cot"><strong><?php echo esc_html( $r['name'] ); ?></strong><span><?php echo esc_html( $r['domain'] ); ?> &middot; <?php echo esc_html( $sector ); ?></span></div><button type="button" class="bv-gi__dbtn" aria-expanded="false" aria-controls="<?php echo esc_attr( $did ); ?>" aria-label="<?php echo esc_attr( $dlabel ); ?>"><span class="bv-gi__dlf"><?php echo esc_html( $dlabel ); ?></span><span class="bv-gi__dls" aria-hidden="true"><?php echo esc_html( $t( 'Details', 'Details' ) ); ?></span><i class="bv-gi__dico" aria-hidden="true"></i></button></div></td>
 								<td class="bv-gi__score"><span class="bv-gi__bar" style="--s:<?php echo (int) $r['score']; ?>"><?php echo (int) $r['score']; ?></span><?php if ( $r['margin'] > 0 ) : ?><span class="bv-gi__pm">&plusmn;<?php echo (int) $r['margin']; ?></span><?php endif; ?></td>
 								<td class="bv-gi__chg" data-label="<?php echo esc_attr( $ml['chg'] ); ?>"><?php
 									if ( ! empty( $r['method_new'] ) ) {

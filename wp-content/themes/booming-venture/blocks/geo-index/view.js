@@ -50,7 +50,7 @@
 			return String(str).replace(/\{(\d)\}/g, function (m, i) { return args[+i] !== undefined ? args[+i] : m; });
 		}
 		function blk(title, inner) { return '<div class="bv-gi__dblk"><h4>' + esc(title) + '</h4>' + inner + '</div>'; }
-		function detailHtml(tr, x) {
+		function detailHtml(tr, x, lkey) {
 			var name = (tr.querySelector('.bv-gi__co strong') || {}).textContent || '';
 			var sec = tr.getAttribute('data-sector') || '';
 			var h = '';
@@ -84,7 +84,7 @@
 				} else {
 					lt = '<p>' + esc(fill(TD.leadGap, l[1], l[2], l[3]) + (l[4] ? TD.tied : '.')) + '</p>';
 					if (l[5] && l[5].length) lt += '<p>' + esc(fill(TD.srcs, l[1], name)) + ' <span class="bv-gi__hosts">' + esc(l[5].join(', ')) + '</span></p>';
-					if (l[6] && l[6].length) lt += '<p>' + esc(fill(TD.miss, l[1])) + ' ' + esc(l[6].map(function (k) { return T.labels[k] || k; }).join(', ')) + '</p>';
+					if (l[6] && l[6].length) lt += '<p>' + esc(fill(TD.miss, l[1])) + ' ' + esc(l[6].map(function (k) { return k === 'lang' && T.langList && T.langList[lkey] ? T.langList[lkey] : (T.labels[k] || k); }).join(', ')) + '</p>';
 				}
 				h += blk(fill(TD.lead, sec), lt);
 			}
@@ -95,6 +95,61 @@
 			var btn = tr.querySelector('.bv-gi__dbtn');
 			return btn ? document.getElementById(btn.getAttribute('aria-controls')) : null;
 		}
+		var RM = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		function pdfUrl(domain, list, sec) {
+			if (!T.pdf) return '';
+			return T.pdf + (T.pdf.indexOf('?') === -1 ? '?' : '&') + 'domain=' + encodeURIComponent(domain) + (list ? '&list=' + encodeURIComponent(list) : '') + '&lang=' + encodeURIComponent(T.pdfLang || 'en') + (sec ? '&sector=' + encodeURIComponent(sec) : '');
+		}
+		function pdfLink(url, label) {
+			return url ? '<a class="bv-gi__pdf" href="' + esc(url) + '" download rel="nofollow">' + esc(label) + '</a>' : '';
+		}
+		/* PDF links download through fetch, so an expired check shows a message instead of a broken file. */
+		root.addEventListener('click', function (e) {
+			var a = e.target.closest ? e.target.closest('.bv-gi__pdf') : null;
+			if (!a || !window.fetch || !window.URL || !URL.createObjectURL) return;
+			e.preventDefault();
+			if (a.classList.contains('is-busy')) return;
+			var label = a.textContent;
+			a.classList.add('is-busy');
+			a.textContent = T.pdfBusy || label;
+			fetch(a.href, { credentials: 'same-origin' })
+				.then(function (r) {
+					if (!r.ok) throw new Error(r.status === 429 ? 'limit' : (r.status === 404 ? 'gone' : 'error'));
+					var cd = r.headers.get('Content-Disposition') || '';
+					var m = cd.match(/filename="?([^";]+)"?/);
+					return r.blob().then(function (b) { return { b: b, name: m ? m[1] : 'geo-index.pdf' }; });
+				})
+				.then(function (f) {
+					var u = URL.createObjectURL(f.b);
+					var tmp = document.createElement('a');
+					tmp.href = u;
+					tmp.download = f.name;
+					document.body.appendChild(tmp);
+					tmp.click();
+					tmp.remove();
+					setTimeout(function () { URL.revokeObjectURL(u); }, 4000);
+					a.textContent = label;
+				})
+				.catch(function (err) {
+					a.textContent = err.message === 'gone' ? (T.pdfGone || label) : (err.message === 'limit' ? (T.limit || label) : (T.error || label));
+					setTimeout(function () { a.textContent = label; }, 5000);
+				})
+				.then(function () { a.classList.remove('is-busy'); });
+		});
+
+		/* Open: show the row, then let CSS grow it. Close: shrink, then hide when the transition ends. */
+		function setOpen(det, open) {
+			if (!det) return;
+			clearTimeout(det._bvT);
+			if (open) {
+				det.hidden = false;
+				void det.offsetHeight;
+				det.classList.add('is-open');
+			} else {
+				det.classList.remove('is-open');
+				det._bvT = setTimeout(function () { if (!det.classList.contains('is-open')) det.hidden = true; }, RM ? 0 : 360);
+			}
+		}
 		root.querySelectorAll('.bv-gi__dbtn').forEach(function (btn) {
 			btn.addEventListener('click', function () {
 				var tr = btn.closest('tr');
@@ -102,18 +157,22 @@
 				var det = detailOf(tr);
 				if (!det && open) {
 					var list = tr.closest('.bv-gi__list');
-					var x = (D[list ? list.getAttribute('data-list') : ''] || {})[(tr.getAttribute('data-name') || '').split(' ').pop()];
+					var lkey = list ? list.getAttribute('data-list') : '';
+					var dom = (tr.getAttribute('data-name') || '').split(' ').pop();
+					var x = (D[lkey] || {})[dom];
 					det = document.createElement('tr');
 					det.className = 'bv-gi__detail';
 					det.id = btn.getAttribute('aria-controls');
+					det.hidden = true;
 					var td = document.createElement('td');
 					td.colSpan = tr.cells.length;
-					td.innerHTML = '<div class="bv-gi__dgrid">' + (x ? detailHtml(tr, x) : '') + '</div>';
+					var act = pdfLink(pdfUrl(dom, lkey, ''), T.pdfBtn);
+					td.innerHTML = '<div class="bv-gi__dwrap"><div class="bv-gi__din"><div class="bv-gi__dgrid">' + (x ? detailHtml(tr, x, lkey) : '') + (act ? '<div class="bv-gi__dact">' + act + '</div>' : '') + '</div></div></div>';
 					det.appendChild(td);
 					tr.parentNode.insertBefore(det, tr.nextSibling);
 				}
 				btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-				if (det) det.hidden = !open;
+				setOpen(det, open);
 			});
 		});
 
@@ -177,7 +236,9 @@
 				}
 				if (det) {
 					var btn = tr.querySelector('.bv-gi__dbtn');
-					det.hidden = tr.hidden || !btn || btn.getAttribute('aria-expanded') !== 'true';
+					var show = !tr.hidden && btn && btn.getAttribute('aria-expanded') === 'true';
+					det.hidden = !show;
+					det.classList.toggle('is-open', !!show);
 				}
 			});
 			var next = activeList() && activeList().querySelector('.bv-gi__next');
@@ -187,6 +248,11 @@
 				if (rest > 0 && T.more) next.textContent = T.more.replace('%s', Math.min(rest, PAGE));
 			}
 			if (count && T.count) count.textContent = T.count.replace('%1$s', match).replace('%2$s', all.length);
+			if (tbody && !RM) {
+				tbody.classList.remove('bv-gi--sw');
+				void tbody.offsetWidth;
+				tbody.classList.add('bv-gi--sw');
+			}
 		}
 
 		function select(list) {
@@ -246,6 +312,20 @@
 			});
 		}
 
+		/* The score counts up from 0, quick and eased; instant when the visitor prefers less motion. */
+		function countUp(el, to) {
+			if (!el || RM || !window.requestAnimationFrame) return;
+			var start = null, dur = 700;
+			el.textContent = '0';
+			function step(ts) {
+				if (start === null) start = ts;
+				var p = Math.min(1, (ts - start) / dur);
+				el.textContent = Math.round(to * (1 - Math.pow(1 - p, 3)));
+				if (p < 1) window.requestAnimationFrame(step);
+			}
+			window.requestAnimationFrame(step);
+		}
+
 		/* Points a check is worth (see inc/geo-index.php), to say how much a refused homepage hides. */
 		var WORTH = { html: 15, schema_org: 20, lang: 8, fresh: 10 };
 
@@ -261,12 +341,13 @@
 				html += '<div class="bv-gi__warn"><p><strong>' + esc(T.refused.replace('%s', code).replace('%s', lost)) + '</strong></p><p>' + esc(botsOpen ? T.botWarn : T.retry) + '</p></div>';
 			}
 			html += '<ul class="bv-gi__checks">';
+			var n = 0;
 			Object.keys(T.labels).forEach(function (k) {
 				if (!(k in d.checks)) return;
 				var v = d.checks[k];
 				var cls = v === true ? 'yes' : (v === false ? 'no' : 'na');
 				var word = v === true ? T.pass : (v === false ? T.fail : T.unknown);
-				html += '<li class="bv-gi__li--' + cls + '"><span>' + esc(word) + '</span> ' + esc(T.labels[k]) + '</li>';
+				html += '<li class="bv-gi__li--' + cls + '" style="--i:' + (n++) + '"><span>' + esc(word) + '</span> ' + esc(T.labels[k]) + '</li>';
 			});
 			html += '</ul>';
 			if (T.listNote) {
@@ -302,17 +383,22 @@
 				}
 				html += '</div>';
 			}
+			out.classList.remove('is-loading', 'is-in');
 			out.innerHTML = html;
 			out.hidden = false;
+			void out.offsetWidth;
+			out.classList.add('is-in');
+			countUp(out.querySelector('.bv-gi__big strong'), +d.score || 0);
 			gate.hidden = false;
 			plan.hidden = true;
 		}
 
 		function renderPlan(d) {
 			var items = Object.keys(T.advice).filter(function (k) { return d.checks[k] === false; });
-			plan.innerHTML = items.length
+			var csec = form ? form.querySelector('.bv-gi__csec') : null;
+			plan.innerHTML = (T.planHead ? '<h4>' + esc(T.planHead) + '</h4>' : '') + (items.length
 				? '<ol>' + items.map(function (k) { return '<li><strong>' + esc(T.labels[k] || k) + '.</strong> ' + esc(T.advice[k]) + '</li>'; }).join('') + '</ol>'
-				: '<p>' + esc(T.pass) + '.</p>';
+				: '<p>' + esc(T.pass) + '.</p>') + pdfLink(pdfUrl(d.domain, '', csec && csec.value ? csec.value : ''), T.pdfPlan);
 			plan.hidden = false;
 			gate.hidden = true;
 		}
@@ -327,6 +413,8 @@
 					return;
 				}
 				out.textContent = T.checking;
+				out.classList.remove('is-in');
+				out.classList.add('is-loading');
 				out.hidden = false;
 				gate.hidden = true;
 				plan.hidden = true;
@@ -340,7 +428,7 @@
 						return r.json();
 					})
 					.then(function (d) { last = d; renderResult(d); })
-					.catch(function (err) { out.textContent = err.message === 'limit' ? T.limit : T.error; })
+					.catch(function (err) { out.classList.remove('is-loading'); out.textContent = err.message === 'limit' ? T.limit : T.error; })
 					.then(function () { btn.disabled = false; });
 			});
 			document.addEventListener('wpcf7mailsent', function (ev) {

@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'BV_THEME_VERSION', '1.24.1' );
+define( 'BV_THEME_VERSION', '1.25.0' );
 define( 'BV_THEME_DIR', get_template_directory() );
 define( 'BV_THEME_URI', get_template_directory_uri() );
 
@@ -36,6 +36,7 @@ require_once BV_THEME_DIR . '/inc/i18n.php';
 require_once BV_THEME_DIR . '/inc/geo-index.php';
 require_once BV_THEME_DIR . '/inc/geo-index-ai.php';
 require_once BV_THEME_DIR . '/inc/geo-index-stats.php';
+require_once BV_THEME_DIR . '/inc/geo-index-pdf.php';
 require_once BV_THEME_DIR . '/inc/geo-index-method.php';
 require_once BV_THEME_DIR . '/inc/geo-index-report.php';
 require_once BV_THEME_DIR . '/inc/geo-index-scan.php';
