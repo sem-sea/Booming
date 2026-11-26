@@ -10,6 +10,12 @@ touching code.
 
 ---
 
+## 1.29.0 (November 2026)
+
+- The site chat knows the B2B GEO Index numbers: measurement dates, the website checks and their points, and per list the average, the top 10, the pass rate per check and all 20 sectors with average, leaders and weakest check (bv_chat_index, from stored results, cached per measurement).
+- When a visitor names a company from the index (name, alias or domain), the chat gets that company's list, sector, rank, score and missing checks (bv_chat_index_match, at most three companies). Names that are everyday words, such as Boom or Maandag, only count when written as the company name.
+- New rules: numbers only from the index data with the measurement date, no judgments about companies, unknown companies go to the free check. New page tag geo-method for the method page.
+
 ## 1.28.0 (November 2026)
 
 - The monthly GEO Index scan now starts on the first working day of the month (Monday to Friday, not a Dutch public holiday) at 05:00 UTC, instead of the first Monday. New helpers bv_gi_first_workday() and bv_gi_nl_holidays() (Easter worked out in PHP, no calendar extension). Next scans: Tuesday 1 December 2026, Monday 4 January 2027, Monday 1 February 2027.
