@@ -1006,7 +1006,7 @@ function bv_gi_ai_settings_page(): void {
 		<h1>B2B GEO Index</h1>
 		<?php if ( isset( $_GET['saved'] ) ) : ?><div class="notice notice-success"><p>Opgeslagen.</p></div><?php endif; ?>
 		<?php [ $c_lo, $c_hi ] = bv_gi_ai_cost_range( max( 1, count( bv_gi_ai_active() ) ) ); ?>
-		<p>De index meet op de eerste maandag van elke maand de websites van 400 bedrijven. Met API-sleutels meet hij ook hoe vaak ChatGPT, Claude, Gemini en Perplexity deze bedrijven noemen:<?php echo (int) bv_gi_ai_variants(); ?> vragen per categorie, in maximaal <?php echo (int) bv_gi_ai_runs(); ?> rondes<?php echo bv_gi_ai_adaptive() ? ' (extra rondes alleen waar de uitkomst nog onzeker is)' : ''; ?>, voor <?php echo (int) $cats; ?> categorieën. Dat kost bij OpenRouter naar schatting $<?php echo (int) $c_lo; ?> tot $<?php echo (int) $c_hi; ?> per maand.</p>
+		<p>De index meet op de eerste werkdag van elke maand de websites van 400 bedrijven. Met API-sleutels meet hij ook hoe vaak ChatGPT, Claude, Gemini en Perplexity deze bedrijven noemen:<?php echo (int) bv_gi_ai_variants(); ?> vragen per categorie, in maximaal <?php echo (int) bv_gi_ai_runs(); ?> rondes<?php echo bv_gi_ai_adaptive() ? ' (extra rondes alleen waar de uitkomst nog onzeker is)' : ''; ?>, voor <?php echo (int) $cats; ?> categorieën. Dat kost bij OpenRouter naar schatting $<?php echo (int) $c_lo; ?> tot $<?php echo (int) $c_hi; ?> per maand.</p>
 		<?php do_action( 'bv_gi_settings_top' ); ?>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 			<input type="hidden" name="action" value="bv_gi_ai_save">

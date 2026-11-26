@@ -10,6 +10,11 @@ touching code.
 
 ---
 
+## 1.28.0 (November 2026)
+
+- The monthly GEO Index scan now starts on the first working day of the month (Monday to Friday, not a Dutch public holiday) at 05:00 UTC, instead of the first Monday. New helpers bv_gi_first_workday() and bv_gi_nl_holidays() (Easter worked out in PHP, no calendar extension). Next scans: Tuesday 1 December 2026, Monday 4 January 2027, Monday 1 February 2027.
+- All texts follow: index block, monthly report FAQ, settings, chat context, Dataset schema, index page FAQ (content.json) and the method log (method 2 now dated 1 December 2026).
+
 ## 1.27.0 (November 2026)
 
 - Sector deep link on the GEO Index: /b2b-geo-index/?sector=c64 (or /nl/b2b-geo-index/?sector=c64) opens the index filtered on that sector, with the sector PDF button shown and the filters scrolled into view. Unknown keys are ignored. Made for the LinkedIn sector videos.

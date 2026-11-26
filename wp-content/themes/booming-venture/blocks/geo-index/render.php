@@ -541,8 +541,8 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 
 	<p class="bv-gi__meta"><?php
 		echo esc_html( $date
-			? sprintf( $t( 'Laatst gemeten: %s. Elke eerste maandag van de maand opnieuw gemeten.', 'Last measured: %s. Measured again on the first Monday of every month.' ), $date )
-			: $t( 'Elke eerste maandag van de maand opnieuw gemeten.', 'Measured again on the first Monday of every month.' ) );
+			? sprintf( $t( 'Laatst gemeten: %s. Elke eerste werkdag van de maand opnieuw gemeten.', 'Last measured: %s. Measured again on the first working day of every month.' ), $date )
+			: $t( 'Elke eerste werkdag van de maand opnieuw gemeten.', 'Measured again on the first working day of every month.' ) );
 	?></p>
 
 	<div class="bv-gi__legend">

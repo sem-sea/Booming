@@ -2,7 +2,7 @@
 /**
  * Monthly B2B GEO Index report (1.20.0, monthly scans only since 1.22.0).
  *
- * When all numbers of the first-Monday measurement are in (the website checks and,
+ * When all numbers of the first-working-day measurement are in (the website checks and,
  * when AI measuring is on, the AI answers), the site writes one blog post in
  * English and one in Dutch from the measured data. No AI writes the text, so
  * nothing is made up and it costs nothing. The posts follow the blog layout
@@ -135,7 +135,7 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 	$m      = $months[ (int) gmdate( 'n', $started ) - 1 ];
 	$y      = gmdate( 'Y', $started );
 	$when   = $m . ' ' . $y;
-	$next   = strtotime( 'first monday of next month', strtotime( gmdate( 'Y-m-01', $started ) . ' 12:00 UTC' ) );
+	$next   = bv_gi_first_workday( strtotime( gmdate( 'Y-m-15', $started ) . ' 12:00 UTC +1 month' ) );
 	$next_s = $days[ (int) gmdate( 'w', $next ) ] . ' ' . gmdate( 'j', $next ) . ' ' . $months[ (int) gmdate( 'n', $next ) - 1 ] . ' ' . gmdate( 'Y', $next );
 	$and    = $nl ? ' en ' : ' and ';
 	$join   = static fn( array $a ) => count( $a ) > 1 ? implode( ', ', array_slice( $a, 0, -1 ) ) . $and . end( $a ) : implode( '', $a );
@@ -339,13 +339,13 @@ function bv_gi_report_build( string $lang, array $d, int $started ): array {
 	/* FAQ: H2 + H3/paragraph pairs, picked up for the FAQPage schema. */
 	$faq = $nl
 		? [
-			[ 'Wanneer verschijnt de volgende B2B GEO Index?', sprintf( 'Op de eerste maandag van de volgende maand: %s. De ranglijst op de indexpagina wordt bijgewerkt zodra die meting klaar is.', $next_s ) ],
+			[ 'Wanneer verschijnt de volgende B2B GEO Index?', sprintf( 'Op de eerste werkdag van de volgende maand: %s. De ranglijst op de indexpagina wordt bijgewerkt zodra die meting klaar is.', $next_s ) ],
 			[ 'Hoe wordt de GEO-score berekend?', $has_ai ? sprintf( 'De helft komt uit hoe vaak %s het bedrijf noemen in antwoorden op vijf koopvragen per categorie, de helft uit zeven websitechecks. Beide delen lopen van 0 tot 100, met een foutmarge van 95%%.', $join( $eng ) ) : 'Deze maand is het de websitescore: zeven checks op de eigen website van het bedrijf, van 0 tot 100. Als de AI-meting draait, komt de helft van de score uit hoe vaak AI-assistenten het bedrijf noemen.' ],
 			[ 'Kan ik mijn eigen bedrijf checken?', 'Ja. Vul je domein in bij de check op de pagina van de B2B GEO Index. Je krijgt dezelfde websitescore als de bedrijven in de ranglijst.' ],
 			[ 'Mag ik deze cijfers gebruiken?', 'Ja. Download de volledige ranglijst als CSV op de pagina van de B2B GEO Index en citeer de cijfers met een link naar de index als bron.' ],
 		]
 		: [
-			[ 'When is the next B2B GEO Index?', sprintf( 'On the first Monday of next month: %s. The ranking on the index page updates as soon as that measurement is done.', $next_s ) ],
+			[ 'When is the next B2B GEO Index?', sprintf( 'On the first working day of next month: %s. The ranking on the index page updates as soon as that measurement is done.', $next_s ) ],
 			[ 'How is the GEO score calculated?', $has_ai ? sprintf( 'Half comes from how often %s name the company in answers to five buyer questions per category, half from seven website checks. Both parts run from 0 to 100, with a 95%% margin of error.', $join( $eng ) ) : 'This month it is the website score: seven checks on the company\'s own website, from 0 to 100. When the AI measurement runs, half of the score comes from how often AI assistants name the company.' ],
 			[ 'Can I check my own company?', 'Yes. Enter your domain in the check on the B2B GEO Index page. You get the same website score as the companies in the ranking.' ],
 			[ 'Can I use these numbers?', 'Yes. Download the full ranking as CSV on the B2B GEO Index page and quote the numbers with a link to the index as the source.' ],
@@ -394,7 +394,7 @@ function bv_gi_report_maybe( bool $force = false ): array {
 		return [ 'state' => 'off' ];
 	}
 	if ( ! $force && 'monthly' !== $st['source'] ) {
-		return [ 'state' => 'manual' ]; // automatic posts only follow the first-Monday scan
+		return [ 'state' => 'manual' ]; // automatic posts only follow the first-working-day scan
 	}
 	$done = (array) get_option( 'bv_gi_report', [] );
 	$have = (array) ( $done[ $st['month'] ] ?? [] );
@@ -472,7 +472,7 @@ add_action( 'bv_gi_settings_rows', static function () {
 			<?php foreach ( $choices as $k => $label ) : ?>
 				<label style="margin-right:16px"><input type="radio" name="report_mode" value="<?php echo esc_attr( $k ); ?>" <?php checked( $o['mode'], $k ); ?>> <?php echo esc_html( $label ); ?></label>
 			<?php endforeach; ?>
-			<p class="description">Na de automatische scan op de eerste maandag van de maand schrijft de site een blogbericht in het Engels en het Nederlands met de top 10, de koplopers per sector, de stijgers en de websitescores. Na een handmatige scan maak je het bericht met de knop hieronder. De tekst komt uit de meetdata. Is een lijst niet goed gemeten (minder dan 80% van de bedrijven, nu 160 van de 200), dan wordt het een concept.</p>
+			<p class="description">Na de automatische scan op de eerste werkdag van de maand schrijft de site een blogbericht in het Engels en het Nederlands met de top 10, de koplopers per sector, de stijgers en de websitescores. Na een handmatige scan maak je het bericht met de knop hieronder. De tekst komt uit de meetdata. Is een lijst niet goed gemeten (minder dan 80% van de bedrijven, nu 160 van de 200), dan wordt het een concept.</p>
 		</td>
 	</tr>
 	<?php

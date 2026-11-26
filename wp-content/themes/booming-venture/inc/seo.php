@@ -399,8 +399,8 @@ function bv_gi_schema_nodes(): array {
 		'inLanguage'           => $nl ? 'nl-NL' : 'en',
 		'keywords'             => [ 'GEO', 'generative engine optimization', 'AI search', 'B2B', 'ChatGPT', 'Claude', 'Gemini', 'Perplexity' ],
 		'measurementTechnique' => $t(
-			'Elke eerste maandag van de maand: per categorie vijf koopvragen aan AI-assistenten via hun API, met de eigen zoekfunctie van elke assistent, een tweede ronde waar de uitkomst onzeker is en een foutmarge van 95% (Wilson), plus robots.txt, HTML zonder JavaScript, structured data, Wikidata, Wikipedia, sitemap-actualiteit, taalversies en llms.txt van elke website.',
-			'On the first Monday of every month: five buyer questions per category to AI assistants through their APIs, each using its own web search, a second round where the result is uncertain and a 95% margin of error (Wilson), plus robots.txt, HTML without JavaScript, structured data, Wikidata, Wikipedia, sitemap freshness, language versions and llms.txt of each website.'
+			'Elke eerste werkdag van de maand: per categorie vijf koopvragen aan AI-assistenten via hun API, met de eigen zoekfunctie van elke assistent, een tweede ronde waar de uitkomst onzeker is en een foutmarge van 95% (Wilson), plus robots.txt, HTML zonder JavaScript, structured data, Wikidata, Wikipedia, sitemap-actualiteit, taalversies en llms.txt van elke website.',
+			'On the first working day of every month: five buyer questions per category to AI assistants through their APIs, each using its own web search, a second round where the result is uncertain and a 95% margin of error (Wilson), plus robots.txt, HTML without JavaScript, structured data, Wikidata, Wikipedia, sitemap freshness, language versions and llms.txt of each website.'
 		),
 		'variableMeasured'     => [ 'GEO score', 'Margin of error', 'AI score', 'Visibility', 'Share of voice', 'First mention', 'Sentiment', 'Cited sources', 'Website score', 'AI crawler access', 'Text without JavaScript', 'Organization schema', 'Wikipedia article', 'Sitemap freshness', 'Language versions' ],
 		'distribution'         => $data,

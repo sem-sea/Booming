@@ -14,14 +14,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-/** When the next automatic (first Monday) scan starts. */
+/** When the next automatic scan (first working day of the month) starts. */
 function bv_gi_next_monthly(): int {
 	$now   = time();
-	$first = strtotime( 'first monday of this month 05:00 UTC', $now );
+	$first = bv_gi_first_workday( $now );
 	if ( $now < $first && get_option( 'bv_gi_monthly_last' ) !== gmdate( 'Y-m', $now ) ) {
 		return $first;
 	}
-	return strtotime( 'first monday of next month 05:00 UTC', strtotime( gmdate( 'Y-m-01 12:00', $now ) . ' UTC' ) );
+	return bv_gi_first_workday( strtotime( gmdate( 'Y-m-15 12:00', $now ) . ' UTC +1 month' ) );
 }
 
 /** Everything the panel shows, as one array (also the AJAX answer). */

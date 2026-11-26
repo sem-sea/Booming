@@ -7,7 +7,7 @@
  * international B2B software companies (blocks/geo-index/companies.json).
  *
  * How it runs
- *  - On the first Monday of each month (05:00 UTC) WP-Cron queues both lists. A batch job then
+ *  - On the first working day of each month (05:00 UTC) WP-Cron queues both lists. A batch job then
  *    measures a few domains per run, every two minutes, until the queue is
  *    empty. No outside service, no browser, no computer needs to be on.
  *  - Results live in the option bv_gi_results (not autoloaded); the scores
@@ -385,8 +385,49 @@ function bv_gi_measure( string $domain, string $name, string $list ): array {
 
 /* ------------------------------------------------------------------ monthly run (WP-Cron) */
 
+/**
+ * Dutch public holidays of a year (Y-m-d). Easter is worked out with the
+ * anonymous Gregorian algorithm, so no calendar extension is needed.
+ * Liberation Day is left out: it can never be the first working day.
+ */
+function bv_gi_nl_holidays( int $year ): array {
+	$a     = $year % 19;
+	$b     = intdiv( $year, 100 );
+	$c     = $year % 100;
+	$h     = ( 19 * $a + $b - intdiv( $b, 4 ) - intdiv( $b - intdiv( $b + 8, 25 ) + 1, 3 ) + 15 ) % 30;
+	$l     = ( 32 + 2 * ( $b % 4 ) + 2 * intdiv( $c, 4 ) - $h - ( $c % 4 ) ) % 7;
+	$m     = intdiv( $a + 11 * $h + 22 * $l, 451 );
+	$n     = $h + $l - 7 * $m + 114;
+	$east  = gmmktime( 12, 0, 0, intdiv( $n, 31 ), ( $n % 31 ) + 1, $year );
+	$at    = static fn( int $days ) => gmdate( 'Y-m-d', $east + $days * DAY_IN_SECONDS );
+	$kings = gmmktime( 12, 0, 0, 4, 27, $year );
+	if ( '0' === gmdate( 'w', $kings ) ) {
+		$kings -= DAY_IN_SECONDS; // King's Day moves to Saturday when the 27th is a Sunday
+	}
+	return [ "$year-01-01", $at( 1 ), gmdate( 'Y-m-d', $kings ), $at( 39 ), $at( 50 ), "$year-12-25", "$year-12-26" ];
+}
+
+/**
+ * 05:00 UTC (06:00 or 07:00 in the Netherlands) on the first working day of
+ * the month that holds $ts: the first Monday to Friday that is not a Dutch
+ * public holiday. 1 January 2027 is a Friday and a holiday, so that month
+ * starts on Monday 4 January.
+ */
+function bv_gi_first_workday( int $ts ): int {
+	$year  = (int) gmdate( 'Y', $ts );
+	$month = (int) gmdate( 'n', $ts );
+	$off   = bv_gi_nl_holidays( $year );
+	for ( $day = 1; $day <= 7; $day++ ) {
+		$t = gmmktime( 5, 0, 0, $month, $day, $year );
+		if ( (int) gmdate( 'N', $t ) <= 5 && ! in_array( gmdate( 'Y-m-d', $t ), $off, true ) ) {
+			return $t;
+		}
+	}
+	return gmmktime( 5, 0, 0, $month, 1, $year );
+}
+
 /*
- * A daily check starts the run on the first Monday of each month, or the
+ * A daily check starts the run on the first working day of each month, or the
  * first day after it that WP-Cron fires, once per month. The old weekly
  * event (up to 1.18.2) is removed.
  */
@@ -400,20 +441,20 @@ add_action( 'init', static function () {
 } );
 
 /*
- * The automatic scan runs on the first Monday of each month (06:00 in the
- * Netherlands). Its own month marker means a manual scan earlier in the
+ * The automatic scan runs on the first working day of each month (06:00 in
+ * the Netherlands in winter). Its own month marker means a manual scan earlier in the
  * month never cancels it. On a site that gets this version mid-month the
  * current month counts as done, so the first automatic scan is next month.
  */
 add_action( 'init', static function () {
 	if ( false === get_option( 'bv_gi_monthly_last' ) ) {
-		$done = time() >= strtotime( 'first monday of this month 05:00 UTC' );
+		$done = time() >= bv_gi_first_workday( time() );
 		update_option( 'bv_gi_monthly_last', $done ? gmdate( 'Y-m' ) : gmdate( 'Y-m', strtotime( 'first day of last month' ) ), false );
 	}
 } );
 add_action( 'bv_gi_daily', static function () {
 	$month = gmdate( 'Y-m' );
-	if ( time() >= strtotime( 'first monday of this month 05:00 UTC' ) && get_option( 'bv_gi_monthly_last' ) !== $month ) {
+	if ( time() >= bv_gi_first_workday( time() ) && get_option( 'bv_gi_monthly_last' ) !== $month ) {
 		update_option( 'bv_gi_monthly_last', $month, false );
 		do_action( 'bv_gi_run', 'monthly' );
 	}
@@ -423,7 +464,7 @@ add_action( 'bv_gi_daily', static function () {
  * A new company list (the "version" in companies.json) starts one fresh
  * website measurement right after the theme update, so the new companies get
  * a website score without waiting for the next month. It asks no AI questions
- * (no cost) and writes no monthly report; both follow on the first Monday.
+ * (no cost) and writes no monthly report; both follow on the first working day.
  * Results of companies that left the list are dropped.
  */
 add_action( 'init', static function () {
@@ -450,7 +491,7 @@ add_action( 'init', static function () {
 add_action( 'bv_gi_weekly', static fn() => do_action( 'bv_gi_run' ) );
 
 /**
- * Start a website measurement. $source: monthly (first Monday, gets the
+ * Start a website measurement. $source: monthly (first working day, gets the
  * monthly report), manual (Settings > GEO Index) or list (new company list).
  */
 function bv_gi_start_web( string $source = 'manual' ): void {
