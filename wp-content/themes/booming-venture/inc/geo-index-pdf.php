@@ -6,7 +6,8 @@
  * Dutch and English. The block (blocks/geo-index/render.php) and the PDF use
  * the same texts, so they never drift apart.
  *
- * GET /wp-json/bv/v1/geo-pdf?domain=x.com&list=nl|intl&lang=nl|en
+ * GET /wp-json/bv/v1/geo-pdf?domain=x.com&list=nl|intl&lang=nl|en (company), or
+ * GET /wp-json/bv/v1/geo-pdf?sector=c20&list=nl|intl&lang=nl|en (whole sector)
  * returns a styled A4 report: score, every check, AI numbers when measured,
  * the gap with the sector leader and an improvement plan. For a company in
  * the index it uses the stored results; for any other domain it uses the
@@ -318,6 +319,53 @@ function bv_gi_pdf_class(): void {
 			$this->_out( sprintf( '%.2F %.2F %.2F %.2F %.2F %.2F c ', $x1 * $k, ( $h - $y1 ) * $k, $x2 * $k, ( $h - $y2 ) * $k, $x3 * $k, ( $h - $y3 ) * $k ) );
 		}
 
+		/** Section heading with a short accent line; starts a new page when the section would not fit. */
+		public function section( string $title, float $need = 30 ): void {
+			if ( $this->GetY() + $need > 272 ) {
+				$this->AddPage();
+			}
+			$this->Ln( 2 );
+			$this->SetX( 16 );
+			$this->SetFont( 'Helvetica', 'B', 12.5 );
+			$this->rgb( '#0c1a2e', 'text' );
+			$this->Cell( $this->w - 32, 7, $this->tx( $title ), 0, 1 );
+			$this->rgb( '#bae6fd', 'draw' );
+			$this->SetLineWidth( 0.4 );
+			$this->Line( 16, $this->GetY(), 16 + 24, $this->GetY() );
+			$this->Ln( 3 );
+		}
+
+		/** Small heading inside a section. */
+		public function sub( string $title, float $need = 20 ): void {
+			if ( $this->GetY() + $need > 272 ) {
+				$this->AddPage();
+			}
+			$this->Ln( 2 );
+			$this->SetX( 16 );
+			$this->SetFont( 'Helvetica', 'B', 10 );
+			$this->rgb( '#0369a1', 'text' );
+			$this->Cell( $this->w - 32, 6, $this->tx( $title ), 0, 1 );
+			$this->Ln( 0.5 );
+		}
+
+		/** A paragraph in body text. */
+		public function para( string $txt, float $size = 9.5, string $color = '#1f2937' ): void {
+			$this->SetX( 16 );
+			$this->SetFont( 'Helvetica', '', $size );
+			$this->rgb( $color, 'text' );
+			$this->MultiCell( $this->w - 32, $size * 0.53, $this->tx( $txt ), 0, 'L' );
+		}
+
+		/** A horizontal bar from 0 to 100%. */
+		public function bar( float $x, float $y, float $w, float $pct, string $color = '#0284c7' ): void {
+			$this->rgb( '#e2e8f0' );
+			$this->RoundedRect( $x, $y, $w, 2.4, 1.2, 'F' );
+			if ( $pct > 0 ) {
+				$this->rgb( $color );
+				$this->RoundedRect( $x, $y, max( 2.4, $w * min( 100, $pct ) / 100 ), 2.4, 1.2, 'F' );
+			}
+		}
+
 		public function Header() { // phpcs:ignore WordPress.NamingConventions.ValidFunctionName
 			if ( $this->PageNo() < 2 ) {
 				return;
@@ -472,19 +520,8 @@ function bv_gi_pdf_render( array $d, bool $nl ): string {
 		$pdf->SetY( $y0 + $h + 4 );
 	}
 
-	$section = static function ( string $title, float $need = 30 ) use ( $pdf, $W ) {
-		if ( $pdf->GetY() + $need > 272 ) { // keep a section together when it fits on the next page
-			$pdf->AddPage();
-		}
-		$pdf->Ln( 2 );
-		$pdf->SetX( 16 );
-		$pdf->SetFont( 'Helvetica', 'B', 12.5 );
-		$pdf->rgb( '#0c1a2e', 'text' );
-		$pdf->Cell( $W, 7, $pdf->tx( $title ), 0, 1 );
-		$pdf->rgb( '#bae6fd', 'draw' );
-		$pdf->SetLineWidth( 0.4 );
-		$pdf->Line( 16, $pdf->GetY(), 16 + 24, $pdf->GetY() );
-		$pdf->Ln( 3 );
+	$section = static function ( string $title, float $need = 30 ) use ( $pdf ) {
+		$pdf->section( $title, $need );
 	};
 
 	/* Website checks */
@@ -615,6 +652,12 @@ function bv_gi_pdf_render( array $d, bool $nl ): string {
 		}
 	}
 
+	/* Sector analysis: where the company stands among its peers */
+	$sd = $d['sector'] ? bv_gi_sector_data( $d['list'], $d['sector'] ) : null;
+	if ( $sd ) {
+		bv_gi_pdf_sector( $pdf, $sd, $nl, $d['domain'], $d['checks'] );
+	}
+
 	/* Improvement plan */
 	$section( $t( 'Je verbeterplan', 'Your improvement plan' ) );
 	$todo = [];
@@ -659,7 +702,312 @@ function bv_gi_pdf_render( array $d, bool $nl ): string {
 		$pdf->Ln( 3 );
 	}
 
-	/* Closing */
+	bv_gi_pdf_closing( $pdf, $nl, $short );
+
+	return $pdf->Output( 'S' );
+}
+
+/* ------------------------------------------------------------------ sector analysis */
+
+/** The checks compared across a sector, in reading order. */
+function bv_gi_sector_keys(): array {
+	return [ 'bot_OAI-SearchBot', 'bot_Claude-SearchBot', 'bot_PerplexityBot', 'bot_Google-Extended', 'bot_Bingbot', 'html', 'schema_org', 'schema_sameas', 'wikidata', 'wikipedia', 'fresh', 'lang', 'llms' ];
+}
+
+/**
+ * Everything about one sector in one list, from stored data: the companies
+ * ranked, average website scores (complete measurements only) for the sector,
+ * the whole list and the same sector in the other list, the pass rate per
+ * check, the checks that cost the sector most points, and the sources AI
+ * assistants cite most for this sector.
+ */
+function bv_gi_sector_data( string $list, string $sector ): ?array {
+	$sectors = (array) ( bv_gi_companies()['sectors'] ?? [] );
+	if ( ! isset( $sectors[ $sector ] ) ) {
+		return null;
+	}
+	$rows = bv_gi_ranked( $list );
+	$in   = array_values( array_filter( $rows, static fn( $r ) => $r['sector'] === $sector ) );
+	if ( ! $in ) {
+		return null;
+	}
+	$ok    = static fn( array $rs ) => array_values( array_filter( $rs, static fn( $r ) => 'ok' === ( $r['status'] ?? 'ok' ) ) );
+	$avg   = static fn( array $rs ) => $rs ? (int) round( array_sum( array_column( $rs, 'ready' ) ) / count( $rs ) ) : null;
+	$other = array_values( array_filter( bv_gi_ranked( 'nl' === $list ? 'intl' : 'nl' ), static fn( $r ) => $r['sector'] === $sector ) );
+	$rate  = static function ( array $rs, string $k ): array {
+		$y = 0;
+		$n = 0;
+		foreach ( $rs as $r ) {
+			$v = $r['checks'][ $k ] ?? null;
+			if ( true === $v ) {
+				$y++;
+				$n++;
+			} elseif ( false === $v ) {
+				$n++;
+			}
+		}
+		return [ $y, $n ];
+	};
+	$pass = [];
+	foreach ( bv_gi_sector_keys() as $k ) {
+		$pass[ $k ] = [ 'sector' => $rate( $in, $k ), 'list' => $rate( $rows, $k ) ];
+	}
+	/* Where the sector loses most points: share missing times the points of the check. */
+	$w    = bv_gi_check_weights();
+	$weak = [];
+	foreach ( $pass as $k => $p ) {
+		[ $y, $n ] = $p['sector'];
+		if ( $n >= 3 && $y < $n ) {
+			$weak[ $k ] = ( $n - $y ) / $n * ( $w[ $k ] ?? 0 );
+		}
+	}
+	arsort( $weak );
+	$res = (array) get_option( 'bv_gi_ai_results', [] );
+	$ans = (int) ( $res['ans'][ $list ][ $sector ] ?? 0 );
+	$src = [];
+	if ( $ans ) {
+		$all = (array) ( $res['src'][ $list ][ $sector ] ?? [] );
+		uasort( $all, static fn( $a, $b ) => (int) ( $b['a'] ?? 0 ) <=> (int) ( $a['a'] ?? 0 ) );
+		foreach ( array_slice( $all, 0, 6, true ) as $h => $d ) {
+			$src[] = [ 'host' => (string) $h, 'pct' => (int) round( 100 * (int) ( $d['a'] ?? 0 ) / $ans ) ];
+		}
+	}
+	return [
+		'list'      => $list,
+		'sector'    => $sector,
+		'names'     => $sectors[ $sector ],
+		'rows'      => $in,
+		'count'     => count( $rows ),
+		'n_ok'      => count( $ok( $in ) ),
+		'avg'       => $avg( $ok( $in ) ),
+		'avg_list'  => $avg( $ok( $rows ) ),
+		'avg_other' => $avg( $ok( $other ) ),
+		'pass'      => $pass,
+		'weak'      => array_slice( array_keys( $weak ), 0, 3 ),
+		'src'       => $src,
+		'ans'       => $ans,
+		'ai_n'      => count( array_filter( $in, static fn( $r ) => $r['ai_data'] && empty( $r['ai_low'] ) ) ),
+		'measured'  => (int) ( ( (array) get_option( 'bv_gi_meta', [] ) )['completed'] ?? 0 ),
+	];
+}
+
+/**
+ * The sector analysis block: ranking of the sector, pass rate per check (with
+ * the company's own result when $self_checks is given), the checks that cost
+ * the sector most points with advice, and the sources AI assistants cite.
+ */
+function bv_gi_pdf_sector( BV_GI_PDF $pdf, array $s, bool $nl, string $self = '', ?array $self_checks = null ): void {
+	$t      = static fn( $nl_text, $en_text ) => $nl ? $nl_text : $en_text;
+	$tx     = bv_gi_texts( $nl, $s['list'] );
+	$W      = $pdf->GetPageWidth() - 32;
+	$name   = $s['names'][ $nl ? 0 : 1 ];
+	$listnm = 'nl' === $s['list'] ? $t( 'Top 200 Nederland', 'Top 200 Netherlands' ) : $t( 'Top 200 internationaal', 'Top 200 international' );
+	$n      = count( $s['rows'] );
+	$pos    = 0;
+	foreach ( $s['rows'] as $i => $r ) {
+		if ( $r['domain'] === $self ) {
+			$pos = $i + 1;
+		}
+	}
+
+	$pdf->section( sprintf( $t( 'Sectoranalyse: %s', 'Sector analysis: %s' ), $name ), 70 );
+	$intro = sprintf( $t( 'In de %1$s staan %2$d bedrijven in %3$s.', 'The %1$s has %2$d companies in %3$s.' ), $listnm, $n, $name );
+	if ( null !== $s['avg'] ) {
+		$intro .= ' ' . sprintf( $t( 'Hun gemiddelde websitescore is %1$d, tegen %2$d voor de hele lijst', 'Their average website score is %1$d, against %2$d for the whole list' ), $s['avg'], (int) $s['avg_list'] );
+		$intro .= null !== $s['avg_other'] ? sprintf( $t( ' en %d voor dezelfde sector in de %s.', ' and %d for the same sector in the %s.' ), $s['avg_other'], 'nl' === $s['list'] ? $t( 'internationale lijst', 'international list' ) : $t( 'Nederlandse lijst', 'Dutch list' ) ) : '.';
+	}
+	if ( $s['n_ok'] < $n ) {
+		$miss   = $n - $s['n_ok'];
+		$intro .= ' ' . ( 1 === $miss
+			? $t( 'Bij 1 bedrijf weigerde de homepage ons verzoek; dat telt niet mee in het gemiddelde.', 'For 1 of them the homepage refused our request; it is left out of the average.' )
+			: sprintf( $t( 'Bij %d bedrijven weigerde de homepage ons verzoek; die tellen niet mee in het gemiddelde.', 'For %d of them the homepage refused our request; they are left out of the average.' ), $miss ) );
+	}
+	if ( $pos ) {
+		$intro .= ' ' . sprintf( $t( '%1$s staat op plaats %2$d van %3$d in deze sector.', '%1$s is number %2$d of %3$d in this sector.' ), $s['rows'][ $pos - 1 ]['name'], $pos, $n );
+	}
+	$pdf->para( $intro );
+
+	/* Ranking of the sector */
+	$pdf->sub( $t( 'De ranglijst van de sector', 'The sector ranking' ), 12 + 6.6 * $n );
+	$cols = [ 8, $W - 8 - 52 - 16 - 14 - 16, 52, 16, 14, 16 ];
+	$head = [ '#', $t( 'Bedrijf', 'Company' ), $t( 'Score', 'Score' ), $t( 'Website', 'Website' ), 'AI', $t( 'Index', 'Index' ) ];
+	$pdf->SetX( 16 );
+	$pdf->SetFont( 'Helvetica', 'B', 7.5 );
+	$pdf->rgb( '#f0f9ff' );
+	$pdf->rgb( '#5b6b80', 'text' );
+	foreach ( $head as $i => $h ) {
+		$pdf->Cell( $cols[ $i ], 6, $pdf->tx( strtoupper( $h ) ), 0, 0, $i >= 3 ? 'R' : 'L', true );
+	}
+	$pdf->Ln( 6 );
+	$star = false;
+	foreach ( $s['rows'] as $i => $r ) {
+		if ( $pdf->GetY() > 266 ) {
+			$pdf->AddPage();
+		}
+		$ry   = $pdf->GetY();
+		$mine = $r['domain'] === $self;
+		if ( $mine ) {
+			$pdf->rgb( '#e0f2fe' );
+			$pdf->Rect( 16, $ry, $W, 6.6, 'F' );
+			$pdf->rgb( '#0284c7' );
+			$pdf->Rect( 16, $ry, 1, 6.6, 'F' );
+		} elseif ( 1 === $i % 2 ) {
+			$pdf->rgb( '#f8fafc' );
+			$pdf->Rect( 16, $ry, $W, 6.6, 'F' );
+		}
+		$part = 'ok' !== ( $r['status'] ?? 'ok' );
+		$star = $star || $part;
+		$pdf->SetXY( 16, $ry );
+		$pdf->SetFont( 'Helvetica', 'B', 8.5 );
+		$pdf->rgb( '#5b6b80', 'text' );
+		$pdf->Cell( $cols[0], 6.6, (string) ( $i + 1 ), 0, 0, 'C' );
+		$pdf->SetFont( 'Helvetica', $mine ? 'B' : '', 8.5 );
+		$pdf->rgb( '#0c1a2e', 'text' );
+		$label = $r['name'] . '  ';
+		$pdf->Cell( $pdf->GetStringWidth( $pdf->tx( $label ) ), 6.6, $pdf->tx( $label ), 0, 0 );
+		$pdf->SetFont( 'Helvetica', '', 7 );
+		$pdf->rgb( '#5b6b80', 'text' );
+		$pdf->Cell( max( 1, $cols[1] - $pdf->GetStringWidth( $pdf->tx( $label ) ) - 0.5 ), 6.6, $pdf->tx( $r['domain'] ), 0, 0 );
+		$bx = 16 + $cols[0] + $cols[1];
+		$pdf->bar( $bx, $ry + 2.1, 38, (float) $r['score'], $mine ? '#0284c7' : '#38bdf8' );
+		$pdf->SetXY( $bx + 40, $ry );
+		$pdf->SetFont( 'Helvetica', 'B', 8.5 );
+		$pdf->rgb( '#0c1a2e', 'text' );
+		$pdf->Cell( 12, 6.6, (string) $r['score'], 0, 0, 'R' );
+		$pdf->SetFont( 'Helvetica', '', 8.5 );
+		$pdf->rgb( '#1f2937', 'text' );
+		$pdf->Cell( $cols[3], 6.6, $r['ready'] . ( $part ? '*' : '' ), 0, 0, 'R' );
+		$pdf->Cell( $cols[4], 6.6, null === $r['ai'] ? '-' : ( $r['ai_low'] ? $t( 'n.b.', 'n/a' ) : (string) $r['ai'] ), 0, 0, 'R' );
+		$pdf->rgb( '#5b6b80', 'text' );
+		$pdf->Cell( $cols[5], 6.6, (string) $r['rank'], 0, 1, 'R' );
+	}
+	if ( $star ) {
+		$pdf->Ln( 1 );
+		$pdf->para( $t( '* Onvolledig gemeten: de homepage weigerde ons verzoek, dus de websitescore is te laag.', '* Incomplete: the homepage refused our request, so the website score is too low.' ), 7.5, '#5b6b80' );
+	}
+
+	/* Pass rate per check */
+	$pdf->sub( $t( 'Hoeveel bedrijven in de sector elke check halen', 'How many companies in the sector pass each check' ), 14 + 6.2 * count( $s['pass'] ) );
+	$pdf->SetX( 16 );
+	$pdf->SetFont( 'Helvetica', 'B', 7.5 );
+	$pdf->rgb( '#f0f9ff' );
+	$pdf->rgb( '#5b6b80', 'text' );
+	$cw = [ $W - 46 - 18 - 18 - ( $self_checks ? 14 : 0 ), 46, 18, 18 ];
+	$pdf->Cell( $cw[0], 6, $pdf->tx( strtoupper( $t( 'Check', 'Check' ) ) ), 0, 0, 'L', true );
+	$pdf->Cell( $cw[1], 6, '', 0, 0, 'L', true );
+	$pdf->Cell( $cw[2], 6, $pdf->tx( strtoupper( $t( 'Sector', 'Sector' ) ) ), 0, 0, 'R', true );
+	$pdf->Cell( $cw[3], 6, $pdf->tx( strtoupper( $t( 'Lijst', 'List' ) ) ), 0, $self_checks ? 0 : 1, 'R', true );
+	if ( $self_checks ) {
+		$pdf->Cell( 14, 6, $pdf->tx( strtoupper( $t( 'Jij', 'You' ) ) ), 0, 1, 'C', true );
+	}
+	$i = 0;
+	foreach ( $s['pass'] as $k => $p ) {
+		if ( $pdf->GetY() > 268 ) {
+			$pdf->AddPage();
+		}
+		[ $y, $nn ]   = $p['sector'];
+		[ $ly, $lnn ] = $p['list'];
+		$pct  = $nn ? 100 * $y / $nn : 0;
+		$lpct = $lnn ? 100 * $ly / $lnn : 0;
+		$ry   = $pdf->GetY();
+		if ( 1 === $i % 2 ) {
+			$pdf->rgb( '#f8fafc' );
+			$pdf->Rect( 16, $ry, $W, 6.2, 'F' );
+		}
+		$pdf->SetXY( 16, $ry );
+		$pdf->SetFont( 'Helvetica', '', 8.5 );
+		$pdf->rgb( '#1f2937', 'text' );
+		$lbl = $tx['labels'][ $k ] ?? $k;
+		while ( $pdf->GetStringWidth( $pdf->tx( $lbl ) ) > $cw[0] - 3 && strlen( $lbl ) > 10 ) {
+			$lbl = rtrim( mb_substr( $lbl, 0, mb_strlen( $lbl ) - 2 ) ) . '…';
+		}
+		$pdf->Cell( $cw[0], 6.2, $pdf->tx( $lbl ), 0, 0 );
+		$bx = 16 + $cw[0];
+		if ( $nn ) {
+			$pdf->bar( $bx, $ry + 1.9, $cw[1] - 4, $pct, $pct >= 75 ? '#0d9488' : ( $pct >= 40 ? '#0284c7' : '#f59e0b' ) );
+		}
+		$pdf->SetXY( $bx + $cw[1], $ry );
+		$pdf->SetFont( 'Helvetica', 'B', 8.5 );
+		$pdf->rgb( '#0c1a2e', 'text' );
+		$pdf->Cell( $cw[2], 6.2, $nn ? sprintf( '%d/%d', $y, $nn ) : '-', 0, 0, 'R' );
+		$pdf->SetFont( 'Helvetica', '', 8.5 );
+		$pdf->rgb( '#5b6b80', 'text' );
+		$pdf->Cell( $cw[3], 6.2, $lnn ? round( $lpct ) . '%' : '-', 0, $self_checks ? 0 : 1, 'R' );
+		if ( $self_checks ) {
+			$pdf->icon( 16 + $W - 7, $ry + 3.1, $self_checks[ $k ] ?? null );
+			$pdf->SetXY( 16, $ry + 6.2 );
+		}
+		$i++;
+	}
+	$pdf->Ln( 1 );
+	$pdf->para( $t( 'Sector: bedrijven die de check halen, van de bedrijven waar we hem konden meten. Lijst: hetzelfde voor de hele lijst van 200.', 'Sector: companies that pass the check, out of those where we could measure it. List: the same for the whole list of 200.' ), 7.5, '#5b6b80' );
+
+	/* Where the sector loses points */
+	if ( $s['weak'] ) {
+		$pdf->sub( $t( 'Waar de sector de meeste punten laat liggen', 'Where the sector loses most points' ), 40 );
+		foreach ( $s['weak'] as $j => $k ) {
+			if ( $pdf->GetY() > 258 ) {
+				$pdf->AddPage();
+			}
+			[ $y, $nn ] = $s['pass'][ $k ]['sector'];
+			$iy = $pdf->GetY();
+			$pdf->rgb( '#f59e0b' );
+			$pdf->RoundedRect( 16, $iy + 0.5, 6, 6, 3, 'F' );
+			$pdf->SetXY( 16, $iy + 0.5 );
+			$pdf->SetFont( 'Helvetica', 'B', 8.5 );
+			$pdf->SetTextColor( 255, 255, 255 );
+			$pdf->Cell( 6, 6, (string) ( $j + 1 ), 0, 0, 'C' );
+			$pdf->SetXY( 25, $iy );
+			$pdf->SetFont( 'Helvetica', 'B', 9.5 );
+			$pdf->rgb( '#0c1a2e', 'text' );
+			$pdf->MultiCell( $W - 9, 5.3, $pdf->tx( sprintf( $t( '%1$d van de %2$d bedrijven missen: %3$s', '%1$d of %2$d companies miss: %3$s' ), $nn - $y, $nn, $tx['labels'][ $k ] ?? $k ) ), 0, 'L' );
+			$pdf->SetX( 25 );
+			$pdf->SetFont( 'Helvetica', '', 9 );
+			$pdf->rgb( '#1f2937', 'text' );
+			$pdf->MultiCell( $W - 9, 4.8, $pdf->tx( $tx['advice'][ $k ] ?? '' ), 0, 'L' );
+			$pdf->Ln( 2 );
+		}
+	}
+
+	/* Sources AI assistants cite in this sector */
+	if ( $s['src'] ) {
+		$pdf->sub( sprintf( $t( 'Bronnen die AI-assistenten in %1$s het vaakst citeren (%2$d antwoorden)', 'Sources AI assistants cite most in %1$s (%2$d answers)' ), $name, $s['ans'] ), 12 + 6 * count( $s['src'] ) );
+		foreach ( $s['src'] as $src ) {
+			$ry = $pdf->GetY();
+			$pdf->SetXY( 18, $ry );
+			$pdf->SetFont( 'Helvetica', '', 8.5 );
+			$pdf->rgb( '#1f2937', 'text' );
+			$pdf->Cell( 58, 5.6, $pdf->tx( $src['host'] ), 0, 0 );
+			$pdf->bar( 78, $ry + 1.6, 72, (float) $src['pct'], '#0d9488' );
+			$pdf->SetXY( 152, $ry );
+			$pdf->rgb( '#5b6b80', 'text' );
+			$pdf->Cell( 42, 5.6, $pdf->tx( sprintf( $t( '%d%% van de antwoorden', '%d%% of answers' ), $src['pct'] ) ), 0, 1, 'R' );
+		}
+		$pdf->Ln( 1 );
+		$pdf->para( $t( 'Een vermelding op deze sites is vaak de snelste weg naar meer AI-zichtbaarheid in deze sector.', 'A mention on these sites is often the fastest route to more AI visibility in this sector.' ), 8.5, '#5b6b80' );
+	}
+}
+
+/** Brand header band with a title and the date (first page). */
+function bv_gi_pdf_band( BV_GI_PDF $pdf, string $title, string $date ): void {
+	$W = $pdf->GetPageWidth() - 32;
+	$pdf->gradient( 0, 0, $pdf->GetPageWidth(), 34 );
+	$pdf->SetXY( 16, 10 );
+	$pdf->SetFont( 'Helvetica', 'B', 8.5 );
+	$pdf->SetTextColor( 255, 255, 255 );
+	$pdf->Cell( $W / 2, 4, 'B2B GEO INDEX', 0, 0 );
+	$pdf->Cell( $W / 2, 4, 'BOOMING VENTURE', 0, 1, 'R' );
+	$pdf->SetX( 16 );
+	$pdf->SetFont( 'Helvetica', 'B', 17 );
+	$pdf->Cell( $W * 0.7, 10, $pdf->tx( $title ), 0, 0 );
+	$pdf->SetFont( 'Helvetica', '', 9 );
+	$pdf->Cell( $W * 0.3, 10, $pdf->tx( $date ), 0, 1, 'R' );
+}
+
+/** Closing box with the Boardroom Quickscan and the index URL. */
+function bv_gi_pdf_closing( BV_GI_PDF $pdf, bool $nl, string $short ): void {
+	$t = static fn( $nl_text, $en_text ) => $nl ? $nl_text : $en_text;
+	$W = $pdf->GetPageWidth() - 32;
 	if ( $pdf->GetY() > 240 ) {
 		$pdf->AddPage();
 	}
@@ -667,6 +1015,7 @@ function bv_gi_pdf_render( array $d, bool $nl ): string {
 	$cy = $pdf->GetY();
 	$pdf->rgb( '#f0fdfa' );
 	$pdf->rgb( '#99f6e4', 'draw' );
+	$pdf->SetLineWidth( 0.3 );
 	$pdf->RoundedRect( 16, $cy, $W, 24, 3, 'DF' );
 	$pdf->SetXY( 21, $cy + 4 );
 	$pdf->SetFont( 'Helvetica', 'B', 10.5 );
@@ -678,7 +1027,85 @@ function bv_gi_pdf_render( array $d, bool $nl ): string {
 	$quick = home_url( $nl ? '/nl/boardroom-quickscan/' : '/boardroom-quickscan/' );
 	$pdf->MultiCell( $W - 10, 4.8, $pdf->tx( sprintf( $t( 'Vraag een gratis Boardroom Quickscan van 15 minuten aan via %1$s. De volledige index, de methode en de open data staan op %2$s.', 'Request a free 15-minute Boardroom Quickscan at %1$s. The full index, the method and the open data are at %2$s.' ), preg_replace( '#^https?://(www\.)?#', '', untrailingslashit( $quick ) ), $short ) ), 0, 'L' );
 	$pdf->Link( 16, $cy, $W, 24, $quick );
+}
 
+/** A report for a whole sector: averages, ranking, checks, weak spots and sources. */
+function bv_gi_pdf_render_sector( array $s, bool $nl ): string {
+	bv_gi_pdf_class();
+	$t      = static fn( $nl_text, $en_text ) => $nl ? $nl_text : $en_text;
+	$page   = get_page_by_path( $nl ? 'nl/b2b-geo-index' : 'b2b-geo-index' );
+	$url    = ( $page && 'publish' === $page->post_status ) ? get_permalink( $page ) : home_url( '/' );
+	$short  = preg_replace( '#^https?://(www\.)?#', '', untrailingslashit( $url ) );
+	$today  = bv_gi_pdf_date( time(), $nl );
+	$name   = $s['names'][ $nl ? 0 : 1 ];
+	$listnm = 'nl' === $s['list'] ? $t( 'Top 200 Nederland', 'Top 200 Netherlands' ) : $t( 'Top 200 internationaal', 'Top 200 international' );
+
+	$pdf = new BV_GI_PDF( 'P', 'mm', 'A4' );
+	$pdf->SetMargins( 16, 16, 16 );
+	$pdf->SetAutoPageBreak( true, 22 );
+	$pdf->AliasNbPages();
+	$pdf->SetTitle( $t( 'Sectorrapport ', 'Sector report ' ) . $name, true );
+	$pdf->SetAuthor( 'Booming Venture', true );
+	$pdf->SetCreator( 'B2B GEO Index', true );
+	$pdf->title_small = 'B2B GEO Index  |  ' . $name;
+	$pdf->foot        = sprintf( $t( 'B2B GEO Index van Booming Venture  |  %s  |  gemaakt op %s', 'B2B GEO Index by Booming Venture  |  %s  |  made on %s' ), $short, $today );
+	$pdf->foot_url    = $url;
+	$pdf->AddPage();
+	$W = $pdf->GetPageWidth() - 32;
+	bv_gi_pdf_band( $pdf, $t( 'Sectorrapport AI-vindbaarheid', 'Sector report AI search readiness' ), $today );
+
+	$pdf->SetXY( 16, 44 );
+	$pdf->rgb( '#0c1a2e', 'text' );
+	$pdf->SetFont( 'Helvetica', 'B', 20 );
+	$pdf->Cell( $W, 9, $pdf->tx( $name ), 0, 1 );
+	$pdf->SetX( 16 );
+	$pdf->SetFont( 'Helvetica', '', 9.5 );
+	$pdf->rgb( '#5b6b80', 'text' );
+	$sub = [ $listnm, sprintf( $t( '%d bedrijven', '%d companies' ), count( $s['rows'] ) ) ];
+	if ( $s['measured'] ) {
+		$sub[] = sprintf( $t( 'gemeten op %s', 'measured on %s' ), bv_gi_pdf_date( $s['measured'], $nl ) );
+	}
+	$pdf->Cell( $W, 5, $pdf->tx( implode( '  |  ', $sub ) ), 0, 1 );
+
+	/* Card: sector average against the list and the other list */
+	$y = 64;
+	$pdf->rgb( '#f0f9ff' );
+	$pdf->rgb( '#bae6fd', 'draw' );
+	$pdf->SetLineWidth( 0.3 );
+	$pdf->RoundedRect( 16, $y, $W, 36, 3, 'DF' );
+	$pdf->SetXY( 22, $y + 6 );
+	$pdf->rgb( '#0369a1', 'text' );
+	$pdf->SetFont( 'Helvetica', 'B', 40 );
+	$big = null === $s['avg'] ? '-' : (string) $s['avg'];
+	$sw  = $pdf->GetStringWidth( $big );
+	$pdf->Cell( $sw + 1, 16, $big, 0, 0 );
+	$pdf->SetFont( 'Helvetica', '', 11 );
+	$pdf->rgb( '#5b6b80', 'text' );
+	$pdf->SetXY( 22 + $sw + 1, $y + 13.5 );
+	$pdf->Cell( 16, 6, '/ 100', 0, 0 );
+	$pdf->SetXY( 22, $y + 24 );
+	$pdf->SetFont( 'Helvetica', 'B', 8.5 );
+	$pdf->Cell( 70, 5, $pdf->tx( $t( 'GEMIDDELDE WEBSITESCORE', 'AVERAGE WEBSITE SCORE' ) ), 0, 0 );
+	$rx     = 16 + $W * 0.47;
+	$leader = $s['rows'][0];
+	$lines  = [
+		sprintf( $t( 'Hele lijst: %d', 'Whole list: %d' ), (int) $s['avg_list'] ),
+		null !== $s['avg_other'] ? sprintf( $t( 'Zelfde sector in de %1$s: %2$d', 'Same sector in the %1$s: %2$d' ), 'nl' === $s['list'] ? $t( 'internationale lijst', 'international list' ) : $t( 'Nederlandse lijst', 'Dutch list' ), $s['avg_other'] ) : '',
+		sprintf( $t( 'Leider: %1$s (%2$d)', 'Leader: %1$s (%2$d)' ), $leader['name'], $leader['score'] ),
+	];
+	$pdf->SetFont( 'Helvetica', '', 9 );
+	$pdf->rgb( '#1f2937', 'text' );
+	$ly = $y + 6;
+	foreach ( array_filter( $lines ) as $line ) {
+		$pdf->SetXY( $rx, $ly );
+		$pdf->Cell( 16 + $W - $rx - 6, 5, $pdf->tx( $line ), 0, 0 );
+		$ly += 5.5;
+	}
+	$pdf->bar( $rx, $y + 26, 16 + $W - $rx - 6, (float) ( $s['avg'] ?? 0 ) );
+	$pdf->SetY( $y + 40 );
+
+	bv_gi_pdf_sector( $pdf, $s, $nl );
+	bv_gi_pdf_closing( $pdf, $nl, $short );
 	return $pdf->Output( 'S' );
 }
 
@@ -689,7 +1116,7 @@ add_action( 'rest_api_init', static function () {
 		'methods'             => 'GET',
 		'permission_callback' => '__return_true',
 		'args'                => [
-			'domain' => [ 'required' => true, 'type' => 'string' ],
+			'domain' => [ 'type' => 'string', 'default' => '' ],
 			'list'   => [ 'type' => 'string', 'default' => '' ],
 			'lang'   => [ 'type' => 'string', 'default' => 'en' ],
 			'sector' => [ 'type' => 'string', 'default' => '' ],
@@ -698,7 +1125,8 @@ add_action( 'rest_api_init', static function () {
 			$raw    = strtolower( trim( (string) $req['domain'] ) );
 			$raw    = preg_replace( '#^[a-z]+://#', '', $raw );
 			$domain = preg_replace( '#^www\.#', '', preg_replace( '#[/?\#:].*$#', '', $raw ) );
-			if ( ! preg_match( '/^(?=.{4,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24}$/', $domain ) ) {
+			$sector = sanitize_key( (string) $req['sector'] );
+			if ( '' !== $domain && ! preg_match( '/^(?=.{4,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,24}$/', $domain ) ) {
 				return new WP_Error( 'bv_domain', 'invalid domain', [ 'status' => 400 ] );
 			}
 			$nl   = 'nl' === $req['lang'];
@@ -709,13 +1137,24 @@ add_action( 'rest_api_init', static function () {
 			if ( $n >= 30 ) {
 				return new WP_Error( 'bv_rate', 'too many reports', [ 'status' => 429 ] );
 			}
-			$d = bv_gi_pdf_data( $domain, $list, sanitize_key( (string) $req['sector'] ) );
-			if ( ! $d ) {
-				return new WP_Error( 'bv_nodata', $nl ? 'Doe eerst de check voor dit domein.' : 'Run the check for this domain first.', [ 'status' => 404 ] );
+			if ( '' === $domain ) {
+				/* No domain: a report for the whole sector. */
+				$s = bv_gi_sector_data( $list, $sector );
+				if ( ! $s ) {
+					return new WP_Error( 'bv_nodata', 'unknown sector', [ 'status' => 404 ] );
+				}
+				set_transient( $key, $n + 1, HOUR_IN_SECONDS );
+				$pdf  = bv_gi_pdf_render_sector( $s, $nl );
+				$file = sanitize_file_name( 'geo-index-sector-' . sanitize_title( $s['names'][1] ) . '-' . $list . '-' . wp_date( 'Y-m-d' ) . '.pdf' );
+			} else {
+				$d = bv_gi_pdf_data( $domain, $list, $sector );
+				if ( ! $d ) {
+					return new WP_Error( 'bv_nodata', $nl ? 'Doe eerst de check voor dit domein.' : 'Run the check for this domain first.', [ 'status' => 404 ] );
+				}
+				set_transient( $key, $n + 1, HOUR_IN_SECONDS );
+				$pdf  = bv_gi_pdf_render( $d, $nl );
+				$file = sanitize_file_name( 'geo-index-' . $domain . '-' . wp_date( 'Y-m-d' ) . '.pdf' );
 			}
-			set_transient( $key, $n + 1, HOUR_IN_SECONDS );
-			$pdf  = bv_gi_pdf_render( $d, $nl );
-			$file = sanitize_file_name( 'geo-index-' . $domain . '-' . wp_date( 'Y-m-d' ) . '.pdf' );
 			nocache_headers();
 			header( 'Content-Type: application/pdf' );
 			header( 'Content-Disposition: attachment; filename="' . $file . '"' );

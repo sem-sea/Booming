@@ -333,6 +333,8 @@
 .bv-gi__pdf:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.4); }
 .bv-gi__pdf.is-busy { filter: saturate(0.6); pointer-events: none; }
 .bv-gi__plan .bv-gi__pdf { margin-top: 0.75rem; }
+.bv-gi__secpdf { margin: 0.5rem 0 0; }
+.bv-gi__secpdf:not([hidden]) { animation: bv-gi-up 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
 
 /* Details open and close smoothly: the inner wrapper grows from 0 to its natural height. */
 .bv-gi__table tr.bv-gi__detail { opacity: 0; transition: opacity 0.26s ease; }

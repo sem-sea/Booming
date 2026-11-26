@@ -248,6 +248,13 @@
 				if (rest > 0 && T.more) next.textContent = T.more.replace('%s', Math.min(rest, PAGE));
 			}
 			if (count && T.count) count.textContent = T.count.replace('%1$s', match).replace('%2$s', all.length);
+			/* With a sector picked, offer the PDF report for that sector in this list. */
+			var sp = root.querySelector('.bv-gi__secpdf');
+			if (sp) {
+				var opt = sector.options[sector.selectedIndex];
+				sp.innerHTML = sec && T.secPdf && opt && opt.getAttribute('data-key') ? pdfLink(pdfUrl('', current, opt.getAttribute('data-key')), T.secPdf.replace('%s', opt.text)) : '';
+				sp.hidden = !sec;
+			}
 			if (tbody && !RM) {
 				tbody.classList.remove('bv-gi--sw');
 				void tbody.offsetWidth;

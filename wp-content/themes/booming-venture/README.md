@@ -10,6 +10,11 @@ touching code.
 
 ---
 
+## 1.26.0 (November 2026)
+
+- Sector analysis in every company PDF: the sector ranking with the company highlighted, average website score against the whole list and the same sector in the other list, the pass rate per check in the sector and the list next to the company's own result, the three checks that cost the sector most points (with advice), and the sources AI assistants cite most in the sector.
+- Sector report as its own PDF: GET /wp-json/bv/v1/geo-pdf?sector=c20&list=nl&lang=nl. A download button appears under the filters when a sector is picked.
+
 ## 1.25.0 (November 2026)
 
 - PDF report per company: GET /wp-json/bv/v1/geo-pdf?domain=&list=&lang= (inc/geo-index-pdf.php, FPDF 1.9 in inc/lib/fpdf). Brand header, score card, every check with its points, AI numbers when measured, gap with the sector leader and a numbered improvement plan, in Dutch or English. Download button in every details panel, and "Download your improvement plan as PDF" after the newsletter step of the check. Built from stored data only (no outside requests), 30 per hour per visitor.

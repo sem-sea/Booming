@@ -140,6 +140,7 @@ $i18n = [
 	'pdfPlan'  => $t( 'Download je verbeterplan als PDF', 'Download your improvement plan as PDF' ),
 	'pdfBusy'  => $t( 'PDF wordt gemaakt...', 'Making the PDF...' ),
 	'planHead' => $t( 'Je verbeterplan', 'Your improvement plan' ),
+	'secPdf'   => $t( 'Download het sectorrapport %s (PDF)', 'Download the %s sector report (PDF)' ),
 	'pdfGone'  => $t( 'Deze check is verlopen. Doe de check opnieuw en download dan de PDF.', 'This check has expired. Run the check again, then download the PDF.' ),
 ];
 
@@ -191,9 +192,9 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 		<input type="search" class="bv-gi__q" placeholder="<?php echo esc_attr( $i18n['search'] ); ?>" aria-label="<?php echo esc_attr( $i18n['search'] ); ?>">
 		<label class="bv-gi__field"><span><?php echo esc_html( $t( 'Sector', 'Sector' ) ); ?></span>
 			<select class="bv-gi__sector"><option value=""><?php echo esc_html( $i18n['allSect'] ); ?></option><?php
-				foreach ( $sectors as $sec ) {
+				foreach ( $sectors as $sk => $sec ) {
 					$sl = (string) ( $sec[ $nl ? 0 : 1 ] ?? '' );
-					echo '<option value="' . esc_attr( $sl ) . '">' . esc_html( $sl ) . '</option>'; // phpcs:ignore
+					echo '<option value="' . esc_attr( $sl ) . '" data-key="' . esc_attr( $sk ) . '">' . esc_html( $sl ) . '</option>'; // phpcs:ignore
 				}
 			?></select>
 		</label>
@@ -234,6 +235,7 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 		</div>
 		</details>
 		<p class="bv-gi__count" aria-live="polite"></p>
+		<p class="bv-gi__secpdf" hidden></p>
 	</div>
 
 	<?php
