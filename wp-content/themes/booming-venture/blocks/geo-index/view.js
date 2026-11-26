@@ -299,7 +299,24 @@
 				chips.forEach(function (c) { c.setAttribute('aria-pressed', 'false'); });
 				apply();
 			});
+			/* A link with ?sector=<key> (for example from a LinkedIn post) opens that sector, with its PDF report. */
+			var deep = '';
+			try { deep = new URLSearchParams(window.location.search).get('sector') || ''; } catch (e) {}
+			if (deep) {
+				for (var si = 0; si < sector.options.length; si++) {
+					if (sector.options[si].getAttribute('data-key') === deep) {
+						sector.value = sector.options[si].value;
+						break;
+					}
+				}
+			}
 			select(current);
+			if (deep && sector.value) {
+				syncSources();
+				setTimeout(function () {
+					(filters || root).scrollIntoView({ behavior: RM ? 'auto' : 'smooth', block: 'start' });
+				}, 250);
+			}
 		} else {
 			tabs.forEach(function (t) { t.addEventListener('click', function () { select(t.getAttribute('data-list')); }); });
 		}

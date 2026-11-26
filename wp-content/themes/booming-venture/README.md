@@ -10,6 +10,10 @@ touching code.
 
 ---
 
+## 1.27.0 (November 2026)
+
+- Sector deep link on the GEO Index: /b2b-geo-index/?sector=c64 (or /nl/b2b-geo-index/?sector=c64) opens the index filtered on that sector, with the sector PDF button shown and the filters scrolled into view. Unknown keys are ignored. Made for the LinkedIn sector videos.
+
 ## 1.26.0 (November 2026)
 
 - Sector analysis in every company PDF: the sector ranking with the company highlighted, average website score against the whole list and the same sector in the other list, the pass rate per check in the sector and the list next to the company's own result, the three checks that cost the sector most points (with advice), and the sources AI assistants cite most in the sector.
