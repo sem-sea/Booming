@@ -470,7 +470,7 @@ Rules
 
 How you write
 - Always answer in {$language}, the language of this version of the website, also when the visitor writes in another language.
-- Plain, friendly and direct. Short sentences. At most about 90 words. Plain text: no markdown, no lists with symbols, no headings, no emoji, no exclamation marks, no dashes as punctuation.
+- Plain, friendly and direct. Short sentences. At most about 120 words, and always finish your last sentence. Plain text: no markdown, no lists with symbols, no headings, no emoji, no exclamation marks, no dashes as punctuation.
 - Avoid hype words such as delve, elevate, leverage, unlock, seamless, robust, game-changer, revolutionize.
 
 KNOWLEDGE
@@ -567,8 +567,9 @@ function bv_chat_handle( WP_REST_Request $req ): WP_REST_Response {
 	$path   = substr( (string) wp_parse_url( (string) $req->get_param( 'page' ), PHP_URL_PATH ), 0, 120 );
 	$body   = [
 		'model'       => BV_CHAT_MODEL,
-		'max_tokens'  => 450,
-		'temperature' => 0.3,
+		'max_tokens'  => 900,
+		/* Claude Haiku 5.5 thinks by default and those tokens count toward max_tokens, which cut answers off. Short answers need no thinking. It also only accepts the default temperature. */
+		'reasoning'   => [ 'enabled' => false ],
 		'messages'    => array_merge(
 			[ [ 'role' => 'system', 'content' => [
 				[ 'type' => 'text', 'text' => bv_chat_rules( $lang ), 'cache_control' => [ 'type' => 'ephemeral' ] ],
@@ -595,6 +596,13 @@ function bv_chat_handle( WP_REST_Request $req ): WP_REST_Response {
 	if ( $code < 200 || $code >= 300 || '' === trim( $text ) ) {
 		update_option( 'bv_chat_last_error', [ 'time' => time(), 'code' => $code, 'error' => is_wp_error( $res ) ? $res->get_error_message() : mb_substr( (string) ( $json['error']['message'] ?? 'empty answer' ), 0, 200 ) ], false );
 		return bv_chat_reply( [ 'error' => $nl ? 'Sorry, ik kan nu even niet antwoorden. Probeer het zo nog eens, of neem contact op met Ben.' : 'Sorry, I cannot answer right now. Please try again shortly, or contact Ben.' ], 429 === $code ? 429 : 502 );
+	}
+	/* Still hit the limit: end at the last full sentence instead of mid-sentence. */
+	if ( 'length' === ( $json['choices'][0]['finish_reason'] ?? '' ) ) {
+		update_option( 'bv_chat_last_error', [ 'time' => time(), 'code' => $code, 'error' => 'answer reached max_tokens and was cut at the last full sentence' ], false );
+		if ( preg_match( '/^.*[.!?](?=\s|$)/su', $text, $whole ) ) {
+			$text = $whole[0];
+		}
 	}
 	$cost = (float) ( $json['usage']['cost'] ?? 0 );
 	if ( ! $cost ) { // estimate from tokens when OpenRouter sends no cost

@@ -327,8 +327,8 @@ function bv_gi_ai_sentiment( array $items, int $timeout = 20 ): array {
 		'headers' => [ 'Authorization' => 'Bearer ' . $key, 'Content-Type' => 'application/json', 'HTTP-Referer' => home_url( '/' ), 'X-Title' => 'B2B GEO Index' ],
 		'body'    => wp_json_encode( [
 			'model'       => 'anthropic/claude-haiku-5.5',
-			'max_tokens'  => 200,
-			'temperature' => 0,
+			'max_tokens'  => 400,
+			'reasoning'   => [ 'enabled' => false ], // Haiku 5.5 thinks by default and thinking counts toward max_tokens; a list of numbers needs none
 			'messages'    => [ [ 'role' => 'user', 'content' => $prompt ] ],
 		] ),
 	] );
@@ -370,7 +370,7 @@ function bv_gi_ai_request( string $engine, string $prompt ): array {
 			/* auto: the model's own search where OpenRouter supports it, else Exa ($0.007 per search), so no model fails on the search setting. */
 			$body['tools'] = [ [ 'type' => 'openrouter:web_search', 'parameters' => [ 'engine' => 'auto', 'max_results' => 5 ] ] ];
 		}
-		if ( 0 === strpos( $model, 'openai/' ) || 0 === strpos( $model, 'google/' ) ) {
+		if ( 0 === strpos( $model, 'openai/' ) || 0 === strpos( $model, 'google/' ) || 0 === strpos( $model, 'anthropic/' ) ) {
 			$body['reasoning'] = [ 'effort' => 'low' ]; // short thinking: the answer is a short list, and thinking tokens cost money
 		}
 		return [
@@ -398,7 +398,7 @@ function bv_gi_ai_request( string $engine, string $prompt ): array {
 				'headers' => [ 'x-api-key' => $key, 'anthropic-version' => '2023-06-01', 'Content-Type' => 'application/json' ],
 				'data'    => wp_json_encode( [
 					'model'      => $model,
-					'max_tokens' => 1500,
+					'max_tokens' => 4000, // Claude 5.5 models think by default and thinking counts toward max_tokens: room for thinking plus the answer
 					'messages'   => [ [ 'role' => 'user', 'content' => $prompt ] ],
 					'tools'      => [ [ 'type' => 'web_search_20250305', 'name' => 'web_search', 'max_uses' => 1 ] ], // one search keeps the cost at about 1 cent per question
 				] ),

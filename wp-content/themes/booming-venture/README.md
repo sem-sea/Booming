@@ -10,6 +10,11 @@ touching code.
 
 ---
 
+## 1.29.1 (November 2026)
+
+- Fix: chat answers stopped halfway. Claude Haiku 5.5 thinks by default and thinking tokens count toward max_tokens, so 450 tokens could run out before the answer was done. The chat now turns thinking off (reasoning.enabled false), drops the temperature setting (Haiku 5.5 only accepts the default), allows 900 tokens and up to about 120 words, and if an answer still hits the limit it ends at the last full sentence (noted in bv_chat_last_error).
+- Same cause fixed in the GEO Index: the tone rating turns thinking off (400 tokens), Claude through OpenRouter thinks at low effort, and the direct Anthropic call allows 4000 tokens so thinking and the answer both fit.
+
 ## 1.29.0 (November 2026)
 
 - The site chat knows the B2B GEO Index numbers: measurement dates, the website checks and their points, and per list the average, the top 10, the pass rate per check and all 20 sectors with average, leaders and weakest check (bv_chat_index, from stored results, cached per measurement).
