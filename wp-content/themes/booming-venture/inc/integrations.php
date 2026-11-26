@@ -279,9 +279,10 @@ add_filter( 'wpcf7_form_elements', static function ( $html ) {
 		$title = $form ? strtolower( (string) $form->title() ) : '';
 	}
 	$label = '';
-	if ( str_contains( $title, 'growth' ) || str_contains( $title, 'guide' ) ) $label = 'Send me the guide';
-	elseif ( str_contains( $title, 'newsletter' ) ) $label = 'Subscribe';
-	elseif ( str_contains( $title, 'contact' ) ) $label = 'Send message';
+	$nl    = function_exists( 'bv_lang' ) && 'nl' === bv_lang(); // Dutch pages get Dutch buttons
+	if ( str_contains( $title, 'growth' ) || str_contains( $title, 'guide' ) ) $label = $nl ? 'Stuur me de gids' : 'Send me the guide';
+	elseif ( str_contains( $title, 'newsletter' ) ) $label = $nl ? 'Aanmelden' : 'Subscribe';
+	elseif ( str_contains( $title, 'contact' ) ) $label = $nl ? 'Bericht versturen' : 'Send message';
 	if ( $label ) {
 		$html = preg_replace(
 			'/(<input\b[^>]*type="submit"[^>]*value=")(Send|Submit|Verzenden|Versturen)(")/i',

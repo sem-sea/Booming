@@ -576,8 +576,18 @@ add_action( 'rest_api_init', static function () {
 			}
 			set_transient( $key, $n + 1, HOUR_IN_SECONDS );
 			$m   = bv_gi_measure( $domain, preg_replace( '/\..*$/', '', $domain ), $list );
-			$out = [ 'domain' => $domain, 'score' => $m['score'], 'parts' => $m['parts'], 'checks' => $m['checks'], 'status' => $m['status'] ];
-			set_transient( 'bv_gi_c_' . md5( $list . $domain ), $out, DAY_IN_SECONDS );
+			$out = [
+				'domain'      => $domain,
+				'score'       => $m['score'],
+				'parts'       => $m['parts'],
+				'checks'      => $m['checks'],
+				'status'      => $m['status'],
+				'home_code'   => (int) ( $m['home_code'] ?? 0 ),
+				'robots_code' => (int) ( $m['robots_code'] ?? 0 ),
+			];
+			/* A refused homepage is often bot protection the owner can change: keep that
+			 * result only 15 minutes, so a fix can be checked again the same day. */
+			set_transient( 'bv_gi_c_' . md5( $list . $domain ), $out, 'ok' === $m['status'] ? DAY_IN_SECONDS : 15 * MINUTE_IN_SECONDS );
 			return bv_gi_check_extra( $out, $list, $sector );
 		},
 	] );
@@ -633,7 +643,15 @@ function bv_gi_check_extra( array $out, string $list, string $sector ): array {
 		'tied'    => (bool) ( $gap['tied'] ?? false ),
 		'missing' => $gap['missing'] ?? [],
 		'sources' => $top,
+		'partial' => 'ok' !== ( $out['status'] ?? 'ok' ),
 	];
+	/* A domain outside the index only has a website score: compare it with the
+	 * leader's website score, which has no margin. Not for an incomplete check. */
+	if ( $gap && ! $self ) {
+		$out['gap']['leader']['score'] = (int) $leader['ready'];
+		$out['gap']['points']          = $out['gap']['partial'] ? null : (int) $leader['ready'] - (int) $out['score'];
+		$out['gap']['tied']            = false;
+	}
 	return $out;
 }
 

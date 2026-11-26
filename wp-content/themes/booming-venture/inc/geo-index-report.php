@@ -472,7 +472,7 @@ add_action( 'bv_gi_settings_rows', static function () {
 			<?php foreach ( $choices as $k => $label ) : ?>
 				<label style="margin-right:16px"><input type="radio" name="report_mode" value="<?php echo esc_attr( $k ); ?>" <?php checked( $o['mode'], $k ); ?>> <?php echo esc_html( $label ); ?></label>
 			<?php endforeach; ?>
-			<p class="description">Na de automatische scan op de eerste maandag van de maand schrijft de site een blogbericht in het Engels en het Nederlands met de top 10, de koplopers per sector, de stijgers en de websitescores. Na een handmatige scan maak je het bericht met de knop hieronder. De tekst komt uit de meetdata. Is een lijst niet goed gemeten (minder dan 80 van de 100 bedrijven), dan wordt het een concept.</p>
+			<p class="description">Na de automatische scan op de eerste maandag van de maand schrijft de site een blogbericht in het Engels en het Nederlands met de top 10, de koplopers per sector, de stijgers en de websitescores. Na een handmatige scan maak je het bericht met de knop hieronder. De tekst komt uit de meetdata. Is een lijst niet goed gemeten (minder dan 80% van de bedrijven, nu 160 van de 200), dan wordt het een concept.</p>
 		</td>
 	</tr>
 	<?php

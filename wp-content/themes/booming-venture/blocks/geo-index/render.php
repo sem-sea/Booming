@@ -40,6 +40,10 @@ $num     = static fn( $v ) => $nl ? str_replace( '.', ',', (string) $v ) : (stri
 $mpage      = get_page_by_path( $nl ? 'nl/b2b-geo-index/methode' : 'b2b-geo-index/methodology' );
 $method_url = ( $mpage && 'publish' === $mpage->post_status ) ? get_permalink( $mpage ) : '#' . $t( 'methode', 'methodology' );
 
+/* The index page in the other language, for the check: each page measures against its own list. */
+$opage     = get_page_by_path( $nl ? 'b2b-geo-index' : 'nl/b2b-geo-index' );
+$other_url = ( $opage && 'publish' === $opage->post_status ) ? get_permalink( $opage ) . '#check' : '';
+
 /* Crawler access: filter chips, and one "x/5" column in the table. */
 $bots = [
 	'bot_OAI-SearchBot'    => [ 'ChatGPT', $t( 'ChatGPT search mag de site lezen (OAI-SearchBot)', 'ChatGPT search may read the site (OAI-SearchBot)' ) ],
@@ -130,14 +134,24 @@ $i18n = [
 	'gapSrcP'  => $t( '%s%% van de antwoorden', '%s%% of answers' ),
 	'inIndex'  => $t( '%1$s staat in de index: score %2$s.', '%1$s is in the index: score %2$s.' ),
 	'inAi'     => $t( 'Genoemd in %1$s van %2$s antwoorden (%3$s%%, marge %4$s tot %5$s%%).', 'Named in %1$s of %2$s answers (%3$s%%, margin %4$s to %5$s%%).' ),
-	'labels'   => array_map( static fn( $c ) => $c[1], $bots + $cols ) + [
+	'partial'  => $t( 'onvolledig', 'incomplete' ),
+	'refused'  => $t( 'Je homepage weigerde ons verzoek (%s). Daardoor konden we checks voor %s van de 100 punten niet doen, en is deze score te laag.', 'Your homepage refused our request (%s). So we could not run checks worth %s of the 100 points, and this score is too low.' ),
+	'noAnswer' => $t( 'geen antwoord binnen 6 seconden', 'no answer within 6 seconds' ),
+	'botWarn'  => $t( 'Je robots.txt laat AI-crawlers toe, maar dat is alleen de voordeur. Botbescherming of een firewall (bijvoorbeeld bij Cloudflare of Akamai) kan ChatGPT, Claude en Perplexity alsnog weigeren. Vraag je webteam of OAI-SearchBot, Claude-SearchBot en PerplexityBot je homepage kunnen openen, en check daarna opnieuw. Na 15 minuten meten we opnieuw.', 'Your robots.txt lets AI crawlers in, but that is only the front door. Bot protection or a firewall (at Cloudflare or Akamai, for example) can still turn ChatGPT, Claude and Perplexity away. Ask your web team whether OAI-SearchBot, Claude-SearchBot and PerplexityBot can open your homepage, then check again. We measure again after 15 minutes.' ),
+	'retry'    => $t( 'Vraag je webteam of de homepage bereikbaar is voor crawlers, en check daarna opnieuw. Na 15 minuten meten we opnieuw.', 'Ask your web team whether the homepage is reachable for crawlers, then check again. We measure again after 15 minutes.' ),
+	'listNote' => $t( 'Gemeten zoals de Nederlandse lijst: we kijken of de site een Nederlandse versie heeft. Een internationaal bedrijf? Gebruik de Engelse versie van deze check, die naar meerdere taalversies kijkt.', 'Measured like the international list: we look for two or more language versions. A Dutch company? Run the check on the Dutch page, which looks for a Dutch version instead.' ),
+	'otherUrl' => $other_url,
+	'otherTxt' => $t( 'Engelse versie van deze check', 'Dutch version of this check' ),
+	'gapPart'  => $t( 'We kunnen je niet goed vergelijken met de leider, omdat een deel van de checks niet lukte.', 'We cannot compare you with the leader properly, because part of the checks did not run.' ),
+	'labels'   => array_merge( array_map( static fn( $c ) => $c[1], $bots + $cols ), [
 		'bot_GPTBot'       => $t( 'GPTBot (training van OpenAI) mag de site lezen', 'GPTBot (OpenAI training) may read the site' ),
 		'bot_ChatGPT-User' => $t( 'ChatGPT mag pagina\'s openen op verzoek van gebruikers (ChatGPT-User)', 'ChatGPT may open pages for users (ChatGPT-User)' ),
 		'bot_ClaudeBot'    => $t( 'ClaudeBot (training van Anthropic) mag de site lezen', 'ClaudeBot (Anthropic training) may read the site' ),
 		'schema_sameas'    => $t( 'Links naar profielen elders (sameAs)', 'Links to profiles elsewhere (sameAs)' ),
 		'wikidata'         => $t( 'Wikidata-item met de juiste website', 'Wikidata item with the right website' ),
 		'llms'             => $t( 'llms.txt aanwezig', 'llms.txt present' ),
-	],
+		'lang'             => $t( 'Nederlandse versie van de site', 'Two or more language versions (hreflang)' ),
+	] ),
 	'advice'   => [
 		'bot_OAI-SearchBot'    => $t( 'Sta OAI-SearchBot toe in robots.txt en in je firewall. Zonder deze crawler verschijn je niet als bron in ChatGPT search.', 'Allow OAI-SearchBot in robots.txt and your firewall. Without it you do not appear as a source in ChatGPT search.' ),
 		'bot_ChatGPT-User'     => $t( 'Sta ChatGPT-User toe, zodat ChatGPT je pagina\'s kan openen als een gebruiker erom vraagt.', 'Allow ChatGPT-User so ChatGPT can open your pages when a user asks for them.' ),
@@ -573,15 +587,14 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 		<?php endforeach; ?>
 	</div>
 
+	<span id="check" aria-hidden="true"></span>
 	<div class="bv-gi__check" id="<?php echo esc_attr( $id ); ?>-check">
 		<h3><?php echo esc_html( $t( 'Check je eigen bedrijf', 'Check your own company' ) ); ?></h3>
-		<p><?php echo esc_html( $v2
-			? $t( 'Vul je domein in en zie in 30 seconden de websitescore van je bedrijf, gemeten op dezelfde manier als de bedrijven in de index. Kies je sector om ook je verschil met de sectorleider te zien.', 'Enter your domain and see your website score in 30 seconds, measured the same way as the companies in the index. Pick your sector to also see your gap with the sector leader.' )
-			: $t( 'Vul je domein in en zie in 30 seconden de websitescore van je bedrijf, gemeten op dezelfde manier als de bedrijven in de index.', 'Enter your domain and see your website score in 30 seconds, measured the same way as the companies in the index.' ) ); ?></p>
+		<p><?php echo esc_html( $t( 'Vul je domein in en zie in 30 seconden de websitescore van je bedrijf, gemeten op dezelfde manier als de bedrijven in de Nederlandse lijst. Kies je sector om ook je verschil met de sectorleider te zien.', 'Enter your domain and see your website score in 30 seconds, measured the same way as the companies in the international list. Pick your sector to also see your gap with the sector leader.' ) ); ?></p>
 		<form class="bv-gi__form" novalidate>
 			<label class="screen-reader-text" for="<?php echo esc_attr( $id ); ?>-domain"><?php echo esc_html( $t( 'Domein', 'Domain' ) ); ?></label>
 			<input type="text" id="<?php echo esc_attr( $id ); ?>-domain" name="domain" inputmode="url" autocomplete="url" placeholder="<?php echo esc_attr( $t( 'jouwbedrijf.nl', 'yourcompany.com' ) ); ?>" required>
-			<?php if ( $v2 ) : ?>
+			<?php if ( $sectors ) : ?>
 				<label class="screen-reader-text" for="<?php echo esc_attr( $id ); ?>-sector"><?php echo esc_html( $t( 'Sector', 'Sector' ) ); ?></label>
 				<select id="<?php echo esc_attr( $id ); ?>-sector" name="sector" class="bv-gi__csec">
 					<option value=""><?php echo esc_html( $t( 'Je sector (optioneel)', 'Your sector (optional)' ) ); ?></option>

@@ -48,6 +48,21 @@ Every piece of long-form content must satisfy ALL of the following before return
 - Fragments OK. "And"/"But" sentence starts OK. Conversational, not casual.
 - Specific numbers, named tools, real frameworks. No vague hyperbole.
 
+## Human rhythm (hard, EN and NL)
+
+Write like a person who did the work, not like a summary of it.
+
+- Mix short and long sentences. Never three sentences of about the same length in a row.
+- Verbs over nouns ("we measured" not "the measurement of"). Plain words over formal ones.
+- An opinion or honest doubt is fine ("we expected more blocking"). Say what surprised you.
+- No "not X, but Y" / "niet X, maar Y". No triads without a reason (a real list of three tools is fine).
+- No colon as a reveal ("The result: ..."). Split into two sentences instead.
+- No question in running text that you answer yourself in the next sentence. Questions belong in H2s and the FAQ.
+- Max 4 sentences per paragraph. Fragments are fine.
+- Our own data first, with exact counts ("64 of 171"), then outside sources. Never round a finding into a claim the data does not support.
+- Dutch: B1, Dutch punctuation (no Oxford comma, decimal comma: 29,7%, 1.000), "versus" not "vs". Avoid cruciaal, essentieel, naadloos, bovendien, daarnaast, kortom, "in de huidige", "het is belangrijk om".
+- The NL version is written in Dutch, not translated sentence by sentence. Same facts, its own sentences.
+
 ## Workflow
 
 1. Read existing post body if rewriting.

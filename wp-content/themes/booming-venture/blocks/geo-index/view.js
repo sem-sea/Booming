@@ -246,9 +246,21 @@
 			});
 		}
 
+		/* Points a check is worth (see inc/geo-index.php), to say how much a refused homepage hides. */
+		var WORTH = { html: 15, schema_org: 20, lang: 8, fresh: 10 };
+
 		function renderResult(d) {
-			var html = '<p class="bv-gi__big"><strong>' + esc(d.score) + '</strong> ' + esc(T.outOf) + '</p>';
-			html += '<p class="bv-gi__for">' + esc(T.scoreFor.replace('%s', d.domain)) + '</p><ul class="bv-gi__checks">';
+			var partial = d.status && d.status !== 'ok';
+			var html = '<p class="bv-gi__big"><strong>' + esc(d.score) + '</strong> ' + esc(T.outOf) + (partial && T.partial ? ' <span class="bv-gi__inc">(' + esc(T.partial) + ')</span>' : '') + '</p>';
+			html += '<p class="bv-gi__for">' + esc(T.scoreFor.replace('%s', d.domain)) + '</p>';
+			if (partial && T.refused) {
+				var lost = 0;
+				Object.keys(WORTH).forEach(function (k) { if (d.checks[k] === null || d.checks[k] === undefined) lost += WORTH[k]; });
+				var code = d.home_code ? 'HTTP ' + d.home_code : T.noAnswer;
+				var botsOpen = d.robots_code >= 200 && d.robots_code < 300 && ['bot_OAI-SearchBot', 'bot_Claude-SearchBot', 'bot_PerplexityBot'].every(function (k) { return d.checks[k] === true; });
+				html += '<div class="bv-gi__warn"><p><strong>' + esc(T.refused.replace('%s', code).replace('%s', lost)) + '</strong></p><p>' + esc(botsOpen ? T.botWarn : T.retry) + '</p></div>';
+			}
+			html += '<ul class="bv-gi__checks">';
 			Object.keys(T.labels).forEach(function (k) {
 				if (!(k in d.checks)) return;
 				var v = d.checks[k];
@@ -257,6 +269,9 @@
 				html += '<li class="bv-gi__li--' + cls + '"><span>' + esc(word) + '</span> ' + esc(T.labels[k]) + '</li>';
 			});
 			html += '</ul>';
+			if (T.listNote) {
+				html += '<p class="bv-gi__note">' + esc(T.listNote) + (T.otherUrl ? ' <a href="' + esc(T.otherUrl) + '">' + esc(T.otherTxt) + '</a>' : '') + '</p>';
+			}
 			if (d.index && T.inIndex) {
 				html += '<p class="bv-gi__inidx">' + esc(T.inIndex.replace('%1$s', d.index.name).replace('%2$s', d.index.score));
 				if (d.index.ai && !d.index.ai.low && T.inAi) {
@@ -275,7 +290,10 @@
 					html += '</p>';
 					if (g.missing && g.missing.length) {
 						html += '<p>' + esc(T.gapMiss) + '</p><ul class="bv-gi__gapl">' + g.missing.map(function (k) { return '<li>' + esc(T.labels[k] || k) + '</li>'; }).join('') + '</ul>';
-					} else {
+					}
+					if (g.partial && T.gapPart) {
+						html += '<p>' + esc(T.gapPart) + '</p>';
+					} else if (!g.missing || !g.missing.length) {
 						html += '<p>' + esc(T.gapNone) + '</p>';
 					}
 				}

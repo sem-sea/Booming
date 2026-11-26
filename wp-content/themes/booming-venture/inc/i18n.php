@@ -81,7 +81,36 @@ add_filter( 'post_link', static function ( $url, $post ) {
 
 add_action( 'init', static function () {
 	add_rewrite_rule( '^nl/blog/([^/]+)/?$', 'index.php?name=$matches[1]', 'top' );
+	/* Dutch posts feed (1.24.1). Without this rule /nl/feed/ was the empty comment feed of the /nl/ page. */
+	add_rewrite_rule( '^nl/feed/?$', 'index.php?feed=rss2', 'top' );
+	add_rewrite_rule( '^nl/feed/(rss2|atom)/?$', 'index.php?feed=$matches[1]', 'top' );
 }, 5 );
+
+/* The Dutch feed: Dutch posts only (the loop filter below follows the /nl/ path),
+ * nl-NL as language, the Dutch blog as channel link, and the right feed link on Dutch pages. */
+add_filter( 'bloginfo_rss', static function ( $value, $show ) {
+	if ( 'nl' !== bv_lang() ) return $value;
+	if ( 'language' === $show ) return 'nl-NL';
+	if ( 'url' === $show ) return home_url( '/nl/blog/' );
+	return $value;
+}, 10, 2 );
+
+add_filter( 'feed_link', static function ( $output, $feed ) {
+	if ( 'nl' !== bv_lang() || false !== strpos( (string) $feed, 'comments' ) ) return $output;
+	return home_url( 'atom' === $feed ? '/nl/feed/atom/' : '/nl/feed/' );
+}, 10, 2 );
+
+add_filter( 'redirect_canonical', static function ( $redirect ) {
+	return preg_match( '#^/nl/feed(/|$)#', (string) parse_url( $_SERVER['REQUEST_URI'] ?? '', PHP_URL_PATH ) ) ? false : $redirect;
+} );
+
+/* Yoast's feed footer ("The post X appeared first on Y.") in Dutch for the Dutch feed. */
+$bv_feed_nl = static function ( $content ) {
+	if ( 'nl' !== bv_lang() || ! is_feed() ) return $content;
+	return preg_replace( '#<p>The post (.+?) appeared first on (.+?)\.</p>#s', '<p>Het bericht $1 verscheen eerst op $2.</p>', (string) $content );
+};
+add_filter( 'the_content_feed', $bv_feed_nl, 99 );
+add_filter( 'the_excerpt_rss', $bv_feed_nl, 99 );
 
 /* Flush rewrite rules once per theme version so /nl/blog/{slug}/ resolves. */
 add_action( 'init', static function () {

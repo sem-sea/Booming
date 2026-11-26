@@ -10,6 +10,14 @@ touching code.
 
 ---
 
+## 1.24.1 (November 2026)
+
+- Public check: when a homepage refuses our request (bot protection, firewall), the score shows as incomplete with the HTTP status, the points that could not be measured and what to ask the web team. Such results are kept 15 minutes instead of 24 hours, so a fix can be checked again the same day.
+- Public check: the sector picker always shows; a domain outside the index is compared with the leader's website score. The language check names what this page measures (Dutch version on the Dutch page, two or more language versions on the English page) and links to the check on the other page.
+- Dutch feed at /nl/feed/ (Dutch posts, nl-NL, Dutch Yoast footer); Dutch pages link to it. Before, /nl/feed/ was the empty comment feed of the /nl/ page.
+- Contact Form 7 buttons in Dutch on Dutch pages (Aanmelden, Stuur me de gids, Bericht versturen).
+- GEO Index settings: the draft rule says 160 of 200 companies per list.
+
 ## 1.24.0 (November 2026)
 
 - GEO Index method 2: five buyer questions per category with a different intent, round 1 for every category and a second round only where the result is still uncertain (adaptive, cheaper), 95% margins of error (Wilson) on every AI number, ranks for the top 10 and groups after that, changes since last month only when larger than the margin, at least 12 answers for an AI score.
