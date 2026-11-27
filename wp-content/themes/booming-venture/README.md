@@ -10,6 +10,11 @@ touching code.
 
 ---
 
+## 1.29.2 (November 2026)
+
+- The site chat talks like a person: small talk is answered briefly and kindly, follow-up questions build on the conversation, general questions about marketing, sales, SEO, GEO, AI search and B2B growth get a real answer from general knowledge (facts about Ben and Booming Venture still only from the site), length follows the question (up to about 150 words), and it answers in the visitor's language.
+- The no-model filter now only stops attempts to change the rules and clear coding or homework jobs; summaries, translations of its own answers and other normal questions go to the model. Memory: the last 12 messages instead of 8.
+
 ## 1.29.1 (November 2026)
 
 - Fix: chat answers stopped halfway. Claude Haiku 5.5 thinks by default and thinking tokens count toward max_tokens, so 450 tokens could run out before the answer was done. The chat now turns thinking off (reasoning.enabled false), drops the temperature setting (Haiku 5.5 only accepts the default), allows 900 tokens and up to about 120 words, and if an answer still hits the limit it ends at the last full sentence (noted in bv_chat_last_error).

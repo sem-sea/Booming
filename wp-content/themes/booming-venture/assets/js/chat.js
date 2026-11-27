@@ -167,7 +167,7 @@
 		msgs.push({ role: 'user', content: text });
 		input.value = ''; grow();
 		busy = true; save(); render();
-		var history = msgs.filter(function (m) { return !m.error; }).slice(-8).map(function (m) {
+		var history = msgs.filter(function (m) { return !m.error; }).slice(-12).map(function (m) {
 			return m.role === 'user' ? { role: 'user', content: m.content } : { role: 'assistant', content: m.content, sig: m.sig || '' };
 		});
 		var headers = { 'Content-Type': 'application/json' };
