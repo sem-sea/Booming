@@ -769,32 +769,15 @@ function bv_gi_ranked( string $list ): array {
 	return $rows;
 }
 
-/*
- * The GEO Index menu link only shows once its page is published, so the
- * menu never points to a page that visitors cannot open.
- */
-add_filter( 'render_block_core/navigation', function ( $html ) {
-	if ( false === strpos( $html, 'b2b-geo-index' ) ) {
-		return $html;
-	}
-	/* Removing the <li> from the finished menu keeps one list; an empty link block would split it in two. */
-	return preg_replace_callback(
-		'#<li\b[^>]*>\s*<a\b[^>]*href="([^"]*b2b-geo-index/?)"[^>]*>.*?</a>\s*</li>#s',
-		static function ( $m ) {
-			$page = get_page_by_path( trim( (string) wp_parse_url( $m[1], PHP_URL_PATH ), '/' ) );
-			return ( $page && 'publish' === $page->post_status ) ? $m[0] : '';
-		},
-		$html
-	);
-} );
+/* The menu guard for the index pages lives in inc/growth.php (1.30.0). */
 
 /* ------------------------------------------------------------------ open data and freshness */
 
-/** IDs of published pages that show the index (EN and NL). */
+/** IDs of published pages that show index data (EN and NL): the index, the AI check and the sector pages (1.30.0). */
 function bv_gi_pages(): array {
 	global $wpdb;
 	return array_map( 'intval', (array) $wpdb->get_col(
-		"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'publish' AND post_content LIKE '%wp:booming-venture/geo-index%' LIMIT 5"
+		"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'page' AND post_status = 'publish' AND ( post_content LIKE '%wp:booming-venture/geo-index%' OR post_content LIKE '%wp:booming-venture/geo-sector%' ) LIMIT 60"
 	) );
 }
 

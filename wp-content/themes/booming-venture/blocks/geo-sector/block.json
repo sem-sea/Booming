@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "booming-venture/geo-sector",
+  "version": "1.0.0",
+  "title": "B2B GEO Index: sector",
+  "category": "booming-venture",
+  "icon": "chart-area",
+  "description": "One sector of the B2B GEO Index: ranking in both lists, pass rate per check, where the sector loses points, the buyer questions asked and the sources AI cites. Server-rendered from the monthly measurement.",
+  "keywords": ["geo", "sector", "ai search", "index"],
+  "supports": { "html": false, "align": ["wide", "full"] },
+  "attributes": {
+    "sector": { "type": "string", "default": "" }
+  },
+  "textdomain": "booming-venture",
+  "render": "file:./render.php"
+}

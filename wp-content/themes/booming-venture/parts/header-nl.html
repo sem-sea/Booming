@@ -14,13 +14,28 @@
 		<!-- /wp:group -->
 
 		<!-- wp:navigation {"overlayMenu":"mobile","textColor":"contrast","className":"bv-nav","style":{"typography":{"fontWeight":"500"},"spacing":{"blockGap":"var:preset|spacing|30"}}} -->
-			<!-- wp:navigation-link {"label":"Over ons","url":"/nl/over-ons/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"UNIFY Framework","url":"/nl/unify-framework/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"Diensten","url":"/nl/diensten/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"Funnel Calculator","url":"/nl/funnel-calculator/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"ROI Forecaster","url":"/nl/roi-forecaster/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"GEO Index","url":"/nl/b2b-geo-index/","kind":"custom","isTopLevelLink":true} /-->
+			<!-- wp:navigation-submenu {"label":"Diensten","url":"/nl/diensten/","kind":"custom"} -->
+				<!-- wp:navigation-link {"label":"GEO voor B2B","url":"/nl/diensten/geo/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"GEO-bureau Rotterdam","url":"/nl/geo-bureau-rotterdam/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Head of Growth","url":"/nl/head-of-growth/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Alle diensten","url":"/nl/diensten/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
+			<!-- wp:navigation-submenu {"label":"B2B GEO Index","url":"/nl/b2b-geo-index/","kind":"custom"} -->
+				<!-- wp:navigation-link {"label":"De index","url":"/nl/b2b-geo-index/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Methode","url":"/nl/b2b-geo-index/methode/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Statistieken AI-zoeken","url":"/nl/ai-zoeken-b2b-statistieken/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
+			<!-- wp:navigation-link {"label":"Cases","url":"/nl/cases/","kind":"custom","isTopLevelLink":true} /-->
 			<!-- wp:navigation-link {"label":"Blog","url":"/nl/blog/","kind":"custom","isTopLevelLink":true} /-->
+			<!-- wp:navigation-submenu {"label":"Tools","url":"/nl/ai-check/","kind":"custom"} -->
+				<!-- wp:navigation-link {"label":"AI-check","url":"/nl/ai-check/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Funnel Calculator","url":"/nl/funnel-calculator/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"ROI Forecaster","url":"/nl/roi-forecaster/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
+			<!-- wp:navigation-submenu {"label":"Over ons","url":"/nl/over-ons/","kind":"custom"} -->
+				<!-- wp:navigation-link {"label":"Over Booming Venture","url":"/nl/over-ons/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"UNIFY Framework","url":"/nl/unify-framework/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
 			<!-- wp:navigation-link {"label":"Contact","url":"/nl/#contact","kind":"custom","isTopLevelLink":true,"className":"bv-nav-mobile-only"} /-->
 		<!-- /wp:navigation -->
 

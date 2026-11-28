@@ -23,6 +23,7 @@ $meta    = (array) get_option( 'bv_gi_meta', [] );
 $when    = ! empty( $meta['completed'] ) ? $meta['completed'] : 0;
 $date    = $when ? wp_date( 'j F Y', $when ) : '';
 $id      = wp_unique_id( 'bv-gi-' );
+$check_only = 'check' === ( $attributes['mode'] ?? '' ); // 1.30.0: only the domain check, for the AI check page
 
 /* AI assistants measured in the last AI run (inc/geo-index-ai.php). */
 $ai_run  = (array) get_option( 'bv_gi_ai_results', [] );
@@ -149,6 +150,7 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 ?>
 <div <?php echo $wrapper; ?> data-bv-block="geo-index" data-default-list="<?php echo esc_attr( $default ); ?>" data-api="<?php echo esc_url( rest_url( 'bv/v1/geo-check' ) ); ?>" data-lang="<?php echo $nl ? 'nl' : 'en'; ?>">
 	<script type="application/json" class="bv-gi__i18n"><?php echo wp_json_encode( $i18n ); ?></script>
+	<?php if ( ! $check_only ) : ?>
 
 	<div class="bv-gi__tabs" role="tablist" aria-label="<?php echo esc_attr( $t( 'Kies een lijst', 'Choose a list' ) ); ?>">
 		<?php foreach ( $tabs as $key => $label ) : ?>
@@ -559,6 +561,25 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 			<span><strong><?php echo esc_html( $short ); ?></strong> <?php echo esc_html( $full ); ?></span>
 		<?php endforeach; ?>
 	</div>
+
+	<?php
+	/* Links to the sector pages (1.30.0): one page per sector with its own ranking, checks and sources. */
+	$spages = function_exists( 'bv_gi_sector_pages' ) ? bv_gi_sector_pages( $nl ? 'nl' : 'en' ) : [];
+	if ( $spages ) :
+		?>
+		<nav class="bv-gi__sectors" id="<?php echo esc_attr( $nl ? 'sectoren' : 'sectors' ); ?>" aria-label="<?php echo esc_attr( $t( 'Sectorpagina\'s', 'Sector pages' ) ); ?>">
+			<h3><?php echo esc_html( $t( 'Analyse per sector', 'Analysis per sector' ) ); ?></h3>
+			<p class="bv-gi__small"><?php echo esc_html( $t( 'Elke sector heeft een eigen pagina met de ranglijst in beide lijsten, de checks, de verbeterpunten, de koopvragen en de bronnen die AI citeert.', 'Each sector has its own page with the ranking in both lists, the checks, the improvements, the buyer questions and the sources AI cites.' ) ); ?></p>
+			<ul class="bv-gs__chips">
+				<?php foreach ( $spages as $sp ) : ?>
+					<li><a href="<?php echo esc_url( $sp['url'] ); ?>"><?php echo esc_html( $sp['name'] ); ?></a></li>
+				<?php endforeach; ?>
+			</ul>
+		</nav>
+	<?php endif; ?>
+
+	<p class="bv-gi__small bv-gi__cite"><?php echo esc_html( $t( 'Cijfers gebruiken mag, zonder toestemming vooraf, onder CC BY 4.0: vermeld "B2B GEO Index, Booming Venture" met een link naar deze pagina. Journalisten kunnen de cijfers van een nieuwe meting een dag eerder onder embargo krijgen via het contactformulier.', 'You may use the numbers without asking first, under CC BY 4.0: credit "B2B GEO Index, Booming Venture" with a link to this page. Journalists can get the numbers of a new measurement one day early under embargo through the contact form.' ) ); ?> <a href="https://creativecommons.org/licenses/by/4.0/" rel="license noopener" target="_blank">CC BY 4.0</a></p>
+	<?php endif; ?>
 
 	<span id="check" aria-hidden="true"></span>
 	<div class="bv-gi__check" id="<?php echo esc_attr( $id ); ?>-check">

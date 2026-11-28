@@ -14,7 +14,8 @@
     "spacing": { "margin": true, "padding": true }
   },
   "attributes": {
-    "list": { "type": "string", "default": "" }
+    "list": { "type": "string", "default": "" },
+    "mode": { "type": "string", "default": "" }
   },
   "textdomain": "booming-venture",
   "editorScript": "file:./editor.js",

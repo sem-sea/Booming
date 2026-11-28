@@ -40,6 +40,7 @@ require_once BV_THEME_DIR . '/inc/geo-index-pdf.php';
 require_once BV_THEME_DIR . '/inc/geo-index-method.php';
 require_once BV_THEME_DIR . '/inc/geo-index-report.php';
 require_once BV_THEME_DIR . '/inc/geo-index-scan.php';
+require_once BV_THEME_DIR . '/inc/growth.php';
 require_once BV_THEME_DIR . '/inc/chat.php';
 require_once BV_THEME_DIR . '/inc/import-nl.php';
 require_once BV_THEME_DIR . '/inc/rebuild.php';

@@ -177,6 +177,38 @@ add_action( 'template_redirect', function () {
 		}
 	}
 
+	/* GEO service, proof and tools (1.30.0), with the Dutch versions. */
+	echo "\n## GEO for B2B\n\n";
+	$geo = [
+		[ 'services/geo',              'GEO programme for B2B: AI visibility sprint (EUR 3,950) and monthly retainer (from EUR 1,950), baseline on 20 buyer questions in four AI assistants, monthly measurement with a 95% margin of error' ],
+		[ 'nl/diensten/geo',           'GEO-traject voor B2B (Dutch): sprint en maandelijkse begeleiding, met prijzen' ],
+		[ 'geo-agency-rotterdam',      'GEO agency in Rotterdam for B2B companies' ],
+		[ 'nl/geo-bureau-rotterdam',   'GEO-bureau Rotterdam (Dutch)' ],
+		[ 'cases',                     'Cases with measured results: the move from a JavaScript site AI could not read to a server-rendered site, and how the B2B GEO Index was built' ],
+		[ 'nl/cases',                  'Cases (Dutch)' ],
+		[ 'geo-pricing-netherlands',   'What GEO costs in the Netherlands: published prices of Dutch GEO agencies compared' ],
+		[ 'nl/wat-kost-geo',           'Wat kost GEO? Openbare prijzen van Nederlandse GEO-bureaus vergeleken (Dutch)' ],
+		[ 'ai-visibility-check',       'Free AI visibility check: website score in 30 seconds and the gap with the sector leader' ],
+		[ 'nl/ai-check',               'Gratis AI-check (Dutch)' ],
+		[ 'ai-search-b2b-statistics',  'AI search statistics for B2B: sourced numbers and own measurements, updated quarterly' ],
+		[ 'nl/ai-zoeken-b2b-statistieken', 'Statistieken over AI-zoeken in B2B (Dutch)' ],
+	];
+	foreach ( $geo as [ $slug, $desc ] ) {
+		$p = get_page_by_path( $slug );
+		if ( $p && 'publish' === $p->post_status ) {
+			echo '- [' . bv_llms_text( $p->post_title ) . '](' . get_permalink( $p ) . "): {$desc}\n";
+		}
+	}
+	if ( function_exists( 'bv_gi_sector_pages' ) ) {
+		$sp = bv_gi_sector_pages( 'en' );
+		if ( $sp ) {
+			echo "\n## B2B GEO Index by sector\n\n";
+			foreach ( $sp as $row ) {
+				echo '- [B2B GEO Index: ' . bv_llms_text( $row['name'] ) . '](' . $row['url'] . "): ranking of the ten largest companies in both lists, pass rate per check, where the sector loses points, the buyer questions asked and the sources AI cites\n";
+			}
+		}
+	}
+
 	/* Blog index */
 	echo "\n## Blog\n\n";
 	$blog = get_page_by_path( 'blog' );

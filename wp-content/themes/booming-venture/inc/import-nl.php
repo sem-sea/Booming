@@ -156,6 +156,118 @@ add_action( 'rest_api_init', static function () {
 				return rest_ensure_response( [ 'items' => $log ] );
 			}
 
+			/*
+			 * ?update=pages-v2 (1.30.0): create or refresh the growth pages in
+			 * English and Dutch (GEO service, Rotterdam, cases, pricing, AI
+			 * check, statistics and one page per index sector), published and
+			 * linked as translations. Text, title and SEO meta follow the
+			 * theme; WordPress keeps the old text as a revision.
+			 */
+			if ( 'pages-v2' === $req->get_param( 'update' ) ) {
+				$only = sanitize_key( (string) $req->get_param( 'only' ) );
+				foreach ( (array) ( $data['pages_v2'] ?? [] ) as $item ) {
+					if ( '' !== $only && $only !== ( $item['key'] ?? '' ) ) {
+						continue;
+					}
+					$ids = [];
+					foreach ( [ 'en', 'nl' ] as $lang ) {
+						$b = (array) ( $item[ $lang ] ?? [] );
+						if ( empty( $b['slug'] ) || empty( $b['content'] ) ) {
+							continue;
+						}
+						$parent_path = trim( (string) ( $b['parent'] ?? '' ), '/' );
+						$parent      = '' !== $parent_path ? get_page_by_path( $parent_path ) : null;
+						if ( '' !== $parent_path && ! $parent ) {
+							$log[] = [ 'id' => 0, 'state' => 'no-parent', 'slug' => $parent_path . '/' . $b['slug'] ];
+							continue;
+						}
+						$path = ( $parent ? $parent_path . '/' : '' ) . sanitize_title( $b['slug'] );
+						$meta = array_intersect_key( (array) ( $b['meta'] ?? [] ), array_flip( [ '_yoast_wpseo_title', '_yoast_wpseo_metadesc' ] ) );
+						if ( ! empty( $item['sector'] ) ) {
+							$meta['_bv_gi_sector'] = sanitize_key( $item['sector'] );
+						}
+						if ( 'nl' === $lang ) {
+							$meta['_bv_lang'] = 'nl';
+							if ( ! empty( $ids['en'] ) ) {
+								$meta['_bv_translation'] = (int) $ids['en'];
+							}
+						}
+						$page = get_page_by_path( $path );
+						$args = [ 'post_title' => (string) $b['title'], 'post_content' => (string) $b['content'], 'post_status' => 'publish', 'meta_input' => $meta ];
+						if ( $page ) {
+							$id    = wp_update_post( wp_slash( [ 'ID' => $page->ID ] + $args ), true );
+							$state = 'updated';
+						} else {
+							$id    = wp_insert_post( wp_slash( $args + [ 'post_type' => 'page', 'post_name' => sanitize_title( $b['slug'] ), 'post_parent' => $parent ? (int) $parent->ID : 0, 'comment_status' => 'closed', 'ping_status' => 'closed' ] ), true );
+							$state = 'created';
+						}
+						if ( is_wp_error( $id ) ) {
+							$log[] = [ 'id' => 0, 'state' => 'error', 'slug' => $path, 'error' => $id->get_error_message() ];
+							continue;
+						}
+						update_post_meta( (int) $id, '_wp_page_template', sanitize_key( (string) ( $b['template'] ?? 'page-landing' ) ) );
+						$ids[ $lang ] = (int) $id;
+						$log[]        = [ 'id' => (int) $id, 'state' => $state, 'slug' => get_page_uri( (int) $id ) ];
+					}
+				}
+				kses_init_filters();
+				$count = array_count_values( array_column( $log, 'state' ) );
+				return rest_ensure_response( [ 'created' => $count['created'] ?? 0, 'updated' => $count['updated'] ?? 0, 'errors' => ( $count['error'] ?? 0 ) + ( $count['no-parent'] ?? 0 ), 'items' => $log ] );
+			}
+
+			/*
+			 * ?update=posts-nl-v2 (1.30.0): Dutch versions of English posts.
+			 * Each copies the publish time, category and featured image of its
+			 * English original and is linked to it, so a post whose English
+			 * version is live goes live now and the rest follow their English
+			 * schedule. Existing Dutch posts get the shipped text.
+			 */
+			if ( 'posts-nl-v2' === $req->get_param( 'update' ) ) {
+				foreach ( (array) ( $data['posts_nl_v2'] ?? [] ) as $b ) {
+					$en = get_posts( [ 'name' => sanitize_title( (string) ( $b['en'] ?? '' ) ), 'post_type' => 'post', 'post_status' => [ 'publish', 'future' ], 'numberposts' => 1, 'suppress_filters' => true ] );
+					if ( ! $en || empty( $b['slug'] ) || empty( $b['content'] ) ) {
+						$log[] = [ 'id' => 0, 'state' => 'no-original', 'slug' => (string) ( $b['slug'] ?? '' ) ];
+						continue;
+					}
+					$en   = $en[0];
+					$meta = array_intersect_key( (array) ( $b['meta'] ?? [] ), array_flip( [ '_yoast_wpseo_title', '_yoast_wpseo_metadesc' ] ) ) + [ '_bv_lang' => 'nl', '_bv_translation' => (int) $en->ID ];
+					$args = [
+						'post_title'   => (string) $b['title'],
+						'post_content' => (string) $b['content'],
+						'post_excerpt' => (string) ( $b['excerpt'] ?? '' ),
+						'meta_input'   => $meta,
+					];
+					$have = get_posts( [ 'name' => sanitize_title( $b['slug'] ), 'post_type' => 'post', 'post_status' => [ 'publish', 'future', 'private', 'draft' ], 'numberposts' => 1, 'suppress_filters' => true ] );
+					if ( $have ) {
+						$id    = wp_update_post( wp_slash( [ 'ID' => $have[0]->ID ] + $args ), true );
+						$state = 'updated';
+					} else {
+						$future = strtotime( $en->post_date_gmt . ' UTC' ) > time();
+						$id     = wp_insert_post( wp_slash( $args + [
+							'post_type'      => 'post',
+							'post_name'      => sanitize_title( $b['slug'] ),
+							'post_status'    => $future ? 'future' : 'publish',
+							'post_date'      => $en->post_date,
+							'post_date_gmt'  => $en->post_date_gmt,
+							'post_author'    => (int) $en->post_author,
+							'post_category'  => wp_get_post_categories( $en->ID ),
+							'comment_status' => 'closed',
+							'ping_status'    => 'closed',
+						] ), true );
+						$state  = $future ? 'scheduled' : 'created';
+						if ( ! is_wp_error( $id ) && has_post_thumbnail( $en ) ) {
+							set_post_thumbnail( (int) $id, get_post_thumbnail_id( $en ) );
+						}
+					}
+					$log[] = is_wp_error( $id )
+						? [ 'id' => 0, 'state' => 'error', 'slug' => $b['slug'], 'error' => $id->get_error_message() ]
+						: [ 'id' => (int) $id, 'state' => $state, 'slug' => $b['slug'], 'date' => get_post_field( 'post_date', (int) $id ) ];
+				}
+				kses_init_filters();
+				$count = array_count_values( array_column( $log, 'state' ) );
+				return rest_ensure_response( [ 'counts' => $count, 'items' => $log ] );
+			}
+
 			/* Dutch home, then its child pages. */
 			$home  = bv_import_item( (array) $data['pages']['parent'], 'page' );
 			$log[] = $home;

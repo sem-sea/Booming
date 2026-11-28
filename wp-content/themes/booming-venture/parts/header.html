@@ -14,13 +14,28 @@
 		<!-- /wp:group -->
 
 		<!-- wp:navigation {"overlayMenu":"mobile","textColor":"contrast","className":"bv-nav","style":{"typography":{"fontWeight":"500"},"spacing":{"blockGap":"var:preset|spacing|30"}}} -->
-			<!-- wp:navigation-link {"label":"About","url":"/about/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"UNIFY Framework","url":"/unify-framework/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"Services","url":"/services/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"Funnel Calculator","url":"/funnel-calculator/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"ROI Forecaster","url":"/roi-forecaster/","kind":"custom","isTopLevelLink":true} /-->
-			<!-- wp:navigation-link {"label":"GEO Index","url":"/b2b-geo-index/","kind":"custom","isTopLevelLink":true} /-->
+			<!-- wp:navigation-submenu {"label":"Services","url":"/services/","kind":"custom"} -->
+				<!-- wp:navigation-link {"label":"GEO for B2B","url":"/services/geo/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"GEO agency Rotterdam","url":"/geo-agency-rotterdam/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Head of Growth","url":"/head-of-growth/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"All services","url":"/services/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
+			<!-- wp:navigation-submenu {"label":"B2B GEO Index","url":"/b2b-geo-index/","kind":"custom"} -->
+				<!-- wp:navigation-link {"label":"The index","url":"/b2b-geo-index/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Methodology","url":"/b2b-geo-index/methodology/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"AI search statistics","url":"/ai-search-b2b-statistics/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
+			<!-- wp:navigation-link {"label":"Cases","url":"/cases/","kind":"custom","isTopLevelLink":true} /-->
 			<!-- wp:navigation-link {"label":"Blog","url":"/blog/","kind":"custom","isTopLevelLink":true} /-->
+			<!-- wp:navigation-submenu {"label":"Tools","url":"/ai-visibility-check/","kind":"custom"} -->
+				<!-- wp:navigation-link {"label":"AI visibility check","url":"/ai-visibility-check/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"Funnel Calculator","url":"/funnel-calculator/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"ROI Forecaster","url":"/roi-forecaster/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
+			<!-- wp:navigation-submenu {"label":"About","url":"/about/","kind":"custom"} -->
+				<!-- wp:navigation-link {"label":"About Booming Venture","url":"/about/","kind":"custom"} /-->
+				<!-- wp:navigation-link {"label":"UNIFY Framework","url":"/unify-framework/","kind":"custom"} /-->
+			<!-- /wp:navigation-submenu -->
 			<!-- wp:navigation-link {"label":"Contact","url":"/#contact","kind":"custom","isTopLevelLink":true,"className":"bv-nav-mobile-only"} /-->
 		<!-- /wp:navigation -->
 
