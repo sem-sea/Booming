@@ -2416,25 +2416,7 @@ body:has(:is(input, textarea, select):not(.bv-chat__input):focus) .bv-chat-launc
 @media (prefers-reduced-motion: reduce) { .bv-chat { transition: none; } .bv-chat__dot { animation: none; opacity: 0.7; } }
 @media print { .bv-chat-launch, .bv-chat { display: none !important; } }
 
-/* ------------------------------------------------------------------ 1.30.0: menu dropdowns, GEO service, sector pages */
-.bv-nav .wp-block-navigation__submenu-container { min-width: 15rem !important; padding: 0.5rem !important; border: 1px solid var(--wp--preset--color--border, #e2e8f0) !important; border-radius: 0.875rem; box-shadow: 0 12px 32px rgba(12, 26, 46, 0.12); }
-.bv-nav .wp-block-navigation__submenu-container .wp-block-navigation-item__content { display: block; padding: 0.5rem 0.75rem !important; border-radius: 0.5rem; }
-.bv-nav .wp-block-navigation__submenu-container .wp-block-navigation-item__content:hover,
-.bv-nav .wp-block-navigation__submenu-container .wp-block-navigation-item__content:focus-visible { background: var(--wp--preset--color--base-50, #f8fafc); color: var(--wp--preset--color--booming-700, #0369a1); }
-.bv-nav .wp-block-navigation__submenu-icon { margin-left: 0.25rem; }
-@media (max-width: 599px) {
-	.bv-nav .wp-block-navigation__submenu-container { box-shadow: none; border: 0 !important; padding: 0 0 0 0.75rem !important; }
-}
-
-.bv-geo-panel { padding: clamp(1.5rem, 1rem + 2vw, 2.5rem); border-radius: 1rem; background: linear-gradient(135deg, #0284c7, #14b8a6); color: #fff; }
-.bv-geo-panel__title { margin: 0 0 1rem; font-size: 0.875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.9; }
-.bv-geo-panel__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; }
-.bv-geo-panel__list li { padding: 1rem; border-radius: 0.75rem; background: rgba(255, 255, 255, 0.14); font-size: 0.9375rem; line-height: 1.35; }
-.bv-geo-panel__list strong { display: block; font-family: var(--wp--preset--font-family--heading, inherit); font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem); line-height: 1.1; }
-
-.bv-geo-cta { margin: 2.5rem 0 0; padding: 1.125rem 1.25rem; border-left: 4px solid #14b8a6; border-radius: 0 0.75rem 0.75rem 0; background: var(--wp--preset--color--base-50, #f8fafc); }
-.bv-geo-cta p { margin: 0; }
-
+/* ------------------------------------------------------------------ 1.30.0: sector pages and new pages (existing pages unchanged) */
 .bv-gs__dom { font-size: 0.8125rem; color: var(--wp--preset--color--muted, #5b6b80); }
 .bv-gs__part { font-size: 0.8125rem; color: #b45309; }
 .bv-gs .bv-gs__rank + h3 { margin-top: 2rem; }
@@ -2442,8 +2424,8 @@ body:has(:is(input, textarea, select):not(.bv-chat__input):focus) .bv-chat-launc
 .bv-gs__chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0 0; padding: 0; list-style: none; }
 .bv-gs__chips a { display: inline-block; padding: 0.375rem 0.75rem; border: 1px solid var(--wp--preset--color--border, #e2e8f0); border-radius: 999px; background: #fff; font-size: 0.875rem; text-decoration: none; }
 .bv-gs__chips a:hover, .bv-gs__chips a:focus-visible { border-color: #0284c7; color: var(--wp--preset--color--booming-700, #0369a1); }
-.bv-gi__sectors { margin: 2rem 0 1rem; }
+
+.bv-gi__sectors { margin: 2.5rem 0 1rem; }
 .bv-gi__sectors h3 { margin: 0 0 0.25rem; }
-.bv-gi__cite { margin-top: 1rem; }
 
 .bv-price-table td:first-child { font-weight: 600; }

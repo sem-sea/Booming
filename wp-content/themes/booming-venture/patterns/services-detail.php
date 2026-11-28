@@ -17,35 +17,6 @@ $img4  = bv_image( 'service-4' );
 	<!-- wp:html -->
 	<div class="alignwide">
 
-		<article class="bv-service-row bv-service-row--flip" id="geo">
-			<div>
-				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;"><?php echo bv_icon( "search", 18 ); ?>&nbsp;&nbsp;GEO for B2B</div>
-				<h3>GEO: visibility in AI search</h3>
-				<p class="bv-price">Sprint €3,950, then from €1,950/month</p>
-				<p style="color:var(--wp--preset--color--muted);margin:0 0 1rem;">Get named and cited by ChatGPT, Claude, Gemini and Perplexity when B2B buyers ask which supplier to choose.</p>
-				<ul class="bv-check-list">
-					<li>Baseline on 20 real buyer questions in four AI assistants</li>
-					<li>Technical basis: crawlers, server HTML, schema and entity</li>
-					<li>Answer pages for the questions your buyers ask</li>
-					<li>Monthly measurement with a 95% margin of error</li>
-					<li>Listings, reviews and digital PR with your own data</li>
-					<li>Fixed price, cancel monthly after the sprint</li>
-				</ul>
-				<a href="/services/geo/" class="wp-block-button__link wp-element-button" style="display:inline-block;margin-top:1.25rem;background:var(--wp--preset--gradient--brand);color:#fff;padding:.75rem 1.5rem;border-radius:.625rem;text-decoration:none;font-weight:600;">See the GEO programme →</a>
-			</div>
-			<div>
-				<div class="bv-geo-panel">
-					<p class="bv-geo-panel__title">How we measure</p>
-					<ul class="bv-geo-panel__list">
-						<li><strong>20</strong> buyer questions</li>
-						<li><strong>4</strong> AI assistants</li>
-						<li><strong>95%</strong> margin of error</li>
-						<li><strong>400</strong> B2B companies as benchmark</li>
-					</ul>
-				</div>
-			</div>
-		</article>
-
 		<article class="bv-service-row">
 			<div>
 				<div style="display:inline-flex;align-items:center;gap:.5rem;color:var(--wp--preset--color--booming-700);font-weight:600;font-size:.875rem;text-transform:uppercase;letter-spacing:.08em;"><?php echo bv_icon( "bar-chart-3", 18 ); ?>&nbsp;&nbsp;Strategic Consulting</div>

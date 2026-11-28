@@ -138,8 +138,10 @@ add_action( 'rest_api_init', static function () {
 					}
 					$page = get_page_by_path( $parent_path . '/' . sanitize_title( $b['slug'] ) );
 					if ( $page ) {
-						$id    = wp_update_post( wp_slash( [ 'ID' => $page->ID, 'post_title' => (string) $b['title'], 'post_content' => (string) $b['content'], 'post_status' => 'publish', 'meta_input' => $meta ] ), true );
-						$state = 'updated';
+						/* Create only (owner's rule, 28 Nov 2026): an existing method page stays as it is. */
+						$ids[ $lang ] = (int) $page->ID;
+						$log[]        = [ 'id' => (int) $page->ID, 'state' => 'exists', 'slug' => get_page_uri( (int) $page->ID ) ];
+						continue;
 					} else {
 						$id    = wp_insert_post( wp_slash( [ 'post_type' => 'page', 'post_title' => (string) $b['title'], 'post_name' => sanitize_title( $b['slug'] ), 'post_parent' => (int) $parent->ID, 'post_status' => 'publish', 'post_content' => (string) $b['content'], 'comment_status' => 'closed', 'ping_status' => 'closed', 'meta_input' => $meta ] ), true );
 						$state = 'created';
@@ -157,11 +159,11 @@ add_action( 'rest_api_init', static function () {
 			}
 
 			/*
-			 * ?update=pages-v2 (1.30.0): create or refresh the growth pages in
-			 * English and Dutch (GEO service, Rotterdam, cases, pricing, AI
-			 * check, statistics and one page per index sector), published and
-			 * linked as translations. Text, title and SEO meta follow the
-			 * theme; WordPress keeps the old text as a revision.
+			 * ?update=pages-v2 (1.30.0): create the new pages in English and
+			 * Dutch (GEO service, Rotterdam, cases, pricing, AI check,
+			 * statistics and one page per index sector), published and linked
+			 * as translations. Create only: a page that already exists at that
+			 * address is left exactly as it is (owner's rule, 28 Nov 2026).
 			 */
 			if ( 'pages-v2' === $req->get_param( 'update' ) ) {
 				$only = sanitize_key( (string) $req->get_param( 'only' ) );
@@ -193,14 +195,16 @@ add_action( 'rest_api_init', static function () {
 							}
 						}
 						$page = get_page_by_path( $path );
-						$args = [ 'post_title' => (string) $b['title'], 'post_content' => (string) $b['content'], 'post_status' => 'publish', 'meta_input' => $meta ];
 						if ( $page ) {
-							$id    = wp_update_post( wp_slash( [ 'ID' => $page->ID ] + $args ), true );
-							$state = 'updated';
-						} else {
-							$id    = wp_insert_post( wp_slash( $args + [ 'post_type' => 'page', 'post_name' => sanitize_title( $b['slug'] ), 'post_parent' => $parent ? (int) $parent->ID : 0, 'comment_status' => 'closed', 'ping_status' => 'closed' ] ), true );
-							$state = 'created';
+							$log[] = [ 'id' => (int) $page->ID, 'state' => 'exists', 'slug' => $path ];
+							if ( 'en' === $lang ) {
+								break; // an existing English page is not ours to pair: skip the Dutch one too
+							}
+							continue;
 						}
+						$args  = [ 'post_title' => (string) $b['title'], 'post_content' => (string) $b['content'], 'post_status' => 'publish', 'meta_input' => $meta ];
+						$id    = wp_insert_post( wp_slash( $args + [ 'post_type' => 'page', 'post_name' => sanitize_title( $b['slug'] ), 'post_parent' => $parent ? (int) $parent->ID : 0, 'comment_status' => 'closed', 'ping_status' => 'closed' ] ), true );
+						$state = 'created';
 						if ( is_wp_error( $id ) ) {
 							$log[] = [ 'id' => 0, 'state' => 'error', 'slug' => $path, 'error' => $id->get_error_message() ];
 							continue;
@@ -212,7 +216,7 @@ add_action( 'rest_api_init', static function () {
 				}
 				kses_init_filters();
 				$count = array_count_values( array_column( $log, 'state' ) );
-				return rest_ensure_response( [ 'created' => $count['created'] ?? 0, 'updated' => $count['updated'] ?? 0, 'errors' => ( $count['error'] ?? 0 ) + ( $count['no-parent'] ?? 0 ), 'items' => $log ] );
+				return rest_ensure_response( [ 'created' => $count['created'] ?? 0, 'skipped' => $count['exists'] ?? 0, 'errors' => ( $count['error'] ?? 0 ) + ( $count['no-parent'] ?? 0 ), 'items' => $log ] );
 			}
 
 			/*
@@ -220,7 +224,8 @@ add_action( 'rest_api_init', static function () {
 			 * Each copies the publish time, category and featured image of its
 			 * English original and is linked to it, so a post whose English
 			 * version is live goes live now and the rest follow their English
-			 * schedule. Existing Dutch posts get the shipped text.
+			 * schedule. Create only: a post that already exists with that slug
+			 * is left exactly as it is (owner's rule, 28 Nov 2026).
 			 */
 			if ( 'posts-nl-v2' === $req->get_param( 'update' ) ) {
 				foreach ( (array) ( $data['posts_nl_v2'] ?? [] ) as $b ) {
@@ -230,17 +235,17 @@ add_action( 'rest_api_init', static function () {
 						continue;
 					}
 					$en   = $en[0];
-					$meta = array_intersect_key( (array) ( $b['meta'] ?? [] ), array_flip( [ '_yoast_wpseo_title', '_yoast_wpseo_metadesc' ] ) ) + [ '_bv_lang' => 'nl', '_bv_translation' => (int) $en->ID ];
+					$meta = array_intersect_key( (array) ( $b['meta'] ?? [] ), array_flip( [ '_yoast_wpseo_title', '_yoast_wpseo_metadesc', '_yoast_wpseo_focuskw' ] ) ) + [ '_bv_lang' => 'nl', '_bv_translation' => (int) $en->ID ];
 					$args = [
 						'post_title'   => (string) $b['title'],
 						'post_content' => (string) $b['content'],
 						'post_excerpt' => (string) ( $b['excerpt'] ?? '' ),
 						'meta_input'   => $meta,
 					];
-					$have = get_posts( [ 'name' => sanitize_title( $b['slug'] ), 'post_type' => 'post', 'post_status' => [ 'publish', 'future', 'private', 'draft' ], 'numberposts' => 1, 'suppress_filters' => true ] );
+					$have = get_posts( [ 'name' => sanitize_title( $b['slug'] ), 'post_type' => 'post', 'post_status' => [ 'publish', 'future', 'private', 'draft', 'pending', 'trash' ], 'numberposts' => 1, 'suppress_filters' => true ] );
 					if ( $have ) {
-						$id    = wp_update_post( wp_slash( [ 'ID' => $have[0]->ID ] + $args ), true );
-						$state = 'updated';
+						$log[] = [ 'id' => (int) $have[0]->ID, 'state' => 'exists', 'slug' => $b['slug'] ];
+						continue;
 					} else {
 						$future = strtotime( $en->post_date_gmt . ' UTC' ) > time();
 						$id     = wp_insert_post( wp_slash( $args + [

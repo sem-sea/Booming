@@ -562,23 +562,6 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 		<?php endforeach; ?>
 	</div>
 
-	<?php
-	/* Links to the sector pages (1.30.0): one page per sector with its own ranking, checks and sources. */
-	$spages = function_exists( 'bv_gi_sector_pages' ) ? bv_gi_sector_pages( $nl ? 'nl' : 'en' ) : [];
-	if ( $spages ) :
-		?>
-		<nav class="bv-gi__sectors" id="<?php echo esc_attr( $nl ? 'sectoren' : 'sectors' ); ?>" aria-label="<?php echo esc_attr( $t( 'Sectorpagina\'s', 'Sector pages' ) ); ?>">
-			<h3><?php echo esc_html( $t( 'Analyse per sector', 'Analysis per sector' ) ); ?></h3>
-			<p class="bv-gi__small"><?php echo esc_html( $t( 'Elke sector heeft een eigen pagina met de ranglijst in beide lijsten, de checks, de verbeterpunten, de koopvragen en de bronnen die AI citeert.', 'Each sector has its own page with the ranking in both lists, the checks, the improvements, the buyer questions and the sources AI cites.' ) ); ?></p>
-			<ul class="bv-gs__chips">
-				<?php foreach ( $spages as $sp ) : ?>
-					<li><a href="<?php echo esc_url( $sp['url'] ); ?>"><?php echo esc_html( $sp['name'] ); ?></a></li>
-				<?php endforeach; ?>
-			</ul>
-		</nav>
-	<?php endif; ?>
-
-	<p class="bv-gi__small bv-gi__cite"><?php echo esc_html( $t( 'Cijfers gebruiken mag, zonder toestemming vooraf, onder CC BY 4.0: vermeld "B2B GEO Index, Booming Venture" met een link naar deze pagina. Journalisten kunnen de cijfers van een nieuwe meting een dag eerder onder embargo krijgen via het contactformulier.', 'You may use the numbers without asking first, under CC BY 4.0: credit "B2B GEO Index, Booming Venture" with a link to this page. Journalists can get the numbers of a new measurement one day early under embargo through the contact form.' ) ); ?> <a href="https://creativecommons.org/licenses/by/4.0/" rel="license noopener" target="_blank">CC BY 4.0</a></p>
 	<?php endif; ?>
 
 	<span id="check" aria-hidden="true"></span>
@@ -608,4 +591,20 @@ $wrapper = get_block_wrapper_attributes( [ 'class' => 'bv-gi', 'id' => $id, 'sty
 		</div>
 		<div class="bv-gi__plan" hidden></div>
 	</div>
+
+	<?php
+	/* AI check page only (1.30.0): links to every sector page, so each one is a click away from the check. The index page itself is unchanged. */
+	$spages = ( $check_only && function_exists( 'bv_gi_sector_pages' ) ) ? bv_gi_sector_pages( $nl ? 'nl' : 'en' ) : [];
+	if ( $spages ) :
+		?>
+		<nav class="bv-gi__sectors" aria-label="<?php echo esc_attr( $t( 'Sectorpagina\'s', 'Sector pages' ) ); ?>">
+			<h3><?php echo esc_html( $t( 'Bekijk je sector in de B2B GEO Index', 'See your sector in the B2B GEO Index' ) ); ?></h3>
+			<p class="bv-gi__small"><?php echo esc_html( $t( 'Per sector: de ranglijst in beide lijsten, de checks, de verbeterpunten, de koopvragen en de bronnen die AI citeert.', 'Per sector: the ranking in both lists, the checks, the improvements, the buyer questions and the sources AI cites.' ) ); ?></p>
+			<ul class="bv-gs__chips">
+				<?php foreach ( $spages as $sp ) : ?>
+					<li><a href="<?php echo esc_url( $sp['url'] ); ?>"><?php echo esc_html( $sp['name'] ); ?></a></li>
+				<?php endforeach; ?>
+			</ul>
+		</nav>
+	<?php endif; ?>
 </div>

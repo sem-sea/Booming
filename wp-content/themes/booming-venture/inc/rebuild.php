@@ -92,7 +92,7 @@ add_filter( 'wpseo_schema_organization', static function ( $data ) {
 		'addressLocality' => 'Rotterdam',
 		'addressCountry'  => 'NL',
 	];
-	$data['founder'] = [ '@id' => home_url( '/' ) . '#person-ben-verschuur' ];
+	$data['founder'] = [ '@type' => 'Person', 'name' => 'Ben Verschuur', 'url' => home_url( '/about/' ), 'sameAs' => [ 'https://www.linkedin.com/in/benverschuur' ] ];
 	$same            = (array) ( $data['sameAs'] ?? [] );
 	$same[]          = 'https://www.linkedin.com/company/booming-venture/';
 	$data['sameAs']  = array_values( array_unique( $same ) );

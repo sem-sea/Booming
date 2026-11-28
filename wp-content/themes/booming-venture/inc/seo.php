@@ -39,8 +39,7 @@ function bv_schema_identity_nodes(): array {
 		'legalName'     => 'Booming Venture',
 		'url'           => $site_url,
 		'logo'          => $logo_url,
-		'description'   => 'Booming Venture is a B2B GEO agency from Rotterdam. We help B2B companies get found and recommended in Google and in AI assistants such as ChatGPT, Claude, Gemini and Perplexity, with AI-powered B2B marketing, and we publish the monthly B2B GEO Index of 400 companies.',
-			'slogan'        => 'Performance. Personality. Powered by AI.',
+		'description'   => 'AI-powered marketing strategies and business consulting from Rotterdam. We help premium brands grow with performance marketing that delivers results.',
 		'email'         => 'info@boomingventure.com',
 		'taxID'         => 'NL005211648B76',
 		'vatID'         => 'NL005211648B76',
@@ -66,7 +65,7 @@ function bv_schema_identity_nodes(): array {
 			'https://www.linkedin.com/company/booming-venture/',
 			/* Add Wikipedia, Wikidata, Crunchbase, GitHub, X/Twitter when they exist. */
 		] ),
-		'knowsAbout'    => [ 'Generative engine optimization', 'AI search visibility', 'Answer engine optimization', 'B2B SEO', 'B2B marketing', 'AI marketing', 'Performance marketing', 'Conversion rate optimization', 'Marketing analytics' ],
+		'knowsAbout'    => [ 'AI marketing', 'Performance marketing', 'Conversion rate optimization', 'Growth strategy', 'Marketing automation', 'B2B SaaS growth' ],
 		'areaServed'    => [
 			[ '@type' => 'Country', 'name' => 'Netherlands' ],
 			[ '@type' => 'AdministrativeArea', 'name' => 'European Union' ],
@@ -86,7 +85,7 @@ function bv_schema_identity_nodes(): array {
 		'givenName'     => 'Ben',
 		'familyName'    => 'Verschuur',
 		'jobTitle'      => 'Founder and AI Marketing Strategist',
-		'description'   => 'Ben Verschuur is the founder of Booming Venture, a B2B GEO agency in Rotterdam, and the maker of the B2B GEO Index. He helps B2B companies get found and recommended in Google and AI assistants, with 15+ years of experience leading performance and growth marketing at Zeelander Yachts, DPDK Digital Agency, Knab, Aegon, and Hallmark Cards.',
+		'description'   => 'Ben Verschuur is the founder of Booming Venture and a hands-on AI marketing strategist based in Rotterdam, the Netherlands. He helps premium brands and B2B SaaS companies turn AI into a working operating system for growth, with 15+ years of experience leading performance and growth marketing at Zeelander Yachts, DPDK Digital Agency, Knab, Aegon, and Hallmark Cards.',
 		'url'           => $site_url . 'about/',
 		'image'         => $site_url . 'wp-content/uploads/2026/05/Ben.png',
 		'nationality'   => [ '@type' => 'Country', 'name' => 'Netherlands' ],
